@@ -1,0 +1,160 @@
+{
+  "schema": "zrm/design-pattern-decisions/v1",
+  "decisions": [
+    {
+      "id": "ZRM-DESIGN-001",
+      "pattern": "staged-typestate-authority-pipeline",
+      "applies_to": "All transitions from untrusted bytes through authenticated facts, commit plans, and accepted journals.",
+      "problem": "A mutable object with verification booleans would let callers confuse inert data with authority and skip required stages.",
+      "selected_because": "Distinct private-field stage types make invalid authority transitions harder to represent and keep verifier construction boundaries reviewable.",
+      "alternatives_considered": [
+        "One transition object carrying is_valid, is_verified, and is_committed flags.",
+        "Caller-provided booleans returned by proof and signature adapters.",
+        "No additional pattern; keep one inert data type and explicit verifier functions."
+      ],
+      "tradeoffs": [
+        "More intermediate types and explicit conversions must be documented and tested.",
+        "Versioned stage changes can require coordinated API updates."
+      ],
+      "normative_refs": [
+        "AGENTS.md",
+        "SPECIFICATION.md"
+      ],
+      "enforcement_refs": [
+        "tools/check_code_quality.py",
+        "tools/rust_quality.py"
+      ],
+      "review_triggers": [
+        "A new boolean field or parameter represents verification, validity, authorization, commitment, acceptance, or trust.",
+        "A caller gains a public constructor for a sealed authority stage."
+      ],
+      "review_scope": "technical",
+      "review_status": "ai-reviewed",
+      "review_ref": "worklogs/2026-07-11-wp0-code-quality-report.md"
+    },
+    {
+      "id": "ZRM-DESIGN-002",
+      "pattern": "ports-and-adapters",
+      "applies_to": "Core dependencies and future database, proof, network, clock, randomness, and application integrations.",
+      "problem": "Infrastructure dependencies in the semantic core would make accepted behavior platform-dependent and couple policy to one backend.",
+      "selected_because": "Core-owned ports preserve inward dependency direction while adapters can vary without weakening reference semantics.",
+      "alternatives_considered": [
+        "A central application service importing database, network, proof, and policy implementations.",
+        "Backend types exposed directly through semantic-core public APIs.",
+        "No additional pattern; keep direct dependencies while the core has no external boundary."
+      ],
+      "tradeoffs": [
+        "Each adapter requires explicit conformance and failure-equivalence tests.",
+        "The workspace dependency allowlist must be updated whenever a reviewed crate is added."
+      ],
+      "normative_refs": [
+        "AGENTS.md",
+        "QUALITY_GATES.md"
+      ],
+      "enforcement_refs": [
+        "tools/check_architecture.py",
+        "tools/tests/test_policy_checks.py"
+      ],
+      "review_triggers": [
+        "A new crate or feature creates an edge not represented in the reviewed dependency policy.",
+        "An adapter needs time, environment, network, filesystem, randomness, or process access."
+      ],
+      "review_scope": "technical",
+      "review_status": "ai-reviewed",
+      "review_ref": "worklogs/2026-07-11-wp0-code-quality-report.md"
+    },
+    {
+      "id": "ZRM-DESIGN-003",
+      "pattern": "validated-value-objects",
+      "applies_to": "Identifiers, roots, units, quantities, policies, verified facts, plans, and journals with enforced invariants.",
+      "problem": "Primitive bytes, strings, public fields, or Default construction can bypass nonzero, domain, bound, and authority invariants.",
+      "selected_because": "Opaque value objects with rejecting constructors centralize invariants and separate wire candidates from validated values.",
+      "alternatives_considered": [
+        "Public protocol structs with caller-populated primitive fields.",
+        "Type aliases for IDs, roots, modes, units, and error codes.",
+        "No additional pattern; validate primitives at every use site."
+      ],
+      "tradeoffs": [
+        "Callers must handle typed construction errors.",
+        "Wire and validated forms require deliberate conversion code."
+      ],
+      "normative_refs": [
+        "AGENTS.md",
+        "IMPLEMENTATION_PLAN.md"
+      ],
+      "enforcement_refs": [
+        "tools/check_code_quality.py",
+        "crates/zrm-types/src/lib.rs"
+      ],
+      "review_triggers": [
+        "An authority-relevant value gains public fields, Default, a string representation, or a raw byte alias.",
+        "Deserialization can construct a capability or validated plan directly."
+      ],
+      "review_scope": "technical",
+      "review_status": "ai-reviewed",
+      "review_ref": "worklogs/2026-07-11-wp0-code-quality-report.md"
+    },
+    {
+      "id": "ZRM-DESIGN-004",
+      "pattern": "manual-canonical-codec",
+      "applies_to": "Normative authority bytes, hashes, list framing, domain separation, and strict decoders.",
+      "problem": "General-purpose serialization can change defaults, ordering, enum tags, or trailing-byte behavior outside protocol review.",
+      "selected_because": "A manual versioned codec exposes exact field order and bounds and can be replayed by an independent implementation.",
+      "alternatives_considered": [
+        "Derive-based Serde or framework serialization as the authority hash source.",
+        "Diagnostic JSON reused as canonical protocol bytes.",
+        "No additional pattern; leave objects without an authority byte representation."
+      ],
+      "tradeoffs": [
+        "Each schema needs explicit encode, decode, vector, mutation, and compatibility maintenance.",
+        "Canonical field changes require an RFC and versioned migration plan."
+      ],
+      "normative_refs": [
+        "SPECIFICATION.md",
+        "QUALITY_GATES.md"
+      ],
+      "enforcement_refs": [
+        "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "vectors/independent_python/replay_resource_wire_v1.py"
+      ],
+      "review_triggers": [
+        "A new authority object gains bytes or hashes.",
+        "Field order, tags, domains, bounds, rejection precedence, or independent vectors change."
+      ],
+      "review_scope": "technical",
+      "review_status": "ai-reviewed",
+      "review_ref": "worklogs/2026-07-11-wp0-code-quality-report.md"
+    },
+    {
+      "id": "ZRM-DESIGN-005",
+      "pattern": "narrow-capability-ports",
+      "applies_to": "State views, commits, verifier dispatch, hash suites, persistence, and application adapter interfaces.",
+      "problem": "Manager traits and broad service objects combine unrelated authority and make substitution or reject-is-no-op behavior difficult to audit.",
+      "selected_because": "Small core-owned capability ports make preconditions, side effects, error semantics, and replacement-adapter obligations explicit.",
+      "alternatives_considered": [
+        "One manager interface for reads, writes, verification, networking, and reporting.",
+        "Application-owned callbacks returning booleans or untyped maps.",
+        "No additional pattern; use concrete functions until a genuine substitution boundary exists."
+      ],
+      "tradeoffs": [
+        "Composition requires more explicit wiring between focused capabilities.",
+        "Interface changes must preserve Liskov-equivalent failure and binding semantics."
+      ],
+      "normative_refs": [
+        "AGENTS.md",
+        "SPECIFICATION.md"
+      ],
+      "enforcement_refs": [
+        "tools/check_complexity.py",
+        "tools/check_code_quality.py"
+      ],
+      "review_triggers": [
+        "A public trait crosses the method review budget or combines read and commit authority.",
+        "A type named Manager, Handler, Processor, Utils, or Helpers enters core source."
+      ],
+      "review_scope": "technical",
+      "review_status": "ai-reviewed",
+      "review_ref": "worklogs/2026-07-11-wp0-code-quality-report.md"
+    }
+  ]
+}

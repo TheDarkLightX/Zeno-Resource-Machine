@@ -102,6 +102,8 @@ In addition:
 
 Exceptions require an explicit review rationale.
 
+Quality is evaluated as separate gates for complexity, code smells, authority-relevant antipatterns, and design-choice evidence. Coverage or cleanliness in one dimension cannot offset a blocking result in another. For Class C-E work, AI review records the design forces, the selected pattern or `no additional pattern`, invalid states prevented, extension-point or closed-set reasoning, rejected alternatives, pattern-specific failure modes, enforcement, and tests. Human review packets report specified behaviors, exact assurance results, CBC coverage, residual gaps, and non-claims. Ask for human semantic direction only when the specification is ambiguous or a proposed behavior would change it.
+
 ## Tests
 
 Each semantic rule needs:

@@ -14,7 +14,7 @@
     "production_ready": false,
     "current_level": "ZRM-L0",
     "claim_scope": [
-      "reviewed_repository_local_wp0_controls",
+      "reviewed_initial_repository_local_wp0_controls",
       "reviewed_wp1_primitive_and_canonical_codec_slice"
     ],
     "promotion_evidence": [
@@ -24,7 +24,9 @@
     "unreviewed_candidate_scope": [
       "pre_rfc_wp2_in_memory_policy_model",
       "wp2_specialized_opaque_root_candidates",
-      "wp2_policy_limits_unit_checks_and_verifier_cost_quotes"
+      "wp2_policy_limits_unit_checks_and_verifier_cost_quotes",
+      "wp0_multi_axis_code_quality_controls",
+      "wp0_source_sbom_and_cryptography_cbom_controls"
     ],
     "non_claims": [
       "no_implemented_semantic_kernel",
@@ -155,7 +157,7 @@
         "evidence/wp1-class-c-review-2026-07-11.json",
         "evidence/wp2-local-gates-2026-07-11.json"
       ],
-      "next_action": "obtain human review of the new WP2 root-type candidates and preserve opaque construction and closed domain framing as later identifier families are added",
+      "next_action": "validate the WP2 root-type candidate behaviors through hosted assurance evidence and preserve opaque construction and closed domain framing as later identifier families are added",
       "non_claim": "the WP1 identifier slice is reviewed; newly added WP2 root types remain candidate code, and all caller-provided identifiers remain inert data until later semantic verification",
       "normative_refs": [
         "SPECIFICATION.md#103-required-domain-strings",
@@ -635,7 +637,8 @@
       "evidence_refs": [
         "evidence/WP1_MUTATION_MAP.md",
         "worklogs/2026-07-11-wp2-policy-model.md",
-        "evidence/wp2-local-gates-2026-07-11.json"
+        "evidence/wp2-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp0-complexity-report.md"
       ],
       "next_action": "extend checked arithmetic and Kani evidence to complete dispatch-plan summation and WP6 accounting and transformation paths",
       "non_claim": "the evidence covers WP1 widths plus isolated WP2 policy ceilings and per-row verifier cost; no complete dispatch plan, accounting arithmetic, or transformation engine exists",
@@ -1222,14 +1225,16 @@
     },
     {
       "id": "ZRM-CBC-033",
-      "title": "Complexity remains locally auditable",
+      "title": "Complexity and code quality remain locally auditable",
       "severity": "high",
       "status": "implemented_partial",
       "defense_layer": "detected_by_evidence",
-      "disaster_state": "critical functions become too complex for reliable review",
-      "construction_rule": "Enforce complexity, length, nesting, and responsibility budgets with justified exceptions",
+      "disaster_state": "critical code becomes too complex, smell-prone, pattern-incoherent, or exception-dependent for reliable review",
+      "construction_rule": "Enforce complexity, length, nesting, responsibility, structural smell, antipattern, and explicit design-decision budgets with justified exceptions",
       "required_evidence": [
         "complexity report",
+        "multi-axis code-quality report",
+        "design-pattern decision register",
         "review exception record",
         "focused tests"
       ],
@@ -1237,23 +1242,35 @@
         "clippy.toml",
         "Cargo.toml",
         "tools/check_architecture.py",
-        "crates/zrm-policy/src/lib.rs"
+        "tools/check_code_quality.py",
+        "tools/check_complexity.py",
+        "tools/complexity_exceptions.json",
+        "tools/design_pattern_decisions.json",
+        "tools/rust_quality.py",
+        "tools/rust_complexity.py",
+        "crates/zrm-policy/src/lib.rs",
+        "crates/zrm-policy/src/limits.rs"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
         "crates/zrm-policy/tests/policy_model.rs",
+        "tools/tests/test_code_quality.py",
+        "tools/tests/test_complexity.py",
         "tools/tests/test_policy_checks.py"
       ],
       "formal_refs": [],
       "evidence_refs": [
         "worklogs/2026-07-10-wp0-wp1.md",
         "worklogs/2026-07-11-wp2-policy-model.md",
-        "evidence/wp2-local-gates-2026-07-11.json"
+        "evidence/wp2-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp0-complexity-report.md",
+        "worklogs/2026-07-11-wp0-code-quality-report.md"
       ],
-      "next_action": "add a machine-readable complexity report and reviewed exception workflow before promotion",
-      "non_claim": "lint and module boundaries are enforced, but the full complexity-budget report is not yet automated",
+      "next_action": "retain the excellent tier with zero quality findings or exception debt, replay the behavior-and-evidence packet in hosted CI, and add a reviewed compiler-AST lane before claiming cyclomatic or cognitive-complexity coverage",
+      "non_claim": "the automated reports cover five lexical complexity metrics, sixteen structural quality rules, and completeness of five required design decisions; they do not expand macros, classify semantic criticality, compute cyclomatic or cognitive complexity, detect every diff-aware smell, or prove universal design-pattern optimality",
       "normative_refs": [
-        "SPECIFICATION.md#394-complexity-budgets"
+        "SPECIFICATION.md#394-complexity-budgets",
+        "QUALITY_GATES.md#6-gate-g3--complexity-and-auditability"
       ],
       "target_level": "ZRM-L0",
       "work_packages": [
@@ -1513,19 +1530,27 @@
         "Cargo.lock",
         "deny.toml",
         "docs/DEPENDENCY_POLICY.md",
+        "supply-chain/build_surface.json",
+        "supply-chain/cryptography.json",
+        "tools/bom_cbom.py",
+        "tools/bom_common.py",
+        "tools/bom_sbom.py",
+        "tools/generate_bom.py",
         ".github/workflows/ci.yml"
       ],
       "test_refs": [
         "tools/check_repository_hygiene.py",
+        "tools/tests/test_bom.py",
         "tools/tests/test_policy_checks.py"
       ],
       "formal_refs": [],
       "evidence_refs": [
         "docs/dependency-reviews/sha2-0.11.0.md",
-        "docs/dependency-reviews/libfuzzer-sys-0.4.13.md"
+        "docs/dependency-reviews/libfuzzer-sys-0.4.13.md",
+        "worklogs/2026-07-11-wp0-sbom-cbom.md"
       ],
-      "next_action": "add cargo-vet policy, SBOM and cryptographic bill of materials generation, then verify cargo-deny in the hosted gate",
-      "non_claim": "locked dependencies, local audit, and CI policy do not establish a vetted or release-provenance-complete supply chain",
+      "next_action": "validate the hosted deny/BOM gate, adopt cargo-vet only after maintainers approve the critical trust criteria or reviewed audit imports, and add standardized plus compiled-artifact BOM exports during WP13",
+      "non_claim": "the ZRM-native reports inventory locked Cargo source components, dependency edges, executable build targets, and registered cryptography; they do not establish cargo-vet trust, SPDX or CycloneDX conformance, compiled-artifact contents, signed provenance, reproducibility, or a release-complete supply chain",
       "normative_refs": [
         "SPECIFICATION.md#43-dependency-and-supply-chain-policy"
       ],
@@ -1694,7 +1719,8 @@
       "evidence_refs": [
         ".github/workflows/nightly.yml",
         "worklogs/2026-07-11-wp2-policy-model.md",
-        "evidence/wp2-local-gates-2026-07-11.json"
+        "evidence/wp2-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp0-complexity-report.md"
       ],
       "next_action": "freeze policy and cost-model authority bytes, implement sorted unique cost-row coverage and the complete pre-dispatch cost plan, then add backend worst-case and end-to-end load evidence in WP5 and WP9",
       "non_claim": "WP1 byte bounds plus WP2 machine ceilings and isolated local per-row cost quotes are implemented; no authenticated cost model, governed charge, complete dispatch plan, backend work bound, storage runtime, rate limit, or end-to-end DoS claim exists",

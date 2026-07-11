@@ -18,6 +18,17 @@
 
 ## Proposed design
 
+### Design-choice review
+
+- Design forces:
+- Pattern selected, or no additional pattern:
+- Invalid states prevented:
+- Extension point or closed-set reason:
+- Alternatives rejected:
+- Pattern-specific failure modes:
+- Enforcement and tests:
+- Technical AI-review status:
+
 ## Alternatives considered
 
 ## Test-first plan
@@ -64,6 +75,10 @@ For every required command not run, record `NOT RUN`, the reason, and the gate t
 
 ## Human review required
 
+- Specified behaviors confirmed:
+- Exact assurance results:
+- CBC obligations covered:
+- Remaining gaps and non-claims:
 - Required reviewers/roles:
 - Review focus:
 - Promotion blocked until:

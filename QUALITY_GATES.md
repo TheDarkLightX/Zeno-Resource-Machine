@@ -168,6 +168,7 @@ Budgets are review triggers, not excuses for mechanical fragmentation.
 | positional parameters | <= 4 | > 6 |
 | public trait methods | <= 7 | > 10 |
 | critical module logical lines | <= 400 | > 700 |
+| generic type parameters on public API | <= 3 | > 4 |
 
 Unsafe blocks remain forbidden in the semantic core and require an isolated adapter safety case elsewhere.
 
@@ -186,6 +187,42 @@ Auditability requirements:
 - no stringly typed program, role, policy, unit, or resource-kind identifiers;
 - no function named `handle`, `process`, `do_work`, or `utils` in the critical core without a narrower semantic name;
 - comments explain invariants, authority, and rationale—not syntax.
+
+### Multi-axis excellence metric
+
+CI MUST emit a deterministic code-quality report that combines four separate dimensions:
+
+1. complexity budgets and exact exception debt;
+2. mechanically recognizable code smells;
+3. authority-relevant antipatterns;
+4. completeness and structural enforcement of required design-pattern decisions.
+
+The report reaches the `excellent-candidate` structural tier only when:
+
+- no active smell, antipattern, or structural-pattern finding exists;
+- no complexity review trigger lacks approval;
+- no approved complexity exception debt remains;
+- no preferred-budget advisory debt remains;
+- every required pattern decision records its applicability, problem, rationale, alternatives, tradeoffs, enforcement references, and review triggers.
+
+An `excellent-candidate` result still requires contextual review before it may be described as excellent overall. Design-pattern and syntax choices use AI review evidence. Human review is evidence-oriented: report specification behaviors, exact test and assurance results, obligation coverage, remaining gaps, and non-claims. Do not require a human to inspect pattern mechanics or source structure. Ask for human semantic direction only when the specification is ambiguous or a proposed behavior would change it. Pattern records MUST state their technical AI-review status and consider the option of using no additional pattern. The number of named patterns is never a quality score.
+
+Preferred-budget advisories remain visible and are subject to a source-controlled no-increase ceiling while they stay below mandatory review triggers. Production complexity and lexical smell checks across production, integration-test, fuzz, benchmark, example, and build-script roles are reported separately. The metric has no additive numeric score: one high-severity defect cannot be offset by unrelated clean checks.
+
+The lexical lane MUST state that it does not expand macros, replace compiler-AST analysis, prove semantic responsibility boundaries, or prove that a selected design pattern is universally optimal. Diff-aware review remains required for shotgun edits, duplicated host/guest semantics, mirrored test oracles, and comments that excuse unenforced invariants.
+
+Every Class C-E change records the following design-choice review packet, even when the selected choice is `no additional pattern`:
+
+```text
+Design forces:
+Pattern selected, or no additional pattern:
+Invalid states prevented:
+Extension point or closed-set reason:
+Alternatives rejected:
+Pattern-specific failure modes:
+Enforcement and tests:
+Technical AI-review status:
+```
 
 ---
 

@@ -8,15 +8,15 @@ Machine-readable release posture:
 
 ```text
 public_implementation_claim_allowed = true
-claim_scope = reviewed repository-local WP0 controls and WP1 canonical-codec slice
-unreviewed_candidate_scope = pre-RFC WP2 in-memory policy-model slice
+claim_scope = reviewed initial repository-local WP0 controls and WP1 canonical-codec slice
+unreviewed_candidate_scope = pre-RFC WP2 policy model plus locally evidenced WP0 quality and supply-chain extensions
 production_ready = false
 current_level = ZRM-L0
 ```
 
 ## Implementation scope
 
-The repository contains a maintainer-reviewed, merged pre-alpha implementation of the repository-local WP0 controls and WP1 canonical-codec slice:
+The repository contains a maintainer-reviewed, merged pre-alpha implementation of the initial repository-local WP0 controls and WP1 canonical-codec slice:
 
 - the reviewed WP1 set of opaque nonzero primitive identifier and digest types;
 - the closed, schema-fixed SHA-256 reference suite;
@@ -28,6 +28,8 @@ The repository contains a maintainer-reviewed, merged pre-alpha implementation o
 - pinned CI, dependency policy, conformance, architecture, and repository-hygiene checks.
 
 The current branch also contains an unreviewed pre-RFC WP2 candidate for specialized opaque root types, private-field in-memory policy values, protocol ceilings, exact unit checks, admission-mode consistency, validity windows, and checked verifier-cost quotes. This candidate deliberately defines no policy codec, policy hash, root derivation, trusted validation context, verifier registry, backend dispatch, or verified authority fact. Canonical policy bytes, roots, and hashes remain blocked on a Class E RFC and independent vectors.
+
+The branch adds locally replayed candidate WP0 controls for multi-axis code quality and deterministic source/cryptography inventories. Their reports pass the recorded local gates, while hosted CI and merge review remain pending. They provide assurance evidence only and do not create release provenance, third-party trust, standardized BOM conformance, or production authority.
 
 The decoded `ResourceWireV1` type remains inert syntactic data. The repository does not yet implement a validated `ResourceV1`, authenticated policy activation, semantic transition kernel, authenticated facts, state machine, persistence, atomic commit, proof adapter, application adapter, or production release. Host-side branch, vulnerability-reporting, and release-environment controls remain incomplete. There is no stable package-wide ABI, external security audit, or production-readiness claim. The detailed status and remaining evidence are machine-readable in [`CONFORMANCE_MATRIX.json`](CONFORMANCE_MATRIX.json).
 
@@ -356,6 +358,8 @@ Not included in v0.1:
 - [`templates/PR_TEMPLATE.md`](templates/PR_TEMPLATE.md) — pull-request evidence template.
 - [`PACKAGE_MANIFEST.json`](PACKAGE_MANIFEST.json) — package sizes and SHA-256 payload digests.
 - [`LICENSE`](LICENSE) — MIT license for the repository and specification package.
+
+Repository quality is evaluated as independent gates for complexity, code smells, authority-relevant antipatterns, and design-choice evidence. The automated `excellent-candidate` label is structural only. Design mechanics use AI review; human review receives a behavior-and-evidence summary covering specification obligations, exact assurance results, gaps, and non-claims. Existing preferred-budget advisories are visible under a no-increase ratchet until they are removed.
 
 ---
 

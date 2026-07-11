@@ -128,24 +128,26 @@ pub fn decode_resource_wire_v1(bytes: &[u8]) -> Result<ResourceWireV1, ResourceW
     let mut cursor = Cursor::new(bytes);
     parse_header(&mut cursor)?;
 
-    let machine_id = read_fixed_field::<32>(&mut cursor, 0x0001)?;
-    let domain_id = read_fixed_field::<32>(&mut cursor, 0x0002)?;
-    let application_id = read_fixed_field::<32>(&mut cursor, 0x0003)?;
-    let resource_kind_id = read_fixed_field::<32>(&mut cursor, 0x0004)?;
-    let resource_logic_id = read_fixed_field::<32>(&mut cursor, 0x0005)?;
-    let logic_profile_id = read_fixed_field::<32>(&mut cursor, 0x0006)?;
-    let resource_kind_policy_id = read_fixed_field::<32>(&mut cursor, 0x0007)?;
-    let unit_id = read_fixed_field::<32>(&mut cursor, 0x0008)?;
-    let quantity_atoms = u128::from_be_bytes(read_fixed_field::<16>(&mut cursor, 0x0009)?);
-    let label_root = read_fixed_field::<32>(&mut cursor, 0x000a)?;
-    let value_root = read_fixed_field::<32>(&mut cursor, 0x000b)?;
-    let controller_root = read_fixed_field::<32>(&mut cursor, 0x000c)?;
-    let policy_root = read_fixed_field::<32>(&mut cursor, 0x000d)?;
-    let provenance_root = read_fixed_field::<32>(&mut cursor, 0x000e)?;
-    let nonce = read_fixed_field::<32>(&mut cursor, 0x000f)?;
-    let created_epoch = u64::from_be_bytes(read_fixed_field::<8>(&mut cursor, 0x0010)?);
-    let expiry_epoch = read_expiry_field(&mut cursor)?;
-    let flags = u32::from_be_bytes(read_fixed_field::<4>(&mut cursor, 0x0012)?);
+    let resource = ResourceWireV1 {
+        machine_id: read_fixed_field::<32>(&mut cursor, 0x0001)?,
+        domain_id: read_fixed_field::<32>(&mut cursor, 0x0002)?,
+        application_id: read_fixed_field::<32>(&mut cursor, 0x0003)?,
+        resource_kind_id: read_fixed_field::<32>(&mut cursor, 0x0004)?,
+        resource_logic_id: read_fixed_field::<32>(&mut cursor, 0x0005)?,
+        logic_profile_id: read_fixed_field::<32>(&mut cursor, 0x0006)?,
+        resource_kind_policy_id: read_fixed_field::<32>(&mut cursor, 0x0007)?,
+        unit_id: read_fixed_field::<32>(&mut cursor, 0x0008)?,
+        quantity_atoms: u128::from_be_bytes(read_fixed_field::<16>(&mut cursor, 0x0009)?),
+        label_root: read_fixed_field::<32>(&mut cursor, 0x000a)?,
+        value_root: read_fixed_field::<32>(&mut cursor, 0x000b)?,
+        controller_root: read_fixed_field::<32>(&mut cursor, 0x000c)?,
+        policy_root: read_fixed_field::<32>(&mut cursor, 0x000d)?,
+        provenance_root: read_fixed_field::<32>(&mut cursor, 0x000e)?,
+        nonce: read_fixed_field::<32>(&mut cursor, 0x000f)?,
+        created_epoch: u64::from_be_bytes(read_fixed_field::<8>(&mut cursor, 0x0010)?),
+        expiry_epoch: read_expiry_field(&mut cursor)?,
+        flags: u32::from_be_bytes(read_fixed_field::<4>(&mut cursor, 0x0012)?),
+    };
 
     if !cursor.is_empty() {
         return Err(ResourceWireDecodeError::new(
@@ -153,26 +155,7 @@ pub fn decode_resource_wire_v1(bytes: &[u8]) -> Result<ResourceWireV1, ResourceW
         ));
     }
 
-    Ok(ResourceWireV1 {
-        machine_id,
-        domain_id,
-        application_id,
-        resource_kind_id,
-        resource_logic_id,
-        logic_profile_id,
-        resource_kind_policy_id,
-        unit_id,
-        quantity_atoms,
-        label_root,
-        value_root,
-        controller_root,
-        policy_root,
-        provenance_root,
-        nonce,
-        created_epoch,
-        expiry_epoch,
-        flags,
-    })
+    Ok(resource)
 }
 
 pub(crate) fn validate_ingress_and_header(bytes: &[u8]) -> Result<(), ResourceWireDecodeError> {

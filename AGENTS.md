@@ -374,6 +374,7 @@ Preferred limits:
 | positional parameters | <= 4 | > 6 |
 | public trait methods | <= 7 | > 10 |
 | critical module lines | <= 400 | > 700 |
+| generic type parameters on public API | <= 3 | > 4 |
 
 Exceeding a limit is not automatically wrong, but requires:
 
@@ -383,6 +384,25 @@ Exceeding a limit is not automatically wrong, but requires:
 - explicit reviewer signoff.
 
 Split by responsibility or invariant. Do not split one coherent calculation into opaque micro-functions merely to satisfy a line count.
+
+Code quality is a vector of independent gates. Complexity, mechanically recognizable smells, authority-relevant antipatterns, design-decision completeness, and human design review do not compensate for one another. A blocking failure in one dimension remains blocking regardless of coverage or cleanliness elsewhere.
+
+For every Class C-E change, the design packet also records:
+
+```text
+Design forces
+Pattern selected, or no additional pattern
+Invalid states prevented
+Extension point or closed-set reason
+Alternatives rejected
+Pattern-specific failure modes
+Enforcement and tests
+Technical AI-review status
+```
+
+Pattern count is not a quality metric. Prefer no additional pattern when a named pattern adds indirection without improving invariant visibility, substitution, or authority separation.
+
+Technical, syntactic, and design-pattern choices are AI-reviewable. Human review packets summarize specified behaviors, exact test and assurance results, CBC coverage, residual gaps, and non-claims. Do not require a human to inspect pattern mechanics or source structure. Ask for human semantic direction only when the specification is ambiguous or a proposed behavior would change it.
 
 ---
 
