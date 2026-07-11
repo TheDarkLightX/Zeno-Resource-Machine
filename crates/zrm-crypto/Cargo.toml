@@ -1,0 +1,16 @@
+[package]
+name = "zrm-crypto"
+description = "Reference cryptographic framing for the Zeno Resource Machine"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[dependencies]
+sha2.workspace = true
+zrm-types.workspace = true
+
+[lints]
+workspace = true

@@ -1,0 +1,1631 @@
+{
+  "schema": "zrm/cbc-conformance-matrix/v1",
+  "version": 1,
+  "updated_at": "2026-07-10",
+  "status": "wp0_wp1_candidate_awaiting_human_review",
+  "obligation_family": {
+    "abbreviation": "CBC",
+    "name": "Construction Boundary Conformance",
+    "meaning": "A machine-readable obligation binding a disaster state to a construction rule, required evidence, current status, and explicit non-claim"
+  },
+  "promotion_boundary": {
+    "public_implementation_claim_allowed": false,
+    "production_ready": false,
+    "current_level": "ZRM-L0-candidate",
+    "non_claims": [
+      "no_implemented_semantic_kernel",
+      "no_stable_canonical_abi",
+      "no_formal_runtime_refinement",
+      "no_durable_atomic_machine",
+      "no_recursive_proof_integration",
+      "no_data_availability_solution",
+      "no_privacy_claim",
+      "no_physical_resource_truth_claim",
+      "no_release_provenance",
+      "no_reproducible_release",
+      "no_security_audit",
+      "no_production_authority"
+    ]
+  },
+  "obligation_status_values": [
+    "specified",
+    "implemented_partial",
+    "implemented",
+    "verified_scoped",
+    "blocked",
+    "not_applicable"
+  ],
+  "status_promotion_rules": {
+    "specified": "normative_refs, required_evidence, next_action, and non_claim are present; no implementation claim follows",
+    "implemented_partial": "implementation_refs and test_refs are nonempty; uncovered required evidence and blocking dependencies remain explicit",
+    "implemented": "implementation_refs and test_refs cover the construction rule and required negative cases; blocking_dependencies is empty",
+    "verified_scoped": "implemented requirements hold and formal_refs or evidence_refs contain replayable scoped verification with assumptions and non-claims",
+    "blocked": "next_action names the blocker and blocking_dependencies identifies the unresolved prerequisite",
+    "not_applicable": "evidence_refs contains an approved rationale showing why the obligation cannot affect the selected profile"
+  },
+  "severity_values": [
+    "critical",
+    "high",
+    "medium",
+    "low"
+  ],
+  "defense_layers": [
+    "unrepresentable",
+    "guarded_transition",
+    "detected_at_commit",
+    "detected_by_evidence",
+    "bounded_blast_radius"
+  ],
+  "conformance_levels": {
+    "ZRM-L0": "typed schemas, canonical encoders, vectors, constructor rejects",
+    "ZRM-L1": "deterministic proof-independent reference kernel",
+    "ZRM-L2": "sealed verified-fact integration",
+    "ZRM-L3": "durable atomic machine with concurrency/crash evidence",
+    "ZRM-L4": "recursive proof and DA integration",
+    "ZRM-L5": "release-backed high assurance with independent review"
+  },
+  "obligations": [
+    {
+      "id": "ZRM-CBC-001",
+      "title": "Canonical resource encoding and hash binding",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "ambiguous or malleable resource bytes produce multiple identities or omit semantic fields",
+      "construction_rule": "Define the versioned ResourceWireV1 binary encoding and its schema-fixed SHA-256 suite; reject trailing, noncanonical, duplicate, and unknown-critical fields; derive ResourceId from the exact inner-length-framed wire preimage",
+      "required_evidence": [
+        "golden wire, suite-ID, preimage, and ResourceId vectors",
+        "independent encoder replay",
+        "one-field mutation tests",
+        "trailing/noncanonical/unknown-field rejects"
+      ],
+      "implementation_refs": [
+        "crates/zrm-codec/src/resource_wire_v1.rs",
+        "crates/zrm-crypto/src/lib.rs"
+      ],
+      "test_refs": [
+        "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "crates/zrm-crypto/tests/vectors.rs"
+      ],
+      "formal_refs": [],
+      "evidence_refs": [
+        "vectors/resource_wire_v1.json",
+        "vectors/independent_python/replay_resource_wire_v1.py",
+        "evidence/WP1_MUTATION_MAP.md",
+        "evidence/wp1-local-gates-2026-07-10.json"
+      ],
+      "next_action": "obtain required human semantic and test-evidence review of the draft-v1 ABI, then retain exact vector compatibility in every later work package",
+      "non_claim": "this implements syntactic ResourceWireV1 and ResourceId derivation only; it does not create a semantically valid or authoritative resource",
+      "normative_refs": [
+        "SPECIFICATION.md#102-domain-separated-hash-function",
+        "SPECIFICATION.md#11-canonical-encoding-rules",
+        "SPECIFICATION.md#136-resourcewirev1-canonical-bytes"
+      ],
+      "target_level": "ZRM-L0",
+      "work_packages": [
+        "WP1"
+      ],
+      "blocking_dependencies": []
+    },
+    {
+      "id": "ZRM-CBC-002",
+      "title": "Nonzero and domain-separated identifiers",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "zero or cross-domain identifiers collapse distinct authority domains",
+      "construction_rule": "Use opaque validated newtypes; reject prohibited all-zero values; derive IDs with explicit machine/domain/schema separators",
+      "required_evidence": [
+        "constructor rejects",
+        "cross-domain property tests",
+        "exact ID vectors"
+      ],
+      "implementation_refs": [
+        "crates/zrm-types/src/lib.rs",
+        "crates/zrm-crypto/src/lib.rs"
+      ],
+      "test_refs": [
+        "crates/zrm-types/src/lib.rs",
+        "crates/zrm-crypto/src/lib.rs",
+        "crates/zrm-crypto/tests/vectors.rs"
+      ],
+      "formal_refs": [
+        "crates/zrm-types/src/lib.rs"
+      ],
+      "evidence_refs": [
+        "vectors/resource_wire_v1.json",
+        "evidence/wp1-local-gates-2026-07-10.json"
+      ],
+      "next_action": "obtain required human semantic and test-evidence review, then preserve opaque construction and closed domain framing as later identifier families are added",
+      "non_claim": "opaque nonzero construction validates local representation only; caller-provided identifiers remain inert data until later semantic verification",
+      "normative_refs": [
+        "SPECIFICATION.md#103-required-domain-strings",
+        "SPECIFICATION.md#12-primitive-newtypes"
+      ],
+      "target_level": "ZRM-L0",
+      "work_packages": [
+        "WP1"
+      ],
+      "blocking_dependencies": []
+    },
+    {
+      "id": "ZRM-CBC-003",
+      "title": "Consumed, referenced, and created roles are disjoint",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "one resource is simultaneously treated as consumed, read-only, and newly created",
+      "construction_rule": "Canonicalize role sets and reject cross-role duplicates before logic verification",
+      "required_evidence": [
+        "role collision tests",
+        "property tests over permutations",
+        "bounded model"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#92-role-disjointness",
+        "SPECIFICATION.md#18-resource-roles-and-canonical-order"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP3"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-001"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-004",
+      "title": "Consumed resources exist in committed pre-state",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a transition spends a nonexistent or stale resource",
+      "construction_rule": "Verify membership against the expected pre-state root and bind the proof to resource identity and role; admit the plan only through the full-root/version CAS",
+      "required_evidence": [
+        "missing membership reject",
+        "wrong-root reject",
+        "membership proof fuzzing"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#91-existence",
+        "SPECIFICATION.md#23-state-accumulator-abstraction",
+        "SPECIFICATION.md#25-normative-validation-algorithm"
+      ],
+      "target_level": "ZRM-L3",
+      "work_packages": [
+        "WP4",
+        "WP9"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-003",
+        "ZRM-CBC-022"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-005",
+      "title": "Referenced resources exist and remain unconsumed",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a logic reads fabricated data or accidentally consumes a read-only resource",
+      "construction_rule": "Verify reference membership under the expected pre-state, keep references out of nullifier/effect sets, and require the full-root/version CAS so each reference remains active at the v0.1 commit linearization point",
+      "required_evidence": [
+        "missing reference reject",
+        "reference/consume substitution reject",
+        "journal role tests"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#91-existence",
+        "SPECIFICATION.md#282-compare-and-swap",
+        "SPECIFICATION.md#29-concurrency-and-scheduling"
+      ],
+      "target_level": "ZRM-L3",
+      "work_packages": [
+        "WP4",
+        "WP9"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-003",
+        "ZRM-CBC-022"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-006",
+      "title": "Nullifiers enforce exact-once consumption",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "a resource is consumed more than once",
+      "construction_rule": "Derive profile-bound nullifiers, require nonmembership in the expected snapshot, and insert them atomically with effects under the state/version CAS",
+      "required_evidence": [
+        "first consume accept",
+        "replay reject-is-no-op",
+        "cross-machine/domain nullifier tests",
+        "formal exact-once model"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#93-fresh-consumption",
+        "SPECIFICATION.md#134-transparent-nullifier-profile",
+        "SPECIFICATION.md#25-normative-validation-algorithm"
+      ],
+      "target_level": "ZRM-L3",
+      "work_packages": [
+        "WP4",
+        "WP9"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-002",
+        "ZRM-CBC-022"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-007",
+      "title": "Created resources are globally fresh",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "an old resource commitment is recreated after consumption or an output is duplicated",
+      "construction_rule": "Reject duplicate outputs and transparent-profile historical commitment reuse in the expected snapshot, then insert outputs only under the state/version CAS",
+      "required_evidence": [
+        "same-transition duplicate reject",
+        "historical recreation reject",
+        "bounded accumulator model"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "v0.1 historical freshness is specified only for the transparent nullifier profile; future shielded profiles require a committed equivalent",
+      "normative_refs": [
+        "SPECIFICATION.md#94-fresh-creation",
+        "SPECIFICATION.md#233-state-root",
+        "SPECIFICATION.md#25-normative-validation-algorithm"
+      ],
+      "target_level": "ZRM-L3",
+      "work_packages": [
+        "WP4",
+        "WP9"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-001",
+        "ZRM-CBC-002",
+        "ZRM-CBC-022"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-008",
+      "title": "Resource logic covers every role and ordinal",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "a valid proof for one resource is reused to authorize another resource or role",
+      "construction_rule": "Commit exactly one required LogicClaimHash per role and ordinal with no missing, duplicate, or extra claim; each verified fact binds the final transition hash, exact claim hash, verifier, policy, program, and profile",
+      "required_evidence": [
+        "role substitution reject",
+        "ordinal substitution reject",
+        "wrong statement reject"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#95-logic-coverage",
+        "SPECIFICATION.md#19-resource-logic-contract"
+      ],
+      "target_level": "ZRM-L2",
+      "work_packages": [
+        "WP5"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-003",
+        "ZRM-CBC-017"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-009",
+      "title": "Verified facts are sealed capabilities",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "caller-supplied metadata or proof_ok booleans create authority",
+      "construction_rule": "Only verifier adapters construct private-field VerifiedFact types after full cryptographic and binding checks",
+      "required_evidence": [
+        "compile-fail or privacy tests",
+        "forged fact reject",
+        "adapter API review"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#53-authority-through-capabilities-not-booleans",
+        "SPECIFICATION.md#193-verifier-result-capability",
+        "SPECIFICATION.md#302-port-ownership-and-sealed-registration"
+      ],
+      "target_level": "ZRM-L2",
+      "work_packages": [
+        "WP5"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-002"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-010",
+      "title": "Program, key, profile, and policy are pinned",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a valid artifact under the wrong verifier authorizes a transition",
+      "construction_rule": "Verify exact program/key, proof kind, verifier parameters, policy epoch, revocation state, and the stage-appropriate statement, claim, journal draft, or accepted journal",
+      "required_evidence": [
+        "wrong program/key/profile/policy negatives",
+        "stale policy reject",
+        "revoked verifier reject"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#19-resource-logic-contract",
+        "SPECIFICATION.md#301-verifier-policy",
+        "SPECIFICATION.md#303-adapter-requirements"
+      ],
+      "target_level": "ZRM-L2",
+      "work_packages": [
+        "WP5"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-009",
+        "ZRM-CBC-017"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-011",
+      "title": "Controller authority is explicit",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a transition uses a resource without controller approval",
+      "construction_rule": "Bind signatures/capabilities to the exact transition statement, role, policy, and validity window",
+      "required_evidence": [
+        "missing signature reject",
+        "cross-transition replay reject",
+        "expiry tests"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#22-verified-authority-facts",
+        "SPECIFICATION.md#304-fact-class-binding"
+      ],
+      "target_level": "ZRM-L2",
+      "work_packages": [
+        "WP5"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-009",
+        "ZRM-CBC-017"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-012",
+      "title": "Accounting rows are derived, not trusted",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "a proposer supplies balancing rows that do not reflect the actual transition",
+      "construction_rule": "Derive accounting rows from validated resources and transformation outputs inside the semantic kernel",
+      "required_evidence": [
+        "proposed-row substitution test",
+        "differential row tests",
+        "mutation removing derivation"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#213-row-derivation"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP6"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-003"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-013",
+      "title": "Conserved quantities balance",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "assets or other conserved resources are created or destroyed silently",
+      "construction_rule": "Enforce per-kind and per-unit debit plus authorized mint equals credit plus authorized burn using checked arithmetic",
+      "required_evidence": [
+        "conservation property tests",
+        "unauthorized mint/burn rejects",
+        "SMT/Lean conservation evidence"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#96-accounting-and-transformation",
+        "SPECIFICATION.md#212-conservation-equation"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP6"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-012",
+        "ZRM-CBC-016"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-014",
+      "title": "Cross-kind transformation is explicitly authorized",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "unlike resource kinds are exchanged under an implicit or incomplete rule",
+      "construction_rule": "Require a versioned transformation statement covering every nonzero delta and verify it under a governed logic",
+      "required_evidence": [
+        "uncovered delta reject",
+        "partial coverage reject",
+        "transformation vectors"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#20-transformation-contract",
+        "SPECIFICATION.md#213-row-derivation"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP6"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-012",
+        "ZRM-CBC-013"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-015",
+      "title": "Units cannot be mixed implicitly",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "quantities with different units are added or compared as if equivalent",
+      "construction_rule": "Use opaque UnitId and quantity types; permit conversion only through an explicit transformation with rounding policy",
+      "required_evidence": [
+        "unit mismatch reject",
+        "rounding edge tests",
+        "no-float checks"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#14-resource-kind-policy",
+        "SPECIFICATION.md#214-units"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP2",
+        "WP6"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-002"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-016",
+      "title": "All arithmetic is checked and bounded",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "overflow, truncation, or lossy cast changes economic or authority semantics",
+      "construction_rule": "Use explicit widths, checked operations, bounded counts, and validated conversions; prohibit floating point in consensus semantics",
+      "required_evidence": [
+        "overflow/underflow tests",
+        "Kani harnesses",
+        "cast lint gate"
+      ],
+      "implementation_refs": [
+        "crates/zrm-types/src/lib.rs",
+        "crates/zrm-codec/src/resource_wire_v1.rs"
+      ],
+      "test_refs": [
+        "crates/zrm-types/src/lib.rs",
+        "crates/zrm-codec/tests/resource_wire_v1.rs"
+      ],
+      "formal_refs": [
+        "crates/zrm-types/src/lib.rs",
+        "crates/zrm-codec/src/kani_harnesses.rs"
+      ],
+      "evidence_refs": [
+        "evidence/WP1_MUTATION_MAP.md"
+      ],
+      "next_action": "extend checked arithmetic and Kani evidence to WP6 accounting and transformation paths",
+      "non_claim": "the evidence covers WP1 widths, bounds, and conversions only; no accounting arithmetic or verifier-cost computation exists",
+      "normative_refs": [
+        "SPECIFICATION.md#102-domain-separated-hash-function",
+        "SPECIFICATION.md#21-accounting-model",
+        "SPECIFICATION.md#42-defensive-rust-rules"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP1",
+        "WP6"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-001"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-017",
+      "title": "Transition statement binds all acceptance-relevant facts",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "an uncommitted field changes acceptance, ordering, replay, accounting, or authority",
+      "construction_rule": "Commit proof-independent logic, transformation, authority, and DA claim descriptors with roots and counts in the transition; derive the final StatementHash without cycles; bind every verified fact to that final hash plus its exact claim hash",
+      "required_evidence": [
+        "field-disposition matrix",
+        "one-field mutation sensitivity",
+        "statement vector",
+        "cross-object machine/domain/application substitution rejects"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#16-transition-statement",
+        "SPECIFICATION.md#19-resource-logic-contract",
+        "SPECIFICATION.md#20-transformation-contract",
+        "SPECIFICATION.md#22-verified-authority-facts"
+      ],
+      "target_level": "ZRM-L2",
+      "work_packages": [
+        "WP3",
+        "WP5"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-001",
+        "ZRM-CBC-002"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-018",
+      "title": "Witness fields are checked, recomputed, proof-authorized, or irrelevant",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "an unconstrained witness field controls the result",
+      "construction_rule": "Maintain a field-disposition table and reject any witness field lacking one of the four permitted dispositions",
+      "required_evidence": [
+        "field-disposition audit",
+        "mutation tests",
+        "guest/reference parity"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#17-transition-witness-and-envelope"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP3",
+        "WP6"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-017"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-019",
+      "title": "Untrusted decoding is bounded and canonical",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "bounded_blast_radius",
+      "disaster_state": "malformed bytes trigger excessive allocation, recursion, parser differentials, or ambiguity",
+      "construction_rule": "Enforce byte, depth, count, string, and nesting caps before allocation; canonical re-encode; reject duplicate keys and unknown critical fields",
+      "required_evidence": [
+        "grammar fuzzing",
+        "oversize/depth rejects",
+        "duplicate-key tests",
+        "allocation budget tests"
+      ],
+      "implementation_refs": [
+        "crates/zrm-codec/src/resource_wire_v1.rs",
+        "fuzz/fuzz_targets/resource_wire_v1_decode.rs"
+      ],
+      "test_refs": [
+        "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "fuzz/corpus/resource_wire_v1_decode/absent",
+        "fuzz/corpus/resource_wire_v1_decode/oversize-boundary",
+        "fuzz/corpus/resource_wire_v1_decode/present"
+      ],
+      "formal_refs": [
+        "crates/zrm-codec/src/kani_harnesses.rs"
+      ],
+      "evidence_refs": [
+        "evidence/WP1_MUTATION_MAP.md"
+      ],
+      "next_action": "add explicit count, depth, string, allocation, and diagnostic-JSON bounds when those later wire types are introduced",
+      "non_claim": "the bounded canonical decoder covers ResourceWireV1 only; no generic envelope, nested collection, string, map, or diagnostic JSON decoder exists",
+      "normative_refs": [
+        "SPECIFICATION.md#11-canonical-encoding-rules",
+        "SPECIFICATION.md#136-resourcewirev1-canonical-bytes",
+        "SPECIFICATION.md#17-transition-witness-and-envelope",
+        "SPECIFICATION.md#24-correct-by-construction-transition-pipeline"
+      ],
+      "target_level": "ZRM-L0",
+      "work_packages": [
+        "WP1"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-001"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-020",
+      "title": "Reject is a total no-op",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "a rejected transition mutates state, nullifiers, rewards, files, or external effects",
+      "construction_rule": "Separate parse/authenticate/validate/plan from commit; keep plans private and commit only after final checks",
+      "required_evidence": [
+        "state snapshot equality on every reject class",
+        "mutation moving commit early",
+        "formal reject-no-op model"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#97-state-update",
+        "SPECIFICATION.md#24-correct-by-construction-transition-pipeline",
+        "SPECIFICATION.md#25-normative-validation-algorithm"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP6"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-018"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-021",
+      "title": "Commit is atomic across effects and replay state",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "detected_at_commit",
+      "disaster_state": "resource effects commit without nullifiers or rewards, or replay state commits without effects",
+      "construction_rule": "Persist state roots, nullifiers, accepted journal, rewards, and outbox records in one atomic write set",
+      "required_evidence": [
+        "crash injection at every boundary",
+        "recovery replay",
+        "database constraint tests"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#28-atomic-persistence-and-exact-once-commit"
+      ],
+      "target_level": "ZRM-L3",
+      "work_packages": [
+        "WP9"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-020",
+        "ZRM-CBC-022"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-022",
+      "title": "Stale plans fail compare-and-swap",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "detected_at_commit",
+      "disaster_state": "two independently valid plans both commit against the same pre-state",
+      "construction_rule": "Bind CommitPlan to expected state root/version and ValidationContextHash, then atomically compare the full tuple at commit",
+      "required_evidence": [
+        "two-writer race",
+        "Loom model",
+        "persistent CAS integration test",
+        "epoch/order-context advance race with unchanged machine state"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#248-commitplan---committedtransition",
+        "SPECIFICATION.md#282-compare-and-swap"
+      ],
+      "target_level": "ZRM-L3",
+      "work_packages": [
+        "WP9"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-017",
+        "ZRM-CBC-020"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-023",
+      "title": "Concurrent execution has deterministic conflict semantics",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "race outcome changes semantic results or violates serializability",
+      "construction_rule": "Serialize v0.1 global-root commits; declare read/write footprints and prove serializability before any later parallel-commit profile",
+      "required_evidence": [
+        "conflict tests",
+        "disjoint commutativity property",
+        "Loom/TLA model"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#29-concurrency-and-scheduling"
+      ],
+      "target_level": "ZRM-L3",
+      "work_packages": [
+        "WP9"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-021",
+        "ZRM-CBC-022"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-024",
+      "title": "Stable rejection taxonomy and precedence",
+      "severity": "high",
+      "status": "implemented_partial",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "different implementations reveal inconsistent decisions or sensitive diagnostics",
+      "construction_rule": "Define versioned reject classes, deterministic precedence, bounded public detail, and private diagnostic separation",
+      "required_evidence": [
+        "reject precedence vectors",
+        "cross-language parity",
+        "sensitive data tests"
+      ],
+      "implementation_refs": [
+        "crates/zrm-types/src/lib.rs",
+        "crates/zrm-codec/src/error.rs",
+        "crates/zrm-codec/src/resource_wire_v1.rs"
+      ],
+      "test_refs": [
+        "crates/zrm-types/src/lib.rs",
+        "crates/zrm-codec/tests/resource_wire_v1.rs"
+      ],
+      "formal_refs": [
+        "crates/zrm-codec/src/kani_harnesses.rs"
+      ],
+      "evidence_refs": [
+        "evidence/WP1_MUTATION_MAP.md"
+      ],
+      "next_action": "add independent cross-language reject parity and the private diagnostic envelope in WP7",
+      "non_claim": "stable codes and precedence cover ResourceWireV1 decoding only; no transition-level rejection receipt or private diagnostic schema exists",
+      "normative_refs": [
+        "SPECIFICATION.md#136-resourcewirev1-canonical-bytes",
+        "SPECIFICATION.md#26-rejection-model"
+      ],
+      "target_level": "ZRM-L0",
+      "work_packages": [
+        "WP1",
+        "WP7"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-019"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-025",
+      "title": "State and journal roots are deterministic",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "same semantic transition produces different roots across runs or languages",
+      "construction_rule": "Eliminate time, RNG, locale, environment, unordered iteration, and machine paths from semantic computation",
+      "required_evidence": [
+        "repeatability tests",
+        "cross-language vectors",
+        "Miri endian checks"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#233-state-root",
+        "SPECIFICATION.md#27-journal-draft-and-accepted-transition-journal"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP4",
+        "WP7"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-001",
+        "ZRM-CBC-023"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-026",
+      "title": "Schema evolution is explicit and append-only or migrated",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "a field reorder or default silently changes meaning",
+      "construction_rule": "Version every authority schema; reject unknown criticals; require compatibility proof or migration for breaking changes",
+      "required_evidence": [
+        "old/new decoder matrix",
+        "migration replay",
+        "version mismatch rejects"
+      ],
+      "implementation_refs": [
+        "crates/zrm-codec/src/resource_wire_v1.rs"
+      ],
+      "test_refs": [
+        "crates/zrm-codec/tests/resource_wire_v1.rs"
+      ],
+      "formal_refs": [],
+      "evidence_refs": [
+        "vectors/resource_wire_v1.json"
+      ],
+      "next_action": "define the old/new compatibility matrix and migration replay before any version-two schema is accepted",
+      "non_claim": "version one is rejected or accepted exactly, but no version-two decoder, compatibility proof, or migration exists",
+      "normative_refs": [
+        "SPECIFICATION.md#112-schema-evolution"
+      ],
+      "target_level": "ZRM-L0",
+      "work_packages": [
+        "WP1",
+        "WP7"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-001"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-027",
+      "title": "Semantic epoch identity is proof-tree independent",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "prover grouping changes the economic identity of the same transition set",
+      "construction_rule": "Define a canonical semantic transition ordering/root distinct from proof topology and prove/test grouping invariance",
+      "required_evidence": [
+        "tree grouping metamorphic tests",
+        "formal associativity/tree-independence theorem",
+        "root vectors"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#57-proof-tree-shape-is-not-economic-identity",
+        "SPECIFICATION.md#31-recursive-proof-integration"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-025"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-028",
+      "title": "Data commitment is not overclaimed as availability",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a committed data root is reported as retrievable without policy evidence",
+      "construction_rule": "Use separate VerifiedDaFact capability and profile-specific certificate verification",
+      "required_evidence": [
+        "missing/invalid DA certificate rejects",
+        "weaker-profile nonclaim test",
+        "availability policy vectors"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#32-data-availability"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-017"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-029",
+      "title": "Privacy claims require a complete profile and adversary model",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "detected_by_evidence",
+      "disaster_state": "computational integrity is advertised as zero knowledge or system privacy",
+      "construction_rule": "Separate transparent and shielded profiles; specify leakage, network metadata, disclosure, and cryptographic assumptions",
+      "required_evidence": [
+        "claims checker",
+        "privacy threat model",
+        "side-channel test plan"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#33-privacy-profiles"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-017"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-030",
+      "title": "External and physical attestations remain scoped",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a proof of digital processing is treated as proof of physical energy, location, identity, or truth",
+      "construction_rule": "Bind external attestation source, freshness, scope, verifier, and uncertainty; preserve explicit nonclaims",
+      "required_evidence": [
+        "wrong source/freshness rejects",
+        "attestation policy vectors",
+        "nonclaim tests"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#34-external-and-physical-resource-attestations"
+      ],
+      "target_level": "ZRM-L2",
+      "work_packages": [
+        "WP11"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-009",
+        "ZRM-CBC-011"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-031",
+      "title": "Core dependency direction remains inward",
+      "severity": "high",
+      "status": "implemented_partial",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "application, proof, database, or network concerns contaminate the semantic kernel",
+      "construction_rule": "Enforce crate dependency rules and ports/adapters architecture",
+      "required_evidence": [
+        "dependency graph gate",
+        "forbidden edge test",
+        "architecture review"
+      ],
+      "implementation_refs": [
+        "Cargo.toml",
+        "tools/check_architecture.py"
+      ],
+      "test_refs": [
+        "tools/check_architecture.py",
+        "tools/tests/test_policy_checks.py"
+      ],
+      "formal_refs": [],
+      "evidence_refs": [
+        "worklogs/2026-07-10-wp0-wp1.md"
+      ],
+      "next_action": "extend the dependency checker as policy and verifier crates are introduced and obtain human architecture review",
+      "non_claim": "the current checker covers the three-crate WP1 graph only; it does not validate future adapter or runtime wiring",
+      "normative_refs": [
+        "SPECIFICATION.md#6-layering-and-dependency-direction",
+        "SPECIFICATION.md#37-recommended-rust-workspace-architecture"
+      ],
+      "target_level": "ZRM-L0",
+      "work_packages": [
+        "WP0"
+      ],
+      "blocking_dependencies": []
+    },
+    {
+      "id": "ZRM-CBC-032",
+      "title": "Unsafe code is absent or isolated with a safety case",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "bounded_blast_radius",
+      "disaster_state": "undefined behavior invalidates semantic or cryptographic guarantees",
+      "construction_rule": "Forbid unsafe in core; isolate adapter unsafe with safety contracts, Miri, Kani, fuzzing, and independent review",
+      "required_evidence": [
+        "unsafe inventory",
+        "Miri report",
+        "Kani/fuzz evidence",
+        "review record"
+      ],
+      "implementation_refs": [
+        "Cargo.toml",
+        "crates/zrm-codec/src/lib.rs",
+        "crates/zrm-crypto/src/lib.rs",
+        "crates/zrm-types/src/lib.rs"
+      ],
+      "test_refs": [
+        "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "fuzz/fuzz_targets/resource_wire_v1_decode.rs"
+      ],
+      "formal_refs": [
+        "crates/zrm-codec/src/kani_harnesses.rs",
+        "crates/zrm-types/src/lib.rs"
+      ],
+      "evidence_refs": [
+        ".github/workflows/nightly.yml",
+        "worklogs/2026-07-10-wp0-wp1.md"
+      ],
+      "next_action": "retain pinned Miri coverage and maintain an explicit unsafe inventory plus safety cases as adapters are added",
+      "non_claim": "unsafe is forbidden in current ZRM crates and their tests pass under Miri; this does not establish soundness of dependency unsafe code, unexercised architecture paths, or future adapters",
+      "normative_refs": [
+        "SPECIFICATION.md#373-unsafe-code",
+        "SPECIFICATION.md#42-defensive-rust-rules"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP0",
+        "WP8"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-031"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-033",
+      "title": "Complexity remains locally auditable",
+      "severity": "high",
+      "status": "implemented_partial",
+      "defense_layer": "detected_by_evidence",
+      "disaster_state": "critical functions become too complex for reliable review",
+      "construction_rule": "Enforce complexity, length, nesting, and responsibility budgets with justified exceptions",
+      "required_evidence": [
+        "complexity report",
+        "review exception record",
+        "focused tests"
+      ],
+      "implementation_refs": [
+        "clippy.toml",
+        "Cargo.toml",
+        "tools/check_architecture.py"
+      ],
+      "test_refs": [
+        "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "tools/tests/test_policy_checks.py"
+      ],
+      "formal_refs": [],
+      "evidence_refs": [
+        "worklogs/2026-07-10-wp0-wp1.md"
+      ],
+      "next_action": "add a machine-readable complexity report and reviewed exception workflow before promotion",
+      "non_claim": "lint and module boundaries are enforced, but the full complexity-budget report is not yet automated",
+      "normative_refs": [
+        "SPECIFICATION.md#394-complexity-budgets"
+      ],
+      "target_level": "ZRM-L0",
+      "work_packages": [
+        "WP0"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-031"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-034",
+      "title": "Critical guards are mutation-tested",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "detected_by_evidence",
+      "disaster_state": "tests pass even after a critical guard is removed or inverted",
+      "construction_rule": "Maintain hand-authored mutants for every critical invariant and run general mutation testing",
+      "required_evidence": [
+        "killed-mutant report",
+        "survivor disposition",
+        "mutation command"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#404-mutation-tests"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP8"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-013",
+        "ZRM-CBC-014",
+        "ZRM-CBC-020"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-035",
+      "title": "Parsers and proof envelopes are fuzzed",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "detected_by_evidence",
+      "disaster_state": "untrusted input reaches panic, UB, hang, or resource exhaustion",
+      "construction_rule": "Maintain coverage-guided, structure-aware fuzz targets and commit minimized regressions",
+      "required_evidence": [
+        "fuzz corpus",
+        "duration/report",
+        "minimized regression tests"
+      ],
+      "implementation_refs": [
+        "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
+        "fuzz/Cargo.toml"
+      ],
+      "test_refs": [
+        "fuzz/corpus/resource_wire_v1_decode/absent",
+        "fuzz/corpus/resource_wire_v1_decode/oversize-boundary",
+        "fuzz/corpus/resource_wire_v1_decode/present",
+        "crates/zrm-codec/tests/resource_wire_v1.rs"
+      ],
+      "formal_refs": [],
+      "evidence_refs": [
+        ".github/workflows/nightly.yml",
+        "worklogs/2026-07-10-wp0-wp1.md"
+      ],
+      "next_action": "accumulate sustained fuzz duration, commit minimized failures as regressions, and add later proof-envelope grammars",
+      "non_claim": "the current smoke campaign covers the ResourceWireV1 byte decoder only and grants no proof-envelope or semantic-kernel assurance",
+      "normative_refs": [
+        "SPECIFICATION.md#405-fuzzing"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP8"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-019"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-036",
+      "title": "Reference and optimized semantics agree",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "detected_by_evidence",
+      "disaster_state": "an optimization changes decisions, rows, roots, or journals",
+      "construction_rule": "Maintain a simple reference interpreter and differential tests against every optimized path",
+      "required_evidence": [
+        "differential corpus",
+        "decision/root/journal parity",
+        "metamorphic tests"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#409-differential-and-metamorphic-testing"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP8"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-001",
+        "ZRM-CBC-025"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-037",
+      "title": "Formal models are linked to runtime semantics",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "detected_by_evidence",
+      "disaster_state": "a theorem proves a model that does not match the implementation",
+      "construction_rule": "Use shared constants, vectors, extraction, verified implementation, or a reviewed refinement mapping",
+      "required_evidence": [
+        "refinement document",
+        "runtime/model parity tests",
+        "formal build"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#416-refinement-obligation"
+      ],
+      "target_level": "ZRM-L2",
+      "work_packages": [
+        "WP8"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-036"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-038",
+      "title": "Proof-task rewards are exact-once",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "duplicate, reassigned, late, or challenged proofs create multiple rewards",
+      "construction_rule": "Model task, assignment, completion, challenge, timeout, escrow, and reward as consumed/created resources",
+      "required_evidence": [
+        "BDD lifecycle scenarios",
+        "bounded reward model",
+        "duplicate reward rejects"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#353-market-integrity-requirements",
+        "SPECIFICATION.md#477-proof-market-reward-replay"
+      ],
+      "target_level": "ZRM-L3",
+      "work_packages": [
+        "WP10"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-021",
+        "ZRM-CBC-023"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-039",
+      "title": "Generated and agent-authored code is treated as untrusted",
+      "severity": "high",
+      "status": "implemented_partial",
+      "defense_layer": "detected_by_evidence",
+      "disaster_state": "AI-generated code bypasses design, review, testing, or provenance requirements",
+      "construction_rule": "Require task/invariant plan, minimal diff, evidence log, human review, and all ordinary gates; forbid self-promotion",
+      "required_evidence": [
+        "agent work log",
+        "review record",
+        "gate reports"
+      ],
+      "implementation_refs": [
+        "AGENTS.md",
+        "templates/AGENT_WORKLOG_TEMPLATE.md",
+        "tools/check_repository_hygiene.py"
+      ],
+      "test_refs": [
+        "tools/tests/test_policy_checks.py",
+        "tools/check_repository_hygiene.py"
+      ],
+      "formal_refs": [],
+      "evidence_refs": [
+        "worklogs/2026-07-10-wp0-wp1.md"
+      ],
+      "next_action": "obtain required human review and attach the final clean-revision gate record",
+      "non_claim": "agent evidence and ordinary gates do not replace human review or authorize self-promotion",
+      "normative_refs": [
+        "SPECIFICATION.md#45-generated-code-policy",
+        "SPECIFICATION.md#46-agent-implementation-contract"
+      ],
+      "target_level": "ZRM-L0",
+      "work_packages": [
+        "WP0"
+      ],
+      "blocking_dependencies": []
+    },
+    {
+      "id": "ZRM-CBC-040",
+      "title": "Dependencies and build tooling are governed",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "detected_by_evidence",
+      "disaster_state": "a vulnerable or malicious dependency/build script compromises the TCB",
+      "construction_rule": "Minimize dependencies; review features/build scripts/proc macros; run audit/deny/vet and lock critical versions",
+      "required_evidence": [
+        "dependency review",
+        "advisory report",
+        "license/SBOM",
+        "TCB delta"
+      ],
+      "implementation_refs": [
+        "Cargo.toml",
+        "Cargo.lock",
+        "deny.toml",
+        "docs/DEPENDENCY_POLICY.md",
+        ".github/workflows/ci.yml"
+      ],
+      "test_refs": [
+        "tools/check_repository_hygiene.py",
+        "tools/tests/test_policy_checks.py"
+      ],
+      "formal_refs": [],
+      "evidence_refs": [
+        "docs/dependency-reviews/sha2-0.11.0.md",
+        "docs/dependency-reviews/libfuzzer-sys-0.4.13.md"
+      ],
+      "next_action": "add cargo-vet policy, SBOM and cryptographic bill of materials generation, then verify cargo-deny in the hosted gate",
+      "non_claim": "locked dependencies, local audit, and CI policy do not establish a vetted or release-provenance-complete supply chain",
+      "normative_refs": [
+        "SPECIFICATION.md#43-dependency-and-supply-chain-policy"
+      ],
+      "target_level": "ZRM-L0",
+      "work_packages": [
+        "WP0"
+      ],
+      "blocking_dependencies": []
+    },
+    {
+      "id": "ZRM-CBC-041",
+      "title": "Release artifacts carry verifiable provenance",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "detected_by_evidence",
+      "disaster_state": "artifacts cannot be traced to reviewed source and builder policy",
+      "construction_rule": "Produce SLSA provenance, verification summary, SBOM/CBOM, source/toolchain hashes, test/formal reports, signatures, and nonclaims",
+      "required_evidence": [
+        "signed release manifest",
+        "provenance verification",
+        "transparency log"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#443-release-gate"
+      ],
+      "target_level": "ZRM-L5",
+      "work_packages": [
+        "WP13"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-040"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-042",
+      "title": "Reproducibility claims require independent bit-identical builds",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "detected_by_evidence",
+      "disaster_state": "same-host or path-dependent builds are called reproducible",
+      "construction_rule": "Use isolated independent clean builds and compare specified artifacts bit-for-bit; record environment and path policy",
+      "required_evidence": [
+        "two independent build reports",
+        "artifact hash equality",
+        "path/time/locale perturbation tests"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#434-reproducibility",
+        "SPECIFICATION.md#443-release-gate"
+      ],
+      "target_level": "ZRM-L5",
+      "work_packages": [
+        "WP13"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-041"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-043",
+      "title": "Claims never exceed evidence",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "detected_by_evidence",
+      "disaster_state": "docs or UI call a local test production-ready, private, available, or formally verified",
+      "construction_rule": "Gate reserved claim language through a machine-readable claims/conformance matrix and human review",
+      "required_evidence": [
+        "claims checker",
+        "nonclaims",
+        "release review"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#51-promotion-rule"
+      ],
+      "target_level": "ZRM-L5",
+      "work_packages": [
+        "WP13"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-041",
+        "ZRM-CBC-042"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-044",
+      "title": "No secret or sensitive diagnostic leakage",
+      "severity": "high",
+      "status": "specified",
+      "defense_layer": "bounded_blast_radius",
+      "disaster_state": "errors, Debug, logs, or evidence bundles disclose witnesses, keys, or private state",
+      "construction_rule": "Separate public reject receipts from private diagnostics; redact/zeroize; bound outputs; disable secret Debug",
+      "required_evidence": [
+        "redaction tests",
+        "secret scanning",
+        "log review"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "implement the rule and attach replayable evidence before status promotion",
+      "non_claim": "specification text alone does not satisfy this obligation",
+      "normative_refs": [
+        "SPECIFICATION.md#264-sensitive-diagnostics",
+        "SPECIFICATION.md#42-defensive-rust-rules"
+      ],
+      "target_level": "ZRM-L2",
+      "work_packages": [
+        "WP5",
+        "WP9"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-009"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-045",
+      "title": "Resource exhaustion is bounded end to end",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "bounded_blast_radius",
+      "disaster_state": "validly shaped input causes excessive CPU, memory, disk, proof, or verifier work",
+    "construction_rule": "Commit explicit per-profile byte/count/depth/storage limits plus one governed deterministic verifier-cost model; precompute and bound the complete verifier dispatch charge before expensive work",
+      "required_evidence": [
+        "boundary tests",
+      "cost-row and complete-dispatch-plan vectors with checked-overflow cases",
+      "backend evidence that governed worst-case work remains within each cost row",
+        "timeout-as-failure tests",
+        "load/DoS tests"
+      ],
+      "implementation_refs": [
+        "crates/zrm-types/src/lib.rs",
+        "crates/zrm-codec/src/resource_wire_v1.rs"
+      ],
+      "test_refs": [
+        "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "fuzz/fuzz_targets/resource_wire_v1_decode.rs"
+      ],
+      "formal_refs": [],
+      "evidence_refs": [
+        ".github/workflows/nightly.yml"
+      ],
+      "next_action": "define complete transition count/depth/storage limits and the governed verifier-cost model in WP5 and WP9",
+      "non_claim": "only the WP1 resource-wire byte ceiling and fixed field widths are enforced; no verifier dispatch, storage, load, or end-to-end DoS bound exists",
+      "normative_refs": [
+        "SPECIFICATION.md#15-machine-policy",
+        "SPECIFICATION.md#405-fuzzing",
+        "SPECIFICATION.md#44-ci-and-quality-gates"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP1",
+        "WP5",
+        "WP9"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-019"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+//! Independent cross-language vectors for closed WP1 hash operations.
+
+use zrm_crypto::{derive_resource_id_from_canonical_wire, derive_transparent_nullifier_v1};
+use zrm_types::{DomainId, MachineId, Nullifier, ResourceId, ZeroValueError};
+
+const ABSENT_VECTOR: &[u8; 595] = include_bytes!("../../../vectors/resource_wire_v1_absent.bin");
+const ABSENT_RESOURCE_ID: [u8; 32] = [
+    0x41, 0x94, 0x23, 0x6e, 0x9f, 0x6b, 0xf4, 0xb2, 0x7f, 0x2e, 0x06, 0x21, 0x8a, 0xa6, 0x9b, 0x8c,
+    0x4a, 0x58, 0xa2, 0xd6, 0x9b, 0xfa, 0xc5, 0xda, 0xeb, 0x72, 0x57, 0x40, 0x20, 0x86, 0xe8, 0xc5,
+];
+const ABSENT_NULLIFIER: [u8; 32] = [
+    0xa2, 0x2a, 0x2e, 0x07, 0x93, 0x72, 0x86, 0x9e, 0x9d, 0x5e, 0x14, 0x0b, 0x7f, 0x67, 0x0b, 0x30,
+    0x0e, 0x64, 0x0f, 0x6a, 0x6b, 0x46, 0x3c, 0x80, 0x93, 0xd2, 0xa8, 0x15, 0x97, 0xfb, 0xbe, 0x66,
+];
+
+#[test]
+fn resource_id_matches_independent_vector() {
+    assert_eq!(
+        derive_resource_id_from_canonical_wire(ABSENT_VECTOR).map(ResourceId::into_bytes),
+        Ok(ABSENT_RESOURCE_ID)
+    );
+}
+
+#[test]
+fn transparent_nullifier_matches_independent_vector() -> Result<(), ZeroValueError> {
+    let machine_id = MachineId::try_from([1; 32])?;
+    let domain_id = DomainId::try_from([2; 32])?;
+    let resource_id = ResourceId::try_from(ABSENT_RESOURCE_ID)?;
+    assert_eq!(
+        derive_transparent_nullifier_v1(machine_id, domain_id, resource_id)
+            .map(Nullifier::into_bytes),
+        Ok(ABSENT_NULLIFIER)
+    );
+    Ok(())
+}

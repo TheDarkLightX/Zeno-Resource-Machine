@@ -1,0 +1,30 @@
+# Repository governance and public claims
+/.github/ @TheDarkLightX
+/AGENTS.md @TheDarkLightX
+/CONFORMANCE_MATRIX.json @TheDarkLightX
+/CONTRIBUTING.md @TheDarkLightX
+/README.md @TheDarkLightX
+/REVIEW_CHECKLIST.md @TheDarkLightX
+/SECURITY.md @TheDarkLightX
+/QUALITY_GATES.md @TheDarkLightX
+/SPECIFICATION.md @TheDarkLightX
+/PACKAGE_MANIFEST.json @TheDarkLightX
+/Cargo.toml @TheDarkLightX
+/Cargo.lock @TheDarkLightX
+/rust-toolchain.toml @TheDarkLightX
+/deny.toml @TheDarkLightX
+/.cargo/ @TheDarkLightX
+
+# Canonical bytes, primitive authority types, and hash profiles
+/crates/zrm-codec/ @TheDarkLightX
+/crates/zrm-crypto/ @TheDarkLightX
+/crates/zrm-types/ @TheDarkLightX
+/vectors/ @TheDarkLightX
+
+# Assurance and release surfaces
+/evidence/ @TheDarkLightX
+/docs/ @TheDarkLightX
+/formal/ @TheDarkLightX
+/fuzz/ @TheDarkLightX
+/worklogs/ @TheDarkLightX
+/tools/ @TheDarkLightX

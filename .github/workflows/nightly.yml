@@ -1,0 +1,56 @@
+name: Nightly assurance
+
+on:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fuzz-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install pinned fuzz toolchain
+        run: |
+          rustup toolchain install nightly-2025-03-02 --profile minimal
+          cargo +1.87.0 install --locked --version 0.13.1 cargo-fuzz
+      - name: Replay and fuzz resource decoder
+        run: |
+          cargo +nightly-2025-03-02 fuzz run resource_wire_v1_decode -- -seed=1 -runs=2 -max_len=16385 -timeout=5
+          cargo +nightly-2025-03-02 fuzz run resource_wire_v1_decode -- -seed=1 -max_total_time=900 -max_len=16385 -timeout=5
+
+  kani:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install pinned Kani
+        run: |
+          rustup toolchain install 1.87.0 --profile minimal
+          cargo +1.87.0 install --locked --version 0.60.0 kani-verifier
+          cargo kani setup
+      - name: Model-check WP1 harnesses
+        run: cargo kani --workspace
+
+  miri:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Install pinned Miri toolchain
+        run: rustup toolchain install nightly-2025-03-02 --profile minimal --component miri,rust-src
+      - name: Exercise WP1 tests under Miri
+        run: cargo +nightly-2025-03-02 miri test --workspace --all-features --locked

@@ -1,0 +1,23 @@
+[package]
+name = "zrm-fuzz"
+version = "0.0.0"
+publish = false
+edition = "2024"
+license = "MIT"
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+libfuzzer-sys = "=0.4.13"
+zrm-codec = { version = "=0.1.0", path = "../crates/zrm-codec" }
+
+[[bin]]
+name = "resource_wire_v1_decode"
+path = "fuzz_targets/resource_wire_v1_decode.rs"
+test = false
+doc = false
+bench = false
+
+[workspace]
+members = ["."]
