@@ -103,7 +103,7 @@ Non-claims and known gaps:
 
 ## Evidence log
 
-Final hardened-tree replay completed on 2026-07-11 from branch `agent/wp2-policy-model`, based on merged `origin/main` revision `e955175067a6588762024bd8a890b79d3da8dc8b`. A structured evidence record added after the implementation commit binds the exact candidate revision.
+Final hardened-tree replay completed on 2026-07-11 from branch `agent/wp2-policy-model`, based on merged `origin/main` revision `e955175067a6588762024bd8a890b79d3da8dc8b`. The implementation commit is `04fc103a27c711c3b12f9da0dec4d0e4a93a0dc7`, with tree `58b9cc29bfb012984de90b2167010cc335d44541`. The structured record `evidence/wp2-local-gates-2026-07-11.json` binds that exact candidate revision.
 
 Implemented scope:
 

@@ -152,7 +152,8 @@
       "evidence_refs": [
         "vectors/resource_wire_v1.json",
         "evidence/wp1-local-gates-2026-07-10.json",
-        "evidence/wp1-class-c-review-2026-07-11.json"
+        "evidence/wp1-class-c-review-2026-07-11.json",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
       "next_action": "obtain human review of the new WP2 root-type candidates and preserve opaque construction and closed domain framing as later identifier families are added",
       "non_claim": "the WP1 identifier slice is reviewed; newly added WP2 root types remain candidate code, and all caller-provided identifiers remain inert data until later semantic verification",
@@ -582,7 +583,8 @@
       ],
       "formal_refs": [],
       "evidence_refs": [
-        "worklogs/2026-07-11-wp2-policy-model.md"
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
       "next_action": "retain exact UnitId matching in ResourceV1 construction and implement any conversion only through an RFC-frozen transformation and rounding policy in WP6",
       "non_claim": "the candidate enforces exact policy-unit equality and quantity maxima only; no accounting row, conversion, rounding, transformation, or accepted transition exists",
@@ -632,7 +634,8 @@
       ],
       "evidence_refs": [
         "evidence/WP1_MUTATION_MAP.md",
-        "worklogs/2026-07-11-wp2-policy-model.md"
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
       "next_action": "extend checked arithmetic and Kani evidence to complete dispatch-plan summation and WP6 accounting and transformation paths",
       "non_claim": "the evidence covers WP1 widths plus isolated WP2 policy ceilings and per-row verifier cost; no complete dispatch plan, accounting arithmetic, or transformation engine exists",
@@ -1150,7 +1153,8 @@
       "formal_refs": [],
       "evidence_refs": [
         "worklogs/2026-07-10-wp0-wp1.md",
-        "worklogs/2026-07-11-wp2-policy-model.md"
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
       "next_action": "obtain human architecture review of the four-crate graph and extend the exact allowlist when the separately scoped verifier API is introduced",
       "non_claim": "the checker covers the current types, crypto, codec, and policy crates only; it does not validate future verifier, adapter, kernel, store, or runtime wiring",
@@ -1198,7 +1202,8 @@
       "evidence_refs": [
         ".github/workflows/nightly.yml",
         "worklogs/2026-07-10-wp0-wp1.md",
-        "worklogs/2026-07-11-wp2-policy-model.md"
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
       "next_action": "retain pinned Miri coverage and maintain an explicit unsafe inventory plus safety cases as adapters are added",
       "non_claim": "unsafe is forbidden in current ZRM crates and their tests pass under Miri; this does not establish soundness of dependency unsafe code, unexercised architecture paths, or future adapters",
@@ -1242,7 +1247,8 @@
       "formal_refs": [],
       "evidence_refs": [
         "worklogs/2026-07-10-wp0-wp1.md",
-        "worklogs/2026-07-11-wp2-policy-model.md"
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
       "next_action": "add a machine-readable complexity report and reviewed exception workflow before promotion",
       "non_claim": "lint and module boundaries are enforced, but the full complexity-budget report is not yet automated",
@@ -1285,7 +1291,8 @@
       "formal_refs": [],
       "evidence_refs": [
         "evidence/WP1_MUTATION_MAP.md",
-        "evidence/WP2_POLICY_MUTATION_MAP.md"
+        "evidence/WP2_POLICY_MUTATION_MAP.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
       "next_action": "retain zero missed critical mutants as resource, transition, accounting, state, registry, and commit guards are added",
       "non_claim": "the mutation campaigns cover WP1 and the pre-RFC WP2 local policy slice only; no transition kernel, authority registry, state, persistence, or commit guard exists",
@@ -1335,7 +1342,8 @@
       "evidence_refs": [
         ".github/workflows/nightly.yml",
         "worklogs/2026-07-10-wp0-wp1.md",
-        "worklogs/2026-07-11-wp2-policy-model.md"
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
       "next_action": "accumulate sustained fuzz duration, add canonical policy decoders only after the Class E ABI RFC, commit minimized failures, and add later proof-envelope grammars",
       "non_claim": "the campaigns cover the ResourceWireV1 decoder and isolated WP2 cost arithmetic only; they grant no canonical policy, proof-envelope, registry, or semantic-kernel assurance",
@@ -1471,7 +1479,8 @@
       "evidence_refs": [
         "worklogs/2026-07-10-wp0-wp1.md",
         "evidence/wp1-class-c-review-2026-07-11.json",
-        "worklogs/2026-07-11-wp2-policy-model.md"
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
       "next_action": "obtain final human semantic and test-evidence review of the WP2 candidate after clean-revision gates; retain the completed WP1 review as a separately scoped record",
       "non_claim": "WP1 has scoped human approval; WP2 agent evidence and ordinary gates remain unreviewed contribution material and cannot authorize self-promotion",
@@ -1684,7 +1693,8 @@
       ],
       "evidence_refs": [
         ".github/workflows/nightly.yml",
-        "worklogs/2026-07-11-wp2-policy-model.md"
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
       "next_action": "freeze policy and cost-model authority bytes, implement sorted unique cost-row coverage and the complete pre-dispatch cost plan, then add backend worst-case and end-to-end load evidence in WP5 and WP9",
       "non_claim": "WP1 byte bounds plus WP2 machine ceilings and isolated local per-row cost quotes are implemented; no authenticated cost model, governed charge, complete dispatch plan, backend work bound, storage runtime, rate limit, or end-to-end DoS claim exists",
