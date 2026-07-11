@@ -5,8 +5,8 @@
   "gate_id": "WP3a-local-assurance-replay",
   "status": "pass-with-tracked-gaps",
   "source": {
-    "revision": "8f8aa2af8b3654df74928ad3c53c6bab6b7ffe93",
-    "tree": "1c339451277ae23713029df242c6843b4dd8291a",
+    "revision": "6d810fbc4abd933d36fdcd3b1b16e12b9141458e",
+    "tree": "902d60bcf3452d9911c51489a4901062e2edbe21",
     "base_revision": "7575719cda3e01036f59593bd1ea7810c27d8010",
     "branch": "agent/wp3-resource-roles",
     "implementation_and_test_paths_match_revision": true,
@@ -51,8 +51,8 @@
     },
     {
       "tool": "cargo-mutants 26.0.0",
-      "command": "cargo +1.87.0 mutants -p zrm-kernel --timeout 10 --build-timeout 60 --jobs 2 --output target/mutants-cbc003-final",
-      "result": "pass; 36 mutants tested; 23 caught; 13 unviable; 0 missed; 0 timed out"
+      "command": "cargo +1.87.0 mutants -p zrm-kernel --timeout 10 --build-timeout 60 --jobs 2 --output target/mutants-cbc003-final; cargo +1.87.0 mutants --workspace --timeout 10 --build-timeout 60 --jobs 2 --output target/mutants-hosted-fix",
+      "result": "pass; changed kernel 36 tested, 23 caught, 13 unviable, 0 missed or timed out; full workspace 344 tested, 268 caught, 76 unviable, 0 missed or timed out"
     },
     {
       "tool": "Kani 0.60.0",
@@ -103,7 +103,7 @@
     "Kani emitted target-feature, future-compatibility, and unsupported-construct warnings; unsupported paths were unreachable in the successful harness results",
     "Miri and fuzzing establish evidence only for exercised executions",
     "LLVM branch coverage uses an unstable flag on the pinned nightly compiler",
-    "13 mutation candidates were unviable because they did not compile",
+    "13 changed-kernel and 76 full-workspace mutation candidates were unviable because they did not compile",
     "public-constructor allocator exhaustion is not deterministically injectable; the private reservation mapping has deterministic overflow coverage",
     "the configured hosted 45-second and nightly 900-second fuzz campaigns were not run locally",
     "earlier whole-constructor two-item sorting Kani attempts exceeded 180 seconds and provide no evidence"
