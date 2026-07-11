@@ -58,6 +58,9 @@ Use this checklist for Class C-E changes. A checkbox means the reviewer inspecte
 
 - [ ] Dependency direction remains inward.
 - [ ] Critical functions satisfy complexity budgets or have justified exceptions.
+- [ ] Code-smell and antipattern findings are absent or exactly dispositioned.
+- [ ] The selected design pattern, or no additional pattern, fits the stated forces and failure modes.
+- [ ] AI design-choice evidence records alternatives, enforcement, tests, and review status.
 - [ ] No panic-prone API in authority paths.
 - [ ] Unsafe code is absent or isolated with a safety case.
 - [ ] Untrusted collections, recursion, and allocations are bounded.

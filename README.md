@@ -357,6 +357,8 @@ Not included in v0.1:
 - [`PACKAGE_MANIFEST.json`](PACKAGE_MANIFEST.json) — package sizes and SHA-256 payload digests.
 - [`LICENSE`](LICENSE) — MIT license for the repository and specification package.
 
+Repository quality is evaluated as independent gates for complexity, code smells, authority-relevant antipatterns, and design-choice evidence. The automated `excellent-candidate` label is structural only. Design mechanics use AI review; human review receives a behavior-and-evidence summary covering specification obligations, exact assurance results, gaps, and non-claims. Existing preferred-budget advisories are visible under a no-increase ratchet until they are removed.
+
 ---
 
 ## Correctness posture

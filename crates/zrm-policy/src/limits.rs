@@ -185,11 +185,16 @@ fn ensure_at_most(
     }
 }
 
-#[expect(
-    clippy::too_many_lines,
-    reason = "the explicit field order keeps the configured reject order reviewable"
-)]
 fn validate_candidate(candidate: PolicyLimitsCandidateV1) -> Result<(), PolicyValidationErrorV1> {
+    validate_ingress_and_resource_count_limits(&candidate)?;
+    validate_claim_and_accounting_limits(&candidate)?;
+    validate_proof_and_runtime_limits(&candidate)?;
+    validate_resource_wire_minimum(candidate.max_resource_bytes)
+}
+
+fn validate_ingress_and_resource_count_limits(
+    candidate: &PolicyLimitsCandidateV1,
+) -> Result<(), PolicyValidationErrorV1> {
     ensure_at_most(
         LimitFieldV1::EnvelopeBytes,
         u64::from(candidate.max_envelope_bytes),
@@ -215,6 +220,12 @@ fn validate_candidate(candidate: PolicyLimitsCandidateV1) -> Result<(), PolicyVa
         u64::from(candidate.max_created_resources),
         u64::from(PolicyLimitsV1::MAX_CREATED_RESOURCES),
     )?;
+    Ok(())
+}
+
+fn validate_claim_and_accounting_limits(
+    candidate: &PolicyLimitsCandidateV1,
+) -> Result<(), PolicyValidationErrorV1> {
     ensure_at_most(
         LimitFieldV1::LogicClaims,
         u64::from(candidate.max_logic_claims),
@@ -245,6 +256,12 @@ fn validate_candidate(candidate: PolicyLimitsCandidateV1) -> Result<(), PolicyVa
         u64::from(candidate.max_evidence_references),
         u64::from(PolicyLimitsV1::MAX_EVIDENCE_REFERENCES),
     )?;
+    Ok(())
+}
+
+fn validate_proof_and_runtime_limits(
+    candidate: &PolicyLimitsCandidateV1,
+) -> Result<(), PolicyValidationErrorV1> {
     ensure_at_most(
         LimitFieldV1::ProofArtifactBytes,
         u64::from(candidate.max_proof_artifact_bytes),
@@ -270,9 +287,13 @@ fn validate_candidate(candidate: PolicyLimitsCandidateV1) -> Result<(), PolicyVa
         u64::from(candidate.max_storage_write_bytes),
         u64::from(PolicyLimitsV1::MAX_STORAGE_WRITE_BYTES),
     )?;
-    if candidate.max_resource_bytes < PolicyLimitsV1::MIN_RESOURCE_WIRE_V1_BYTES {
+    Ok(())
+}
+
+fn validate_resource_wire_minimum(max_resource_bytes: u32) -> Result<(), PolicyValidationErrorV1> {
+    if max_resource_bytes < PolicyLimitsV1::MIN_RESOURCE_WIRE_V1_BYTES {
         return Err(PolicyValidationErrorV1::ResourceWireLimitTooSmall {
-            actual: candidate.max_resource_bytes,
+            actual: max_resource_bytes,
             minimum: PolicyLimitsV1::MIN_RESOURCE_WIRE_V1_BYTES,
         });
     }

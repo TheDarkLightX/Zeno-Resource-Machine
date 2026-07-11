@@ -26,7 +26,25 @@
 
 ## Security and disaster-state analysis
 
+## Design-choice review
+
+- Design forces:
+- Pattern selected, or no additional pattern:
+- Invalid states prevented:
+- Extension point or closed-set reason:
+- Alternatives rejected:
+- Pattern-specific failure modes:
+- Enforcement and tests:
+- Technical AI-review status:
+
 ## Test and assurance evidence
+
+Behavior-and-evidence summary for human review:
+
+- Specified behaviors confirmed:
+- Exact assurance results:
+- CBC obligations covered:
+- Remaining gaps and non-claims:
 
 - [ ] unit/invariant
 - [ ] BDD
