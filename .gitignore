@@ -1,0 +1,14 @@
+/target/
+/fuzz/artifacts/
+/fuzz/target/
+*.profraw
+*.profdata
+__pycache__/
+*.pyc
+/.env
+/.env.*
+/internal/
+/local/
+/local-tools/
+/private/
+/scratch/

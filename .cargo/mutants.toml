@@ -1,0 +1,12 @@
+# Kani harnesses are model-checked directly and are not executable under the
+# ordinary cargo-test configuration used by cargo-mutants.
+exclude_re = [
+    "kani_harnesses",
+
+    # Equivalent because stage bits occupy the high u16 and reason bits occupy
+    # the low u16, so OR and XOR produce the same RejectCodeV1 representation.
+    "replace \\| with \\^ in RejectCodeV1::value",
+
+    # Equivalent because ResourceFlagsV1 can only contain KNOWN_MASK == 0.
+    "replace ResourceFlagsV1::bits -> u32 with 0",
+]

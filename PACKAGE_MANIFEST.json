@@ -1,0 +1,98 @@
+{
+  "schema": "zrm/specification-package-manifest/v1",
+  "package": "Zeno Resource Machine high-assurance specification package",
+  "version": "0.1.0-draft.2",
+  "date": "2026-07-10",
+  "status": "unreviewed WP0/WP1 candidate; no public implementation, semantic-kernel, or production claim",
+  "implementation_snapshot": "WP1 candidate",
+  "digest_algorithm": "SHA-256",
+  "path_order": "UTF-8 bytewise lexicographic",
+  "license": "MIT; LICENSE is a hashed payload",
+  "file_count": 14,
+  "total_file_count_including_manifest": 15,
+  "manifest_self_excluded_from_payload_hashes": true,
+  "archive_digest": {
+    "embedded": false,
+    "reason": "The manifest is inside the archive; publish the archive SHA-256 as detached release metadata"
+  },
+  "files": [
+    {
+      "path": "AGENTS.md",
+      "bytes": 20530,
+      "sha256": "a5363c54cee598b23b02866ecb44b8d433b0e72adf442cf54d942fabf0274107"
+    },
+    {
+      "path": "CONFORMANCE_MATRIX.json",
+      "bytes": 62171,
+      "sha256": "3fb335a0f6ba447ccf061ac6bb360a6ee2a9679fb8d5c0970d40081a775b3521"
+    },
+    {
+      "path": "CONTRIBUTING.md",
+      "bytes": 6214,
+      "sha256": "2bb76a271b0865cfdb20a88373423139fc378530ca438f97d870b5e2184d40e6"
+    },
+    {
+      "path": "IMPLEMENTATION_PLAN.md",
+      "bytes": 19740,
+      "sha256": "50df7479499fd6045ab778a4c2e37cded543c08ad5f7183f35b233f76ec14d95"
+    },
+    {
+      "path": "LICENSE",
+      "bytes": 1070,
+      "sha256": "85508b9757ff910428e29187f2b199070dc70e3e07c0ac02ae6b4cac5c3e6cb9"
+    },
+    {
+      "path": "QUALITY_GATES.md",
+      "bytes": 22168,
+      "sha256": "c7f07d245aa16a2b0489a7a6586872775e000ed7ba15549bfe24a9c04f70baf0"
+    },
+    {
+      "path": "README.md",
+      "bytes": 17836,
+      "sha256": "9de28f35a3e76dc1796328904b34db28e9688aa435cd5bf1c8e09a2c8b2e4737"
+    },
+    {
+      "path": "REVIEW_CHECKLIST.md",
+      "bytes": 4330,
+      "sha256": "83ac427344f3c3cf895bc9a109536d299817968148c03d150f20abf27b390c7a"
+    },
+    {
+      "path": "SECURITY.md",
+      "bytes": 4734,
+      "sha256": "ade9748be53b0abaa549e1a9bd6ed0c4a5f0b4bf2b1c207a47c2c036c18fd7b0"
+    },
+    {
+      "path": "SPECIFICATION.md",
+      "bytes": 123989,
+      "sha256": "cd4fb49fa91790ce73cd6588c67dd0f5e5d0e8e945856db71255729c50fb4cdf"
+    },
+    {
+      "path": "templates/ADR_TEMPLATE.md",
+      "bytes": 1149,
+      "sha256": "947b46ea835802b60c57019e84fb8d5a1ce6e143afdbfe7d16f7c7c3fb2ff1e8"
+    },
+    {
+      "path": "templates/AGENT_WORKLOG_TEMPLATE.md",
+      "bytes": 1305,
+      "sha256": "9346ac0aa517a92261ac32d2758256c9130e77a6254035656c563acc9919367a"
+    },
+    {
+      "path": "templates/PR_TEMPLATE.md",
+      "bytes": 1336,
+      "sha256": "6facdfe062e65c4e725df18417d6b1a21b7d0d0d15c07ab6a0507e93b2ebad8c"
+    },
+    {
+      "path": "templates/RFC_TEMPLATE.md",
+      "bytes": 2625,
+      "sha256": "276dfce2fdea4c3a04eb3c867c49153e8c1fde74baa3b719f793f850362dc6bc"
+    }
+  ],
+  "non_claims": [
+    "no implemented semantic kernel",
+    "ResourceWireV1 is a frozen-draft WP1 codec; there is no stable package-wide ABI",
+    "no complete policy migration or rollback design",
+    "no security audit",
+    "no production authority",
+    "no privacy or physical-resource truth claim"
+  ]
+}

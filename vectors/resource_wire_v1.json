@@ -1,0 +1,41 @@
+{
+  "artifacts": {
+    "resource_wire_v1_absent.bin": {
+      "bytes": 595,
+      "sha256": "b5f39396f1db7198204f7a18c76a67c79a690b592293422cb33552f767c0b870"
+    },
+    "resource_wire_v1_absent_preimage.bin": {
+      "bytes": 620,
+      "sha256": "4194236e9f6bf4b27f2e06218aa69b8c4a58a2d69bfac5daeb7257402086e8c5"
+    },
+    "resource_wire_v1_present.bin": {
+      "bytes": 603,
+      "sha256": "393c56820a615783a099255bf5f190c7c523958ff59b52993eaf3a0a7ce4d134"
+    },
+    "resource_wire_v1_present_preimage.bin": {
+      "bytes": 628,
+      "sha256": "83586e470f245999da4163f753410cf46606afe4fc3a15b2c20a6159d13f57b8"
+    },
+    "sha256_reference_suite_id_preimage.bin": {
+      "bytes": 32,
+      "sha256": "99f6dd0823f85ca70ed6d91bd00f50dc63fdb5dec3d9fc7212b9eff27e3b1391"
+    },
+    "transparent_nullifier_v1_preimage.bin": {
+      "bytes": 130,
+      "sha256": "a22a2e079372869e9d5e140b7f670b300e640f6a6b463c8093d2a81597fbbe66"
+    }
+  },
+  "generated_by": "vectors/independent_python/replay_resource_wire_v1.py",
+  "non_claims": [
+    "independent vector replay is not a proof of cryptographic or semantic correctness",
+    "ResourceWireV1 vectors are syntactic and do not establish ResourceV1 validity"
+  ],
+  "schema": "zrm/resource-wire-v1-vectors/v1",
+  "specification_version": "0.1.0-draft.2",
+  "vectors": {
+    "resource_id_absent_expiry": "4194236e9f6bf4b27f2e06218aa69b8c4a58a2d69bfac5daeb7257402086e8c5",
+    "resource_id_present_expiry": "83586e470f245999da4163f753410cf46606afe4fc3a15b2c20a6159d13f57b8",
+    "sha256_reference_suite_id": "99f6dd0823f85ca70ed6d91bd00f50dc63fdb5dec3d9fc7212b9eff27e3b1391",
+    "transparent_nullifier_absent_expiry": "a22a2e079372869e9d5e140b7f670b300e640f6a6b463c8093d2a81597fbbe66"
+  }
+}
