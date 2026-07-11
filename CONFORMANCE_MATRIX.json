@@ -91,7 +91,8 @@
       "evidence_refs": [
         "vectors/resource_wire_v1.json",
         "vectors/independent_python/replay_resource_wire_v1.py",
-        "evidence/WP1_MUTATION_MAP.md"
+        "evidence/WP1_MUTATION_MAP.md",
+        "evidence/wp1-local-gates-2026-07-10.json"
       ],
       "next_action": "obtain required human semantic and test-evidence review of the draft-v1 ABI, then retain exact vector compatibility in every later work package",
       "non_claim": "this implements syntactic ResourceWireV1 and ResourceId derivation only; it does not create a semantically valid or authoritative resource",
@@ -132,7 +133,8 @@
         "crates/zrm-types/src/lib.rs"
       ],
       "evidence_refs": [
-        "vectors/resource_wire_v1.json"
+        "vectors/resource_wire_v1.json",
+        "evidence/wp1-local-gates-2026-07-10.json"
       ],
       "next_action": "obtain required human semantic and test-evidence review, then preserve opaque construction and closed domain framing as later identifier families are added",
       "non_claim": "opaque nonzero construction validates local representation only; caller-provided identifiers remain inert data until later semantic verification",

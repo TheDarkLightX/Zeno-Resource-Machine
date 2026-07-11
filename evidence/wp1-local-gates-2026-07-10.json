@@ -1,0 +1,137 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "record_id": "wp1-local-gates-2026-07-10",
+  "recorded_at": "2026-07-10",
+  "source": {
+    "revision": "0c6c2d33d0d6b9ff0aaa9c6351bd8f064887ee64",
+    "branch": "codex/wp1-resource-wire-v1",
+    "clean_tree_before_replay": true
+  },
+  "scope": [
+    "WP0 repository controls",
+    "WP1 primitive opaque types",
+    "WP1 closed SHA-256 framing",
+    "WP1 ResourceWireV1 canonical codec",
+    "WP1 vectors and reject precedence"
+  ],
+  "tools": {
+    "rustc": "1.87.0 (17067e9ac 2025-05-09)",
+    "cargo": "1.87.0 (99624be96 2025-05-06)",
+    "kani": "0.60.0",
+    "miri": "0.1.0 (8c392966a0 2025-03-01), nightly-2025-03-02",
+    "cargo-fuzz": "0.13.1",
+    "cargo-mutants": "26.0.0",
+    "cargo-llvm-cov": "0.8.5",
+    "cargo-audit": "0.22.1",
+    "cargo-deny": "0.20.2, Rust 1.88.0 tooling compiler",
+    "python": "3.12.3"
+  },
+  "results": [
+    {
+      "gate": "rust-quality",
+      "commands": [
+        "cargo +1.87.0 fmt --all -- --check",
+        "cargo +1.87.0 metadata --format-version 1 --locked",
+        "cargo +1.87.0 check --workspace --all-targets --all-features --locked",
+        "cargo +1.87.0 clippy --workspace --all-targets --all-features --locked -- -D warnings",
+        "cargo +1.87.0 test --workspace --all-targets --all-features --locked",
+        "cargo +1.87.0 test --workspace --doc --locked",
+        "cargo +1.87.0 doc --workspace --all-features --no-deps --locked"
+      ],
+      "result": "pass; 31 Rust tests, all doc tests, and documentation build passed"
+    },
+    {
+      "gate": "repository-policy",
+      "commands": [
+        "python3 -m unittest discover -s tools/tests -v",
+        "python3 tools/check_repository_hygiene.py",
+        "python3 tools/check_conformance.py",
+        "python3 tools/check_architecture.py",
+        "python3 tools/check_package_manifest.py"
+      ],
+      "result": "pass; 7 policy tests, 45 conformance obligations, exact dependency allowlists, and 14 package payload digests checked"
+    },
+    {
+      "gate": "vectors",
+      "commands": [
+        "python3 vectors/independent_python/replay_resource_wire_v1.py --check",
+        "python3 fuzz/generate_corpus.py --check"
+      ],
+      "result": "pass; 6 binary artifacts, 4 protocol digests, and the explicit 16,385-byte boundary seed matched"
+    },
+    {
+      "gate": "fuzz-smoke",
+      "command": "cargo +nightly-2025-03-02 fuzz run resource_wire_v1_decode -- -seed=1 -runs=10000 -max_len=16385 -timeout=5",
+      "result": "pass; no crash in 10,000 runs; cov 411; ft 443; maximum input limit 16,385; three committed seeds"
+    },
+    {
+      "gate": "coverage",
+      "command": "cargo +1.87.0 llvm-cov --workspace --all-features --locked --fail-under-lines 90 --summary-only",
+      "result": "pass; workspace line coverage 97.10 percent; ResourceWireV1 module line coverage 98.07 percent"
+    },
+    {
+      "gate": "mutation",
+      "command": "cargo +1.87.0 mutants --workspace --timeout 10 --build-timeout 60 --jobs 4 --output target/mutants-clean-revision",
+      "result": "pass; 110 candidates; 88 caught; 22 unviable; 0 missed; reviewed exclusions loaded from .cargo/mutants.toml"
+    },
+    {
+      "gate": "kani",
+      "command": "cargo kani --workspace",
+      "result": "pass; 3 harnesses; ingress 0 of 110 failed; cursor 0 of 33 failed with 2 unreachable; nonzero constructor 0 of 100 failed"
+    },
+    {
+      "gate": "miri",
+      "command": "cargo +nightly-2025-03-02 miri test --workspace --all-features --locked",
+      "result": "pass; all 31 tests and doc tests passed on exercised paths"
+    },
+    {
+      "gate": "supply-chain",
+      "commands": [
+        "cargo +1.87.0 audit --deny warnings",
+        "cargo +1.87.0 audit --deny warnings --file fuzz/Cargo.lock",
+        "cargo +1.88.0 deny check",
+        "cargo +1.88.0 deny --manifest-path fuzz/Cargo.toml check"
+      ],
+      "result": "pass; root 12 and fuzz 21 locked dependencies scanned; both policy graphs passed advisories, bans, licenses, and sources"
+    },
+    {
+      "gate": "publication-boundary",
+      "command": "local scan of the staged Git index for prohibited private context",
+      "result": "pass; zero matches; ignored build, bytecode, local, internal, scratch, environment, and private-tool paths were not staged"
+    }
+  ],
+  "review": {
+    "independent_agent_reviews": [
+      "parser and canonical-codec boundary",
+      "opaque-type and cryptographic authority boundary",
+      "WP0, CI, supply-chain, and release posture"
+    ],
+    "blocking_findings_after_repairs": 0,
+    "human_review_complete": false
+  },
+  "assumptions": [
+    "local execution used x86_64 Linux",
+    "audit and dependency-policy checks used the current local RustSec database and registry metadata",
+    "the independent Python generator is a second implementation of the frozen draft bytes, not a formal specification"
+  ],
+  "exclusions": [
+    "Kani-only functions are excluded from ordinary cargo-mutants and checked by Kani",
+    "two algebraically equivalent mutants are documented in evidence/WP1_MUTATION_MAP.md",
+    "defensive allocation-failure and prohibited all-zero SHA-256 paths are not forced by ordinary coverage"
+  ],
+  "gaps": [
+    "required human semantic and test-evidence review remains outstanding",
+    "hosted CI, branch protection, private vulnerability reporting, and release environment settings are not locally verified",
+    "the local fuzz replay is a smoke run; the configured nightly campaign is 15 minutes",
+    "full symbolic codec round-trip Kani verification exceeded the local resource budget and supplies no evidence",
+    "cargo-vet, SBOM, cryptographic bill of materials, reproducible build, signed provenance, and external security audit are absent"
+  ],
+  "non_claims": [
+    "no validated ResourceV1",
+    "no semantic transition kernel",
+    "no state, persistence, atomic commit, or exact-once runtime",
+    "no proof, application, consensus, data-availability, privacy, or physical-truth authority",
+    "no stable package-wide ABI",
+    "no production readiness or public implementation promotion"
+  ]
+}
