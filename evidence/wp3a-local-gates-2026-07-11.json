@@ -10,7 +10,9 @@
     "base_revision": "7575719cda3e01036f59593bd1ea7810c27d8010",
     "branch": "agent/wp3-resource-roles",
     "implementation_and_test_paths_match_revision": true,
-    "unrelated_staged_changes_excluded_from_revision": true
+    "unrelated_staged_changes_excluded_from_revision": true,
+    "hosted_ci_revision": "2ddd5f99d7896c5c3807026ecc13be3be8bd4f6e",
+    "hosted_ci_run_id": 29166738551
   },
   "change_class": "C",
   "review_state": {
@@ -90,6 +92,11 @@
       "result": "pass; 23 source components; 63 dependency edges; 1 cryptography component"
     },
     {
+      "tool": "GitHub Actions CI run 18",
+      "command": "hosted pull-request workflow for revision 2ddd5f99d7896c5c3807026ecc13be3be8bd4f6e",
+      "result": "pass; quality, dependency review, fuzz smoke, assurance coverage and full mutation, and supply-chain jobs all completed successfully"
+    },
+    {
       "tool": "publication-boundary review",
       "command": "repository hygiene plus candidate-path and staged-diff privacy scans",
       "result": "pass; no prohibited private context in the committed candidate; unrelated staged RFC work excluded from the commit"
@@ -110,7 +117,7 @@
   ],
   "remaining_gaps": [
     "human Class C review of the specified CBC-003 behavior and evidence",
-    "hosted CI and nightly assurance replay",
+    "scheduled nightly Kani, Miri, and 900-second fuzz assurance replay",
     "Class E canonical role bytes, tags, list roots, hashes, vectors, and stable reject ABI",
     "obligatory use of CanonicalResourceRolesV1 by a later prevalidated-transition stage before logic verification",
     "resource-body binding, membership, freshness, nullifiers, logic verification, accounting, state, persistence, atomic commit, and journal",

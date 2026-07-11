@@ -119,6 +119,7 @@ Final local replay on the candidate working tree produced the following evidence
 - Structure-aware fuzzing: fixed replay loaded exactly ten named seeds and completed 11 runs with `cov=392`, `ft=535`. A subsequent ten-second request completed 2,526 executions in 11 seconds with `cov=452`, `ft=1041`, no crash, assertion failure, hang, or timeout. Hash-named campaign discoveries were removed; the deterministic corpus check again confirmed exactly ten named role seeds.
 - Supply chain: RustSec scans passed for 14 root and 23 fuzz dependencies; both cargo-deny graphs passed advisories, bans, licenses, and source policy. Deterministic BOM generation reported 23 source components, 63 dependency edges, and one cryptography component.
 - Review: two independent AI adversarial passes reported no remaining behavioral code blocker. Technical pattern and syntax review is complete.
+- Hosted CI: the first assurance run passed coverage and exposed six missing direct assertions during its full mutation campaign. After the focused regression and 344-mutant local replay, GitHub Actions run 18 passed all five jobs: quality, dependency review, fuzz smoke, assurance, and supply chain.
 
 Kani emitted target-feature, future-compatibility, and unsupported-construct warnings. Unsupported paths were unreachable in the successful harness results. Kani evidence is restricted to the stated bounded domains. Miri and fuzzing cover exercised executions only. The configured hosted 45-second and nightly 900-second fuzz campaigns were not run locally.
 
