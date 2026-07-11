@@ -19,18 +19,18 @@
   "files": [
     {
       "path": "AGENTS.md",
-      "bytes": 20530,
-      "sha256": "a5363c54cee598b23b02866ecb44b8d433b0e72adf442cf54d942fabf0274107"
+      "bytes": 21771,
+      "sha256": "c1674086ffc40f8794800959fc4e4611d3fae0240a106058f8ce9718a7bbb91a"
     },
     {
       "path": "CONFORMANCE_MATRIX.json",
-      "bytes": 67057,
-      "sha256": "0cd980e77a826ccda48d9b5838d04c189b1fbe03397ae2cf9d4c9d80f84a25da"
+      "bytes": 68877,
+      "sha256": "61870a5a4498367ae6eb732b3202d86bdcbc99e1d4f3fcca66bb9e228daa28b9"
     },
     {
       "path": "CONTRIBUTING.md",
-      "bytes": 6214,
-      "sha256": "2bb76a271b0865cfdb20a88373423139fc378530ca438f97d870b5e2184d40e6"
+      "bytes": 6914,
+      "sha256": "f14b8a4e6ff2519501fb87df2dcbf91623ba8ed3b748da679c21539166c6cb56"
     },
     {
       "path": "IMPLEMENTATION_PLAN.md",
@@ -44,18 +44,18 @@
     },
     {
       "path": "QUALITY_GATES.md",
-      "bytes": 22168,
-      "sha256": "c7f07d245aa16a2b0489a7a6586872775e000ed7ba15549bfe24a9c04f70baf0"
+      "bytes": 24828,
+      "sha256": "e4bf48c1a50f3d6673c11c2171f5b1bbb0cb5b8f2ba3d5e09b0137ca66b98c57"
     },
     {
       "path": "README.md",
-      "bytes": 18901,
-      "sha256": "a9e170b1e8fd9c26e537ff74ebb5829e0451336c2f1ab48ae08eae1f2171a99c"
+      "bytes": 19377,
+      "sha256": "682402a5675e82416f4bc9da1da5d934f93b986e245e3246c811723b467fca56"
     },
     {
       "path": "REVIEW_CHECKLIST.md",
-      "bytes": 4330,
-      "sha256": "83ac427344f3c3cf895bc9a109536d299817968148c03d150f20abf27b390c7a"
+      "bytes": 4605,
+      "sha256": "ab9d6ce7c4f694f15027514fec4b98cebfc32244b4aa25cf40eeff691df96efb"
     },
     {
       "path": "SECURITY.md",
@@ -74,13 +74,13 @@
     },
     {
       "path": "templates/AGENT_WORKLOG_TEMPLATE.md",
-      "bytes": 1305,
-      "sha256": "9346ac0aa517a92261ac32d2758256c9130e77a6254035656c563acc9919367a"
+      "bytes": 1697,
+      "sha256": "4a6954d3912819c50ff529c9cdaa3522f79b314bc7506c80a4915a6511062f05"
     },
     {
       "path": "templates/PR_TEMPLATE.md",
-      "bytes": 1336,
-      "sha256": "6facdfe062e65c4e725df18417d6b1a21b7d0d0d15c07ab6a0507e93b2ebad8c"
+      "bytes": 1777,
+      "sha256": "7d1b0d8863c114ddbca846a80aa860ed61abc5202d379123d885342a2332cd1d"
     },
     {
       "path": "templates/RFC_TEMPLATE.md",
