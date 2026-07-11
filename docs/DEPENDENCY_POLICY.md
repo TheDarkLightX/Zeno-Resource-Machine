@@ -8,7 +8,12 @@ Required local and CI checks are:
 cargo metadata --format-version 1 --locked
 cargo audit
 cargo deny check
+python3 tools/generate_bom.py --sbom target/zrm-sbom.json --cbom target/zrm-cbom.json
 ```
+
+The BOM command evaluates both `Cargo.toml` and the isolated `fuzz/Cargo.toml` under locked offline metadata. The source SBOM records exact registry checksums, dependency edges, scope membership, activated features, licenses, and executable build targets. `supply-chain/build_surface.json` must exactly cover every discovered build script and proc macro with live review references. `supply-chain/cryptography.json` binds implemented algorithms, parameters, domains, purposes, source/tests, explicit claims, and non-claims to exact SBOM package versions.
+
+The generated files are ZRM-native deterministic source inventories under `target/`. They do not claim SPDX or CycloneDX conformance, compiled-artifact completeness, signed provenance, vulnerability freedom, or reproducible builds.
 
 `cargo vet` is planned after maintainers select and review trusted audit imports. Until then, absence of a vet policy remains an explicit WP0 gap rather than an implied audit.
 

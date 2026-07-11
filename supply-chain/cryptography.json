@@ -1,0 +1,61 @@
+{
+  "schema": "zrm/cryptography-registry/v1",
+  "components": [
+    {
+      "id": "ZRM-CRYPTO-001",
+      "status": "implemented-reference",
+      "primitive_type": "hash",
+      "algorithm": "SHA-256",
+      "parameter_set": "SHA-256 with a 256-bit digest and specification-defined length/domain framing",
+      "implementation_packages": [
+        {
+          "name": "crypto-common",
+          "version": "0.2.2"
+        },
+        {
+          "name": "digest",
+          "version": "0.11.3"
+        },
+        {
+          "name": "sha2",
+          "version": "0.11.0"
+        },
+        {
+          "name": "zrm-crypto",
+          "version": "0.1.0"
+        }
+      ],
+      "protocol_domains": [
+        "zrm.crypto_suite.sha256.v1",
+        "zrm.nullifier.transparent.v1",
+        "zrm.resource.v1"
+      ],
+      "purposes": [
+        "Derive the schema-fixed SHA256_REFERENCE_V1_ID.",
+        "Derive ResourceId from canonical ResourceWireV1 bytes with exact length framing.",
+        "Derive transparent-profile nullifiers from machine, domain, and resource identity."
+      ],
+      "source_refs": [
+        "Cargo.toml",
+        "crates/zrm-crypto/src/lib.rs",
+        "docs/dependency-reviews/sha2-0.11.0.md"
+      ],
+      "test_refs": [
+        "crates/zrm-crypto/src/lib.rs",
+        "crates/zrm-crypto/tests/vectors.rs",
+        "vectors/independent_python/replay_resource_wire_v1.py"
+      ],
+      "claimed_properties": [
+        "The reference implementation is deterministic over explicitly supplied bytes.",
+        "Every implemented protocol use supplies an explicit ASCII domain and fixed-width length framing.",
+        "Independent fixed vectors constrain the current suite, resource-ID, and transparent-nullifier outputs."
+      ],
+      "non_claims": [
+        "SHA-256 hashing does not authenticate caller-provided resource or policy data by itself.",
+        "The transparent nullifier profile provides no privacy.",
+        "The current implementation provides no signature, proof system, key management, confidentiality, or hardware-backed claim.",
+        "Miri and local vectors do not establish the soundness of every dependency unsafe or architecture-specific path."
+      ]
+    }
+  ]
+}

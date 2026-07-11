@@ -1,0 +1,43 @@
+{
+  "schema": "zrm/build-surface-policy/v1",
+  "components": [
+    {
+      "name": "getrandom",
+      "version": "0.4.3",
+      "target_kind": "custom-build",
+      "scopes": [
+        "fuzz"
+      ],
+      "review_refs": [
+        "docs/dependency-reviews/libfuzzer-sys-0.4.13.md"
+      ],
+      "rationale": "Target-configuration build logic is confined to the isolated fuzz dependency closure."
+    },
+    {
+      "name": "libc",
+      "version": "0.2.186",
+      "target_kind": "custom-build",
+      "scopes": [
+        "fuzz",
+        "root"
+      ],
+      "review_refs": [
+        "docs/dependency-reviews/libfuzzer-sys-0.4.13.md",
+        "docs/dependency-reviews/sha2-0.11.0.md"
+      ],
+      "rationale": "Platform-configuration build logic is part of both the hashing closure and isolated fuzz tooling closure."
+    },
+    {
+      "name": "libfuzzer-sys",
+      "version": "0.4.13",
+      "target_kind": "custom-build",
+      "scopes": [
+        "fuzz"
+      ],
+      "review_refs": [
+        "docs/dependency-reviews/libfuzzer-sys-0.4.13.md"
+      ],
+      "rationale": "The native libFuzzer build and link step is accepted only in the isolated fuzz workspace."
+    }
+  ]
+}
