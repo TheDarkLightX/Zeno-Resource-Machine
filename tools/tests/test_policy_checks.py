@@ -6,7 +6,14 @@ import unittest
 from pathlib import Path
 
 from tools.check_architecture import dependency_failures
-from tools.check_conformance import ConformanceError, github_anchor, require, validate_reference
+from tools.check_conformance import (
+    ConformanceError,
+    github_anchor,
+    require,
+    validate_promotion_boundary,
+    validate_reference,
+)
+from tools.check_coverage import CoverageError, coverage_totals, enforce_thresholds
 from tools.check_repository_hygiene import action_pin_failures
 
 
@@ -30,6 +37,51 @@ class ConformanceHelperTests(unittest.TestCase):
         with self.assertRaises(ConformanceError):
             validate_reference("../ZRM/LICENSE", "ZRM-CBC-TEST", {})
 
+    @staticmethod
+    def promoted_data() -> dict[str, object]:
+        """Return the minimal valid promoted-claim shape for focused tests."""
+
+        return {
+            "status": "scoped_wp0_wp1_implementation",
+            "promotion_boundary": {
+                "public_implementation_claim_allowed": True,
+                "production_ready": False,
+                "current_level": "ZRM-L0",
+                "claim_scope": ["reviewed_wp1_scope"],
+                "promotion_evidence": ["evidence/wp1-class-c-review-2026-07-11.json"],
+            },
+        }
+
+    def test_promoted_claim_rejects_wrong_matrix_status(self) -> None:
+        """A promoted level cannot retain candidate or arbitrary top-level status."""
+
+        data = self.promoted_data()
+        data["status"] = "candidate"
+        with self.assertRaises(ConformanceError):
+            validate_promotion_boundary(data, [{"status": "implemented"}])
+
+    def test_promoted_claim_requires_evidence(self) -> None:
+        """A promoted level must bind an existing durable review/evidence record."""
+
+        data = self.promoted_data()
+        boundary = data["promotion_boundary"]
+        self.assertIsInstance(boundary, dict)
+        if isinstance(boundary, dict):
+            boundary["promotion_evidence"] = []
+        with self.assertRaises(ConformanceError):
+            validate_promotion_boundary(data, [{"status": "implemented"}])
+
+    def test_promoted_claim_requires_public_claim_flag(self) -> None:
+        """A promoted level with a disabled scoped-claim flag is inconsistent."""
+
+        data = self.promoted_data()
+        boundary = data["promotion_boundary"]
+        self.assertIsInstance(boundary, dict)
+        if isinstance(boundary, dict):
+            boundary["public_implementation_claim_allowed"] = False
+        with self.assertRaises(ConformanceError):
+            validate_promotion_boundary(data, [{"status": "implemented"}])
+
 
 class WorkflowPinTests(unittest.TestCase):
     """Exercise exact GitHub Action pin enforcement."""
@@ -45,6 +97,72 @@ class WorkflowPinTests(unittest.TestCase):
 
         workflow = "uses: actions/checkout@v4\n"
         self.assertEqual(len(action_pin_failures(workflow, Path("ci.yml"))), 1)
+
+
+class CoveragePolicyTests(unittest.TestCase):
+    """Exercise fail-closed line and branch threshold handling."""
+
+    @staticmethod
+    def report() -> dict[str, object]:
+        """Return a minimal LLVM JSON coverage report."""
+
+        return {
+            "data": [
+                {
+                    "totals": {
+                        "lines": {"count": 100, "covered": 98},
+                        "branches": {"count": 10, "covered": 9},
+                    },
+                    "files": [
+                        {
+                            "filename": "/repo/crates/zrm-policy/src/lib.rs",
+                            "summary": {
+                                "lines": {"count": 20, "covered": 20},
+                                "branches": {"count": 4, "covered": 4},
+                            },
+                        }
+                    ],
+                }
+            ]
+        }
+
+    def test_workspace_thresholds_accept_inclusive_percentages(self) -> None:
+        """Workspace totals at or above both thresholds pass."""
+
+        totals = coverage_totals(self.report(), None)
+        self.assertEqual(enforce_thresholds(totals, 98.0, 90.0), (98.0, 90.0))
+
+    def test_scope_prefix_aggregates_only_selected_files(self) -> None:
+        """A critical-crate scope uses only matching file summaries."""
+
+        totals = coverage_totals(self.report(), "crates/zrm-policy")
+        self.assertEqual(enforce_thresholds(totals, 100.0, 100.0), (100.0, 100.0))
+
+    def test_branch_threshold_fails_closed(self) -> None:
+        """A branch result below policy raises a typed error."""
+
+        totals = coverage_totals(self.report(), None)
+        with self.assertRaises(CoverageError):
+            enforce_thresholds(totals, 90.0, 90.1)
+
+    def test_zero_branch_sites_fail_closed(self) -> None:
+        """A report that omitted branch instrumentation cannot pass as full."""
+
+        totals = coverage_totals(self.report(), None)
+        totals["branches"] = {"count": 0, "covered": 0}
+        with self.assertRaises(CoverageError):
+            enforce_thresholds(totals, 90.0, 85.0)
+
+    def test_impossible_covered_count_fails_closed(self) -> None:
+        """Covered sites cannot be negative or exceed total sites."""
+
+        for count, covered in [(-1, 0), (10, -1), (10, 11)]:
+            with self.subTest(count=count, covered=covered):
+                totals = coverage_totals(self.report(), None)
+                totals["branches"] = {"count": count, "covered": covered}
+                with self.assertRaises(CoverageError):
+                    enforce_thresholds(totals, 90.0, 85.0)
+
 
 class ArchitecturePolicyTests(unittest.TestCase):
     """Exercise exact external dependency allowlisting."""

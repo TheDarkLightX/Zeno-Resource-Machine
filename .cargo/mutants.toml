@@ -9,4 +9,9 @@ exclude_re = [
 
     # Equivalent because ResourceFlagsV1 can only contain KNOWN_MASK == 0.
     "replace ResourceFlagsV1::bits -> u32 with 0",
+
+    # Equivalent because both constructors reject every schema except one, so
+    # the private-field validated getters can only return one.
+    "replace VerifierCostModelV1::schema_version -> u16 with 1",
+    "replace MachinePolicyV1::schema_version -> u16 with 1",
 ]

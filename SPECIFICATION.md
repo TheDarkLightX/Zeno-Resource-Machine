@@ -315,7 +315,7 @@ At minimum, the implementation and CBC matrix MUST address:
 
 **Reject receipt:** non-authoritative diagnostic output describing why an uncommitted transition failed.
 
-**Construction Boundary Conformance (CBC):** ZRM's machine-readable obligation family. Each `ZRM-CBC-*` record binds a disaster state to a construction rule, required evidence, current status, and explicit non-claim. `specified` means the obligation exists in the design; it does not mean the obligation is implemented or verified.
+**Construction Boundary Conformance (CBC):** ZRM's machine-readable obligation family. Each `ZRM-CBC-*` record binds a disaster state to a construction rule, required evidence, current status, and explicit non-claim. `specified` means the obligation exists in the design; it does not mean the obligation is implemented or verified. This project-local acronym is distinct from the general **correct by construction (CbC)** engineering approach. A CBC identifier names an assurance obligation; it does not itself claim CbC correctness.
 
 ---
 

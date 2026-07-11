@@ -13,11 +13,13 @@ ALLOWED_INTERNAL_DEPENDENCIES = {
     "zrm-types": set(),
     "zrm-crypto": {"zrm-types"},
     "zrm-codec": {"zrm-crypto", "zrm-types"},
+    "zrm-policy": {"zrm-crypto", "zrm-types"},
 }
 ALLOWED_EXTERNAL_DEPENDENCIES = {
     "zrm-types": set(),
     "zrm-crypto": {"sha2"},
     "zrm-codec": set(),
+    "zrm-policy": set(),
 }
 
 

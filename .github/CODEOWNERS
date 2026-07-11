@@ -18,6 +18,7 @@
 # Canonical bytes, primitive authority types, and hash profiles
 /crates/zrm-codec/ @TheDarkLightX
 /crates/zrm-crypto/ @TheDarkLightX
+/crates/zrm-policy/ @TheDarkLightX
 /crates/zrm-types/ @TheDarkLightX
 /vectors/ @TheDarkLightX
 
