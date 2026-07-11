@@ -2,9 +2,10 @@
   "schema": "zrm/specification-package-manifest/v1",
   "package": "Zeno Resource Machine high-assurance specification package",
   "version": "0.1.0-draft.2",
-  "date": "2026-07-10",
-  "status": "unreviewed WP0/WP1 candidate; no public implementation, semantic-kernel, or production claim",
-  "implementation_snapshot": "WP1 candidate",
+  "date": "2026-07-11",
+  "status": "reviewed scoped ZRM-L0 implementation plus unreviewed pre-RFC WP2 policy-model candidate; no release or production claim",
+  "implementation_snapshot": "reviewed repository-local WP0 controls and WP1 canonical-codec slice; unreviewed WP2 policy-model candidate",
+  "manifest_scope": "normative specification-package payload only; code, tests, worklogs, and evidence records are outside this inventory",
   "digest_algorithm": "SHA-256",
   "path_order": "UTF-8 bytewise lexicographic",
   "license": "MIT; LICENSE is a hashed payload",
@@ -23,8 +24,8 @@
     },
     {
       "path": "CONFORMANCE_MATRIX.json",
-      "bytes": 62275,
-      "sha256": "d689177cd417e1a5d9eba3f24f030cbc08947445d6c343e5574f4f3f4a5df9ac"
+      "bytes": 67057,
+      "sha256": "0cd980e77a826ccda48d9b5838d04c189b1fbe03397ae2cf9d4c9d80f84a25da"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -48,8 +49,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 17836,
-      "sha256": "9de28f35a3e76dc1796328904b34db28e9688aa435cd5bf1c8e09a2c8b2e4737"
+      "bytes": 18901,
+      "sha256": "a9e170b1e8fd9c26e537ff74ebb5829e0451336c2f1ab48ae08eae1f2171a99c"
     },
     {
       "path": "REVIEW_CHECKLIST.md",
@@ -58,13 +59,13 @@
     },
     {
       "path": "SECURITY.md",
-      "bytes": 4734,
-      "sha256": "ade9748be53b0abaa549e1a9bd6ed0c4a5f0b4bf2b1c207a47c2c036c18fd7b0"
+      "bytes": 4804,
+      "sha256": "8f159386a9434d18474230001c18affe785474d1797b5d06dec35c7d800b3106"
     },
     {
       "path": "SPECIFICATION.md",
-      "bytes": 123989,
-      "sha256": "cd4fb49fa91790ce73cd6588c67dd0f5e5d0e8e945856db71255729c50fb4cdf"
+      "bytes": 124191,
+      "sha256": "055a9650c6e2a6441f68ebf0ba20aeae3fc4c8bd0b7cd7dec21c9cc26144cd7d"
     },
     {
       "path": "templates/ADR_TEMPLATE.md",
@@ -90,6 +91,7 @@
   "non_claims": [
     "no implemented semantic kernel",
     "ResourceWireV1 is a frozen-draft WP1 codec; there is no stable package-wide ABI",
+    "no canonical policy bytes, policy hashes, authenticated policy activation, or trusted validation context",
     "no complete policy migration or rollback design",
     "no security audit",
     "no production authority",

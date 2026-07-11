@@ -1,0 +1,47 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "record_id": "wp1-class-c-review-2026-07-11",
+  "recorded_at": "2026-07-11",
+  "gate_id": "G18-human-review",
+  "status": "pass-with-tracked-followups",
+  "source": {
+    "reviewed_head": "c98d3a0114cc1879c4f05a1d94067caf362b9702",
+    "merge_revision": "e955175067a6588762024bd8a890b79d3da8dc8b",
+    "merged_tree": "5b8898e889884bc0305261d9adf1816ff58b446e",
+    "pull_request": "https://github.com/TheDarkLightX/Zeno-Resource-Machine/pull/1"
+  },
+  "change_class": "C",
+  "reviewer_identity": "TheDarkLightX",
+  "reviewer_role": "repository maintainer, semantic owner, and test-evidence reviewer",
+  "decision_recording": "explicit maintainer decision summarized without committing a private chat transcript",
+  "timing": "post-merge approval recorded before public claim promotion",
+  "reviewed_scope": [
+    "repository-local WP0 controls shipped with the WP1 candidate",
+    "WP1 opaque primitive types",
+    "WP1 schema-fixed SHA-256 framing",
+    "WP1 ResourceWireV1 canonical codec and reject precedence",
+    "WP1 tests, vectors, and scoped assurance evidence"
+  ],
+  "evidence_reviewed": [
+    "evidence/wp1-local-gates-2026-07-10.json",
+    "worklogs/2026-07-10-wp0-wp1.md",
+    "hosted quality, fuzz-smoke, supply-chain, dependency-review, and assurance checks for pull request 1"
+  ],
+  "decision": "approved",
+  "github_formal_review_object_present": false,
+  "independent_github_review_claimed": false,
+  "followups": [
+    "retain the scoped full-codec Kani gap until a bounded functional harness is viable",
+    "retain reviewed coverage and mutation exclusions",
+    "keep nightly fuzz evidence distinct from pull-request smoke evidence",
+    "complete host branch controls, private vulnerability reporting, and release-environment controls",
+    "complete cargo-vet, SBOM, CBOM, reproducibility, provenance, and external audit work before any release claim"
+  ],
+  "non_claims": [
+    "the review does not cover ResourceV1 semantic construction",
+    "the review does not cover policy, verifier, transition, state, persistence, commit, proof, or application code",
+    "the review does not establish a stable package-wide ABI",
+    "the review is not an independent external security review",
+    "the review does not establish production readiness"
+  ]
+}

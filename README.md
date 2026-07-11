@@ -7,17 +7,18 @@
 Machine-readable release posture:
 
 ```text
-public_implementation_claim_allowed = false
-candidate_scope = WP0/WP1 only
+public_implementation_claim_allowed = true
+claim_scope = reviewed repository-local WP0 controls and WP1 canonical-codec slice
+unreviewed_candidate_scope = pre-RFC WP2 in-memory policy-model slice
 production_ready = false
-current_level = ZRM-L0-candidate
+current_level = ZRM-L0
 ```
 
-## Candidate implementation scope
+## Implementation scope
 
-The repository contains an unreviewed, reviewable Rust candidate for WP0 and WP1:
+The repository contains a maintainer-reviewed, merged pre-alpha implementation of the repository-local WP0 controls and WP1 canonical-codec slice:
 
-- opaque nonzero primitive identifier and digest types;
+- the reviewed WP1 set of opaque nonzero primitive identifier and digest types;
 - the closed, schema-fixed SHA-256 reference suite;
 - strict bounded `ResourceWireV1` encoding and decoding;
 - stable decoder reject codes and deterministic precedence;
@@ -26,7 +27,9 @@ The repository contains an unreviewed, reviewable Rust candidate for WP0 and WP1
 - malformed-input regressions, property-style field sensitivity tests, fuzzing, bounded Kani harnesses, Miri, coverage, and mutation testing;
 - pinned CI, dependency policy, conformance, architecture, and repository-hygiene checks.
 
-This candidate exercises the surface required by conformance level `ZRM-L0`, but it is not promoted because Class C human semantic and test-evidence review remains outstanding. The decoded `ResourceWireV1` type is inert syntactic data. The repository does not yet implement a validated `ResourceV1`, policy engine, semantic transition kernel, authenticated facts, state machine, persistence, atomic commit, proof adapter, application adapter, or production release. The detailed status and remaining evidence are machine-readable in [`CONFORMANCE_MATRIX.json`](CONFORMANCE_MATRIX.json).
+The current branch also contains an unreviewed pre-RFC WP2 candidate for specialized opaque root types, private-field in-memory policy values, protocol ceilings, exact unit checks, admission-mode consistency, validity windows, and checked verifier-cost quotes. This candidate deliberately defines no policy codec, policy hash, root derivation, trusted validation context, verifier registry, backend dispatch, or verified authority fact. Canonical policy bytes, roots, and hashes remain blocked on a Class E RFC and independent vectors.
+
+The decoded `ResourceWireV1` type remains inert syntactic data. The repository does not yet implement a validated `ResourceV1`, authenticated policy activation, semantic transition kernel, authenticated facts, state machine, persistence, atomic commit, proof adapter, application adapter, or production release. Host-side branch, vulnerability-reporting, and release-environment controls remain incomplete. There is no stable package-wide ABI, external security audit, or production-readiness claim. The detailed status and remaining evidence are machine-readable in [`CONFORMANCE_MATRIX.json`](CONFORMANCE_MATRIX.json).
 
 > **zkVMs prove that code ran. ZRM defines what the result is allowed to change.**
 
@@ -260,6 +263,8 @@ Exact-once guarantees cover effects inside the atomic ZRM machine write set. Ext
 ### Construction Boundary Conformance
 
 ZRM uses **Construction Boundary Conformance (CBC)** identifiers for its machine-readable assurance obligations. Each `ZRM-CBC-*` entry names a disaster state, the construction rule that prevents or detects it, the evidence required for promotion, and the claim that remains unavailable. A specified CBC entry records a design obligation. It does not record an implemented or verified result.
+
+In this repository, **CBC** always means **Construction Boundary Conformance**. The broader engineering approach commonly called **correct by construction** is abbreviated **CbC** when an abbreviation is needed. The distinction avoids treating an assurance obligation identifier as a correctness claim.
 
 ---
 

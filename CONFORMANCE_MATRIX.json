@@ -1,20 +1,36 @@
 {
   "schema": "zrm/cbc-conformance-matrix/v1",
   "version": 1,
-  "updated_at": "2026-07-10",
-  "status": "wp0_wp1_candidate_awaiting_human_review",
+  "updated_at": "2026-07-11",
+  "status": "scoped_wp0_wp1_implementation",
   "obligation_family": {
     "abbreviation": "CBC",
     "name": "Construction Boundary Conformance",
-    "meaning": "A machine-readable obligation binding a disaster state to a construction rule, required evidence, current status, and explicit non-claim"
+    "meaning": "A machine-readable obligation binding a disaster state to a construction rule, required evidence, current status, and explicit non-claim",
+    "disambiguation": "CBC is the project-local obligation family; CbC refers to the general correct-by-construction engineering approach"
   },
   "promotion_boundary": {
-    "public_implementation_claim_allowed": false,
+    "public_implementation_claim_allowed": true,
     "production_ready": false,
-    "current_level": "ZRM-L0-candidate",
+    "current_level": "ZRM-L0",
+    "claim_scope": [
+      "reviewed_repository_local_wp0_controls",
+      "reviewed_wp1_primitive_and_canonical_codec_slice"
+    ],
+    "promotion_evidence": [
+      "evidence/wp1-local-gates-2026-07-10.json",
+      "evidence/wp1-class-c-review-2026-07-11.json"
+    ],
+    "unreviewed_candidate_scope": [
+      "pre_rfc_wp2_in_memory_policy_model",
+      "wp2_specialized_opaque_root_candidates",
+      "wp2_policy_limits_unit_checks_and_verifier_cost_quotes"
+    ],
     "non_claims": [
       "no_implemented_semantic_kernel",
       "no_stable_canonical_abi",
+      "no_canonical_policy_bytes_or_hashes",
+      "no_authenticated_policy_activation_or_trusted_context",
       "no_formal_runtime_refinement",
       "no_durable_atomic_machine",
       "no_recursive_proof_integration",
@@ -69,7 +85,7 @@
       "id": "ZRM-CBC-001",
       "title": "Canonical resource encoding and hash binding",
       "severity": "critical",
-      "status": "implemented_partial",
+      "status": "implemented",
       "defense_layer": "unrepresentable",
       "disaster_state": "ambiguous or malleable resource bytes produce multiple identities or omit semantic fields",
       "construction_rule": "Define the versioned ResourceWireV1 binary encoding and its schema-fixed SHA-256 suite; reject trailing, noncanonical, duplicate, and unknown-critical fields; derive ResourceId from the exact inner-length-framed wire preimage",
@@ -92,9 +108,10 @@
         "vectors/resource_wire_v1.json",
         "vectors/independent_python/replay_resource_wire_v1.py",
         "evidence/WP1_MUTATION_MAP.md",
-        "evidence/wp1-local-gates-2026-07-10.json"
+        "evidence/wp1-local-gates-2026-07-10.json",
+        "evidence/wp1-class-c-review-2026-07-11.json"
       ],
-      "next_action": "obtain required human semantic and test-evidence review of the draft-v1 ABI, then retain exact vector compatibility in every later work package",
+      "next_action": "retain exact draft-v1 vector compatibility and the reviewed syntactic-versus-semantic authority boundary in every later work package",
       "non_claim": "this implements syntactic ResourceWireV1 and ResourceId derivation only; it does not create a semantically valid or authoritative resource",
       "normative_refs": [
         "SPECIFICATION.md#102-domain-separated-hash-function",
@@ -134,17 +151,20 @@
       ],
       "evidence_refs": [
         "vectors/resource_wire_v1.json",
-        "evidence/wp1-local-gates-2026-07-10.json"
+        "evidence/wp1-local-gates-2026-07-10.json",
+        "evidence/wp1-class-c-review-2026-07-11.json",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
-      "next_action": "obtain required human semantic and test-evidence review, then preserve opaque construction and closed domain framing as later identifier families are added",
-      "non_claim": "opaque nonzero construction validates local representation only; caller-provided identifiers remain inert data until later semantic verification",
+      "next_action": "obtain human review of the new WP2 root-type candidates and preserve opaque construction and closed domain framing as later identifier families are added",
+      "non_claim": "the WP1 identifier slice is reviewed; newly added WP2 root types remain candidate code, and all caller-provided identifiers remain inert data until later semantic verification",
       "normative_refs": [
         "SPECIFICATION.md#103-required-domain-strings",
         "SPECIFICATION.md#12-primitive-newtypes"
       ],
       "target_level": "ZRM-L0",
       "work_packages": [
-        "WP1"
+        "WP1",
+        "WP2"
       ],
       "blocking_dependencies": []
     },
@@ -398,8 +418,8 @@
       "test_refs": [],
       "formal_refs": [],
       "evidence_refs": [],
-      "next_action": "implement the rule and attach replayable evidence before status promotion",
-      "non_claim": "specification text alone does not satisfy this obligation",
+      "next_action": "freeze verifier-policy authority bytes and release/revocation bindings by Class E RFC, then implement the sealed WP5 registry with wrong-program, stale, and revoked negatives",
+      "non_claim": "WP2 exposes only unauthenticated candidate-shape checks, including exact admission-policy ID comparison; it does not implement this obligation's registry membership, program or key identity, release identity, revocation, trusted epoch, artifact verification, or authority facts",
       "normative_refs": [
         "SPECIFICATION.md#19-resource-logic-contract",
         "SPECIFICATION.md#301-verifier-policy",
@@ -407,6 +427,7 @@
       ],
       "target_level": "ZRM-L2",
       "work_packages": [
+        "WP2",
         "WP5"
       ],
       "blocking_dependencies": [
@@ -544,7 +565,7 @@
       "id": "ZRM-CBC-015",
       "title": "Units cannot be mixed implicitly",
       "severity": "critical",
-      "status": "specified",
+      "status": "implemented_partial",
       "defense_layer": "unrepresentable",
       "disaster_state": "quantities with different units are added or compared as if equivalent",
       "construction_rule": "Use opaque UnitId and quantity types; permit conversion only through an explicit transformation with rounding policy",
@@ -553,12 +574,20 @@
         "rounding edge tests",
         "no-float checks"
       ],
-      "implementation_refs": [],
-      "test_refs": [],
+      "implementation_refs": [
+        "crates/zrm-types/src/lib.rs",
+        "crates/zrm-policy/src/resource_kind.rs"
+      ],
+      "test_refs": [
+        "crates/zrm-policy/tests/policy_model.rs"
+      ],
       "formal_refs": [],
-      "evidence_refs": [],
-      "next_action": "implement the rule and attach replayable evidence before status promotion",
-      "non_claim": "specification text alone does not satisfy this obligation",
+      "evidence_refs": [
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
+      ],
+      "next_action": "retain exact UnitId matching in ResourceV1 construction and implement any conversion only through an RFC-frozen transformation and rounding policy in WP6",
+      "non_claim": "the candidate enforces exact policy-unit equality and quantity maxima only; no accounting row, conversion, rounding, transformation, or accepted transition exists",
       "normative_refs": [
         "SPECIFICATION.md#14-resource-kind-policy",
         "SPECIFICATION.md#214-units"
@@ -587,21 +616,29 @@
       ],
       "implementation_refs": [
         "crates/zrm-types/src/lib.rs",
-        "crates/zrm-codec/src/resource_wire_v1.rs"
+        "crates/zrm-codec/src/resource_wire_v1.rs",
+        "crates/zrm-policy/src/limits.rs",
+        "crates/zrm-policy/src/cost.rs"
       ],
       "test_refs": [
         "crates/zrm-types/src/lib.rs",
-        "crates/zrm-codec/tests/resource_wire_v1.rs"
+        "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "crates/zrm-policy/tests/policy_model.rs",
+        "crates/zrm-policy/src/cost.rs"
       ],
       "formal_refs": [
         "crates/zrm-types/src/lib.rs",
-        "crates/zrm-codec/src/kani_harnesses.rs"
+        "crates/zrm-codec/src/kani_harnesses.rs",
+        "crates/zrm-policy/src/limits.rs",
+        "crates/zrm-policy/src/cost.rs"
       ],
       "evidence_refs": [
-        "evidence/WP1_MUTATION_MAP.md"
+        "evidence/WP1_MUTATION_MAP.md",
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
-      "next_action": "extend checked arithmetic and Kani evidence to WP6 accounting and transformation paths",
-      "non_claim": "the evidence covers WP1 widths, bounds, and conversions only; no accounting arithmetic or verifier-cost computation exists",
+      "next_action": "extend checked arithmetic and Kani evidence to complete dispatch-plan summation and WP6 accounting and transformation paths",
+      "non_claim": "the evidence covers WP1 widths plus isolated WP2 policy ceilings and per-row verifier cost; no complete dispatch plan, accounting arithmetic, or transformation engine exists",
       "normative_refs": [
         "SPECIFICATION.md#102-domain-separated-hash-function",
         "SPECIFICATION.md#21-accounting-model",
@@ -610,6 +647,7 @@
       "target_level": "ZRM-L1",
       "work_packages": [
         "WP1",
+        "WP2",
         "WP6"
       ],
       "blocking_dependencies": [
@@ -1114,10 +1152,12 @@
       ],
       "formal_refs": [],
       "evidence_refs": [
-        "worklogs/2026-07-10-wp0-wp1.md"
+        "worklogs/2026-07-10-wp0-wp1.md",
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
-      "next_action": "extend the dependency checker as policy and verifier crates are introduced and obtain human architecture review",
-      "non_claim": "the current checker covers the three-crate WP1 graph only; it does not validate future adapter or runtime wiring",
+      "next_action": "obtain human architecture review of the four-crate graph and extend the exact allowlist when the separately scoped verifier API is introduced",
+      "non_claim": "the checker covers the current types, crypto, codec, and policy crates only; it does not validate future verifier, adapter, kernel, store, or runtime wiring",
       "normative_refs": [
         "SPECIFICATION.md#6-layering-and-dependency-direction",
         "SPECIFICATION.md#37-recommended-rust-workspace-architecture"
@@ -1146,19 +1186,24 @@
         "Cargo.toml",
         "crates/zrm-codec/src/lib.rs",
         "crates/zrm-crypto/src/lib.rs",
+        "crates/zrm-policy/src/lib.rs",
         "crates/zrm-types/src/lib.rs"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "crates/zrm-policy/tests/policy_model.rs",
         "fuzz/fuzz_targets/resource_wire_v1_decode.rs"
       ],
       "formal_refs": [
         "crates/zrm-codec/src/kani_harnesses.rs",
+        "crates/zrm-policy/src/cost.rs",
         "crates/zrm-types/src/lib.rs"
       ],
       "evidence_refs": [
         ".github/workflows/nightly.yml",
-        "worklogs/2026-07-10-wp0-wp1.md"
+        "worklogs/2026-07-10-wp0-wp1.md",
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
       "next_action": "retain pinned Miri coverage and maintain an explicit unsafe inventory plus safety cases as adapters are added",
       "non_claim": "unsafe is forbidden in current ZRM crates and their tests pass under Miri; this does not establish soundness of dependency unsafe code, unexercised architecture paths, or future adapters",
@@ -1191,15 +1236,19 @@
       "implementation_refs": [
         "clippy.toml",
         "Cargo.toml",
-        "tools/check_architecture.py"
+        "tools/check_architecture.py",
+        "crates/zrm-policy/src/lib.rs"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "crates/zrm-policy/tests/policy_model.rs",
         "tools/tests/test_policy_checks.py"
       ],
       "formal_refs": [],
       "evidence_refs": [
-        "worklogs/2026-07-10-wp0-wp1.md"
+        "worklogs/2026-07-10-wp0-wp1.md",
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
       "next_action": "add a machine-readable complexity report and reviewed exception workflow before promotion",
       "non_claim": "lint and module boundaries are enforced, but the full complexity-budget report is not yet automated",
@@ -1218,7 +1267,7 @@
       "id": "ZRM-CBC-034",
       "title": "Critical guards are mutation-tested",
       "severity": "critical",
-      "status": "specified",
+      "status": "implemented_partial",
       "defense_layer": "detected_by_evidence",
       "disaster_state": "tests pass even after a critical guard is removed or inverted",
       "construction_rule": "Maintain hand-authored mutants for every critical invariant and run general mutation testing",
@@ -1227,17 +1276,33 @@
         "survivor disposition",
         "mutation command"
       ],
-      "implementation_refs": [],
-      "test_refs": [],
+      "implementation_refs": [
+        ".cargo/mutants.toml",
+        "crates/zrm-policy/src/limits.rs",
+        "crates/zrm-policy/src/machine.rs",
+        "crates/zrm-policy/src/resource_kind.rs",
+        "crates/zrm-policy/src/verifier.rs",
+        "crates/zrm-policy/src/cost.rs"
+      ],
+      "test_refs": [
+        "crates/zrm-policy/tests/policy_model.rs",
+        "crates/zrm-policy/src/cost.rs"
+      ],
       "formal_refs": [],
-      "evidence_refs": [],
-      "next_action": "implement the rule and attach replayable evidence before status promotion",
-      "non_claim": "specification text alone does not satisfy this obligation",
+      "evidence_refs": [
+        "evidence/WP1_MUTATION_MAP.md",
+        "evidence/WP2_POLICY_MUTATION_MAP.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
+      ],
+      "next_action": "retain zero missed critical mutants as resource, transition, accounting, state, registry, and commit guards are added",
+      "non_claim": "the mutation campaigns cover WP1 and the pre-RFC WP2 local policy slice only; no transition kernel, authority registry, state, persistence, or commit guard exists",
       "normative_refs": [
         "SPECIFICATION.md#404-mutation-tests"
       ],
       "target_level": "ZRM-L1",
       "work_packages": [
+        "WP1",
+        "WP2",
         "WP8"
       ],
       "blocking_dependencies": [
@@ -1261,9 +1326,13 @@
       ],
       "implementation_refs": [
         "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
+        "fuzz/fuzz_targets/policy_cost_v1.rs",
         "fuzz/Cargo.toml"
       ],
       "test_refs": [
+        "fuzz/corpus/policy_cost_v1/maxima",
+        "fuzz/corpus/policy_cost_v1/small-success",
+        "fuzz/corpus/policy_cost_v1/sequence",
         "fuzz/corpus/resource_wire_v1_decode/absent",
         "fuzz/corpus/resource_wire_v1_decode/oversize-boundary",
         "fuzz/corpus/resource_wire_v1_decode/present",
@@ -1272,15 +1341,19 @@
       "formal_refs": [],
       "evidence_refs": [
         ".github/workflows/nightly.yml",
-        "worklogs/2026-07-10-wp0-wp1.md"
+        "worklogs/2026-07-10-wp0-wp1.md",
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
-      "next_action": "accumulate sustained fuzz duration, commit minimized failures as regressions, and add later proof-envelope grammars",
-      "non_claim": "the current smoke campaign covers the ResourceWireV1 byte decoder only and grants no proof-envelope or semantic-kernel assurance",
+      "next_action": "accumulate sustained fuzz duration, add canonical policy decoders only after the Class E ABI RFC, commit minimized failures, and add later proof-envelope grammars",
+      "non_claim": "the campaigns cover the ResourceWireV1 decoder and isolated WP2 cost arithmetic only; they grant no canonical policy, proof-envelope, registry, or semantic-kernel assurance",
       "normative_refs": [
         "SPECIFICATION.md#405-fuzzing"
       ],
       "target_level": "ZRM-L1",
       "work_packages": [
+        "WP1",
+        "WP2",
         "WP8"
       ],
       "blocking_dependencies": [
@@ -1404,10 +1477,13 @@
       ],
       "formal_refs": [],
       "evidence_refs": [
-        "worklogs/2026-07-10-wp0-wp1.md"
+        "worklogs/2026-07-10-wp0-wp1.md",
+        "evidence/wp1-class-c-review-2026-07-11.json",
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
-      "next_action": "obtain required human review and attach the final clean-revision gate record",
-      "non_claim": "agent evidence and ordinary gates do not replace human review or authorize self-promotion",
+      "next_action": "obtain final human semantic and test-evidence review of the WP2 candidate after clean-revision gates; retain the completed WP1 review as a separately scoped record",
+      "non_claim": "WP1 has scoped human approval; WP2 agent evidence and ordinary gates remain unreviewed contribution material and cannot authorize self-promotion",
       "normative_refs": [
         "SPECIFICATION.md#45-generated-code-policy",
         "SPECIFICATION.md#46-agent-implementation-contract"
@@ -1600,18 +1676,28 @@
       ],
       "implementation_refs": [
         "crates/zrm-types/src/lib.rs",
-        "crates/zrm-codec/src/resource_wire_v1.rs"
+        "crates/zrm-codec/src/resource_wire_v1.rs",
+        "crates/zrm-policy/src/limits.rs",
+        "crates/zrm-policy/src/cost.rs"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
-        "fuzz/fuzz_targets/resource_wire_v1_decode.rs"
+        "crates/zrm-policy/tests/policy_model.rs",
+        "crates/zrm-policy/src/cost.rs",
+        "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
+        "fuzz/fuzz_targets/policy_cost_v1.rs"
       ],
-      "formal_refs": [],
+      "formal_refs": [
+        "crates/zrm-policy/src/limits.rs",
+        "crates/zrm-policy/src/cost.rs"
+      ],
       "evidence_refs": [
-        ".github/workflows/nightly.yml"
+        ".github/workflows/nightly.yml",
+        "worklogs/2026-07-11-wp2-policy-model.md",
+        "evidence/wp2-local-gates-2026-07-11.json"
       ],
-      "next_action": "define complete transition count/depth/storage limits and the governed verifier-cost model in WP5 and WP9",
-      "non_claim": "only the WP1 resource-wire byte ceiling and fixed field widths are enforced; no verifier dispatch, storage, load, or end-to-end DoS bound exists",
+      "next_action": "freeze policy and cost-model authority bytes, implement sorted unique cost-row coverage and the complete pre-dispatch cost plan, then add backend worst-case and end-to-end load evidence in WP5 and WP9",
+      "non_claim": "WP1 byte bounds plus WP2 machine ceilings and isolated local per-row cost quotes are implemented; no authenticated cost model, governed charge, complete dispatch plan, backend work bound, storage runtime, rate limit, or end-to-end DoS claim exists",
       "normative_refs": [
         "SPECIFICATION.md#15-machine-policy",
         "SPECIFICATION.md#405-fuzzing",
@@ -1620,6 +1706,7 @@
       "target_level": "ZRM-L1",
       "work_packages": [
         "WP1",
+        "WP2",
         "WP5",
         "WP9"
       ],

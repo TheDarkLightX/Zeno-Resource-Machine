@@ -199,6 +199,20 @@ def validate_promotion_boundary(data: dict[str, Any], obligations: list[dict[str
         require(re.fullmatch(r"ZRM-L[0-5]", current_level) is not None, "unknown promoted conformance level")
         require(public_claim, "a promoted implementation level must enable scoped implementation claims")
         require(
+            data.get("status") == "scoped_wp0_wp1_implementation",
+            "promoted matrix status is inconsistent",
+        )
+        claim_scope = require_string_list(boundary.get("claim_scope"), "claim_scope", "promotion_boundary")
+        require(bool(claim_scope), "promoted posture needs a nonempty claim scope")
+        promotion_evidence = require_string_list(
+            boundary.get("promotion_evidence"),
+            "promotion_evidence",
+            "promotion_boundary",
+        )
+        require(bool(promotion_evidence), "promoted posture needs promotion evidence")
+        for reference in promotion_evidence:
+            validate_reference(reference, "promotion_boundary", {})
+        require(
             "implemented" in statuses or "verified_scoped" in statuses,
             "promoted posture needs promoted obligations",
         )

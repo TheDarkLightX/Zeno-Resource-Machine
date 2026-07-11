@@ -2,7 +2,7 @@
 
 ## Project status
 
-Zeno Resource Machine is currently **pre-alpha specification work with an unreviewed WP0/WP1 implementation candidate**. There is no supported production release and no claim that the specification or candidate implementation is safe for funds, legal rights, model-training authority, physical resources, or safety-critical use.
+Zeno Resource Machine is currently **pre-alpha specification work with reviewed repository-local WP0 controls, a reviewed WP1 canonical-codec slice, and an unreviewed pre-RFC WP2 policy-model candidate**. There is no supported production release, and no implementation in this repository is claimed safe for funds, legal rights, model-training authority, physical resources, or safety-critical use.
 
 The repository's public security posture is fail-closed:
 

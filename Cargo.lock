@@ -94,5 +94,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "zrm-policy"
+version = "0.1.0"
+dependencies = [
+ "zrm-crypto",
+ "zrm-types",
+]
+
+[[package]]
 name = "zrm-types"
 version = "0.1.0"

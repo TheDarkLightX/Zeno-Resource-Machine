@@ -194,6 +194,109 @@ define_nonzero_bytes32!(
     DataAvailabilityRoot,
     "Opaque data-availability content root."
 );
+define_nonzero_bytes32!(
+    MachineStateRoot,
+    "Opaque committed machine-state root. Raw construction does not authenticate state."
+);
+define_nonzero_bytes32!(
+    MachinePolicyRoot,
+    "Opaque future machine-policy-root candidate. Raw construction establishes no encoding, derivation, authentication, or activation."
+);
+define_nonzero_bytes32!(
+    OrderingContextRoot,
+    "Opaque authenticated-ordering-context root candidate."
+);
+define_nonzero_bytes32!(
+    SupportedResourceSchemaRoot,
+    "Opaque root of resource schemas admitted by a machine policy."
+);
+define_nonzero_bytes32!(
+    SupportedTransitionSchemaRoot,
+    "Opaque root of transition schemas admitted by a machine policy."
+);
+define_nonzero_bytes32!(
+    ResourceKindPolicySetRoot,
+    "Opaque root of resource-kind policies accepted for reading or consumption."
+);
+define_nonzero_bytes32!(
+    CreationResourceKindPolicyMapRoot,
+    "Opaque root of the current creation-policy map."
+);
+define_nonzero_bytes32!(
+    AcceptedPredecessorResourcePolicySetRoot,
+    "Opaque root of accepted predecessor resource policies."
+);
+define_nonzero_bytes32!(
+    LogicVerifierPolicyRoot,
+    "Opaque root of governed logic-verifier policies."
+);
+define_nonzero_bytes32!(
+    TransformationVerifierPolicyRoot,
+    "Opaque root of governed transformation-verifier policies."
+);
+define_nonzero_bytes32!(
+    AuthorityVerifierPolicyRoot,
+    "Opaque root of governed authority-verifier policies."
+);
+define_nonzero_bytes32!(
+    DataAvailabilityPolicyRoot,
+    "Opaque root of governed data-availability policies."
+);
+define_nonzero_bytes32!(
+    GovernanceAuthorityRoot,
+    "Opaque root of policy-governance authority."
+);
+define_nonzero_bytes32!(FeatureSuiteRoot, "Opaque root of enabled feature profiles.");
+define_nonzero_bytes32!(
+    AllowedLogicSetRoot,
+    "Opaque root of resource logics allowed by a resource-kind policy."
+);
+define_nonzero_bytes32!(
+    AllowedLogicProfileSetRoot,
+    "Opaque root of logic profiles allowed by a resource-kind policy."
+);
+define_nonzero_bytes32!(
+    AllowedTransformationSetRoot,
+    "Opaque root of transformations allowed by a resource-kind policy."
+);
+define_nonzero_bytes32!(
+    ControllerPolicyRoot,
+    "Opaque root of resource-controller policy."
+);
+define_nonzero_bytes32!(MintAuthorityRoot, "Opaque root of mint authority policy.");
+define_nonzero_bytes32!(BurnAuthorityRoot, "Opaque root of burn authority policy.");
+define_nonzero_bytes32!(
+    ProgramOrKeyDigest,
+    "Opaque digest of a verifier program or verification key."
+);
+define_nonzero_bytes32!(
+    StatementSchemaRoot,
+    "Opaque root of statement schemas accepted by a verifier policy."
+);
+define_nonzero_bytes32!(
+    JournalSchemaRoot,
+    "Opaque root of journal schemas accepted by a verifier policy."
+);
+define_nonzero_bytes32!(
+    ProofParameterRoot,
+    "Opaque root of proof-system parameters."
+);
+define_nonzero_bytes32!(
+    CoverageClaimsRoot,
+    "Opaque root of a verifier profile's scoped coverage claims."
+);
+define_nonzero_bytes32!(
+    NonClaimsRoot,
+    "Opaque root of a verifier profile's explicit non-claims."
+);
+define_nonzero_bytes32!(
+    TrustedComputingBaseRoot,
+    "Opaque root of a verifier profile's trusted computing base."
+);
+define_nonzero_bytes32!(
+    VerifierCostRowsRoot,
+    "Opaque future verifier-cost-rows-root candidate. Raw construction establishes no encoding, ordering, derivation, or authentication."
+);
 
 /// A nonnegative protocol quantity measured in indivisible atoms.
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
