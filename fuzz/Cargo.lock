@@ -166,6 +166,15 @@ version = "0.0.0"
 dependencies = [
  "libfuzzer-sys",
  "zrm-codec",
+ "zrm-kernel",
+ "zrm-policy",
+ "zrm-types",
+]
+
+[[package]]
+name = "zrm-kernel"
+version = "0.1.0"
+dependencies = [
  "zrm-policy",
  "zrm-types",
 ]

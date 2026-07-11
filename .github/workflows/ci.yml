@@ -120,6 +120,8 @@ jobs:
           cargo +nightly-2025-03-02 fuzz run resource_wire_v1_decode -- -seed=1 -max_total_time=45 -max_len=16385 -timeout=5
           cargo +nightly-2025-03-02 fuzz run policy_cost_v1 -- -seed=1 -runs=3 -max_len=88 -timeout=5
           cargo +nightly-2025-03-02 fuzz run policy_cost_v1 -- -seed=1 -max_total_time=45 -max_len=88 -timeout=5
+          cargo +nightly-2025-03-02 fuzz run resource_roles_v1 -- -seed=1 -runs=10 -max_len=24684 -timeout=5
+          cargo +nightly-2025-03-02 fuzz run resource_roles_v1 -- -seed=1 -max_total_time=45 -max_len=24684 -timeout=5
 
   assurance:
     runs-on: ubuntu-24.04
@@ -145,6 +147,7 @@ jobs:
           cargo +nightly-2025-03-02 llvm-cov --workspace --all-features --locked --branch --json --output-path target/llvm-cov-branch.json
           python3 tools/check_coverage.py target/llvm-cov-branch.json --min-lines 90 --min-branches 85
           python3 tools/check_coverage.py target/llvm-cov-branch.json --scope-prefix crates/zrm-policy --min-lines 95 --min-branches 100
+          python3 tools/check_coverage.py target/llvm-cov-branch.json --scope-prefix crates/zrm-kernel --min-lines 100 --min-branches 100
 
       - name: Run configured mutation campaign
         run: cargo +1.87.0 mutants --workspace --timeout 10 --build-timeout 60 --jobs 2 --output target/mutants

@@ -135,6 +135,24 @@ impl PolicyLimitsV1 {
         self.0
     }
 
+    /// Returns the maximum consumed-resource count.
+    #[must_use]
+    pub const fn max_consumed_resources(self) -> u16 {
+        self.0.max_consumed_resources
+    }
+
+    /// Returns the maximum referenced-resource count.
+    #[must_use]
+    pub const fn max_referenced_resources(self) -> u16 {
+        self.0.max_referenced_resources
+    }
+
+    /// Returns the maximum created-resource count.
+    #[must_use]
+    pub const fn max_created_resources(self) -> u16 {
+        self.0.max_created_resources
+    }
+
     /// Returns the per-artifact proof-byte limit.
     #[must_use]
     pub const fn max_proof_artifact_bytes(self) -> u32 {

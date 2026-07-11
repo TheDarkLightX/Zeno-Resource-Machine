@@ -26,7 +26,8 @@
       "wp2_specialized_opaque_root_candidates",
       "wp2_policy_limits_unit_checks_and_verifier_cost_quotes",
       "wp0_multi_axis_code_quality_controls",
-      "wp0_source_sbom_and_cryptography_cbom_controls"
+      "wp0_source_sbom_and_cryptography_cbom_controls",
+      "wp3a_canonical_resource_role_partition"
     ],
     "non_claims": [
       "no_implemented_semantic_kernel",
@@ -174,21 +175,36 @@
       "id": "ZRM-CBC-003",
       "title": "Consumed, referenced, and created roles are disjoint",
       "severity": "critical",
-      "status": "specified",
+      "status": "implemented_partial",
       "defense_layer": "unrepresentable",
       "disaster_state": "one resource is simultaneously treated as consumed, read-only, and newly created",
-      "construction_rule": "Canonicalize role sets and reject cross-role duplicates before logic verification",
+      "construction_rule": "Bound all three role counts before allocation, reject within-role duplicates and all cross-role collisions in deterministic precedence, sort each valid role by ResourceId, and derive role-local ordinals only from the sealed canonical partition",
       "required_evidence": [
         "role collision tests",
         "property tests over permutations",
         "bounded model"
       ],
-      "implementation_refs": [],
-      "test_refs": [],
-      "formal_refs": [],
-      "evidence_refs": [],
-      "next_action": "implement the rule and attach replayable evidence before status promotion",
-      "non_claim": "specification text alone does not satisfy this obligation",
+      "implementation_refs": [
+        "crates/zrm-kernel/src/lib.rs",
+        "crates/zrm-kernel/src/resource_roles.rs",
+        "crates/zrm-policy/src/limits.rs"
+      ],
+      "test_refs": [
+        "crates/zrm-kernel/tests/resource_roles.rs",
+        "crates/zrm-kernel/tests/resource_role_atlas.rs",
+        "fuzz/fuzz_targets/resource_roles_v1.rs"
+      ],
+      "formal_refs": [
+        "crates/zrm-kernel/src/resource_roles/kani_harnesses.rs",
+        "crates/zrm-kernel/src/resource_roles/kani_harnesses/count.rs",
+        "crates/zrm-kernel/src/resource_roles/kani_harnesses/collision.rs",
+        "crates/zrm-kernel/src/resource_roles/kani_harnesses/duplicate.rs"
+      ],
+      "evidence_refs": [
+        "worklogs/2026-07-11-wp3-resource-roles.md"
+      ],
+      "next_action": "make CanonicalResourceRolesV1 an obligatory input to the later prevalidated-transition stage before logic verification, then define canonical role bytes and list roots through Class E review",
+      "non_claim": "this candidate proves only a local structural partition under caller-supplied validated limits; it authenticates no policy or resource body and performs no membership, freshness, logic, accounting, root, state, commit, or canonical-ABI check",
       "normative_refs": [
         "SPECIFICATION.md#92-role-disjointness",
         "SPECIFICATION.md#18-resource-roles-and-canonical-order"
@@ -197,9 +213,7 @@
       "work_packages": [
         "WP3"
       ],
-      "blocking_dependencies": [
-        "ZRM-CBC-001"
-      ]
+      "blocking_dependencies": []
     },
     {
       "id": "ZRM-CBC-004",

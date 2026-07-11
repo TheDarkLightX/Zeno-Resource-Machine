@@ -22,6 +22,9 @@
 /crates/zrm-types/ @TheDarkLightX
 /vectors/ @TheDarkLightX
 
+# Pure semantic kernel
+/crates/zrm-kernel/ @TheDarkLightX
+
 # Assurance and release surfaces
 /evidence/ @TheDarkLightX
 /docs/ @TheDarkLightX
