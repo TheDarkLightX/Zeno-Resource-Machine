@@ -1,0 +1,127 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "record_id": "wp3a-local-gates-2026-07-11",
+  "recorded_at": "2026-07-11",
+  "gate_id": "WP3a-local-assurance-replay",
+  "status": "pass-with-tracked-gaps",
+  "source": {
+    "revision": "8f8aa2af8b3654df74928ad3c53c6bab6b7ffe93",
+    "tree": "1c339451277ae23713029df242c6843b4dd8291a",
+    "base_revision": "7575719cda3e01036f59593bd1ea7810c27d8010",
+    "branch": "agent/wp3-resource-roles",
+    "implementation_and_test_paths_match_revision": true,
+    "unrelated_staged_changes_excluded_from_revision": true
+  },
+  "change_class": "C",
+  "review_state": {
+    "agent_peer_reviews_complete": true,
+    "human_class_c_review_complete": false,
+    "promotion_allowed": false
+  },
+  "implemented_scope": [
+    "no_std plus alloc zrm-kernel crate with inward dependencies only on zrm-types and zrm-policy",
+    "borrowed consumed, referenced, and created ResourceId candidates",
+    "all role counts validated before allocation under the v1 ceiling of 256 per role",
+    "deterministic duplicate and pairwise role-collision precedence before allocation",
+    "fallible role-local reservation followed by ascending canonical role sorting",
+    "private validated role storage with derived zero-based u32 ordinals",
+    "structure-aware fuzz oracle and ten deterministic boundary seeds",
+    "CBC-003 implemented_partial evidence and explicit authority non-claims"
+  ],
+  "results": [
+    {
+      "tool": "cargo",
+      "command": "cargo +1.87.0 test --workspace --all-targets --all-features --locked",
+      "result": "pass; 86 tests; 0 failures"
+    },
+    {
+      "tool": "cargo-clippy and rustdoc",
+      "command": "cargo +1.87.0 clippy --workspace --all-targets --all-features --locked -- -D warnings; cargo +1.87.0 test --workspace --doc --locked; cargo +1.87.0 doc --workspace --all-features --no-deps --locked",
+      "result": "pass; 0 denied warnings; all doc tests and documentation passed"
+    },
+    {
+      "tool": "independent role atlases",
+      "command": "cargo +1.87.0 test -p zrm-kernel --all-features --locked",
+      "result": "pass; 16 tests; two independent 512-case exact sequence atlases; 256 and 257 per-role boundaries; simultaneous 768-ID case; terminal ordinal 255 for every role"
+    },
+    {
+      "tool": "cargo-llvm-cov 0.8.5",
+      "command": "cargo +nightly-2025-03-02 llvm-cov --workspace --all-features --locked --branch --json --output-path target/llvm-cov-branch-wp3a-final.json",
+      "result": "pass; workspace lines 98.67%, branches 99.09%; zrm-kernel lines 100.00%, branches 100.00%; zrm-policy lines 99.70%, branches 100.00%"
+    },
+    {
+      "tool": "cargo-mutants 26.0.0",
+      "command": "cargo +1.87.0 mutants -p zrm-kernel --timeout 10 --build-timeout 60 --jobs 2 --output target/mutants-cbc003-final",
+      "result": "pass; 36 mutants tested; 23 caught; 13 unviable; 0 missed; 0 timed out"
+    },
+    {
+      "tool": "Kani 0.60.0",
+      "command": "cargo kani --workspace",
+      "result": "pass; 11 of 11 harnesses; 0 failures; WP3a count constructor 0/942 failed with 4/4 covers, collision constructor 0/930 with 4/4 covers, direct duplicate validator 0/298 with 3/3 covers"
+    },
+    {
+      "tool": "Miri nightly-2025-03-02",
+      "command": "cargo +nightly-2025-03-02 miri test --workspace --all-features --locked",
+      "result": "pass; 86 tests and all doc tests; 0 failures; maximum-ceiling kernel atlas completed in 161.20 seconds"
+    },
+    {
+      "tool": "cargo-fuzz 0.13.1",
+      "command": "cargo +nightly-2025-03-02 fuzz run resource_roles_v1 -- -seed=1 -runs=11 -max_len=24684 -timeout=5; cargo +nightly-2025-03-02 fuzz run resource_roles_v1 -- -seed=1 -max_total_time=10 -max_len=24684 -timeout=5",
+      "result": "pass; fixed replay cov=392 ft=535; campaign completed 2526 executions in 11 seconds with cov=452 ft=1041; no crash, assertion failure, hang, or timeout; corpus restored to exactly 10 named seeds"
+    },
+    {
+      "tool": "complexity and code-quality gates",
+      "command": "python3 tools/check_complexity.py; python3 tools/check_code_quality.py",
+      "result": "pass; 29 Rust files; 230 functions; 0 preferred-limit warnings; 0 exceptions; excellent-candidate; 16 rules; 5 design decisions; 0 findings; 0 advisories"
+    },
+    {
+      "tool": "repository policy, vectors, and corpus",
+      "command": "python3 tools/check_repository_hygiene.py; python3 tools/check_conformance.py; python3 tools/check_architecture.py; python3 tools/check_package_manifest.py; python3 -m unittest discover -s tools/tests -v; python3 vectors/independent_python/replay_resource_wire_v1.py --check; python3 fuzz/generate_corpus.py --check",
+      "result": "pass; 45 CBC obligations; 73 Python tests; exact dependency allowlists; 14 package payload digests; 6 binary vector artifacts; 4 protocol digests; 10 exact resource-role seeds"
+    },
+    {
+      "tool": "cargo-audit and cargo-deny",
+      "command": "cargo +1.87.0 audit --deny warnings; cargo +1.87.0 audit --deny warnings --file fuzz/Cargo.lock; cargo +1.88.0 deny check; cargo +1.88.0 deny --manifest-path fuzz/Cargo.toml check",
+      "result": "pass; 14 root and 23 fuzz dependency closures; advisories, bans, licenses, and sources passed"
+    },
+    {
+      "tool": "deterministic SBOM and CBOM",
+      "command": "python3 tools/generate_bom.py --sbom target/zrm-sbom-wp3a.json --cbom target/zrm-cbom-wp3a.json",
+      "result": "pass; 23 source components; 63 dependency edges; 1 cryptography component"
+    },
+    {
+      "tool": "publication-boundary review",
+      "command": "repository hygiene plus candidate-path and staged-diff privacy scans",
+      "result": "pass; no prohibited private context in the committed candidate; unrelated staged RFC work excluded from the commit"
+    }
+  ],
+  "assumptions_and_limits": [
+    "the implementation and test paths exercised before commit exactly match the recorded revision and tree",
+    "the offline boundary atlases are bug-discovery and regression evidence, not a proof",
+    "Kani count and collision domains contain one ID per role; the duplicate-validator domain contains two equal fixed IDs under a symbolic role",
+    "canonical sorting and ordinals are tested, fuzzed, coverage-gated, and mutation-gated but are not claimed as model-checked",
+    "Kani emitted target-feature, future-compatibility, and unsupported-construct warnings; unsupported paths were unreachable in the successful harness results",
+    "Miri and fuzzing establish evidence only for exercised executions",
+    "LLVM branch coverage uses an unstable flag on the pinned nightly compiler",
+    "13 mutation candidates were unviable because they did not compile",
+    "public-constructor allocator exhaustion is not deterministically injectable; the private reservation mapping has deterministic overflow coverage",
+    "the configured hosted 45-second and nightly 900-second fuzz campaigns were not run locally",
+    "earlier whole-constructor two-item sorting Kani attempts exceeded 180 seconds and provide no evidence"
+  ],
+  "remaining_gaps": [
+    "human Class C review of the specified CBC-003 behavior and evidence",
+    "hosted CI and nightly assurance replay",
+    "Class E canonical role bytes, tags, list roots, hashes, vectors, and stable reject ABI",
+    "obligatory use of CanonicalResourceRolesV1 by a later prevalidated-transition stage before logic verification",
+    "resource-body binding, membership, freshness, nullifiers, logic verification, accounting, state, persistence, atomic commit, and journal",
+    "proof integration, data availability, privacy, release provenance, independent reproducible build, and external security audit"
+  ],
+  "non_claims": [
+    "this evidence does not promote CBC-003 beyond implemented_partial or authorize merge",
+    "this evidence does not prove unbounded correctness",
+    "the caller-supplied limits are validated data and are not authenticated active policy",
+    "resource identifiers remain inert and are not bound to canonical resource bodies",
+    "the structural partition grants no transition, state, proof, or commit authority",
+    "this evidence establishes no safety for funds or production readiness"
+  ]
+}

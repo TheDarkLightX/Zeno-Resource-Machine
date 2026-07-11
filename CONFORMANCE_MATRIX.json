@@ -201,7 +201,8 @@
         "crates/zrm-kernel/src/resource_roles/kani_harnesses/duplicate.rs"
       ],
       "evidence_refs": [
-        "worklogs/2026-07-11-wp3-resource-roles.md"
+        "worklogs/2026-07-11-wp3-resource-roles.md",
+        "evidence/wp3a-local-gates-2026-07-11.json"
       ],
       "next_action": "make CanonicalResourceRolesV1 an obligatory input to the later prevalidated-transition stage before logic verification, then define canonical role bytes and list roots through Class E review",
       "non_claim": "this candidate proves only a local structural partition under caller-supplied validated limits; it authenticates no policy or resource body and performs no membership, freshness, logic, accounting, root, state, commit, or canonical-ABI check",
