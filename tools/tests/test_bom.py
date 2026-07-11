@@ -3,24 +3,50 @@
 from __future__ import annotations
 
 import json
+import subprocess
 import unittest
+from contextlib import redirect_stderr
+from io import StringIO
+from pathlib import Path
+from tempfile import TemporaryDirectory
 from unittest.mock import patch
 
 from tools.generate_bom import (
+    MAX_INPUT_BYTES,
+    ROOT,
     BomError,
     WorkspaceSnapshot,
+    _capture_workspace,
     _decode_json_strict,
+    _read_bounded,
     _write_report,
     apply_build_surface_policy,
     build_cbom,
     build_sbom,
     canonical_json,
+    main,
 )
 
 
 SHA_ID = "registry+https://github.com/rust-lang/crates.io-index#sha2@0.11.0"
 BUILD_ID = "registry+https://github.com/rust-lang/crates.io-index#build-helper@1.0.0"
 PROC_ID = "registry+https://github.com/rust-lang/crates.io-index#derive-helper@2.0.0"
+
+
+def cargo_metadata_command(manifest_path: str) -> list[str]:
+    """Return the exact fixed Cargo command required by the BOM contract."""
+
+    return [
+        "cargo",
+        "metadata",
+        "--format-version",
+        "1",
+        "--locked",
+        "--offline",
+        "--all-features",
+        "--manifest-path",
+        manifest_path,
+    ]
 
 
 def metadata(scope: str) -> dict[str, object]:
@@ -396,6 +422,38 @@ class CbomTests(unittest.TestCase):
             with self.subTest(invalid=invalid), self.assertRaises(BomError):
                 build_cbom({**registry, "components": [invalid]}, sbom)
 
+    def test_symlinked_source_reference_rejects(self) -> None:
+        """A live symlink cannot stand in for reviewed CBOM source evidence."""
+
+        sbom = build_sbom([snapshot("root")])
+        registry = crypto_registry()
+        component = registry["components"][0]
+        self.assertIsInstance(component, dict)
+        if not isinstance(component, dict):
+            self.fail("fixture component must be an object")
+        target_root = ROOT / "target"
+        target_root.mkdir(parents=True, exist_ok=True)
+        with TemporaryDirectory(prefix="bom-source-", dir=target_root) as directory:
+            repository_root = Path(directory)
+            source = repository_root / "source.rs"
+            source.write_text("pub fn reviewed() {}\n", encoding="utf-8")
+            source_link = repository_root / "source-link.rs"
+            source_link.symlink_to(source.name)
+            test_reference = repository_root / "source_test.rs"
+            test_reference.write_text("#[test]\nfn reviewed() {}\n", encoding="utf-8")
+            symlinked = {
+                **component,
+                "source_refs": [source_link.name],
+                "test_refs": [test_reference.name],
+            }
+
+            with self.assertRaisesRegex(BomError, "references a symlink"):
+                build_cbom(
+                    {**registry, "components": [symlinked]},
+                    sbom,
+                    repository_root=repository_root,
+                )
+
     def test_unregistered_crypto_named_package_rejects(self) -> None:
         """Recognizable cryptographic packages require an explicit CBOM owner."""
 
@@ -437,6 +495,137 @@ class BomIoTests(unittest.TestCase):
                 with self.assertRaises(BomError):
                     _write_report(path, json.dumps({}))
                 write_text.assert_not_called()
+
+    def test_bounded_reader_enforces_exact_one_mebibyte_ceiling(self) -> None:
+        """The documented ceiling accepts its boundary and rejects one byte more."""
+
+        target_root = ROOT / "target"
+        target_root.mkdir(parents=True, exist_ok=True)
+        with TemporaryDirectory(prefix="bom-input-", dir=target_root) as directory:
+            source = Path(directory) / "input.json"
+            source.write_bytes(b"x" * MAX_INPUT_BYTES)
+            self.assertEqual(len(_read_bounded(source, "fixture input")), MAX_INPUT_BYTES)
+
+            source.write_bytes(b"x" * (MAX_INPUT_BYTES + 1))
+            with self.assertRaisesRegex(BomError, "one-megabyte input ceiling"):
+                _read_bounded(source, "fixture input")
+
+    def test_bounded_reader_rejects_symlinked_input(self) -> None:
+        """Policy and lockfile readers cannot follow a symlinked source input."""
+
+        target_root = ROOT / "target"
+        target_root.mkdir(parents=True, exist_ok=True)
+        with TemporaryDirectory(prefix="bom-input-link-", dir=target_root) as directory:
+            source = Path(directory) / "input.json"
+            source.write_text("{}\n", encoding="utf-8")
+            source_link = Path(directory) / "input-link.json"
+            source_link.symlink_to(source.name)
+
+            with self.assertRaisesRegex(BomError, "absent or a symlink"):
+                _read_bounded(source_link, "fixture input")
+
+    def test_oversized_cargo_metadata_rejects_before_lockfile_read(self) -> None:
+        """Cargo stdout cannot bypass the one-mebibyte metadata ceiling."""
+
+        result = subprocess.CompletedProcess(
+            args=["cargo", "metadata"],
+            returncode=0,
+            stdout=b"x" * (MAX_INPUT_BYTES + 1),
+            stderr=b"",
+        )
+        with patch("tools.generate_bom.subprocess.run", return_value=result) as run:
+            with self.assertRaisesRegex(BomError, "Cargo metadata exceeds"):
+                _capture_workspace("root", "Cargo.toml", "missing-lockfile")
+
+        run.assert_called_once_with(
+            cargo_metadata_command("Cargo.toml"),
+            cwd=ROOT,
+            check=False,
+            capture_output=True,
+        )
+
+    def test_malformed_or_nonobject_cargo_metadata_rejects(self) -> None:
+        """Cargo output must be UTF-8 strict JSON with an object root."""
+
+        cases = (
+            (b"\xff", "cannot decode root Cargo metadata"),
+            (b"[]", "root Cargo metadata root must be an object"),
+        )
+        for stdout, expected_error in cases:
+            result = subprocess.CompletedProcess(
+                args=["cargo", "metadata"],
+                returncode=0,
+                stdout=stdout,
+                stderr=b"",
+            )
+            with (
+                self.subTest(stdout=stdout),
+                patch("tools.generate_bom.subprocess.run", return_value=result) as run,
+            ):
+                with self.assertRaisesRegex(BomError, expected_error):
+                    _capture_workspace("root", "Cargo.toml", "missing-lockfile")
+                run.assert_called_once_with(
+                    cargo_metadata_command("Cargo.toml"),
+                    cwd=ROOT,
+                    check=False,
+                    capture_output=True,
+                )
+
+    def test_cargo_subprocess_failure_is_fail_closed(self) -> None:
+        """A nonzero Cargo result returns CLI failure without writing a report."""
+
+        result = subprocess.CompletedProcess(
+            args=["cargo", "metadata"],
+            returncode=101,
+            stdout=b"",
+            stderr=b"locked dependency is unavailable\n",
+        )
+        error_output = StringIO()
+        with (
+            patch("tools.generate_bom.subprocess.run", return_value=result) as run,
+            patch("tools.generate_bom._write_report") as write_report,
+            redirect_stderr(error_output),
+        ):
+            return_code = main([])
+
+        self.assertEqual(return_code, 1)
+        self.assertIn(
+            "root Cargo metadata failed: locked dependency is unavailable",
+            error_output.getvalue(),
+        )
+        run.assert_called_once_with(
+            cargo_metadata_command("Cargo.toml"),
+            cwd=ROOT,
+            check=False,
+            capture_output=True,
+        )
+        write_report.assert_not_called()
+
+    def test_report_writer_rejects_symlinked_parent_and_destination(self) -> None:
+        """A target-local symlink cannot redirect or receive generated evidence."""
+
+        target_root = ROOT / "target"
+        target_root.mkdir(parents=True, exist_ok=True)
+        with TemporaryDirectory(prefix="bom-report-", dir=target_root) as directory:
+            fixture_root = Path(directory)
+            real_parent = fixture_root / "real-parent"
+            real_parent.mkdir()
+            parent_link = fixture_root / "parent-link"
+            parent_link.symlink_to(real_parent.name, target_is_directory=True)
+            parent_report = parent_link / "report.json"
+            parent_report_path = parent_report.relative_to(ROOT).as_posix()
+            with self.assertRaisesRegex(BomError, "report parent is a symlink"):
+                _write_report(parent_report_path, "{}\n")
+            self.assertFalse((real_parent / "report.json").exists())
+
+            destination = fixture_root / "destination.json"
+            destination.write_text("unchanged\n", encoding="utf-8")
+            destination_link = fixture_root / "report.json"
+            destination_link.symlink_to(destination.name)
+            destination_path = destination_link.relative_to(ROOT).as_posix()
+            with self.assertRaisesRegex(BomError, "report path is a symlink"):
+                _write_report(destination_path, "{}\n")
+            self.assertEqual(destination.read_text(encoding="utf-8"), "unchanged\n")
 
 
 if __name__ == "__main__":

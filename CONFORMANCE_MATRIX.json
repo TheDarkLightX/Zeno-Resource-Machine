@@ -14,7 +14,7 @@
     "production_ready": false,
     "current_level": "ZRM-L0",
     "claim_scope": [
-      "reviewed_repository_local_wp0_controls",
+      "reviewed_initial_repository_local_wp0_controls",
       "reviewed_wp1_primitive_and_canonical_codec_slice"
     ],
     "promotion_evidence": [
@@ -24,7 +24,9 @@
     "unreviewed_candidate_scope": [
       "pre_rfc_wp2_in_memory_policy_model",
       "wp2_specialized_opaque_root_candidates",
-      "wp2_policy_limits_unit_checks_and_verifier_cost_quotes"
+      "wp2_policy_limits_unit_checks_and_verifier_cost_quotes",
+      "wp0_multi_axis_code_quality_controls",
+      "wp0_source_sbom_and_cryptography_cbom_controls"
     ],
     "non_claims": [
       "no_implemented_semantic_kernel",

@@ -217,8 +217,8 @@ No formal obligation applies to the Class B BOM logic. The combined shared Rust 
 | Command | Result |
 | --- | --- |
 | `python3 -m unittest discover -s tools/tests -p 'test_bom.py' -v` before implementation | failed: `ModuleNotFoundError: tools.generate_bom` |
-| same focused command after implementation and after module split | passed 12 tests |
-| `python3 -m unittest discover -s tools/tests -v` | passed 66 tests |
+| same focused command on the final hardened tree | passed 19 tests |
+| `python3 -m unittest discover -s tools/tests -v` | passed 73 tests |
 | `python3 -m py_compile tools/bom_common.py tools/bom_sbom.py tools/bom_cbom.py tools/generate_bom.py tools/tests/test_bom.py` | passed |
 | `python3 tools/generate_bom.py --sbom target/zrm-sbom.json --cbom target/zrm-cbom.json` | passed: 22 components, 58 edges, 1 cryptography component |
 | two consecutive BOM generations plus `cmp` on both reports | passed; byte-identical SBOM and CBOM |
@@ -259,7 +259,7 @@ No protocol hash, vector, domain, or authority byte changed. Tooling-only report
 
 ### Dependencies changed
 
-None. No Python package, Cargo crate, action, build tool, feature, or network service was added.
+No external dependency was added: no Python package, Cargo crate, action, feature, external build tool, or network service. The slice adds repository-local Python standard-library BOM tooling.
 
 ### Performance/resource-bound impact
 

@@ -3,8 +3,8 @@
   "package": "Zeno Resource Machine high-assurance specification package",
   "version": "0.1.0-draft.2",
   "date": "2026-07-11",
-  "status": "reviewed scoped ZRM-L0 implementation plus unreviewed pre-RFC WP2 policy-model candidate; no release or production claim",
-  "implementation_snapshot": "reviewed repository-local WP0 controls and WP1 canonical-codec slice; unreviewed WP2 policy-model candidate",
+  "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions and pre-RFC WP2 policy model; no release or production claim",
+  "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model candidate",
   "manifest_scope": "normative specification-package payload only; code, tests, worklogs, and evidence records are outside this inventory",
   "digest_algorithm": "SHA-256",
   "path_order": "UTF-8 bytewise lexicographic",
@@ -24,8 +24,8 @@
     },
     {
       "path": "CONFORMANCE_MATRIX.json",
-      "bytes": 68877,
-      "sha256": "61870a5a4498367ae6eb732b3202d86bdcbc99e1d4f3fcca66bb9e228daa28b9"
+      "bytes": 68987,
+      "sha256": "64809165601ef3e9a489ca4aaa60c93913be1f7d2c0a4d0e6d1bfc237f648f99"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -49,8 +49,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 19377,
-      "sha256": "682402a5675e82416f4bc9da1da5d934f93b986e245e3246c811723b467fca56"
+      "bytes": 19819,
+      "sha256": "75377a8e3bb26378aa4e94f4fa9d7e2c47746a73bdb6fd13be0699c457a2fd25"
     },
     {
       "path": "REVIEW_CHECKLIST.md",

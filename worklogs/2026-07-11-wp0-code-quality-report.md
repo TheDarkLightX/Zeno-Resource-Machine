@@ -85,7 +85,7 @@ Public quality contract and evidence references were updated in `README.md`, `AG
 | --- | --- |
 | Complexity report | 22 production files, 192 functions, **0 warnings**, **0 review triggers**, **0 exceptions** |
 | Code-quality report | `excellent-candidate`; 27 Rust files across production/test/fuzz roles; 16 rules; 5 AI-reviewed decisions; **0 findings**; advisory ceiling **0/0** |
-| Python policy tests | 66 passed across BOM, quality, complexity, conformance, coverage, architecture, and workflow-pin fixtures |
+| Python policy tests | 73 passed across BOM, quality, complexity, conformance, coverage, architecture, and workflow-pin fixtures |
 | Rust tests | 70 passed, 0 failed |
 | Strict Clippy | workspace/all targets/all features passed, including denied cognitive complexity |
 | Workspace coverage | lines **98.48%**, branches **98.94%** |
