@@ -1,0 +1,151 @@
+{
+  "schema": "zrm/esso-semantic-closure-evidence/v1",
+  "package_id": "zrm-semantic-closure-esso-v1",
+  "recorded_at": "2026-07-12",
+  "status": "bounded_models_and_targeted_mutants_passed_requires_independent_review",
+  "normative_candidates": [
+    "rfcs/RFC-0001-policy-context-fact-and-commit-authority.md",
+    "rfcs/RFC-0002-recursive-semantic-journal-composition.md"
+  ],
+  "esso_source": {
+    "repository": "TheDarkLightX/ESSO",
+    "branch": "agent/zrm-semantic-closure-v1",
+    "commit": "8a38735257cb12454e3457ee59cf28bb9f970661",
+    "draft_pull_request": 1,
+    "workflow": "ZRM Semantic Lab",
+    "workflow_run_id": 29186433550,
+    "workflow_conclusion": "success",
+    "bounded_oracle_job_id": 86632677581,
+    "bounded_oracle_conclusion": "success",
+    "multi_solver_job_id": 86632677573,
+    "multi_solver_conclusion": "success"
+  },
+  "solver_profile": {
+    "bounded_oracle": "ESSO canonical IR plus fail-closed Z3 1-inductiveness gate",
+    "multi_solver": ["z3", "cvc5"],
+    "timeout_ms_per_query": 30000,
+    "determinism_trials": 2,
+    "acceptance": "every reference query succeeds under both requested solvers; missing solver, SAT counterexample, unknown, timeout, error, or disagreement fails closed"
+  },
+  "models": {
+    "zrm_atomic_commit_recovery_v1": {
+      "path": "examples/zrm/zrm_atomic_commit_recovery_v1.yaml",
+      "ir_hash": "sha256:474c806539afb760cdb1dfb79c40e8d9fd1fd29a6dc64597a0d99f28a1cf9f16",
+      "inductive": true,
+      "multi_solver": "PASS"
+    },
+    "zrm_exact_once_v1": {
+      "path": "examples/zrm/zrm_exact_once_v1.yaml",
+      "ir_hash": "sha256:9c97929a06272ebfaccc96e5ef1465b2cb1aaa789dfe877b57b7b7bf67b919e8",
+      "inductive": true,
+      "multi_solver": "PASS"
+    },
+    "zrm_plan_freshness_v1": {
+      "path": "examples/zrm/zrm_plan_freshness_v1.yaml",
+      "ir_hash": "sha256:8536afed0692e0214fba13a4bbf379e4c96c4259a09a150b6baba073d2362147",
+      "inductive": true,
+      "multi_solver": "PASS"
+    },
+    "zrm_policy_lifecycle_v1": {
+      "path": "examples/zrm/zrm_policy_lifecycle_v1.yaml",
+      "ir_hash": "sha256:9fbc36ed6fba5e7941bda6f50bb300f060ae307ede0ca9338997abbd2ad25a85",
+      "inductive": true,
+      "multi_solver": "PASS"
+    },
+    "zrpf_semantic_composition_v1": {
+      "path": "examples/zrm/zrpf_semantic_composition_v1.yaml",
+      "ir_hash": "sha256:180d12605766063b7f97e51321be989442b4d9ae80fbfde5331c8c4255b69676",
+      "inductive": true,
+      "multi_solver": "PASS"
+    },
+    "zrm_verifier_fact_freshness_v1": {
+      "path": "examples/zrm/zrm_verifier_fact_freshness_v1.yaml",
+      "ir_hash": "sha256:883a5cd35185dee2ed4ba44c5f8acc576cbcd9462b28296047dc8e67949d4d83",
+      "inductive": true,
+      "multi_solver": "PASS"
+    }
+  },
+  "targeted_mutants": {
+    "creation_under_wrong_policy": {
+      "base_model": "zrm_policy_lifecycle_v1",
+      "action": "create_p1",
+      "mutant_ir_hash": "sha256:2416c208b69082e15d1cea76f9190809288a5b500eb70a354a69c3db4375fa8b",
+      "result": "InvNotInductive",
+      "semantic_counterexample": true
+    },
+    "development_fact_grants_authority": {
+      "base_model": "zrm_verifier_fact_freshness_v1",
+      "action": "verify_logic_s0",
+      "mutant_ir_hash": "sha256:44878f4939046235e3a72597684bf9dfd4258d66cea0045160fbe8a1de1fa93c",
+      "result": "InvNotInductive",
+      "semantic_counterexample": true
+    },
+    "partial_durable_commit": {
+      "base_model": "zrm_atomic_commit_recovery_v1",
+      "action": "commit_record",
+      "mutant_ir_hash": "sha256:086102a314e85337e971904ccea31b4e9f9865a75b1f1d51318d97fda849e52f",
+      "result": "InvNotInductive",
+      "semantic_counterexample": true
+    },
+    "recursive_fold_omits_middle_leaf": {
+      "base_model": "zrpf_semantic_composition_v1",
+      "action": "finish_right",
+      "mutant_ir_hash": "sha256:3e3dacb718a0e2e929bca3ab85b5c2f4514f676ce09330f5762323d7b5843c62",
+      "result": "InvNotInductive",
+      "semantic_counterexample": true
+    },
+    "retry_duplicates_effect": {
+      "base_model": "zrm_exact_once_v1",
+      "action": "retry_committed",
+      "mutant_ir_hash": "sha256:d038d048549a10af3ce30993da650af5ca036e32cc3dae76c8e1b53d14d4763b",
+      "result": "InvNotInductive",
+      "semantic_counterexample": true
+    },
+    "stale_plan_commits": {
+      "base_model": "zrm_plan_freshness_v1",
+      "action": "commit_local",
+      "mutant_ir_hash": "sha256:36b4d04c6e0004f1c0785729bd3805c0c1b2eb5382fbfafc76d5a1c9374035f8",
+      "result": "InvNotInductive",
+      "semantic_counterexample": true
+    }
+  },
+  "design_discoveries": [
+    {
+      "id": "ESSO-DISCOVERY-001",
+      "description": "ESSO enum symbols are globally resolved within one IR; the initial reused symbols were ambiguous and were namespaced before semantic evidence was accepted.",
+      "impact": "model construction correction; no protocol conclusion"
+    },
+    {
+      "id": "ESSO-DISCOVERY-002",
+      "description": "The initial plan model was reachable-safe but not 1-inductive because PlanNone did not exclude already-visible effects. PlanNoneIsPristine was added to make the lifecycle invariant explicit.",
+      "impact": "strengthened semantic contract for plan lifecycle"
+    },
+    {
+      "id": "ESSO-DISCOVERY-003",
+      "description": "A failed mutant counts as evidence only when ESSO produces InitNotInv or InvNotInductive with a concrete counterexample. Parse, unsupported-feature, timeout, unknown, and generic solver failure do not kill a mutant.",
+      "impact": "stronger evidence acceptance rule"
+    }
+  ],
+  "claim_scope": [
+    "six finite ESSO reference models are canonical and 1-inductive under the recorded source revision",
+    "six targeted disaster mutants produce semantic invariant counterexamples",
+    "all six reference models pass the recorded Z3 and CVC5 multi-solver workflow"
+  ],
+  "non_claims": [
+    "the RFCs are not approved protocol semantics",
+    "the authoring track is not an independent semantic reviewer",
+    "bounded ESSO induction does not establish unbounded correctness",
+    "the abstraction from ZRM or ZRPF implementation state to ESSO state is not yet proved",
+    "no production Rust implementation has been differentially checked",
+    "no canonical byte or hash schema for the proposed objects is frozen",
+    "no storage, cryptographic, recursive-proof, consensus, data-availability, privacy, or production-readiness claim"
+  ],
+  "next_required_evidence": [
+    "independent semantic and authority-boundary review",
+    "parameterized formal theorems",
+    "reference Rust implementations and differential tests",
+    "Kani, Loom, fuzz, mutation, and crash-injection evidence",
+    "Class E canonical byte tables and independent vectors",
+    "recursive guest and accumulator refinement evidence"
+  ]
+}
