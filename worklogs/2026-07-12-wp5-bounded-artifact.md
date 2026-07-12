@@ -61,7 +61,14 @@ verified-fact constructor is introduced.
 The earlier local draft reported a compile-failing red phase but retained no
 complete command output. That report is not counted as repository evidence.
 
-Clean-revision results:
+The retained compact receipt is
+[`evidence/wp5-bounded-artifact-2026-07-12.json`](../evidence/wp5-bounded-artifact-2026-07-12.json).
+It binds the following results to source revision
+`cc570d151cdef0ebb13a1783fbacb25c16bdc3f5` and tree
+`e9f27d795f9ef614557ba51c593a4cda1bbab0c3`. The later evidence-only commit
+does not change Rust source, tests, dependencies, or repository checkers.
+
+Revision-bound results:
 
 ```text
 cargo fmt --all --check
@@ -105,8 +112,6 @@ cargo mutants --in-place -p zrm-verifier-api \
   --timeout 20 --build-timeout 60
 PASS: 15 generated; 12 caught; 3 unviable; 0 missed; 0 timed out
 
-public privacy and local-path scan
-PASS: no findings
 ```
 
 Mutation results cover every viable generated source mutant. The three unviable

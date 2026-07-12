@@ -802,6 +802,7 @@
       ],
       "evidence_refs": [
         "evidence/WP1_MUTATION_MAP.md",
+        "evidence/wp5-bounded-artifact-2026-07-12.json",
         "worklogs/2026-07-12-wp5-bounded-artifact.md"
       ],
       "next_action": "add governed aggregate budgets and deterministic allocation-refusal evidence before verifier dispatch; add explicit count, depth, string, and diagnostic-JSON bounds when those wire types are introduced",

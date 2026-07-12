@@ -1,0 +1,144 @@
+{
+  "schema": "zrm/wp5-bounded-artifact-evidence/v1",
+  "source_revision": "cc570d151cdef0ebb13a1783fbacb25c16bdc3f5",
+  "source_tree": "e9f27d795f9ef614557ba51c593a4cda1bbab0c3",
+  "author": "Dana Edwards",
+  "drafting_assistance": "GPT-5.6",
+  "status": "local_candidate_evidence",
+  "claim_scope": [
+    "bounded_artifact_copy",
+    "caller_limit_protocol_ceiling",
+    "artifact_debug_redaction",
+    "inward_workspace_dependency"
+  ],
+  "environment": {
+    "host": "x86_64-unknown-linux-gnu",
+    "rustc": "1.87.0 (17067e9ac 2025-05-09)",
+    "rustc_llvm": "20.1.1",
+    "cargo": "1.87.0 (99624be96 2025-05-06)",
+    "cargo_nightly": "1.89.0-nightly (47c911e9e 2025-05-14)",
+    "cargo_llvm_cov": "0.8.5",
+    "cargo_mutants": "26.0.0"
+  },
+  "source_sha256": {
+    "Cargo.lock": "d005599af4c34e7017a1b30988b8187c5cee7adf1ae571a2059de1bce9557f29",
+    "crates/zrm-verifier-api/src/artifact.rs": "4dae35ff3b9fd13a62467f77a13ca282febcbe7b18a61ebdb06f808f0978d904",
+    "crates/zrm-verifier-api/src/lib.rs": "4c38162dc219837b68db714dfc8787e530ec6174ecaf58a62218dd41b5b59a53",
+    "crates/zrm-verifier-api/tests/artifact.rs": "6f89df3ffe8156af2b90155b5d42e8ff62538971ca6892c5ce46b271acadcf64"
+  },
+  "commands": [
+    {
+      "argv": ["cargo", "fmt", "--all", "--check"],
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "argv": ["cargo", "check", "--workspace", "--all-targets", "--all-features", "--locked"],
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "argv": ["cargo", "clippy", "--workspace", "--all-targets", "--all-features", "--locked", "--", "-D", "warnings"],
+      "exit_code": 0,
+      "result": "pass"
+    },
+    {
+      "argv": ["cargo", "test", "--workspace", "--all-features", "--locked"],
+      "exit_code": 0,
+      "result": "112 runtime tests passed; zero failed"
+    },
+    {
+      "argv": ["cargo", "test", "--workspace", "--doc", "--locked"],
+      "exit_code": 0,
+      "result": "3 compile-fail documentation tests passed; zero failed"
+    },
+    {
+      "argv": ["python3", "tools/check_package_manifest.py"],
+      "exit_code": 0,
+      "result": "all listed bytes and SHA-256 digests match"
+    },
+    {
+      "argv": ["python3", "tools/check_conformance.py"],
+      "exit_code": 0,
+      "result": "45 obligations, live anchors, valid promotion states, acyclic dependencies"
+    },
+    {
+      "argv": ["python3", "tools/check_architecture.py"],
+      "exit_code": 0,
+      "result": "exact internal and external dependency allowlists match"
+    },
+    {
+      "argv": ["python3", "tools/check_complexity.py"],
+      "exit_code": 0,
+      "result": "38 files, 293 functions, zero warnings, zero exceptions"
+    },
+    {
+      "argv": ["python3", "tools/check_code_quality.py"],
+      "exit_code": 0,
+      "result": "excellent-candidate, 16 rules, 5 reviewed decisions, zero advisories"
+    },
+    {
+      "argv": ["python3", "-m", "unittest", "discover", "-s", "tools/tests", "-v"],
+      "exit_code": 0,
+      "result": "75 tests passed; zero failed"
+    },
+    {
+      "argv": ["cargo", "+nightly", "llvm-cov", "--package", "zrm-verifier-api", "--all-targets", "--branch", "--summary-only", "--locked"],
+      "exit_code": 0,
+      "result": "31 of 31 lines, 4 of 4 branches, and 46 of 48 regions covered"
+    },
+    {
+      "argv": ["cargo", "mutants", "--in-place", "-p", "zrm-verifier-api", "--file", "crates/zrm-verifier-api/src/*.rs", "--timeout", "20", "--build-timeout", "60"],
+      "exit_code": 0,
+      "result": "15 generated; 12 caught; 3 unviable; zero missed; zero timed out"
+    }
+  ],
+  "coverage": {
+    "source": "crates/zrm-verifier-api/src/artifact.rs",
+    "regions": {"covered": 46, "total": 48},
+    "functions": {"covered": 5, "total": 5},
+    "lines": {"covered": 31, "total": 31},
+    "branches": {"covered": 4, "total": 4}
+  },
+  "mutation": {
+    "generated": 15,
+    "caught": [
+      "display_returns_default",
+      "protocol_limit_gt_to_eq",
+      "protocol_limit_gt_to_lt",
+      "protocol_limit_gt_to_ge",
+      "artifact_length_gt_to_eq",
+      "artifact_length_gt_to_lt",
+      "artifact_length_gt_to_ge",
+      "as_bytes_returns_empty",
+      "len_returns_zero",
+      "len_returns_one",
+      "is_empty_returns_true",
+      "is_empty_returns_false"
+    ],
+    "unviable": [
+      "try_new_returns_default",
+      "as_bytes_returns_zero_byte",
+      "as_bytes_returns_one_byte"
+    ],
+    "missed": [],
+    "timed_out": [],
+    "raw_artifact_sha256": {
+      "outcomes.json": "95b3916f66feba60cb12ac7051a4500464f4f265f031acb076cef374eb4ec4bf",
+      "caught.txt": "1b38cdb86423ac00d349474fa28e7b070bc6aa2c9785077ba6d7c1668bf8385e",
+      "unviable.txt": "3b32186c79e42ea2039ad88e4f75a2f594aab858ad4ff03092040f6c3e6ba695",
+      "missed.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "timeout.txt": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "non_claims": [
+    "no_authenticated_policy_limit",
+    "no_aggregate_artifact_budget",
+    "no_deterministic_allocator_refusal_test",
+    "no_proof_format_or_canonicality_validation",
+    "no_cryptographic_verification",
+    "no_verified_fact_or_authority",
+    "no_secrecy_or_zeroization_claim",
+    "no_production_readiness"
+  ]
+}
