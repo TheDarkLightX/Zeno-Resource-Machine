@@ -110,11 +110,19 @@ Goal:
 Affected crates/modules:
 Exact typed statement or API:
 Authority boundary:
+Attacker-controlled fields:
+Governed fields:
+New valid states:
+New invalid states:
 Invariants preserved/added:
 Disaster states affected:
 Canonical bytes or hashes affected:
+Replay/freshness implications:
+Upgrade/revocation implications:
 Compatibility/versioning impact:
 Tests to add first:
+Independent reference/oracle plan:
+Counterexamples to attempt:
 Formal/model obligations:
 Dependency impact:
 Performance/resource bounds:
@@ -150,6 +158,14 @@ Verifier adapters, signatures, proofs, policy loading, release binding, commit c
 Canonical bytes, domains, schemas, public APIs, state roots, nullifiers, journal meanings, authority identity/semantics/ABI, release profiles, or production claims.
 
 Class C-D changes require CBC updates and focused negative evidence. Class E requires an RFC plus versioning and migration/replay plans. Classes D and E require at least two independent reviewers, including an authority-boundary reviewer.
+
+For Class C-E work, implementation, specification-oracle, and adversarial-review
+tracks SHOULD begin from separate contexts. At least one non-author reviewer
+MUST derive counterexamples from the specification and disaster states before
+accepting the implementation's tests as the semantic oracle. An AI subagent can
+provide independent technical review evidence when its context and artifact are
+isolated. It does not replace required human approval or an external audit for
+an authority-bearing production release.
 
 ---
 

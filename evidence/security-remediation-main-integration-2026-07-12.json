@@ -1,0 +1,130 @@
+{
+  "schema": "zrm/security-remediation-main-integration/v1",
+  "record_id": "security-remediation-main-integration-2026-07-12",
+  "recorded_at": "2026-07-12",
+  "source": {
+    "security_remediation_revision": "7023db610e0de81ed53cc39b2e79d66d8f42145a",
+    "main_revision": "271c8589ec0c42db996926e79ca783b0c890c2b9",
+    "integration_revision": "3ea334ea330caa2ed0cac732ef5844834b227ace",
+    "integration_tree": "2d3080f638e85360d47db83cd29a010b4c6825fb",
+    "dirty": false
+  },
+  "resolved_conflicts": [
+    ".github/pull_request_template.md",
+    "CONFORMANCE_MATRIX.json",
+    "PACKAGE_MANIFEST.json",
+    "README.md",
+    "REVIEW_CHECKLIST.md",
+    "fuzz/generate_corpus.py",
+    "rfcs/README.md",
+    "templates/PR_TEMPLATE.md",
+    "tools/tests/test_policy_checks.py"
+  ],
+  "rfc_identity_correction": {
+    "reason": "the security-remediation branch-local RFC-0002 identity conflicted with the merged recursive-composition RFC-0002 identity",
+    "prior_rfc_path": "rfcs/0002-security-review-api-quarantine.md",
+    "prior_rfc_sha256": "5227ac9dc7a47f518e029db0898d8771c0cf5cd12349d25e942a0480f80682ce",
+    "successor_rfc_path": "rfcs/RFC-0003-security-review-api-quarantine.md",
+    "successor_rfc_sha256": "d02b473636ade9b81b71df7a44c394a5a957236815394623638b08f2b28318a1",
+    "renamed_oracle_artifacts": [
+      {
+        "prior_path": "reference_models/RESOURCE_KIND_POLICY_V1_RFC0002_PROPOSED.md",
+        "prior_sha256": "a3950943053bff4358a299786c6fa26e11d2b2270d89f47c18a940f2e593588f",
+        "successor_path": "reference_models/RESOURCE_KIND_POLICY_V1_RFC0003_PROPOSED.md",
+        "successor_sha256": "2423be19f2c07389fbeb24b77989b71cf2afeeb2aee22cada19734a639627905"
+      },
+      {
+        "prior_path": "reference_models/resource_kind_policy_v1_rfc0002_proposed.py",
+        "prior_sha256": "023b92af8a3bca5a4f3b35da65941e407b3225e8254ca381f183f49c9e101c1b",
+        "successor_path": "reference_models/resource_kind_policy_v1_rfc0003_proposed.py",
+        "successor_sha256": "c6bcffc7f5a2ac3d0c10e90103f764da88cfb3c9bd51fb3454caf10c13aafc27"
+      },
+      {
+        "prior_path": "reference_models/resource_kind_policy_v1_rfc0002_proposed_counterexamples.json",
+        "prior_sha256": "e57572adc933711b5c0b0701a90e528615e768cf271c2009b59c7b7d5f76ca3e",
+        "successor_path": "reference_models/resource_kind_policy_v1_rfc0003_proposed_counterexamples.json",
+        "successor_sha256": "c6f3ba775098eb5a2e66558efdbfa9f4900ea31d81ceea30d7418e2b144d12fd"
+      },
+      {
+        "prior_path": "reference_models/tests/test_resource_kind_policy_v1_rfc0002_proposed.py",
+        "prior_sha256": "a4b11bda648974cb86d6e63dec5421a6400cb1eb0048dd21d0903d3eb29e34a0",
+        "successor_path": "reference_models/tests/test_resource_kind_policy_v1_rfc0003_proposed.py",
+        "successor_sha256": "21a5692b74225091e9cda7ad72149ec3974d50ba43eab93e221bf02e0b5e87a5"
+      }
+    ]
+  },
+  "historical_evidence_preserved": {
+    "agent_review_path": "evidence/security-remediation-agent-reviews-2026-07-12.json",
+    "agent_review_sha256": "f29d4311c3fe9098418340c8c3b5b099381fd38e931b129f725c5c0d89d9695c",
+    "local_gate_path": "evidence/security-remediation-local-gates-2026-07-12.json",
+    "local_gate_sha256": "3d4b50c3ea93298eacac020e2a41fd9d9f8862b2ec6ef02fc53c2c1824a198fa",
+    "scope": "the preserved records describe the original branch-local RFC-0002 label and do not independently bind the renamed or integrated tree"
+  },
+  "integrated_results": {
+    "rust_tests": {
+      "command": "cargo +1.87.0 test --workspace --all-features --locked",
+      "result": "pass; 130 tests"
+    },
+    "rust_doc_tests": {
+      "command": "cargo +1.87.0 test --workspace --doc --locked",
+      "result": "pass; 7 compile-fail doctests"
+    },
+    "tooling_tests": {
+      "command": "python3 -m unittest discover -s tools/tests -p test_*.py",
+      "result": "pass; 103 tests"
+    },
+    "reference_model_tests": {
+      "command": "python3 -m unittest discover -s reference_models/tests -p test_*.py",
+      "result": "pass; 45 tests"
+    },
+    "conformance": {
+      "command": "python3 tools/check_conformance.py",
+      "result": "pass; 46 obligations"
+    },
+    "package_manifest": {
+      "command": "python3 tools/check_package_manifest.py",
+      "result": "pass; 48 payload files",
+      "manifest_sha256": "c7b752245b87eab29b56348ac16d2a3618448a21e038f24269bc910bef90cecb"
+    },
+    "corpus": {
+      "command": "python3 fuzz/generate_corpus.py --check",
+      "result": "pass; both policy-resource-dimension and role-bound-intrinsic families retained"
+    },
+    "architecture": {
+      "command": "python3 tools/check_architecture.py",
+      "result": "pass; dependency and authority API allowlists"
+    },
+    "complexity_and_quality": {
+      "commands": [
+        "python3 tools/check_complexity.py --report target/pr9-merge-complexity.json",
+        "python3 tools/check_code_quality.py --report target/pr9-merge-quality.json"
+      ],
+      "result": "pass; 41 files, 344 functions, zero advisories, excellent-candidate structural tier"
+    },
+    "repository_hygiene": {
+      "command": "python3 tools/check_repository_hygiene.py",
+      "result": "pass"
+    },
+    "rust_static_and_docs": {
+      "result": "format, check, Clippy with denied warnings, and rustdoc passed"
+    }
+  },
+  "review_state": {
+    "independent_conflict_review_complete": true,
+    "human_semantic_review_complete": false,
+    "hosted_ci_complete": false,
+    "promotion_allowed": false
+  },
+  "remaining_gaps": [
+    "human approval or rejection of RFC-0003 lifecycle candidate semantics",
+    "hosted CI on the integrated revision",
+    "authenticated policy and verifier authority ABI",
+    "governed registry, verified facts, state, persistence, and atomic commit"
+  ],
+  "non_claims": [
+    "this integration record does not approve RFC-0003",
+    "renumbering preserves the proposed relation but is not a proof of unbounded correctness",
+    "the security remediation remains a pre-authority candidate",
+    "no release or production authority follows"
+  ]
+}

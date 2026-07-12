@@ -24,7 +24,9 @@
     "unreviewed_candidate_scope": [
       "pre_rfc_wp2_in_memory_policy_model",
       "wp2_specialized_opaque_root_candidates",
-      "wp2_policy_limits_unit_checks_and_verifier_cost_quotes",
+      "wp2_policy_limits_unit_checks_and_internal_verifier_cost_arithmetic",
+      "security_review_zero_quantity_and_api_quarantine_candidate",
+      "security_review_resource_id_and_diagnostic_hardening_candidate",
       "wp0_multi_axis_code_quality_controls",
       "wp0_source_sbom_and_cryptography_cbom_controls",
       "wp3a_canonical_resource_role_partition",
@@ -121,10 +123,13 @@
         "evidence/wp1-local-gates-2026-07-10.json",
         "evidence/wp1-class-c-review-2026-07-11.json",
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
-        "evidence/wp3b-local-gates-2026-07-11.json"
+        "evidence/wp3b-local-gates-2026-07-11.json",
+        "rfcs/RFC-0003-security-review-api-quarantine.md",
+        "worklogs/2026-07-12-security-review-remediation.md",
+        "evidence/security-remediation-local-gates-2026-07-12.json"
       ],
-      "next_action": "retain exact draft-v1 vector compatibility and the reviewed syntactic-versus-semantic authority boundary in every later work package",
-      "non_claim": "the frozen ResourceWireV1 and ResourceId binding now feed a policy-independent intrinsic resource stage; this does not create final policy-valid ResourceV1, authenticated policy, state membership, accepted transition, or commit authority",
+      "next_action": "retain exact draft-v1 vector compatibility, keep raw resource hashing private to the canonical codec, and preserve the reviewed syntactic-versus-semantic authority boundary in every later work package",
+      "non_claim": "the frozen ResourceWireV1 and ResourceId binding feed a policy-independent intrinsic resource stage, and the supported public typed derivation path is sealed; callers can still compute or construct inert identifier bytes, and no final policy-valid ResourceV1, authenticated policy, state membership, accepted transition, or commit authority exists",
       "normative_refs": [
         "SPECIFICATION.md#102-domain-separated-hash-function",
         "SPECIFICATION.md#11-canonical-encoding-rules",
@@ -463,8 +468,8 @@
       "test_refs": [],
       "formal_refs": [],
       "evidence_refs": [],
-      "next_action": "freeze verifier-policy authority bytes and release/revocation bindings by Class E RFC, then implement the sealed WP5 registry with wrong-program, stale, and revoked negatives",
-      "non_claim": "WP2 exposes only unauthenticated candidate-shape checks, including exact admission-policy ID comparison; it does not implement this obligation's registry membership, program or key identity, release identity, revocation, trusted epoch, artifact verification, or authority facts",
+      "next_action": "freeze verifier-policy authority bytes and release/revocation bindings by an accepted Class E RFC, then implement the sealed WP5 registry with wrong-program, copied-content, non-production-mode, stale, revoked, and wrong-release negatives",
+      "non_claim": "WP2's unauthenticated candidate-shape and admission-ID comparisons are quarantined from the default public API; this does not implement registry membership, content-derived identity, program or key identity, production-mode enforcement, release identity, revocation, trusted epoch, artifact verification, or authority facts",
       "normative_refs": [
         "SPECIFICATION.md#19-resource-logic-contract",
         "SPECIFICATION.md#301-verifier-policy",
@@ -624,15 +629,19 @@
         "crates/zrm-policy/src/resource_kind.rs"
       ],
       "test_refs": [
-        "crates/zrm-policy/tests/policy_model.rs"
+        "crates/zrm-policy/tests/policy_model.rs",
+        "crates/zrm-policy/tests/resource_dimension_atlas.rs",
+        "fuzz/fuzz_targets/policy_resource_dimensions_v1.rs"
       ],
-      "formal_refs": [],
+      "formal_refs": [
+        "crates/zrm-policy/src/resource_kind/kani_harnesses.rs"
+      ],
       "evidence_refs": [
         "worklogs/2026-07-11-wp2-policy-model.md",
         "evidence/wp2-local-gates-2026-07-11.json"
       ],
-      "next_action": "retain exact UnitId matching in ResourceV1 construction and implement any conversion only through an RFC-frozen transformation and rounding policy in WP6",
-      "non_claim": "the candidate enforces exact policy-unit equality and quantity maxima only; no accounting row, conversion, rounding, transformation, or accepted transition exists",
+      "next_action": "retain exact UnitId matching in final ResourceV1 construction and permit conversion only through explicit versioned transformation rules",
+      "non_claim": "the candidate enforces exact policy-unit equality only; no accounting row, conversion, rounding, transformation, or accepted transition exists",
       "normative_refs": [
         "SPECIFICATION.md#14-resource-kind-policy",
         "SPECIFICATION.md#214-units"
@@ -969,20 +978,34 @@
       "implementation_refs": [
         "crates/zrm-types/src/lib.rs",
         "crates/zrm-codec/src/error.rs",
-        "crates/zrm-codec/src/resource_wire_v1.rs"
+        "crates/zrm-codec/src/resource_wire_v1.rs",
+        "crates/zrm-policy/src/error.rs",
+        "crates/zrm-policy/src/resource_kind.rs"
       ],
       "test_refs": [
         "crates/zrm-types/src/lib.rs",
-        "crates/zrm-codec/tests/resource_wire_v1.rs"
+        "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "crates/zrm-policy/tests/policy_model.rs",
+        "crates/zrm-policy/tests/resource_dimension_atlas.rs",
+        "reference_models/tests/test_resource_kind_policy_v1.py",
+        "reference_models/tests/test_resource_kind_policy_v1_rfc0003_proposed.py"
       ],
       "formal_refs": [
-        "crates/zrm-codec/src/kani_harnesses.rs"
+        "crates/zrm-codec/src/kani_harnesses.rs",
+        "crates/zrm-policy/src/resource_kind/kani_harnesses.rs"
       ],
       "evidence_refs": [
-        "evidence/WP1_MUTATION_MAP.md"
+        "evidence/WP1_MUTATION_MAP.md",
+        "reference_models/RESOURCE_KIND_POLICY_V1_ORACLE.md",
+        "reference_models/resource_kind_policy_v1_counterexamples.json",
+        "reference_models/RESOURCE_KIND_POLICY_V1_RFC0003_PROPOSED.md",
+        "reference_models/resource_kind_policy_v1_rfc0003_proposed_counterexamples.json",
+        "evidence/SECURITY_REMEDIATION_MUTATION_MAP.md",
+        "worklogs/2026-07-12-security-review-remediation.md",
+        "evidence/security-remediation-local-gates-2026-07-12.json"
       ],
-      "next_action": "add independent cross-language reject parity and the private diagnostic envelope in WP7",
-      "non_claim": "stable codes and precedence cover ResourceWireV1 decoding only; no transition-level rejection receipt or private diagnostic schema exists",
+      "next_action": "add independent cross-language reject parity, freeze any future marker-resource reject in a new policy version, and implement the private diagnostic envelope in WP7",
+      "non_claim": "stable decoder and policy-dimension precedence cover ResourceWireV1 plus the current in-memory v1 resource-kind predicate; no canonical policy reject ABI, transition-level rejection receipt, or private diagnostic schema exists",
       "normative_refs": [
         "SPECIFICATION.md#136-resourcewirev1-canonical-bytes",
         "SPECIFICATION.md#26-rejection-model"
@@ -1050,10 +1073,12 @@
       ],
       "formal_refs": [],
       "evidence_refs": [
-        "vectors/resource_wire_v1.json"
+        "vectors/resource_wire_v1.json",
+        "rfcs/RFC-0003-security-review-api-quarantine.md",
+        "worklogs/2026-07-12-security-review-remediation.md"
       ],
-      "next_action": "define the old/new compatibility matrix and migration replay before any version-two schema is accepted",
-      "non_claim": "version one is rejected or accepted exactly, but no version-two decoder, compatibility proof, or migration exists",
+      "next_action": "define the old/new compatibility matrix and migration replay before any version-two wire or policy schema is accepted; keep the pre-alpha public API removals recorded in RFC-0003",
+      "non_claim": "ResourceWireV1 version one is rejected or accepted exactly, and pre-alpha API quarantine has a source migration note; no version-two decoder, canonical policy codec, compatibility proof, persisted-state migration, or stable package ABI exists",
       "normative_refs": [
         "SPECIFICATION.md#112-schema-evolution"
       ],
@@ -1389,11 +1414,14 @@
         "crates/zrm-policy/src/cost.rs",
         "crates/zrm-kernel/src/resource.rs",
         "crates/zrm-kernel/src/role_bound_resource.rs",
-        "crates/zrm-verifier-api/src/artifact.rs"
+        "crates/zrm-verifier-api/src/artifact.rs",
+        "tools/check_architecture.py"
       ],
       "test_refs": [
         "crates/zrm-policy/tests/policy_model.rs",
+        "crates/zrm-policy/tests/resource_dimension_atlas.rs",
         "crates/zrm-policy/src/cost.rs",
+        "crates/zrm-policy/src/verifier/tests.rs",
         "crates/zrm-kernel/tests/intrinsic_resource.rs",
         "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs",
         "crates/zrm-kernel/tests/role_bound_intrinsic.rs",
@@ -1409,14 +1437,17 @@
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
         "evidence/WP3B_INTRINSIC_RESOURCE_MUTATION_MAP.md",
         "evidence/wp3b-local-gates-2026-07-11.json",
+        "worklogs/2026-07-12-security-review-remediation.md",
+        "evidence/SECURITY_REMEDIATION_MUTATION_MAP.md",
+        "evidence/security-remediation-local-gates-2026-07-12.json",
         "worklogs/2026-07-11-wp3-role-bound-intrinsic.md",
         "evidence/WP3C_ROLE_BOUND_INTRINSIC_MUTATION_MAP.md",
         "evidence/wp3c-local-gates-2026-07-12.json",
         "evidence/wp5-integrated-2026-07-12.json",
         "worklogs/2026-07-12-wp5-bounded-artifact.md"
       ],
-      "next_action": "retain zero missed generated mutants and named protocol-ceiling, selected-limit, and allocation-refusal mutants as resource, transition, accounting, state, registry, and commit guards are added",
-      "non_claim": "recorded campaigns cover WP1, pre-RFC WP2, WP3a, WP3b, WP3c, and the bounded WP5 artifact boundary including deterministic allocation-refusal mutants; no complete transition kernel, authority registry, verifier dispatch, state, persistence, or commit guard exists",
+      "next_action": "retain zero missed generated mutants and named zero-quantity, API-quarantine, protocol-ceiling, selected-limit, and allocation-refusal mutants as resource, transition, accounting, state, registry, and commit guards are added",
+      "non_claim": "recorded campaigns cover WP1, pre-RFC WP2 internal arithmetic and policy dimensions, the authority-API quarantine, WP3a, WP3b, WP3c, and the bounded WP5 artifact boundary; compile-fail/API checks do not prove a semantic registry, and no complete transition kernel, authority registry, verifier dispatch, state, persistence, or commit guard exists",
       "normative_refs": [
         "SPECIFICATION.md#404-mutation-tests"
       ],
@@ -1449,6 +1480,7 @@
         "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
         "fuzz/fuzz_targets/policy_cost_v1.rs",
         "fuzz/fuzz_targets/intrinsic_resource_v1.rs",
+        "fuzz/fuzz_targets/policy_resource_dimensions_v1.rs",
         "fuzz/fuzz_targets/role_bound_intrinsic_v1.rs",
         "fuzz/Cargo.toml"
       ],
@@ -1463,6 +1495,11 @@
         "fuzz/corpus/intrinsic_resource_v1/all-defects",
         "fuzz/corpus/intrinsic_resource_v1/expiry-before-creation",
         "fuzz/corpus/intrinsic_resource_v1/unknown-flags",
+        "fuzz/corpus/policy_resource_dimensions_v1/zero-conserved",
+        "fuzz/corpus/policy_resource_dimensions_v1/zero-evidence",
+        "fuzz/corpus/policy_resource_dimensions_v1/lifecycle-maximum-zero",
+        "fuzz/corpus/policy_resource_dimensions_v1/lifecycle-maximum-one",
+        "fuzz/corpus/policy_resource_dimensions_v1/lifecycle-maximum-two",
         "fuzz/corpus/role_bound_intrinsic_v1/absent",
         "fuzz/corpus/role_bound_intrinsic_v1/consumed",
         "fuzz/corpus/role_bound_intrinsic_v1/referenced",
@@ -1483,11 +1520,13 @@
         "evidence/wp2-local-gates-2026-07-11.json",
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
         "evidence/wp3b-local-gates-2026-07-11.json",
+        "worklogs/2026-07-12-security-review-remediation.md",
+        "evidence/security-remediation-local-gates-2026-07-12.json",
         "worklogs/2026-07-11-wp3-role-bound-intrinsic.md",
         "evidence/wp3c-local-gates-2026-07-12.json"
       ],
-      "next_action": "accumulate sustained fuzz duration, add canonical policy decoders only after the Class E ABI RFC, commit minimized failures, and add later proof-envelope grammars",
-      "non_claim": "recorded campaigns cover the ResourceWireV1 decoder, isolated WP2 cost arithmetic, the WP3b intrinsic constructor grammar, and patch-bound WP3c structural-placement and stale-body substitution; they grant no SHA-256 proof, canonical policy, proof-envelope, registry, final resource, or complete semantic-kernel assurance",
+      "next_action": "accumulate sustained fuzz duration, retain the resource-dimension full-width grammar, add canonical policy decoders only after the Class E ABI RFC, commit minimized failures, and add later proof-envelope grammars",
+      "non_claim": "recorded campaigns cover the ResourceWireV1 decoder, quarantined WP2 internal arithmetic, the policy-dimension predicate, WP3b intrinsic construction, and patch-bound WP3c placement and stale-body substitution; they grant no SHA-256 proof, canonical policy, authenticated cost model, proof envelope, registry, final resource, or complete semantic-kernel assurance",
       "normative_refs": [
         "SPECIFICATION.md#405-fuzzing"
       ],
@@ -1610,6 +1649,9 @@
       "implementation_refs": [
         "AGENTS.md",
         "templates/AGENT_WORKLOG_TEMPLATE.md",
+        "templates/PR_TEMPLATE.md",
+        "docs/AUTHORITY_MAP.md",
+        "reference_models/RESOURCE_KIND_POLICY_V1_ORACLE.md",
         "tools/check_repository_hygiene.py"
       ],
       "test_refs": [
@@ -1626,12 +1668,15 @@
         "evidence/wp3b-agent-reviews-2026-07-11.json",
         "evidence/wp3b-local-gates-2026-07-11.json",
         "evidence/wp3b-remediation-attestation-2026-07-11.json",
+        "worklogs/2026-07-12-security-review-remediation.md",
+        "evidence/security-remediation-agent-reviews-2026-07-12.json",
+        "evidence/security-remediation-local-gates-2026-07-12.json",
         "worklogs/2026-07-11-wp3-role-bound-intrinsic.md",
         "evidence/wp3c-agent-reviews-2026-07-12.json",
         "evidence/wp3c-local-gates-2026-07-12.json"
       ],
-      "next_action": "obtain final human behavior and assurance-evidence review of each candidate slice after clean hosted gates; retain completed scoped reviews as separate records",
-      "non_claim": "WP1 has scoped human approval; prior WP3b and current WP3c independent agent reviews are receipt-bound, while WP2 and WP3c still lack recorded human Class C review and cannot authorize self-promotion",
+      "next_action": "obtain final human behavior and assurance-evidence review of each candidate slice after clean hosted gates, retain isolated oracle and adversarial artifacts, and prove live distinct-reviewer branch controls before authority or release promotion",
+      "non_claim": "WP1 has scoped human approval; receipt-bound agent oracle and adversarial reviews strengthen technical evidence but do not replace required human approval or an external production audit, and static CODEOWNERS do not prove live host enforcement",
       "normative_refs": [
         "SPECIFICATION.md#45-generated-code-policy",
         "SPECIFICATION.md#46-agent-implementation-contract"
@@ -1797,19 +1842,27 @@
         "log review"
       ],
       "implementation_refs": [
+        "crates/zrm-types/src/opaque.rs",
+        "crates/zrm-codec/src/resource_wire_v1.rs",
         "crates/zrm-verifier-api/src/artifact.rs"
       ],
       "test_refs": [
+        "crates/zrm-types/src/opaque.rs",
+        "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "crates/zrm-kernel/tests/intrinsic_resource.rs",
         "crates/zrm-verifier-api/src/artifact.rs",
         "crates/zrm-verifier-api/tests/artifact.rs"
       ],
       "formal_refs": [],
       "evidence_refs": [
+        "rfcs/RFC-0003-security-review-api-quarantine.md",
+        "worklogs/2026-07-12-security-review-remediation.md",
+        "evidence/security-remediation-local-gates-2026-07-12.json",
         "evidence/wp5-integrated-2026-07-12.json",
         "worklogs/2026-07-12-wp5-bounded-artifact.md"
       ],
-      "next_action": "extend bounded redaction, zeroization, lifecycle, reject-receipt, and application logging controls across later verifier and runtime surfaces",
-      "non_claim": "WP5 prevents ordinary Debug formatting of BoundedArtifactV1 and tests fixed artifact-free diagnostics for its unit error variants; it does not establish secrecy, zeroization, safe application logging, witness lifecycle protection, or repository-wide absence of sensitive diagnostic disclosure",
+      "next_action": "extend constant redaction and disclosure review to future proof artifacts, witnesses, private state, log sinks, errors, and evidence bundles; add zeroization where private profiles introduce secrets",
+      "non_claim": "default opaque values and ResourceWireV1 32-byte array candidates are redacted, nested intrinsic formatting is nonce-value-independent, and WP5 prevents ordinary Debug formatting of BoundedArtifactV1; numeric wire scalars remain visible, and no logging framework, private witness type, zeroization policy, log-sink audit, or complete private diagnostic envelope exists",
       "normative_refs": [
         "SPECIFICATION.md#264-sensitive-diagnostics",
         "SPECIFICATION.md#42-defensive-rust-rules"
@@ -1845,7 +1898,8 @@
         "crates/zrm-kernel/src/role_bound_resource.rs",
         "crates/zrm-policy/src/limits.rs",
         "crates/zrm-policy/src/cost.rs",
-        "crates/zrm-verifier-api/src/artifact.rs"
+        "crates/zrm-verifier-api/src/artifact.rs",
+        "tools/check_architecture.py"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
@@ -1855,6 +1909,7 @@
         "crates/zrm-verifier-api/tests/artifact.rs",
         "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
         "fuzz/fuzz_targets/policy_cost_v1.rs",
+        "fuzz/fuzz_targets/policy_resource_dimensions_v1.rs",
         "fuzz/fuzz_targets/intrinsic_resource_v1.rs",
         "fuzz/fuzz_targets/role_bound_intrinsic_v1.rs"
       ],
@@ -1871,13 +1926,15 @@
         "worklogs/2026-07-11-wp0-complexity-report.md",
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
         "evidence/wp3b-local-gates-2026-07-11.json",
+        "worklogs/2026-07-12-security-review-remediation.md",
+        "evidence/security-remediation-local-gates-2026-07-12.json",
         "worklogs/2026-07-11-wp3-role-bound-intrinsic.md",
         "evidence/wp3c-local-gates-2026-07-12.json",
         "evidence/wp5-integrated-2026-07-12.json",
         "worklogs/2026-07-12-wp5-bounded-artifact.md"
       ],
       "next_action": "authenticate machine and verifier artifact limits, add governed aggregate artifact budgets, freeze cost-model authority bytes, implement sorted authenticated cost rows and the complete pre-dispatch cost plan, then add backend worst-case and end-to-end load evidence in WP5 and WP9",
-      "non_claim": "WP1 byte bounds, bounded WP3b field validation, bounded WP3c role lookup, WP2 machine ceilings and local cost quotes, plus WP5's caller-supplied single-artifact ceiling and deterministic refusal mapping are implemented; no real allocator-OOM, aggregate-budget, authenticated cost model, governed charge, complete dispatch plan, backend work bound, storage runtime, rate limit, or end-to-end DoS claim exists",
+      "non_claim": "WP1 byte bounds, bounded WP3b field validation, bounded WP3c role lookup, WP2 machine ceilings and internal candidate arithmetic, plus WP5's caller-supplied single-artifact ceiling and deterministic refusal mapping are implemented; the default public API cannot produce a caller-row quote, and no real allocator-OOM, aggregate-budget, authenticated cost model, governed charge, complete dispatch plan, backend work bound, storage runtime, rate limit, or end-to-end DoS claim exists",
       "normative_refs": [
         "SPECIFICATION.md#15-machine-policy",
         "SPECIFICATION.md#405-fuzzing",
@@ -1892,6 +1949,60 @@
       ],
       "blocking_dependencies": [
         "ZRM-CBC-019"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-046",
+      "title": "Policy-bound resource dimensions are positive, bounded, and mode-canonical",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a zero, over-maximum, wrong-unit, or mode-invalid quantity enters a policy-validated resource, or noncanonical lifecycle policy shapes create divergent accepted state",
+      "construction_rule": "Resolve one active resource-kind policy, require exact UnitId equality and a positive quantity no greater than its maximum, enforce mode-specific quantity shape, and reject noncanonical lifecycle policy maxima with deterministic constructor and resource precedence",
+      "required_evidence": [
+        "all-mode zero, maximum, unit, and lifecycle decision tables",
+        "frozen prior-specification oracle plus proposed semantic-delta oracle",
+        "full-width checked predicate proof and resource-dimension fuzzing",
+        "critical guard mutation results",
+        "human approval of the lifecycle maximum amendment"
+      ],
+      "implementation_refs": [
+        "crates/zrm-policy/src/resource_kind.rs",
+        "crates/zrm-policy/src/error.rs"
+      ],
+      "test_refs": [
+        "crates/zrm-policy/tests/policy_model.rs",
+        "crates/zrm-policy/tests/resource_dimension_atlas.rs",
+        "fuzz/fuzz_targets/policy_resource_dimensions_v1.rs",
+        "reference_models/tests/test_resource_kind_policy_v1.py",
+        "reference_models/tests/test_resource_kind_policy_v1_rfc0003_proposed.py"
+      ],
+      "formal_refs": [
+        "crates/zrm-policy/src/resource_kind/kani_harnesses.rs"
+      ],
+      "evidence_refs": [
+        "reference_models/RESOURCE_KIND_POLICY_V1_ORACLE.md",
+        "reference_models/resource_kind_policy_v1_counterexamples.json",
+        "reference_models/RESOURCE_KIND_POLICY_V1_RFC0003_PROPOSED.md",
+        "reference_models/resource_kind_policy_v1_rfc0003_proposed_counterexamples.json",
+        "rfcs/RFC-0003-security-review-api-quarantine.md",
+        "evidence/SECURITY_REMEDIATION_MUTATION_MAP.md",
+        "worklogs/2026-07-12-security-review-remediation.md"
+      ],
+      "next_action": "obtain human RFC approval for the in-place pre-alpha lifecycle-maximum amendment, apply the predicate only after authenticated active-policy resolution in final ResourceV1 construction, and define any marker permission in a future version",
+      "non_claim": "the implemented predicate consumes an inert policy candidate and candidate dimensions only; no canonical policy bytes, active-policy authentication, final ResourceV1 capability, accounting proof, marker permission, accepted transition, or commit exists",
+      "normative_refs": [
+        "SPECIFICATION.md#14-resource-kind-policy",
+        "rfcs/RFC-0003-security-review-api-quarantine.md#resource-dimensions"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP2",
+        "WP3"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-002",
+        "ZRM-CBC-024"
       ]
     }
   ]

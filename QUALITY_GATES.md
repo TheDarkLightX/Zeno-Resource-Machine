@@ -153,6 +153,27 @@ Required evidence:
 - review of feature-induced optional edges;
 - no adapter type exposed through core public APIs.
 
+Authority-adjacent public API quarantine additionally requires both:
+
+- an owner-, signature-, multiplicity-, qualifier-, type-, re-export-, and
+  public-value-aware source inventory with counterexample tests; and
+- pinned compiler-derived, canonical span-free rustdoc JSON projections for
+  default and exceptional feature/configuration profiles.
+
+The compiler snapshot uses the pinned Rust toolchain and records the complete
+compiler-visible package API without binding host-specific source paths.
+Every policy source permits only the reviewed test, Kani, and fuzz conditional
+profiles, preventing outer, inner, or comment-obfuscated `cfg(doc)` from hiding
+default-build APIs. Policy `path` attributes are exact-allowlisted and resolve
+only to regular Rust sources inside the complete scanned policy tree. Raw
+attribute identifiers, linked source directories, source inclusion, and
+unreviewed macro definitions or invocation paths fail closed. Macro imports,
+aliases, glob imports, protected-root shadowing, and non-ASCII policy source are
+rejected. Cargo dependency renames are forbidden so an allowed inward package
+cannot acquire a protected local macro root. A digest update is a reviewed
+Class E action, not an automatic golden-file refresh. Source inventory remains
+defense in depth and does not substitute for the compiler-derived gate.
+
 ---
 
 ## 6. Gate G3 — Complexity and auditability
@@ -361,6 +382,12 @@ Targets:
 - timeout or unviable mutants classified separately;
 - exclusions reviewed and documented.
 
+Code compiled only under `cfg(fuzzing)` may be excluded from ordinary
+`cargo-mutants` only when the exclusion names the exact module, the public
+surface is separately allowlisted, the fuzz target and deterministic corpus are
+replayed, and the absence of mutation coverage is stated as a non-claim. Such
+an exclusion does not apply to production or authority-bearing code.
+
 A surviving mutant is a test gap or unjustified code. It is never ignored merely because line coverage is high.
 
 ---
@@ -375,6 +402,8 @@ Initial fuzz targets:
 - transition envelope decoder;
 - accepted-journal and reject-receipt decoders;
 - policy decoder;
+- policy-bound resource-dimension predicate over arbitrary mode, unit relation,
+  full-width quantity, and full-width maximum;
 - canonical list framing;
 - accumulator proofs;
 - proof/signature adapter envelopes;
@@ -681,7 +710,24 @@ Agents MUST NOT:
 - edit generated files instead of the generator;
 - merge or promote their own critical change.
 
-Human review remains required for Classes C-E. Class D/E changes require at least two independent reviewers, including one reviewer focused on the authority boundary.
+Human review remains required for Classes C-E. At least one approving reviewer
+for every Class C-E change must be independent of the implementation author.
+Class D/E changes require at least two distinct non-author reviewers, including
+one reviewer focused on the authority boundary.
+
+Every Class C-E review MUST include a specification-counterexample pass written
+independently of the implementation. The reviewer starts from normative rules
+and disaster states, proposes inputs or sequences that would falsify the
+claimed behavior, and records whether the reference oracle, tests, or model
+reject them. Line and branch coverage, mutation results, fuzz executions, and
+AI review remain supporting evidence; they do not establish that the encoded
+oracle matches intended semantics.
+
+An isolated subagent may supply the independent technical oracle or adversarial
+artifact when it receives a separate initial context. A human maintainer still
+reviews the behavior/evidence packet. Authority-bearing production promotion
+also requires the additional independent human or external audit specified by
+the release profile; an agent cannot approve its own release.
 
 NIST SSDF and its AI profile are process inputs; they do not replace ordinary secure development and evidence requirements for agent-generated code.
 

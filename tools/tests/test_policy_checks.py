@@ -2,11 +2,22 @@
 
 from __future__ import annotations
 
+import re
+import shutil
+import tempfile
+import tomllib
 import unittest
 from pathlib import Path
 from tempfile import TemporaryDirectory
 
-from tools.check_architecture import dependency_failures
+from tools.check_architecture import (
+    ROOT as ARCHITECTURE_ROOT,
+    authority_api_failures,
+    compiler_api_projection_digest,
+    dependency_failures,
+    policy_source_cfg_failures,
+    public_authority_api_failures,
+)
 from tools.check_conformance import (
     ConformanceError,
     github_anchor,
@@ -198,6 +209,19 @@ class ArchitecturePolicyTests(unittest.TestCase):
         }
         self.assertEqual(len(dependency_failures(package)), 1)
 
+    def test_dependency_rename_cannot_create_protected_macro_root(self) -> None:
+        """An allowed package cannot enter policy under a trusted local alias."""
+
+        package = {
+            "name": "zrm-policy",
+            "dependencies": [
+                {"name": "zrm-crypto", "rename": "kani"},
+                {"name": "zrm-types", "rename": None},
+            ],
+        }
+        failures = dependency_failures(package)
+        self.assertTrue(any("dependency renames" in failure for failure in failures))
+
     def test_exact_crypto_dependencies_are_accepted(self) -> None:
         """The reviewed crypto dependency set passes exactly."""
 
@@ -206,6 +230,286 @@ class ArchitecturePolicyTests(unittest.TestCase):
             "dependencies": [{"name": "sha2"}, {"name": "zrm-types"}],
         }
         self.assertEqual(dependency_failures(package), [])
+
+    def test_compiler_api_projection_ignores_only_source_spans(self) -> None:
+        """Host paths do not change the digest, while API content still does."""
+
+        first_host_path = "/" + "home" + "/first/.cargo/registry/source.rs"
+        second_host_path = "/" + "home" + "/second/.cargo/registry/source.rs"
+        baseline = {
+            "format_version": 43,
+            "index": {
+                "1": {
+                    "name": "quote",
+                    "visibility": "public",
+                    "span": {"filename": first_host_path},
+                }
+            },
+        }
+        relocated = {
+            "format_version": 43,
+            "index": {
+                "1": {
+                    "name": "quote",
+                    "visibility": "public",
+                    "span": {"filename": second_host_path},
+                }
+            },
+        }
+        changed_api = {
+            "format_version": 43,
+            "index": {
+                "1": {
+                    "name": "admit",
+                    "visibility": "public",
+                    "span": {"filename": second_host_path},
+                }
+            },
+        }
+        self.assertEqual(
+            compiler_api_projection_digest(baseline),
+            compiler_api_projection_digest(relocated),
+        )
+        self.assertNotEqual(
+            compiler_api_projection_digest(baseline),
+            compiler_api_projection_digest(changed_api),
+        )
+
+    def test_crate_private_candidate_helpers_are_accepted(self) -> None:
+        """Internal arithmetic and shape helpers remain available for assurance."""
+
+        sources = allowed_authority_sources()
+        sources["cost.rs"] += "\npub(crate) fn compute_untrusted_candidate_quote() {}"
+        sources["error.rs"] += "\npub(crate) enum VerifierCompatibilityErrorV1 {}"
+        sources["lib.rs"] += "\npub(crate) use cost::CandidateVerifierCostQuoteV1;"
+        sources["verifier.rs"] += "\npub(crate) fn check_untrusted_admission_candidate_shape() {}"
+        self.assertEqual(public_authority_api_failures(sources), [])
+
+    def test_public_candidate_authority_methods_are_rejected(self) -> None:
+        """Default public APIs cannot quote or return admission-like success."""
+
+        sources = allowed_authority_sources()
+        sources["cost.rs"] += "\npub fn compute_quote() {}"
+        sources["verifier.rs"] += "\npub fn validate_admission_verifier_candidate() {}"
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("compute_quote" in failure for failure in failures))
+        self.assertTrue(
+            any("validate_admission_verifier_candidate" in failure for failure in failures)
+        )
+
+    def test_public_quote_types_and_reexports_are_rejected(self) -> None:
+        """Opaque candidate quote values cannot escape through the crate root."""
+
+        sources = allowed_authority_sources()
+        sources["cost.rs"] += "\npub struct VerifierCostQuoteV1;"
+        sources["lib.rs"] += "\npub use cost::VerifierCostQuoteRequestV1;"
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("VerifierCostQuoteV1" in failure for failure in failures))
+        self.assertTrue(any("VerifierCostQuoteRequestV1" in failure for failure in failures))
+
+    def test_renamed_public_quote_operation_is_rejected_by_exact_allowlist(self) -> None:
+        """Renaming a quote escape cannot bypass the architecture gate."""
+
+        sources = allowed_authority_sources()
+        sources["cost.rs"] += "\npub fn calculate_candidate_cost() -> u64 { 0 }"
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("calculate_candidate_cost" in failure for failure in failures))
+
+    def test_allowlisted_name_on_wrong_owner_is_rejected(self) -> None:
+        """A method cannot reuse another type's allowlisted getter name."""
+
+        sources = allowed_authority_sources()
+        sources["cost.rs"] += """
+impl VerifierCostRowV1 {
+    pub fn max_charge_units(&self) -> u64 { 0 }
+}
+"""
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("max_charge_units" in failure for failure in failures))
+        self.assertTrue(any("function signatures" in failure for failure in failures))
+
+    def test_async_and_extern_public_functions_are_rejected(self) -> None:
+        """Rust function qualifiers cannot bypass the reviewed signature inventory."""
+
+        for declaration in (
+            "pub async fn calculate_candidate_cost() {}",
+            'pub extern "C" fn calculate_candidate_cost() {}',
+        ):
+            with self.subTest(declaration=declaration):
+                sources = allowed_authority_sources()
+                sources["cost.rs"] += f"\n{declaration}"
+                failures = public_authority_api_failures(sources)
+                self.assertTrue(any("calculate_candidate_cost" in failure for failure in failures))
+
+    def test_doc_hidden_nested_public_module_is_rejected(self) -> None:
+        """Rustdoc-only configuration cannot hide a default-build API."""
+
+        sources = allowed_authority_sources()
+        sources["lib.rs"] += (
+            "\n#[cfg(not(doc))] pub mod escape { "
+            "pub async fn calculate_candidate_cost() -> u64 { 0 } }"
+        )
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("conditional-compilation" in failure for failure in failures))
+        self.assertTrue(any("public modules" in failure for failure in failures))
+
+    def test_doc_hidden_api_in_any_policy_module_is_rejected(self) -> None:
+        """An unlisted policy module cannot hide a default-build public method."""
+
+        sources = {
+            "crates/zrm-policy/src/resource_kind.rs": (
+                "#[cfg(not(doc))] impl ResourceKindPolicyV1 { "
+                "pub fn calculate_candidate_cost(&self) -> u64 { 0 } }"
+            )
+        }
+        failures = policy_source_cfg_failures(sources)
+        self.assertTrue(any("conditional-compilation" in failure for failure in failures))
+
+    def test_inner_and_comment_obfuscated_doc_cfg_are_rejected(self) -> None:
+        """Rust lexical variants cannot hide default-build public methods."""
+
+        for source in (
+            "mod escape { #![cfg(not(doc))] impl ResourceKindPolicyV1 { "
+            "pub fn calculate_candidate_cost(&self) -> u64 { 0 } } }",
+            "#[cfg/*comment*/(not(doc))] impl ResourceKindPolicyV1 { "
+            "pub fn calculate_candidate_cost(&self) -> u64 { 0 } }",
+            "mod escape { #![cfg_attr(doc, cfg(any()))] "
+            "impl ResourceKindPolicyV1 { "
+            "pub fn calculate_candidate_cost(&self) -> u64 { 0 } } }",
+            "#[r#cfg(not(doc))] impl ResourceKindPolicyV1 { "
+            "pub fn calculate_candidate_cost(&self) -> u64 { 0 } }",
+            "#[r#cfg_attr(doc, cfg(any()))] impl ResourceKindPolicyV1 { "
+            "pub fn calculate_candidate_cost(&self) -> u64 { 0 } }",
+        ):
+            with self.subTest(source=source):
+                failures = policy_source_cfg_failures(
+                    {"crates/zrm-policy/src/resource_kind.rs": source}
+                )
+                self.assertTrue(any("conditional" in failure for failure in failures))
+
+    def test_unreviewed_policy_path_attribute_is_rejected(self) -> None:
+        """A module cannot escape the complete in-tree policy-source scan."""
+
+        for source in (
+            '#[path = "../../hidden.inc"] mod hidden;',
+            '#[r#path = "../../hidden.inc"] mod hidden;',
+        ):
+            with self.subTest(source=source):
+                sources = {"crates/zrm-policy/src/resource_kind.rs": source}
+                failures = policy_source_cfg_failures(sources)
+                self.assertTrue(any("path attributes" in failure for failure in failures))
+                self.assertTrue(any("outside the scanned" in failure for failure in failures))
+
+    def test_macro_generated_conditional_api_is_rejected(self) -> None:
+        """A macro cannot synthesize a rustdoc-hidden public item."""
+
+        source = (
+            "macro_rules! escape { ($meta:meta) => { #[$meta] "
+            "impl ResourceKindPolicyV1 { "
+            "pub fn calculate_candidate_cost(&self) -> u64 { 0 } } } } "
+            "escape!(cfg(not(doc)));"
+        )
+        failures = policy_source_cfg_failures(
+            {"crates/zrm-policy/src/resource_kind.rs": source}
+        )
+        self.assertTrue(any("macro definition" in failure for failure in failures))
+
+    def test_dependency_macro_and_alias_cannot_escape_inventory(self) -> None:
+        """Allowed inward dependencies cannot synthesize a hidden policy API."""
+
+        direct = policy_source_cfg_failures(
+            {
+                "crates/zrm-policy/src/resource_kind.rs": (
+                    "zrm_types::escape!(cfg(not(doc)));"
+                )
+            }
+        )
+        self.assertTrue(any("unreviewed macro" in failure for failure in direct))
+
+        aliased = policy_source_cfg_failures(
+            {
+                "crates/zrm-policy/src/resource_kind.rs": (
+                    "use zrm_types::escape as assert; assert!(cfg(not(doc)));"
+                )
+            }
+        )
+        self.assertTrue(any("shadow a reviewed macro" in failure for failure in aliased))
+
+        protected_root_aliases = (
+            "use zrm_types as std; std::format!();",
+            "use zrm_types as kani; kani::cover!();",
+            "use zrm_types::{self as std}; std::format!();",
+            "use zrm_types as r#std; std::format!();",
+            "use zrm_types::std; std::format!();",
+            "use zrm_types::{std}; std::format!();",
+        )
+        for source in protected_root_aliases:
+            with self.subTest(source=source):
+                failures = policy_source_cfg_failures(
+                    {"crates/zrm-policy/src/resource_kind.rs": source}
+                )
+                self.assertTrue(
+                    any("reviewed macro root" in failure for failure in failures)
+                )
+
+        unicode_alias = policy_source_cfg_failures(
+            {
+                "crates/zrm-policy/src/resource_kind.rs": (
+                    "use zrm_types as \u00e9; \u00e9::assert!(cfg(not(doc)));"
+                )
+            }
+        )
+        self.assertTrue(any("non-ASCII" in failure for failure in unicode_alias))
+
+    def test_linked_policy_source_root_rejects_before_source_reads(self) -> None:
+        """The policy source root and repository ancestors must be regular."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            policy_parent = root / "crates/zrm-policy"
+            policy_parent.mkdir(parents=True)
+            actual = root / "actual-src"
+            shutil.copytree(ARCHITECTURE_ROOT / "crates/zrm-policy/src", actual)
+            (policy_parent / "src").symlink_to(actual, target_is_directory=True)
+            failures = authority_api_failures(root)
+        self.assertTrue(any("source-root" in failure for failure in failures))
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            crates = root / "crates"
+            crates.mkdir()
+            actual_policy = root / "actual-policy"
+            shutil.copytree(ARCHITECTURE_ROOT / "crates/zrm-policy", actual_policy)
+            (crates / "zrm-policy").symlink_to(actual_policy, target_is_directory=True)
+            failures = authority_api_failures(root)
+        self.assertTrue(any("source-root" in failure for failure in failures))
+
+    def test_public_function_pointer_constant_is_rejected(self) -> None:
+        """A callable associated constant is part of the exact value inventory."""
+
+        sources = allowed_authority_sources()
+        sources["cost.rs"] += "\npub const QUOTE: fn() -> u64 = || 0;"
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("const/static" in failure for failure in failures))
+
+    def test_fuzz_assertion_cannot_return_a_cost_value(self) -> None:
+        """The fuzz-only public bridge remains a raw-input assertion sink."""
+
+        sources = allowed_authority_sources()
+        sources["fuzz_assertions.rs"] = (
+            "pub fn fuzz_assert_untrusted_candidate_cost_invariants(data: &[u8]) -> u64 { "
+            "data.len() as u64 }"
+        )
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("implicit unit return" in failure for failure in failures))
+
+    def test_fuzz_assertion_reexports_require_fuzz_configuration(self) -> None:
+        """The assertion sink is absent from the default public API."""
+
+        sources = allowed_authority_sources()
+        sources["lib.rs"] = sources["lib.rs"].replace("#[cfg(fuzzing)]\n", "", 1)
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("only under cfg(fuzzing)" in failure for failure in failures))
 
     def test_exact_verifier_api_dependency_is_accepted(self) -> None:
         """The inert verifier input boundary depends inward on policy only."""
@@ -224,6 +528,45 @@ class ArchitecturePolicyTests(unittest.TestCase):
             "dependencies": [{"name": "reqwest"}, {"name": "zrm-policy"}],
         }
         self.assertEqual(len(dependency_failures(package)), 1)
+
+
+class MutationConfigTests(unittest.TestCase):
+    """Keep the fuzz-only cargo-mutants exclusion path-exact."""
+
+    def test_fuzz_assertion_exclusion_is_path_anchored(self) -> None:
+        """A future similarly named source file cannot inherit the exclusion."""
+
+        root = Path(__file__).resolve().parents[2]
+        config = tomllib.loads((root / ".cargo/mutants.toml").read_text(encoding="utf-8"))
+        patterns = [
+            pattern
+            for pattern in config["exclude_re"]
+            if "fuzz_assertions" in pattern
+        ]
+        expected = r"^crates/zrm-policy/src/cost/fuzz_assertions\.rs:"
+        self.assertEqual(patterns, [expected])
+        matcher = re.compile(patterns[0])
+        self.assertIsNotNone(
+            matcher.search(
+                "crates/zrm-policy/src/cost/fuzz_assertions.rs:19:5: replace read_u64"
+            )
+        )
+        self.assertIsNone(
+            matcher.search(
+                "crates/zrm-policy/src/other_fuzz_assertions.rs:19:5: replace read_u64"
+            )
+        )
+
+
+def allowed_authority_sources() -> dict[str, str]:
+    """Return the live reviewed sources for focused counterexample mutation."""
+
+    from tools.check_architecture import AUTHORITY_SOURCE_PATHS, ROOT
+
+    return {
+        Path(path).name: (ROOT / path).read_text(encoding="utf-8")
+        for path in AUTHORITY_SOURCE_PATHS
+    }
 
 
 if __name__ == "__main__":

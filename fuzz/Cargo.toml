@@ -30,6 +30,13 @@ doc = false
 bench = false
 
 [[bin]]
+name = "policy_resource_dimensions_v1"
+path = "fuzz_targets/policy_resource_dimensions_v1.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
 name = "resource_roles_v1"
 path = "fuzz_targets/resource_roles_v1.rs"
 test = false

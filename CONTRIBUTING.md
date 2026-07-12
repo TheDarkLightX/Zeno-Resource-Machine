@@ -192,11 +192,15 @@ reachable from the default branch.
 | --- | --- |
 | A | one maintainer |
 | B | one maintainer or domain owner |
-| C | semantic owner + test/evidence review |
-| D | two reviewers, including authority-boundary reviewer |
-| E | approved RFC, two reviewers, formal/compatibility review, release-owner sign-off |
+| C | at least one non-author semantic reviewer + independent test/evidence review |
+| D | two distinct non-author reviewers, including authority-boundary reviewer |
+| E | approved RFC, two distinct non-author reviewers, formal/compatibility review, release-owner sign-off |
 
 An author or coding agent cannot be the sole approver of its own critical change.
+Every Class C-E review includes a specification-counterexample pass authored
+independently of the implementation. The pass derives adversarial cases from
+the normative requirements and disaster states, rather than only reading the
+tests that accompany the patch.
 
 ## Commit and history policy
 

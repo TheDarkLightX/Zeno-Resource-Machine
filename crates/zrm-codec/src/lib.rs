@@ -2,6 +2,10 @@
 //!
 //! Decoded wire values remain inert data until later semantic constructors
 //! validate policy, state, and authority invariants.
+//!
+//! Raw byte slices cannot be converted into a typed resource identifier by a
+//! supported hashing API. Callers must first construct a structurally
+//! canonical [`ResourceWireV1`] and use [`ResourceWireV1::resource_id`].
 
 #![no_std]
 

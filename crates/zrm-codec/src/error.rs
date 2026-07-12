@@ -1,6 +1,5 @@
 use core::fmt;
 
-use zrm_crypto::HashConstructionError;
 use zrm_types::RejectCodeV1;
 
 /// Stable failure returned by strict `ResourceWireV1` decoding.
@@ -61,15 +60,22 @@ impl fmt::Display for ResourceWireEncodeError {
 pub enum ResourceIdDerivationError {
     /// Canonical resource encoding failed.
     Encode(ResourceWireEncodeError),
-    /// Closed SHA-256 framing or digest construction failed.
-    Hash(HashConstructionError),
+    /// A host length did not fit the protocol's explicit hash frame.
+    HashFrameLengthOverflow,
+    /// SHA-256 returned the prohibited all-zero identifier digest.
+    AllZeroDigest,
 }
 
 impl fmt::Display for ResourceIdDerivationError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Encode(error) => write!(formatter, "resource encoding failed: {error}"),
-            Self::Hash(error) => write!(formatter, "resource hash derivation failed: {error}"),
+            Self::HashFrameLengthOverflow => formatter.write_str(
+                "resource hash derivation failed: hash frame length exceeds its explicit width",
+            ),
+            Self::AllZeroDigest => formatter.write_str(
+                "resource hash derivation failed: protocol hash produced a prohibited all-zero digest",
+            ),
         }
     }
 }
@@ -77,7 +83,6 @@ impl fmt::Display for ResourceIdDerivationError {
 #[cfg(test)]
 mod tests {
     use super::{ResourceIdDerivationError, ResourceWireDecodeError, ResourceWireEncodeError};
-    use zrm_crypto::HashConstructionError;
     use zrm_types::{RejectCodeV1, RejectStageV1};
 
     #[test]
@@ -110,10 +115,11 @@ mod tests {
             "resource encoding failed: unable to reserve canonical resource bytes"
         );
         assert_eq!(
-            std::format!(
-                "{}",
-                ResourceIdDerivationError::Hash(HashConstructionError::AllZeroDigest)
-            ),
+            std::format!("{}", ResourceIdDerivationError::HashFrameLengthOverflow),
+            "resource hash derivation failed: hash frame length exceeds its explicit width"
+        );
+        assert_eq!(
+            std::format!("{}", ResourceIdDerivationError::AllZeroDigest),
             "resource hash derivation failed: protocol hash produced a prohibited all-zero digest"
         );
     }

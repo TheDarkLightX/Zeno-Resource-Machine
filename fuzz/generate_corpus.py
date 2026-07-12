@@ -3,18 +3,25 @@
 from __future__ import annotations
 
 import argparse
+import os
+import stat
 import struct
 import sys
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
+RESOURCE_WIRE_CORPUS = ROOT / "fuzz/corpus/resource_wire_v1_decode"
+POLICY_COST_CORPUS = ROOT / "fuzz/corpus/policy_cost_v1"
 OVERSIZE_SEED = ROOT / "fuzz/corpus/resource_wire_v1_decode/oversize-boundary"
 POLICY_SEQUENCE_SEED = ROOT / "fuzz/corpus/policy_cost_v1/sequence"
 POLICY_MAX_SEED = ROOT / "fuzz/corpus/policy_cost_v1/maxima"
 POLICY_SMALL_SUCCESS_SEED = ROOT / "fuzz/corpus/policy_cost_v1/small-success"
 RESOURCE_ROLES_CORPUS = ROOT / "fuzz/corpus/resource_roles_v1"
 INTRINSIC_RESOURCE_CORPUS = ROOT / "fuzz/corpus/intrinsic_resource_v1"
+POLICY_RESOURCE_DIMENSIONS_CORPUS = (
+    ROOT / "fuzz/corpus/policy_resource_dimensions_v1"
+)
 ROLE_BOUND_INTRINSIC_CORPUS = ROOT / "fuzz/corpus/role_bound_intrinsic_v1"
 MAX_RESOURCE_BYTES = 16_384
 
@@ -133,29 +140,118 @@ def role_bound_intrinsic_seeds() -> dict[str, bytes]:
     }
 
 
-def check_seed(path: Path, expected: bytes, label: str) -> bool:
-    """Report whether one deterministic corpus entry is present and exact."""
+def policy_resource_dimension_seed(
+    mode: int, unit_mismatch: bool, quantity: int, quantity_maximum: int
+) -> bytes:
+    """Encode one structured resource-dimension policy seed."""
 
-    if path.is_file() and path.read_bytes() == expected:
-        return True
+    return bytes((mode, int(unit_mismatch))) + quantity.to_bytes(
+        16, "big"
+    ) + quantity_maximum.to_bytes(16, "big")
+
+
+def policy_resource_dimension_seeds() -> dict[str, bytes]:
+    """Return mode, precedence, lifecycle, zero, and u128 boundary seeds."""
+
+    return {
+        "zero-conserved": policy_resource_dimension_seed(0, False, 0, 1),
+        "zero-mintable": policy_resource_dimension_seed(1, False, 0, 1),
+        "zero-lifecycle": policy_resource_dimension_seed(2, False, 0, 1),
+        "zero-transformable": policy_resource_dimension_seed(3, False, 0, 1),
+        "zero-evidence": policy_resource_dimension_seed(4, False, 0, 1),
+        "wrong-unit-precedes-lifecycle": policy_resource_dimension_seed(
+            2, True, 0, 1
+        ),
+        "lifecycle-maximum-zero": policy_resource_dimension_seed(2, False, 1, 0),
+        "lifecycle-maximum-one": policy_resource_dimension_seed(2, False, 1, 1),
+        "lifecycle-maximum-two": policy_resource_dimension_seed(2, False, 1, 2),
+        "quantity-above-maximum": policy_resource_dimension_seed(0, False, 2, 1),
+        "full-width-maximum": policy_resource_dimension_seed(
+            4, False, (1 << 128) - 1, (1 << 128) - 1
+        ),
+    }
+
+
+def check_seed(path: Path, expected: bytes, label: str) -> bool:
+    """Read one exact regular seed through a bounded no-follow descriptor."""
+
+    no_follow = getattr(os, "O_NOFOLLOW", None)
+    if no_follow is None:
+        print(
+            f"fuzz corpus check failed: {label} cannot enforce no-follow reads",
+            file=sys.stderr,
+        )
+        return False
+    try:
+        descriptor = os.open(path, os.O_RDONLY | no_follow)
+    except OSError:
+        descriptor = None
+    if descriptor is not None:
+        try:
+            metadata = os.fstat(descriptor)
+            if stat.S_ISREG(metadata.st_mode) and metadata.st_size == len(expected):
+                chunks: list[bytes] = []
+                remaining = len(expected) + 1
+                while remaining > 0:
+                    chunk = os.read(descriptor, remaining)
+                    if not chunk:
+                        break
+                    chunks.append(chunk)
+                    remaining -= len(chunk)
+                if b"".join(chunks) == expected:
+                    return True
+        except OSError:
+            pass
+        finally:
+            os.close(descriptor)
     print(f"fuzz corpus check failed: {label} is missing or stale", file=sys.stderr)
     return False
 
 
 def check_seed_names(directory: Path, expected_names: set[str], label: str) -> bool:
-    """Reject unreviewed campaign discoveries in a deterministic corpus."""
+    """Reject missing, nested, linked, non-regular, or extra corpus entries."""
 
-    if not directory.is_dir():
+    if directory.is_symlink() or not directory.is_dir():
         print(f"fuzz corpus check failed: {label} corpus is missing", file=sys.stderr)
         return False
-    actual_names = {path.name for path in directory.iterdir() if path.is_file()}
-    if actual_names == expected_names:
+    actual_names: set[str] = set()
+    invalid_entry = False
+    try:
+        for path in directory.iterdir():
+            name = path.name
+            if (
+                name not in expected_names
+                or path.is_symlink()
+                or not path.is_file()
+            ):
+                invalid_entry = True
+                break
+            actual_names.add(name)
+    except OSError:
+        invalid_entry = True
+    if actual_names == expected_names and not invalid_entry:
         return True
     print(
-        f"fuzz corpus check failed: {label} corpus contains missing or extra files",
+        f"fuzz corpus check failed: {label} corpus contains missing, extra, "
+        f"nested, linked, or non-regular entries",
         file=sys.stderr,
     )
     return False
+
+
+def check_corpus_expectations(
+    layouts: list[tuple[Path, set[str], str]],
+    seeds: list[tuple[Path, bytes, str]],
+) -> bool:
+    """Validate every root and member set before bounded seed-content reads."""
+
+    for directory, expected_names, label in layouts:
+        if not check_seed_names(directory, expected_names, label):
+            return False
+    for path, expected, label in seeds:
+        if not check_seed(path, expected, label):
+            return False
+    return True
 
 
 def main() -> int:
@@ -173,43 +269,65 @@ def main() -> int:
     )
     role_seeds = resource_role_seeds()
     intrinsic_seeds = intrinsic_resource_seeds()
+    policy_dimension_seeds = policy_resource_dimension_seeds()
     role_bound_seeds = role_bound_intrinsic_seeds()
     if arguments.check:
-        if not check_seed(OVERSIZE_SEED, expected, "oversize-boundary"):
-            return 1
-        if not check_seed(POLICY_SEQUENCE_SEED, policy_sequence, "policy sequence seed"):
-            return 1
-        if not check_seed(POLICY_MAX_SEED, policy_maxima, "policy maxima seed"):
-            return 1
-        if not check_seed(
-            POLICY_SMALL_SUCCESS_SEED, policy_small_success, "policy success seed"
-        ):
-            return 1
-        for name, role_seed in role_seeds.items():
-            if not check_seed(RESOURCE_ROLES_CORPUS / name, role_seed, name):
-                return 1
-        if not check_seed_names(RESOURCE_ROLES_CORPUS, set(role_seeds), "resource-role"):
-            return 1
-        for name, intrinsic_seed in intrinsic_seeds.items():
-            if not check_seed(INTRINSIC_RESOURCE_CORPUS / name, intrinsic_seed, name):
-                return 1
-        if not check_seed_names(
-            INTRINSIC_RESOURCE_CORPUS, set(intrinsic_seeds), "intrinsic-resource"
-        ):
-            return 1
-        for name, binding_seed in role_bound_seeds.items():
-            if not check_seed(ROLE_BOUND_INTRINSIC_CORPUS / name, binding_seed, name):
-                return 1
-        if not check_seed_names(
-            ROLE_BOUND_INTRINSIC_CORPUS,
-            set(role_bound_seeds),
-            "role-bound-intrinsic",
-        ):
+        layouts = [
+            (
+                RESOURCE_WIRE_CORPUS,
+                {"absent", "oversize-boundary", "present"},
+                "resource-wire",
+            ),
+            (
+                POLICY_COST_CORPUS,
+                {"maxima", "sequence", "small-success"},
+                "policy-cost",
+            ),
+            (RESOURCE_ROLES_CORPUS, set(role_seeds), "resource-role"),
+            (
+                INTRINSIC_RESOURCE_CORPUS,
+                set(intrinsic_seeds),
+                "intrinsic-resource",
+            ),
+            (
+                POLICY_RESOURCE_DIMENSIONS_CORPUS,
+                set(policy_dimension_seeds),
+                "policy-resource-dimensions",
+            ),
+            (
+                ROLE_BOUND_INTRINSIC_CORPUS,
+                set(role_bound_seeds),
+                "role-bound-intrinsic",
+            ),
+        ]
+        seeds = [
+            (OVERSIZE_SEED, expected, "oversize-boundary"),
+            (POLICY_SEQUENCE_SEED, policy_sequence, "policy sequence seed"),
+            (POLICY_MAX_SEED, policy_maxima, "policy maxima seed"),
+            (POLICY_SMALL_SUCCESS_SEED, policy_small_success, "policy success seed"),
+            *[
+                (RESOURCE_ROLES_CORPUS / name, seed, name)
+                for name, seed in role_seeds.items()
+            ],
+            *[
+                (INTRINSIC_RESOURCE_CORPUS / name, seed, name)
+                for name, seed in intrinsic_seeds.items()
+            ],
+            *[
+                (POLICY_RESOURCE_DIMENSIONS_CORPUS / name, seed, name)
+                for name, seed in policy_dimension_seeds.items()
+            ],
+            *[
+                (ROLE_BOUND_INTRINSIC_CORPUS / name, seed, name)
+                for name, seed in role_bound_seeds.items()
+            ],
+        ]
+        if not check_corpus_expectations(layouts, seeds):
             return 1
         print(
             "fuzz corpus check passed: resource boundary, three policy-cost seeds, "
             "ten resource-role seeds, eighteen intrinsic-resource seeds, and "
-            "nine role-bound-intrinsic seeds"
+            "eleven policy-resource-dimension seeds and nine role-bound-intrinsic seeds"
         )
         return 0
     OVERSIZE_SEED.parent.mkdir(parents=True, exist_ok=True)
@@ -224,13 +342,16 @@ def main() -> int:
     INTRINSIC_RESOURCE_CORPUS.mkdir(parents=True, exist_ok=True)
     for name, intrinsic_seed in intrinsic_seeds.items():
         (INTRINSIC_RESOURCE_CORPUS / name).write_bytes(intrinsic_seed)
+    POLICY_RESOURCE_DIMENSIONS_CORPUS.mkdir(parents=True, exist_ok=True)
+    for name, policy_dimension_seed in policy_dimension_seeds.items():
+        (POLICY_RESOURCE_DIMENSIONS_CORPUS / name).write_bytes(policy_dimension_seed)
     ROLE_BOUND_INTRINSIC_CORPUS.mkdir(parents=True, exist_ok=True)
     for name, binding_seed in role_bound_seeds.items():
         (ROLE_BOUND_INTRINSIC_CORPUS / name).write_bytes(binding_seed)
     print(
         "generated resource boundary, three policy-cost seeds, "
         "ten resource-role seeds, eighteen intrinsic-resource seeds, and "
-        "nine role-bound-intrinsic seeds"
+        "eleven policy-resource-dimension seeds and nine role-bound-intrinsic seeds"
     )
     return 0
 

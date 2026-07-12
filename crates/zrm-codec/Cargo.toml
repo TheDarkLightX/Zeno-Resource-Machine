@@ -9,7 +9,7 @@ repository.workspace = true
 publish = false
 
 [dependencies]
-zrm-crypto.workspace = true
+sha2.workspace = true
 zrm-types.workspace = true
 
 [lints]

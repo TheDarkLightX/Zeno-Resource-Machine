@@ -191,6 +191,8 @@ Only the owning verifier API registry can construct them after dispatch through 
 
 ### Evidence
 
+- a specification-derived executable policy oracle developed independently of
+  the production Rust implementation;
 - wrong program/key/profile/policy rejects;
 - stale and revoked verifier rejects;
 - capability forgery compile-fail/API tests;
@@ -199,6 +201,26 @@ Only the owning verifier API registry can construct them after dispatch through 
 - invalid-artifact tests showing that failed verification does not alter the precomputed planned charge;
 - external policy activation/stale-plan model, with no v0.1 claim of complete resource migration or rollback;
 - no caller-provided verification booleans.
+
+### Construction order and stop condition
+
+1. Freeze and independently replay canonical verifier-cost-row bytes, sort and
+   uniqueness rules, row hashes, rows root, and cost-model identity.
+2. Load those rows into a sealed governed model that performs internal lookup;
+   no public quote accepts caller coefficients or a caller row.
+3. Freeze verifier-policy content commitments and registry membership,
+   activation, revocation, production-mode, program/key/release, schema, and
+   resource-bound semantics.
+4. Resolve a requested identifier through authenticated governed state and
+   construct sealed policy/fact capabilities only inside the registry boundary.
+5. Differential-test both components against independently authored reference
+   models and adversarial substitution matrices.
+
+Until steps 1-4 have an accepted Class E authority ABI, canonical vectors, and
+independent review, cost arithmetic and structural candidate comparisons remain
+internal assurance helpers. They MUST NOT expose checked-quote or admission-like
+success to external consumers, and WP3 cannot construct final `ResourceV1` from
+them.
 
 ---
 

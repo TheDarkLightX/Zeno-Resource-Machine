@@ -8,6 +8,7 @@ use core::fmt;
 
 use zrm_types::{BackendFamilyId, VerifierCostRowsRoot};
 
+#[cfg(any(test, kani, fuzzing))]
 use crate::VerifierPolicyV1;
 
 /// The only verifier-cost-model schema version supported by this pre-RFC API.
@@ -109,6 +110,14 @@ pub struct VerifierCostModelCandidateV1 {
 ///
 /// The value establishes local schema-version consistency only. It is not a
 /// policy hash, registry capability, or proof that the rows root is governed.
+/// Candidate arithmetic is deliberately unavailable through the default public
+/// API until a governed rows-root membership ABI exists:
+///
+/// ```compile_fail
+/// use zrm_policy::VerifierCostModelV1;
+///
+/// let _quarantined = VerifierCostModelV1::compute_untrusted_candidate_quote;
+/// ```
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct VerifierCostModelV1 {
     schema_version: u16,
@@ -156,11 +165,12 @@ impl VerifierCostModelV1 {
     ///
     /// The calculation is allocation-free, deterministic, side-effect-free,
     /// and constant time in input size.
-    pub fn compute_quote(
+    #[cfg(any(test, kani, fuzzing))]
+    pub(crate) fn compute_untrusted_candidate_quote(
         &self,
         row: &VerifierCostRowV1,
-        request: &VerifierCostQuoteRequestV1,
-    ) -> Result<VerifierCostQuoteV1, VerifierCostErrorV1> {
+        request: &CandidateVerifierCostQuoteRequestV1,
+    ) -> Result<CandidateVerifierCostQuoteV1, VerifierCostErrorV1> {
         if row.backend_family_id != request.expected_backend_family_id {
             return Err(VerifierCostErrorV1::BackendFamilyMismatch);
         }
@@ -196,7 +206,7 @@ impl VerifierCostModelV1 {
         if units > request.max_verifier_cost_units {
             return Err(VerifierCostErrorV1::VerifierChargeLimitExceeded);
         }
-        Ok(VerifierCostQuoteV1 { units })
+        Ok(CandidateVerifierCostQuoteV1 { units })
     }
 }
 
@@ -228,8 +238,9 @@ impl TryFrom<VerifierCostModelCandidateV1> for VerifierCostModelV1 {
 /// from a locally validated [`VerifierPolicyV1`]. Private fields prevent callers
 /// from substituting weaker bounds after construction. The request remains
 /// inert data and carries no registry, verifier, or governance authority.
+#[cfg(any(test, kani, fuzzing))]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub struct VerifierCostQuoteRequestV1 {
+pub(crate) struct CandidateVerifierCostQuoteRequestV1 {
     /// Backend family copied from the locally validated verifier policy.
     expected_backend_family_id: BackendFamilyId,
     /// Exact bounded artifact byte length presented to the verifier wrapper.
@@ -246,7 +257,8 @@ pub struct VerifierCostQuoteRequestV1 {
     max_verifier_cost_units: u64,
 }
 
-impl VerifierCostQuoteRequestV1 {
+#[cfg(any(test, kani, fuzzing))]
+impl CandidateVerifierCostQuoteRequestV1 {
     /// Copies all policy-selected bounds around the two caller-supplied lengths.
     pub(crate) const fn from_policy(
         policy: &VerifierPolicyV1,
@@ -289,12 +301,14 @@ impl VerifierCostQuoteRequestV1 {
     }
 
     /// Returns the exact artifact length supplied by the caller.
+    #[cfg(any(test, kani))]
     #[must_use]
     pub const fn artifact_len(&self) -> u64 {
         self.artifact_len
     }
 
     /// Returns the exact canonical-statement length supplied by the caller.
+    #[cfg(any(test, kani))]
     #[must_use]
     pub const fn canonical_statement_len(&self) -> u64 {
         self.canonical_statement_len
@@ -308,12 +322,14 @@ impl VerifierCostQuoteRequestV1 {
 /// policy are still unauthenticated pre-RFC data, so this value is not a
 /// governed charge and carries no verifier, registry, proof, or commit authority.
 #[must_use]
+#[cfg(any(test, kani, fuzzing))]
 #[derive(Clone, Copy, Debug, Eq, Ord, PartialEq, PartialOrd)]
-pub struct VerifierCostQuoteV1 {
+pub(crate) struct CandidateVerifierCostQuoteV1 {
     units: u64,
 }
 
-impl VerifierCostQuoteV1 {
+#[cfg(any(test, kani, fuzzing))]
+impl CandidateVerifierCostQuoteV1 {
     /// Returns the checked local quote in the candidate model's cost units.
     #[must_use]
     pub const fn units(self) -> u64 {
@@ -369,12 +385,14 @@ impl fmt::Display for VerifierCostErrorV1 {
     }
 }
 
+#[cfg(any(test, kani, fuzzing))]
 fn checked_multiply(coefficient: u64, amount: u64) -> Result<u128, VerifierCostErrorV1> {
     u128::from(coefficient)
         .checked_mul(u128::from(amount))
         .ok_or(VerifierCostErrorV1::ArithmeticOverflow)
 }
 
+#[cfg(any(test, kani, fuzzing))]
 fn checked_add(left: u128, right: u128) -> Result<u128, VerifierCostErrorV1> {
     left.checked_add(right)
         .ok_or(VerifierCostErrorV1::ArithmeticOverflow)
@@ -383,6 +401,13 @@ fn checked_add(left: u128, right: u128) -> Result<u128, VerifierCostErrorV1> {
 #[cfg(test)]
 #[path = "cost/tests.rs"]
 mod tests;
+
+#[cfg(fuzzing)]
+#[path = "cost/fuzz_assertions.rs"]
+mod fuzz_assertions;
+
+#[cfg(fuzzing)]
+pub use fuzz_assertions::fuzz_assert_untrusted_candidate_cost_invariants;
 
 #[cfg(kani)]
 #[path = "cost/kani_harnesses.rs"]

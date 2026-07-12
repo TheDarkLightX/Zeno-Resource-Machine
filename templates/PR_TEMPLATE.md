@@ -112,6 +112,13 @@ Commands and results:
 
 For each unchecked conditional gate, explain why it is not applicable. Mark unavailable, timed-out, or unrun tools as gaps.
 
+Independent specification-counterexample review:
+
+- Reviewer:
+- Normative rules sampled:
+- Counterexamples proposed:
+- Disposition/evidence:
+
 ## Dependency and supply-chain impact
 
 ## Performance/resource impact
@@ -132,7 +139,7 @@ Work log/provenance:
 ## Required reviewers and sign-off
 
 - Semantic owner:
-- Independent oracle reviewer (Class C-E):
+- Independent oracle/counterexample reviewer (Class C-E):
 - Adversarial reviewer (Class C-E):
 - Authority-boundary reviewer (Class D/E):
 - Compatibility/formal reviewer (Class E):

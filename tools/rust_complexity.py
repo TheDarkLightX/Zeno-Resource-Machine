@@ -264,6 +264,57 @@ def _strip_non_code(source: str) -> str:
     return "".join(output)
 
 
+def strip_rust_non_code(source: str) -> str:
+    """Return Rust source with comments and literals blanked at stable offsets."""
+
+    return _strip_non_code(source)
+
+
+def strip_rust_comments(source: str) -> str:
+    """Blank nested comments while preserving Rust literals and source offsets."""
+
+    output = list(source)
+    cursor = 0
+    while cursor < len(source):
+        if source.startswith("//", cursor):
+            end = source.find("\n", cursor + 2)
+            end = len(source) if end < 0 else end
+            _blank_non_newlines(output, source, cursor, end)
+            cursor = end
+            continue
+        if source.startswith("/*", cursor):
+            depth = 1
+            end = cursor + 2
+            while end < len(source) and depth > 0:
+                if source.startswith("/*", end):
+                    depth += 1
+                    end += 2
+                elif source.startswith("*/", end):
+                    depth -= 1
+                    end += 2
+                else:
+                    end += 1
+            if depth != 0:
+                raise ComplexityError("unterminated Rust block comment")
+            _blank_non_newlines(output, source, cursor, end)
+            cursor = end
+            continue
+        raw_end = _raw_string_end(source, cursor)
+        if raw_end is not None:
+            cursor = raw_end
+            continue
+        if source[cursor] == '"':
+            cursor = _quoted_string_end(source, cursor)
+            continue
+        if source[cursor] == "'":
+            end = _character_literal_end(source, cursor)
+            if end is not None:
+                cursor = end
+                continue
+        cursor += 1
+    return "".join(output)
+
+
 def _tokens(cleaned_source: str) -> tuple[Token, ...]:
     """Return relevant tokens with deterministic one-based line numbers."""
 

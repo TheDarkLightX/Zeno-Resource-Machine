@@ -389,3 +389,65 @@ fn resource_id_result_is_a_distinct_opaque_type() -> Result<(), TestError> {
     );
     Ok(())
 }
+
+#[test]
+fn strict_decoder_rejects_malformed_same_length_bytes() -> Result<(), TestError> {
+    let mut wrong_magic = ABSENT_VECTOR.to_vec();
+    set_byte(&mut wrong_magic, 0, 0)?;
+
+    let mut wrong_tag = ABSENT_VECTOR.to_vec();
+    set_byte(&mut wrong_tag, 11, 2)?;
+
+    let mut wrong_length = ABSENT_VECTOR.to_vec();
+    set_byte(&mut wrong_length, 15, 31)?;
+
+    let mut wrong_option = ABSENT_VECTOR.to_vec();
+    set_byte(&mut wrong_option, 584, 2)?;
+
+    for malformed in [wrong_magic, wrong_tag, wrong_length, wrong_option] {
+        assert_eq!(malformed.len(), ABSENT_VECTOR.len());
+        assert!(decode_resource_wire_v1(&malformed).is_err());
+    }
+    Ok(())
+}
+
+#[test]
+fn resource_wire_debug_redacts_every_32_byte_candidate_and_exposes_scalars() {
+    let first = fixture(None);
+    let mut second = first.clone();
+    replace_32_byte_candidates(&mut second, 0xa5);
+
+    let first_debug = std::format!("{first:?}");
+    let second_debug = std::format!("{second:?}");
+    assert_eq!(first_debug, second_debug);
+    assert_eq!(first_debug.matches("[REDACTED]").count(), 14);
+    assert!(first_debug.contains("nonce: [REDACTED]"));
+    assert!(first_debug.contains("machine_id: [REDACTED]"));
+    assert!(!first_debug.contains("15, 15, 15"));
+    assert!(!second_debug.contains("165, 165, 165"));
+    assert_wire_scalars_visible(&first, &first_debug);
+}
+
+fn replace_32_byte_candidates(resource: &mut ResourceWireV1, byte: u8) {
+    resource.machine_id = [byte; 32];
+    resource.domain_id = [byte; 32];
+    resource.application_id = [byte; 32];
+    resource.resource_kind_id = [byte; 32];
+    resource.resource_logic_id = [byte; 32];
+    resource.logic_profile_id = [byte; 32];
+    resource.resource_kind_policy_id = [byte; 32];
+    resource.unit_id = [byte; 32];
+    resource.label_root = [byte; 32];
+    resource.value_root = [byte; 32];
+    resource.controller_root = [byte; 32];
+    resource.policy_root = [byte; 32];
+    resource.provenance_root = [byte; 32];
+    resource.nonce = [byte; 32];
+}
+
+fn assert_wire_scalars_visible(resource: &ResourceWireV1, diagnostic: &str) {
+    assert!(diagnostic.contains(&std::format!("quantity_atoms: {}", resource.quantity_atoms)));
+    assert!(diagnostic.contains(&std::format!("created_epoch: {}", resource.created_epoch)));
+    assert!(diagnostic.contains("expiry_epoch: None"));
+    assert!(diagnostic.contains("flags: 0"));
+}

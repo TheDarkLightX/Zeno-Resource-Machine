@@ -6,9 +6,7 @@ use zrm_policy::{
     LimitFieldV1, MachinePolicyCandidateV1, MachinePolicyV1, PolicyLimitsCandidateV1,
     PolicyLimitsV1, PolicyObjectV1, PolicyValidationErrorV1, ProofModeV1, ResourceDimensionErrorV1,
     ResourceKindPolicyCandidateV1, ResourceKindPolicyV1, ValidationContextCandidateV1,
-    ValidationContextV1, VerifierCompatibilityErrorV1, VerifierCostErrorV1,
-    VerifierCostModelCandidateV1, VerifierCostModelV1, VerifierCostRowCandidateV1,
-    VerifierCostRowV1, VerifierPolicyCandidateV1, VerifierPolicyV1,
+    ValidationContextV1, VerifierPolicyCandidateV1, VerifierPolicyV1,
 };
 use zrm_types::{CryptoSuiteId, QuantityAtoms, VerifierPolicyId, ZeroValueError};
 
@@ -16,7 +14,6 @@ use zrm_types::{CryptoSuiteId, QuantityAtoms, VerifierPolicyId, ZeroValueError};
 enum PolicyModelTestError {
     ZeroValue(ZeroValueError),
     PolicyValidation(PolicyValidationErrorV1),
-    VerifierCost(VerifierCostErrorV1),
 }
 
 impl From<ZeroValueError> for PolicyModelTestError {
@@ -31,18 +28,11 @@ impl From<PolicyValidationErrorV1> for PolicyModelTestError {
     }
 }
 
-impl From<VerifierCostErrorV1> for PolicyModelTestError {
-    fn from(error: VerifierCostErrorV1) -> Self {
-        Self::VerifierCost(error)
-    }
-}
-
 impl core::fmt::Display for PolicyModelTestError {
     fn fmt(&self, formatter: &mut core::fmt::Formatter<'_>) -> core::fmt::Result {
         match self {
             Self::ZeroValue(error) => write!(formatter, "invalid nonzero fixture: {error}"),
             Self::PolicyValidation(error) => write!(formatter, "invalid policy fixture: {error}"),
-            Self::VerifierCost(error) => write!(formatter, "unexpected quote failure: {error}"),
         }
     }
 }
@@ -529,7 +519,7 @@ fn assert_lifecycle_non_fungible_dimensions(
 ) -> PolicyModelTestResult {
     let mut lifecycle = *candidate;
     lifecycle.accounting_mode = AccountingModeV1::LifecycleNonFungible;
-    lifecycle.quantity_max = QuantityAtoms::new(2);
+    lifecycle.quantity_max = QuantityAtoms::new(1);
     let lifecycle_policy = ResourceKindPolicyV1::try_from(lifecycle)?;
     assert_eq!(
         lifecycle_policy.validate_dimensions(lifecycle.unit_id, QuantityAtoms::new(0)),
@@ -551,6 +541,61 @@ fn resource_kind_policy_enforces_unit_quantity_and_lifecycle_bounds() -> PolicyM
     let candidate = resource_kind_candidate()?;
     assert_conserved_fungible_dimensions(&candidate)?;
     assert_lifecycle_non_fungible_dimensions(&candidate)
+}
+
+#[test]
+fn lifecycle_policy_requires_quantity_maximum_exactly_one() -> Result<(), ZeroValueError> {
+    for invalid_maximum in [0, 2, u128::MAX] {
+        let mut candidate = resource_kind_candidate()?;
+        candidate.accounting_mode = AccountingModeV1::LifecycleNonFungible;
+        candidate.quantity_max = QuantityAtoms::new(invalid_maximum);
+        assert_eq!(
+            ResourceKindPolicyV1::try_from(candidate),
+            Err(PolicyValidationErrorV1::LifecycleQuantityMaximumMustBeOne {
+                actual: invalid_maximum,
+            })
+        );
+    }
+
+    let mut candidate = resource_kind_candidate()?;
+    candidate.accounting_mode = AccountingModeV1::LifecycleNonFungible;
+    candidate.quantity_max = QuantityAtoms::new(1);
+    assert!(ResourceKindPolicyV1::try_from(candidate).is_ok());
+    Ok(())
+}
+
+#[test]
+fn resource_kind_policy_reject_precedence_is_schema_then_window_then_lifecycle_maximum()
+-> Result<(), ZeroValueError> {
+    let mut candidate = resource_kind_candidate()?;
+    candidate.accounting_mode = AccountingModeV1::LifecycleNonFungible;
+    candidate.quantity_max = QuantityAtoms::new(0);
+    candidate.schema_version = 2;
+    candidate.validity_start_epoch = 21;
+    assert_eq!(
+        ResourceKindPolicyV1::try_from(candidate),
+        Err(PolicyValidationErrorV1::UnsupportedSchemaVersion {
+            object: PolicyObjectV1::ResourceKindPolicy,
+            actual: 2,
+        })
+    );
+
+    candidate.schema_version = 1;
+    assert_eq!(
+        ResourceKindPolicyV1::try_from(candidate),
+        Err(PolicyValidationErrorV1::InvalidValidityWindow {
+            object: PolicyObjectV1::ResourceKindPolicy,
+            start: 21,
+            end: 20,
+        })
+    );
+
+    candidate.validity_start_epoch = 20;
+    assert_eq!(
+        ResourceKindPolicyV1::try_from(candidate),
+        Err(PolicyValidationErrorV1::LifecycleQuantityMaximumMustBeOne { actual: 0 })
+    );
+    Ok(())
 }
 
 #[test]
@@ -648,7 +693,7 @@ fn verifier_policy_preserves_each_closed_proof_mode() -> Result<(), ZeroValueErr
     Ok(())
 }
 
-const MAX_LOCAL_DIAGNOSTIC_BYTES: usize = 64;
+const MAX_LOCAL_DIAGNOSTIC_BYTES: usize = 128;
 
 fn assert_stable_bounded_diagnostic(error: impl core::fmt::Display, expected: &str) {
     let diagnostic = format!("{error}");
@@ -700,6 +745,10 @@ fn assert_policy_validation_diagnostics() {
             PolicyValidationErrorV1::MissingAdmissionVerifierPolicy,
             "RequiredVerifier requires an admission verifier policy",
         ),
+        (
+            PolicyValidationErrorV1::LifecycleQuantityMaximumMustBeOne { actual: 2 },
+            "lifecycle quantity maximum must be one, got 2",
+        ),
     ];
     for (error, expected) in policy_errors {
         assert_stable_bounded_diagnostic(error, expected);
@@ -717,6 +766,10 @@ fn assert_resource_dimension_diagnostics() {
             "lifecycle non-fungible resource quantity must be one, got 0",
         ),
         (
+            ResourceDimensionErrorV1::ZeroQuantityForbidden,
+            "zero resource quantity is forbidden by policy",
+        ),
+        (
             ResourceDimensionErrorV1::QuantityExceedsMaximum {
                 actual: 2,
                 maximum: 1,
@@ -729,55 +782,81 @@ fn assert_resource_dimension_diagnostics() {
     }
 }
 
-fn assert_verifier_compatibility_diagnostics() {
-    let compatibility_errors = [
-        (
-            VerifierCompatibilityErrorV1::AdmissionVerifierForbidden,
-            "LocalKernel forbids an admission verifier candidate",
-        ),
-        (
-            VerifierCompatibilityErrorV1::AdmissionVerifierPolicyMismatch,
-            "admission verifier policy identifier mismatch",
-        ),
-        (
-            VerifierCompatibilityErrorV1::MachineMismatch,
-            "verifier policy machine mismatch",
-        ),
-        (
-            VerifierCompatibilityErrorV1::DomainMismatch,
-            "verifier policy domain mismatch",
-        ),
-        (
-            VerifierCompatibilityErrorV1::CostModelMismatch,
-            "verifier policy cost-model mismatch",
-        ),
-        (
-            VerifierCompatibilityErrorV1::MachinePolicyInactive,
-            "machine-policy validity window excludes epoch candidate",
-        ),
-        (
-            VerifierCompatibilityErrorV1::VerifierPolicyInactive,
-            "verifier-policy validity window excludes epoch candidate",
-        ),
-        (
-            VerifierCompatibilityErrorV1::ArtifactLimitExceedsMachine,
-            "verifier artifact bound exceeds machine policy",
-        ),
-        (
-            VerifierCompatibilityErrorV1::VerifierCostLimitExceedsMachine,
-            "verifier cost bound exceeds machine policy",
-        ),
-    ];
-    for (error, expected) in compatibility_errors {
-        assert_stable_bounded_diagnostic(error, expected);
-    }
-}
-
 #[test]
 fn policy_error_diagnostics_are_stable_and_bounded() {
     assert_policy_validation_diagnostics();
     assert_resource_dimension_diagnostics();
-    assert_verifier_compatibility_diagnostics();
+}
+
+#[test]
+fn policy_error_diagnostic_bound_covers_every_numeric_width_maximum() {
+    let policy_objects = [
+        PolicyObjectV1::MachinePolicy,
+        PolicyObjectV1::ResourceKindPolicy,
+        PolicyObjectV1::ValidationContext,
+        PolicyObjectV1::VerifierPolicy,
+    ];
+    for object in policy_objects {
+        assert_diagnostic_is_bounded(PolicyValidationErrorV1::UnsupportedSchemaVersion {
+            object,
+            actual: u16::MAX,
+        });
+        assert_diagnostic_is_bounded(PolicyValidationErrorV1::InvalidValidityWindow {
+            object,
+            start: u64::MAX,
+            end: u64::MAX,
+        });
+    }
+
+    let limit_fields = [
+        LimitFieldV1::EnvelopeBytes,
+        LimitFieldV1::ResourceBytes,
+        LimitFieldV1::ConsumedResources,
+        LimitFieldV1::ReferencedResources,
+        LimitFieldV1::CreatedResources,
+        LimitFieldV1::LogicClaims,
+        LimitFieldV1::TransformationClaims,
+        LimitFieldV1::AuthorityClaims,
+        LimitFieldV1::DataAvailabilityClaims,
+        LimitFieldV1::AccountingRows,
+        LimitFieldV1::EvidenceReferences,
+        LimitFieldV1::ProofArtifactBytes,
+        LimitFieldV1::TotalProofBytes,
+        LimitFieldV1::TotalVerifierCostUnits,
+        LimitFieldV1::NestingDepth,
+        LimitFieldV1::StorageWriteBytes,
+    ];
+    for field in limit_fields {
+        assert_diagnostic_is_bounded(PolicyValidationErrorV1::LimitExceedsProtocolCeiling {
+            field,
+            actual: u64::MAX,
+            ceiling: u64::MAX,
+        });
+    }
+
+    assert_diagnostic_is_bounded(PolicyValidationErrorV1::LifecycleQuantityMaximumMustBeOne {
+        actual: u128::MAX,
+    });
+    assert_diagnostic_is_bounded(PolicyValidationErrorV1::ResourceWireLimitTooSmall {
+        actual: u32::MAX,
+        minimum: u32::MAX,
+    });
+    assert_diagnostic_is_bounded(ResourceDimensionErrorV1::LifecycleQuantityMustBeOne {
+        actual: u128::MAX,
+    });
+    assert_diagnostic_is_bounded(ResourceDimensionErrorV1::QuantityExceedsMaximum {
+        actual: u128::MAX,
+        maximum: u128::MAX,
+    });
+}
+
+fn assert_diagnostic_is_bounded(error: impl core::fmt::Display) {
+    let diagnostic = format!("{error}");
+    assert!(
+        diagnostic.len() <= MAX_LOCAL_DIAGNOSTIC_BYTES,
+        "diagnostic has {} bytes: {diagnostic}",
+        diagnostic.len()
+    );
 }
 
 fn assert_machine_policy_getters() -> PolicyModelTestResult {
@@ -838,19 +917,15 @@ fn assert_verifier_policy_getters() -> PolicyModelTestResult {
         verifier.backend_family_id(),
         verifier_candidate.backend_family_id
     );
-    assert_eq!(verifier.as_candidate(), verifier_candidate);
-    let request = verifier.cost_quote_request(7, 9);
-    assert_eq!(request.artifact_len(), 7);
-    assert_eq!(request.canonical_statement_len(), 9);
-    let reservation = verifier.admission_reservation_quote_request();
     assert_eq!(
-        reservation.artifact_len(),
-        verifier_candidate.max_artifact_bytes
-    );
-    assert_eq!(
-        reservation.canonical_statement_len(),
+        verifier.max_public_input_bytes(),
         verifier_candidate.max_public_input_bytes
     );
+    assert_eq!(
+        verifier.max_public_output_bytes(),
+        verifier_candidate.max_public_output_bytes
+    );
+    assert_eq!(verifier.as_candidate(), verifier_candidate);
     Ok(())
 }
 
@@ -871,248 +946,4 @@ fn assert_validation_context_getters() -> PolicyModelTestResult {
 fn verifier_and_context_getters_preserve_typed_candidates() -> PolicyModelTestResult {
     assert_verifier_policy_getters()?;
     assert_validation_context_getters()
-}
-
-#[test]
-fn policy_derived_cost_quotes_preserve_formula_and_reservation() -> PolicyModelTestResult {
-    let mut candidate = verifier_candidate()?;
-    candidate.max_artifact_bytes = 10;
-    candidate.max_public_input_bytes = 20;
-    candidate.max_public_output_bytes = 30;
-    candidate.max_verifier_cost_units = 1_000;
-    let policy = VerifierPolicyV1::try_from(candidate)?;
-    let model = VerifierCostModelV1::try_from(VerifierCostModelCandidateV1 {
-        schema_version: 1,
-        rows_root: nonzero(61)?,
-        max_charge_units: 10_000,
-    })?;
-    let row = VerifierCostRowV1::new(VerifierCostRowCandidateV1 {
-        backend_family_id: candidate.backend_family_id,
-        base_units: 7,
-        artifact_byte_units: 3,
-        statement_byte_units: 5,
-        reserved_output_byte_units: 11,
-    });
-
-    assert_eq!(
-        model
-            .compute_quote(&row, &policy.cost_quote_request(4, 6))?
-            .units(),
-        379
-    );
-    assert_eq!(
-        model
-            .compute_quote(&row, &policy.admission_reservation_quote_request())?
-            .units(),
-        467
-    );
-    Ok(())
-}
-
-#[test]
-fn policy_derived_cost_quotes_preserve_every_hidden_bound() -> PolicyModelTestResult {
-    let mut candidate = verifier_candidate()?;
-    candidate.max_artifact_bytes = 10;
-    candidate.max_public_input_bytes = 20;
-    candidate.max_public_output_bytes = 30;
-    candidate.max_verifier_cost_units = 1_000;
-    let policy = VerifierPolicyV1::try_from(candidate)?;
-    let model = VerifierCostModelV1::try_from(VerifierCostModelCandidateV1 {
-        schema_version: 1,
-        rows_root: nonzero(61)?,
-        max_charge_units: 10_000,
-    })?;
-    let row = VerifierCostRowV1::new(VerifierCostRowCandidateV1 {
-        backend_family_id: candidate.backend_family_id,
-        base_units: 7,
-        artifact_byte_units: 3,
-        statement_byte_units: 5,
-        reserved_output_byte_units: 11,
-    });
-    assert_eq!(
-        model.compute_quote(&row, &policy.cost_quote_request(11, 6)),
-        Err(VerifierCostErrorV1::ArtifactBytesExceeded)
-    );
-    assert_eq!(
-        model.compute_quote(&row, &policy.cost_quote_request(4, 21)),
-        Err(VerifierCostErrorV1::PublicInputBytesExceeded)
-    );
-
-    let wrong_backend_row = VerifierCostRowV1::new(VerifierCostRowCandidateV1 {
-        backend_family_id: nonzero(62)?,
-        base_units: 7,
-        artifact_byte_units: 3,
-        statement_byte_units: 5,
-        reserved_output_byte_units: 11,
-    });
-    assert_eq!(
-        model.compute_quote(&wrong_backend_row, &policy.cost_quote_request(4, 6)),
-        Err(VerifierCostErrorV1::BackendFamilyMismatch)
-    );
-
-    candidate.max_verifier_cost_units = 378;
-    let capped_policy = VerifierPolicyV1::try_from(candidate)?;
-    assert_eq!(
-        model.compute_quote(&row, &capped_policy.cost_quote_request(4, 6)),
-        Err(VerifierCostErrorV1::VerifierChargeLimitExceeded)
-    );
-    Ok(())
-}
-
-#[test]
-fn verifier_compatibility_binds_machine_domain_cost_model_window_and_limits()
--> PolicyModelTestResult {
-    let machine =
-        MachinePolicyV1::try_from(machine_candidate(AdmissionModeV1::LocalKernel, None)?)?;
-    let verifier = VerifierPolicyV1::try_from(verifier_candidate()?)?;
-    assert_eq!(
-        machine.validate_verifier_candidate_compatibility(&verifier, 15),
-        Ok(())
-    );
-    assert_eq!(
-        machine.validate_verifier_candidate_compatibility(&verifier, 9),
-        Err(VerifierCompatibilityErrorV1::MachinePolicyInactive)
-    );
-
-    let mut wrong_model = verifier_candidate()?;
-    wrong_model.verifier_cost_model_id = nonzero(99)?;
-    let verifier = VerifierPolicyV1::try_from(wrong_model)?;
-    assert_eq!(
-        machine.validate_verifier_candidate_compatibility(&verifier, 15),
-        Err(VerifierCompatibilityErrorV1::CostModelMismatch)
-    );
-    Ok(())
-}
-
-#[test]
-fn admission_verifier_candidate_requires_mode_and_exact_policy_id() -> PolicyModelTestResult {
-    let verifier = VerifierPolicyV1::try_from(verifier_candidate()?)?;
-
-    let local = MachinePolicyV1::try_from(machine_candidate(AdmissionModeV1::LocalKernel, None)?)?;
-    assert_eq!(
-        local.validate_admission_verifier_candidate(&verifier, 15),
-        Err(VerifierCompatibilityErrorV1::AdmissionVerifierForbidden)
-    );
-
-    let wrong_id = MachinePolicyV1::try_from(machine_candidate(
-        AdmissionModeV1::RequiredVerifier,
-        Some(nonzero(99)?),
-    )?)?;
-    assert_eq!(
-        wrong_id.validate_admission_verifier_candidate(&verifier, 15),
-        Err(VerifierCompatibilityErrorV1::AdmissionVerifierPolicyMismatch)
-    );
-
-    let exact = MachinePolicyV1::try_from(machine_candidate(
-        AdmissionModeV1::RequiredVerifier,
-        Some(verifier.verifier_policy_id()),
-    )?)?;
-    assert_eq!(
-        exact.validate_admission_verifier_candidate(&verifier, 15),
-        Ok(())
-    );
-    Ok(())
-}
-
-#[test]
-fn verifier_compatibility_rejects_every_mismatch_before_authority() -> PolicyModelTestResult {
-    let machine =
-        MachinePolicyV1::try_from(machine_candidate(AdmissionModeV1::LocalKernel, None)?)?;
-
-    let mut candidate = verifier_candidate()?;
-    candidate.machine_id = nonzero(90)?;
-    let verifier = VerifierPolicyV1::try_from(candidate)?;
-    assert_eq!(
-        machine.validate_verifier_candidate_compatibility(&verifier, 15),
-        Err(VerifierCompatibilityErrorV1::MachineMismatch)
-    );
-
-    let mut candidate = verifier_candidate()?;
-    candidate.domain_id = nonzero(91)?;
-    let verifier = VerifierPolicyV1::try_from(candidate)?;
-    assert_eq!(
-        machine.validate_verifier_candidate_compatibility(&verifier, 15),
-        Err(VerifierCompatibilityErrorV1::DomainMismatch)
-    );
-
-    let mut candidate = verifier_candidate()?;
-    candidate.validity_start_epoch = 16;
-    let verifier = VerifierPolicyV1::try_from(candidate)?;
-    assert_eq!(
-        machine.validate_verifier_candidate_compatibility(&verifier, 15),
-        Err(VerifierCompatibilityErrorV1::VerifierPolicyInactive)
-    );
-
-    let mut candidate = verifier_candidate()?;
-    candidate.max_artifact_bytes =
-        u64::from(PolicyLimitsV1::strict_default().max_proof_artifact_bytes()) + 1;
-    let verifier = VerifierPolicyV1::try_from(candidate)?;
-    assert_eq!(
-        machine.validate_verifier_candidate_compatibility(&verifier, 15),
-        Err(VerifierCompatibilityErrorV1::ArtifactLimitExceedsMachine)
-    );
-
-    let mut candidate = verifier_candidate()?;
-    candidate.max_verifier_cost_units =
-        PolicyLimitsV1::strict_default().max_total_verifier_cost_units() + 1;
-    let verifier = VerifierPolicyV1::try_from(candidate)?;
-    assert_eq!(
-        machine.validate_verifier_candidate_compatibility(&verifier, 15),
-        Err(VerifierCompatibilityErrorV1::VerifierCostLimitExceedsMachine)
-    );
-    Ok(())
-}
-
-#[test]
-fn verifier_compatibility_accepts_exact_machine_caps_and_rejects_one_more() -> PolicyModelTestResult
-{
-    let machine =
-        MachinePolicyV1::try_from(machine_candidate(AdmissionModeV1::LocalKernel, None)?)?;
-    let limits = machine.limits();
-
-    let mut exact = verifier_candidate()?;
-    exact.max_artifact_bytes = u64::from(limits.max_proof_artifact_bytes());
-    exact.max_verifier_cost_units = limits.max_total_verifier_cost_units();
-    let verifier = VerifierPolicyV1::try_from(exact)?;
-    assert_eq!(
-        machine.validate_verifier_candidate_compatibility(&verifier, 15),
-        Ok(())
-    );
-
-    let mut artifact_over = exact;
-    artifact_over.max_artifact_bytes =
-        u64::from(limits.max_proof_artifact_bytes()).saturating_add(1);
-    let verifier = VerifierPolicyV1::try_from(artifact_over)?;
-    assert_eq!(
-        machine.validate_verifier_candidate_compatibility(&verifier, 15),
-        Err(VerifierCompatibilityErrorV1::ArtifactLimitExceedsMachine)
-    );
-
-    let mut cost_over = exact;
-    cost_over.max_verifier_cost_units = limits.max_total_verifier_cost_units().saturating_add(1);
-    let verifier = VerifierPolicyV1::try_from(cost_over)?;
-    assert_eq!(
-        machine.validate_verifier_candidate_compatibility(&verifier, 15),
-        Err(VerifierCompatibilityErrorV1::VerifierCostLimitExceedsMachine)
-    );
-
-    let mut total_bound_machine = machine_candidate(AdmissionModeV1::LocalKernel, None)?;
-    total_bound_machine.limits.max_proof_artifact_bytes = 700_000;
-    total_bound_machine.limits.max_total_proof_bytes = 600_000;
-    let total_bound_machine = MachinePolicyV1::try_from(total_bound_machine)?;
-
-    let mut total_exact = verifier_candidate()?;
-    total_exact.max_artifact_bytes = 600_000;
-    let verifier = VerifierPolicyV1::try_from(total_exact)?;
-    assert_eq!(
-        total_bound_machine.validate_verifier_candidate_compatibility(&verifier, 15),
-        Ok(())
-    );
-    total_exact.max_artifact_bytes = 600_001;
-    let verifier = VerifierPolicyV1::try_from(total_exact)?;
-    assert_eq!(
-        total_bound_machine.validate_verifier_candidate_compatibility(&verifier, 15),
-        Err(VerifierCompatibilityErrorV1::ArtifactLimitExceedsMachine)
-    );
-    Ok(())
 }

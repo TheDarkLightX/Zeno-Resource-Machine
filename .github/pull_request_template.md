@@ -59,6 +59,13 @@ Residual gaps and non-claims:
 
 List exact commands and results.
 
+Independent specification-counterexample review:
+
+- Reviewer:
+- Normative rules sampled:
+- Counterexamples proposed:
+- Disposition/evidence:
+
 ## Canonical ABI and vectors
 
 ## Dependencies and trusted-computing-base impact
@@ -72,3 +79,9 @@ List exact commands and results.
 ## Remaining gaps and non-claims
 
 ## Required reviewers
+
+- Semantic owner:
+- Independent non-author counterexample reviewer:
+- Authority-boundary reviewer (Class D/E):
+- Compatibility/formal reviewer (Class E):
+- Release owner (Class E):
