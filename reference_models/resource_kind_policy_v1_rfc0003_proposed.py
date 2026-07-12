@@ -1,7 +1,7 @@
-"""Proposed RFC-0002 ResourceKindPolicyV1 quantity decisions.
+"""Proposed RFC-0003 ResourceKindPolicyV1 quantity decisions.
 
 This module encodes a supplied semantic amendment independently of production
-code.  It is non-authoritative unless RFC-0002 is accepted through the governed
+code.  It is non-authoritative unless RFC-0003 is accepted through the governed
 RFC process.  The frozen prior-specification oracle remains in
 ``resource_kind_policy_v1.py`` and is imported only for its inert input types and
 closed accounting-mode enum.
@@ -22,7 +22,7 @@ from reference_models.resource_kind_policy_v1 import (
 
 
 class ProposedDecisionKind(str, Enum):
-    """Binary result of the non-normative RFC-0002 proposal."""
+    """Binary result of the non-normative RFC-0003 proposal."""
 
     ACCEPT = "accept"
     REJECT = "reject"
@@ -55,7 +55,7 @@ class ProposedReason(str, Enum):
 
 @dataclass(frozen=True)
 class ProposedDecision:
-    """Non-authoritative RFC-0002 decision and explicit non-claims."""
+    """Non-authoritative RFC-0003 decision and explicit non-claims."""
 
     kind: ProposedDecisionKind
     reason: ProposedReason
@@ -80,10 +80,10 @@ def _reject(reason: ProposedReason) -> ProposedDecision:
     return ProposedDecision(ProposedDecisionKind.REJECT, reason)
 
 
-def decide_rfc0002_policy_construction(
+def decide_rfc0003_policy_construction(
     candidate: PolicyCandidateV1,
 ) -> ProposedDecision:
-    """Apply the proposed RFC-0002 policy-construction relation.
+    """Apply the proposed RFC-0003 policy-construction relation.
 
     For typed semantic candidates, precedence is schema, validity window, then
     lifecycle maximum.  The closed enum check and host-width checks fail closed
@@ -112,7 +112,7 @@ def decide_rfc0002_policy_construction(
     ):
         return _reject(ProposedReason.LIFECYCLE_POLICY_MAXIMUM_MUST_EQUAL_ONE)
     non_claims = [
-        "RFC-0002 remains proposed until governed acceptance",
+        "RFC-0003 remains proposed until governed acceptance",
         "policy authentication and activation remain unestablished",
     ]
     if candidate.quantity_max == 0:
@@ -120,11 +120,11 @@ def decide_rfc0002_policy_construction(
     return _accept(ProposedReason.POLICY_SHAPE_ACCEPTED, *non_claims)
 
 
-def decide_rfc0002_resource_quantity(
+def decide_rfc0003_resource_quantity(
     candidate_policy: PolicyCandidateV1,
     candidate_resource: ResourceQuantityCandidateV1,
 ) -> ProposedDecision:
-    """Apply the proposed RFC-0002 local unit and quantity relation.
+    """Apply the proposed RFC-0003 local unit and quantity relation.
 
     Policy construction completes first.  For a constructed typed policy,
     semantic reason precedence is unit mismatch, lifecycle exact-one, general
@@ -135,7 +135,7 @@ def decide_rfc0002_resource_quantity(
     no resource or authority-bearing capability.
     """
 
-    policy_decision = decide_rfc0002_policy_construction(candidate_policy)
+    policy_decision = decide_rfc0003_policy_construction(candidate_policy)
     if policy_decision.kind is ProposedDecisionKind.REJECT:
         return policy_decision
     if candidate_resource.unit_id != candidate_policy.unit_id:
@@ -156,14 +156,14 @@ def decide_rfc0002_resource_quantity(
     if candidate_policy.accounting_mode is AccountingMode.EVIDENCE_ONLY:
         return _accept(
             ProposedReason.EVIDENCE_ONLY_QUANTITY_STRUCTURALLY_ACCEPTED,
-            "RFC-0002 remains proposed until governed acceptance",
+            "RFC-0003 remains proposed until governed acceptance",
             "evidence meaning remains unestablished",
             "nonmonetary and nonfungible interpretation remain unestablished",
             "v1 has no zero-marker permission",
         )
     return _accept(
         ProposedReason.RESOURCE_QUANTITY_ACCEPTED,
-        "RFC-0002 remains proposed until governed acceptance",
+        "RFC-0003 remains proposed until governed acceptance",
         "transition accounting and authority remain unestablished",
     )
 
@@ -172,6 +172,6 @@ __all__ = [
     "ProposedDecision",
     "ProposedDecisionKind",
     "ProposedReason",
-    "decide_rfc0002_policy_construction",
-    "decide_rfc0002_resource_quantity",
+    "decide_rfc0003_policy_construction",
+    "decide_rfc0003_resource_quantity",
 ]

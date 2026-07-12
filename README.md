@@ -1,5 +1,9 @@
 # Zeno Resource Machine (ZRM)
 
+**Author:** Dana Edwards
+
+**Drafting assistance:** GPT-5.6
+
 **A proof-system-neutral semantic kernel for exact-once, proof-carrying resource transitions.**
 
 > **Status: incubation / pre-alpha.** The protocol, schemas, APIs, and security model are not stable. No production-readiness, privacy, consensus, token-value, physical-resource, or safety-critical claim is made.
@@ -9,7 +13,9 @@ Machine-readable release posture:
 ```text
 public_implementation_claim_allowed = true
 claim_scope = reviewed initial repository-local WP0 controls and WP1 canonical-codec slice
-unreviewed_candidate_scope = WP2 policy model, security-review remediation, WP0 assurance extensions, CBC-003 structural resource roles, and WP3b intrinsic resource construction
+merged_but_unpromoted_candidate_scope = WP2 policy model, WP0 assurance extensions, WP3a structural resource roles, WP3b intrinsic resource construction, WP3c intrinsic-body role and ordinal binding, and WP5 bounded artifact input boundary
+unreviewed_candidate_scope = security-review remediation and RFC-0003 authority-boundary amendment
+unapproved_design_scope = Class E semantic-closure RFC package
 production_ready = false
 current_level = ZRM-L0
 ```
@@ -29,13 +35,19 @@ The repository contains a maintainer-reviewed, merged pre-alpha implementation o
 
 The current branch also contains an unreviewed pre-RFC WP2 candidate for specialized opaque root types, private-field in-memory policy values, protocol ceilings, exact unit checks, admission-mode consistency, validity windows, and internal verifier-cost arithmetic. Caller-selected cost rows and structural verifier candidates cannot produce a public checked quote or admission-like success. This candidate deliberately defines no policy codec, policy hash, root derivation, trusted validation context, verifier registry, backend dispatch, or verified authority fact. Canonical policy bytes, roots, and hashes remain blocked on a Class E RFC and independent vectors.
 
-The branch adds locally replayed candidate WP0 controls for multi-axis code quality and deterministic source/cryptography inventories. Their reports pass the recorded local gates, while hosted CI and merge review remain pending. They provide assurance evidence only and do not create release provenance, third-party trust, standardized BOM conformance, or production authority.
+The repository includes locally replayed candidate WP0 controls for multi-axis code quality and deterministic source/cryptography inventories. Their recorded local gates and the merged default-branch hosted CI pass. They remain unpromoted assurance evidence and do not create release provenance, third-party trust, standardized BOM conformance, or production authority.
 
-The current development branch also contains the bounded CBC-003 structural role partition. It checks consumed, referenced, and created counts before internal allocation; sorts each role by `ResourceId`; rejects within-role duplicates and all three collision pairs in deterministic order; and derives zero-based ordinals from the canonical lists. The result remains inert and establishes no resource-body binding, membership, transition validity, list root, state change, or commit authority.
+The merged WP3a boundary contains the bounded CBC-003 structural role partition. It checks consumed, referenced, and created counts before internal allocation; sorts each role by `ResourceId`; rejects within-role duplicates and all three collision pairs in deterministic order; and derives zero-based ordinals from the canonical lists. The partition remains inert and establishes no membership, transition validity, list root, state change, or commit authority.
 
 WP3b adds a sealed `IntrinsicResourceV1` stage. It rejects zero identifiers, roots, and nonce, expiry before creation, and every nonzero v1 flag; preserves exact quantity and epoch widths; and derives its own `ResourceId` from the complete existing canonical wire value. The type fixes the v1 field set but proves no strict-decoder provenance. It establishes only policy-independent body consistency and body-to-ID binding.
 
-`ResourceWireV1` remains an inert syntactic candidate, and `IntrinsicResourceV1` is not a final policy-valid resource. Those policy-independent stages preserve zero as unresolved data. The v1 policy schema has no marker-resource permission, so every policy-bound dimension check rejects zero and `EvidenceOnly` grants no exception. RFC-0002 proposes an in-place pre-alpha rule that lifecycle non-fungible policy candidates use the canonical maximum of one atom; that semantic narrowing remains blocked on human approval. Public typed resource-ID derivation is available only through the canonical codec. Default `Debug` formatting redacts every opaque 32-byte value and every 32-byte array candidate in `ResourceWireV1`; numeric quantity, epoch, expiry, and flag candidates remain visible. The repository does not yet implement final `ResourceV1`, authenticated policy activation, a complete semantic transition kernel, authenticated facts, state membership, persistence, atomic commit, proof adapters, application adapters, or a production release. Host-side branch, vulnerability-reporting, independent-review, and release-environment controls remain incomplete. There is no stable package-wide ABI, external security audit, or production-readiness claim. Detailed status and remaining evidence are machine-readable in [`CONFORMANCE_MATRIX.json`](CONFORMANCE_MATRIX.json).
+The merged but unpromoted WP3c candidate composes those stages into `RoleBoundIntrinsicResourceV1`. The sole binding operation looks up the intrinsic body's internally derived `ResourceId` in the supplied sealed canonical partition and stores the exact resulting role and ordinal. A caller cannot inject a mismatched identifier, role, or ordinal independently of that partition. The partition itself remains caller-proposed and unauthenticated. Absence rejects without changing either input. Separation of different bodies relies on the schema-fixed SHA-256 resource-ID derivation and its collision-resistance assumption; concrete mutation tests do not prove hash injectivity. The revision-bound local evidence index records the exhaustive small atlas, ordinal ceiling, coverage, generated and manual mutation, Kani, targeted Miri, fuzz, quality, and supply-chain results. Hosted CI passed on the merged default branch. The repository does not contain an independent human Class C approval record for WP3c, so that review status remains unclaimed. This per-resource result proves neither complete body coverage of the partition nor policy, state, logic, transition, or commit authority.
+
+The WP5 candidate adds only `BoundedArtifactV1`, an owned copy of untrusted verifier bytes under a caller-supplied limit that cannot exceed the protocol ceiling. The type deliberately has no `Debug` implementation and creates no verified fact. Passing its constructor proves no policy selection, proof format, canonicality, program identity, statement binding, cryptographic verification, or authority. A future governed verifier registry must recheck the retained length against authenticated machine and verifier policies before dispatch.
+
+`ResourceWireV1` remains an inert syntactic candidate, and neither `IntrinsicResourceV1` nor `RoleBoundIntrinsicResourceV1` is a final policy-valid resource. Those policy-independent stages preserve zero as unresolved data. The v1 policy schema has no marker-resource permission, so every policy-bound dimension check rejects zero and `EvidenceOnly` grants no exception. RFC-0003 proposes the pre-alpha rule that lifecycle non-fungible policy candidates use the canonical maximum of one atom; that semantic narrowing remains blocked on explicit human approval. Public typed resource-ID derivation is available only through the canonical codec. Default `Debug` formatting redacts every opaque 32-byte value and every 32-byte array candidate in `ResourceWireV1`; numeric quantity, epoch, expiry, and flag candidates remain visible. The repository does not yet implement final `ResourceV1`, authenticated policy activation, a complete semantic transition kernel, authenticated facts, state membership, persistence, atomic commit, proof adapters, application adapters, or a production release. Host-side branch, vulnerability-reporting, independent-review, and release-environment controls remain incomplete. There is no stable package-wide ABI, external security audit, or production-readiness claim. Detailed status and remaining evidence are machine-readable in [`CONFORMANCE_MATRIX.json`](CONFORMANCE_MATRIX.json).
+
+The current documentation branch also contains three unapproved Class E RFCs. RFC-0001 and RFC-0002 cover policy suspension, authority-context freshness, acyclic semantic-effect commitment, linearizable retry classification, uncertain commit outcomes, and serialized recursive journal composition. RFC-0003 records the proposed pre-authority API quarantine and resource-dimension amendment exercised by this remediation branch. They require independent semantic review and explicit maintainer decisions before approval. See [`rfcs/README.md`](rfcs/README.md) and the [`semantic-closure review package`](formal/state-machine/semantic_closure_v1/README.md).
 
 > **zkVMs prove that code ran. ZRM defines what the result is allowed to change.**
 
@@ -358,7 +370,8 @@ Not included in v0.1:
 - [`REVIEW_CHECKLIST.md`](REVIEW_CHECKLIST.md) — high-assurance review checklist.
 - [`docs/AUTHORITY_MAP.md`](docs/AUTHORITY_MAP.md) — staged trust and authority-transition review contracts.
 - [`docs/SECURITY_REVIEW_REMEDIATION_2026_07.md`](docs/SECURITY_REVIEW_REMEDIATION_2026_07.md) — finding disposition, counterexamples, and residual blockers.
-- [`rfcs/README.md`](rfcs/README.md) — breaking-change proposals and their review status.
+- [`rfcs/README.md`](rfcs/README.md) — draft protocol and authority RFC index.
+- [`formal/state-machine/semantic_closure_v1/README.md`](formal/state-machine/semantic_closure_v1/README.md) — draft semantic decisions, review oracles, and refinement obligations.
 - [`templates/RFC_TEMPLATE.md`](templates/RFC_TEMPLATE.md) — protocol and architecture proposal template.
 - [`templates/ADR_TEMPLATE.md`](templates/ADR_TEMPLATE.md) — architectural decision record template.
 - [`templates/AGENT_WORKLOG_TEMPLATE.md`](templates/AGENT_WORKLOG_TEMPLATE.md) — agent evidence report template.

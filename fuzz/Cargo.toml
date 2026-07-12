@@ -50,5 +50,12 @@ test = false
 doc = false
 bench = false
 
+[[bin]]
+name = "role_bound_intrinsic_v1"
+path = "fuzz_targets/role_bound_intrinsic_v1.rs"
+test = false
+doc = false
+bench = false
+
 [workspace]
 members = ["."]

@@ -165,6 +165,27 @@ A pull request includes:
 
 Keep unrelated refactors separate.
 
+### Stacked pull requests
+
+A pull request merged into another feature branch is not integrated into the
+default branch. A stacked pull request may remain based on a feature branch
+while that dependency is under review, but it MUST NOT be merged after its base
+has already merged into the default branch.
+
+When a stacked base merges, every open dependent pull request must be retargeted
+to the default branch, refreshed onto the current default-branch head, and have
+its complete diff and required gates reviewed again. Before merge, confirm that:
+
+- the pull request's base is the intended permanent integration branch;
+- every required predecessor is an ancestor of that base;
+- the pull request head is not already represented by a closed merge into a
+  transient feature branch;
+- manifests and generated evidence describe the refreshed tree.
+
+Closing or merging a stacked pull request does not by itself support an
+implementation, conformance, or release claim. The reviewed payload must be
+reachable from the default branch.
+
 ## Review requirements
 
 | Class | Minimum review |

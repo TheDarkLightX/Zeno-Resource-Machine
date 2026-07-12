@@ -113,3 +113,10 @@ dependencies = [
 [[package]]
 name = "zrm-types"
 version = "0.1.0"
+
+[[package]]
+name = "zrm-verifier-api"
+version = "0.1.0"
+dependencies = [
+ "zrm-policy",
+]

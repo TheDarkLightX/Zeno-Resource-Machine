@@ -1,0 +1,47 @@
+{
+  "schema": "zrm/environment-policy-inputs/v1",
+  "record_id": "wp3c-environment-policy-2026-07-12",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "host_scope": "local assurance replay only",
+  "target": "x86_64-unknown-linux-gnu",
+  "toolchains": [
+    "cargo 1.87.0 (99624be96 2025-05-06)",
+    "rustc 1.87.0 (17067e9ac 2025-05-09)",
+    "cargo 1.88.0 (873a06493 2025-05-10)",
+    "rustc 1.88.0 (6b00bc388 2025-06-23)",
+    "cargo 1.87.0-nightly (2622e844b 2025-02-28)",
+    "rustc 1.87.0-nightly (8c392966a 2025-03-01)",
+    "Python 3.12.3"
+  ],
+  "policy_inputs": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "1de7d3d3fe94c4a951c8c1e4baa00fbee26131696800ae23eda5714b312f107f"
+    },
+    {
+      "path": "Cargo.lock",
+      "sha256": "3d3d3890425e5432f6c3e0e16d47c95864e3ddd36350626421fb46ba68b7f425"
+    },
+    {
+      "path": "fuzz/Cargo.lock",
+      "sha256": "e16818e3e2323d5df8df87e97a5eb2a0551f729bc3e3e3c614c2509652b8655e"
+    },
+    {
+      "path": "rust-toolchain.toml",
+      "sha256": "457384091fedde2da6892de9872f440c23c5473024c70521a028f97377b4abfe"
+    },
+    {
+      "path": "deny.toml",
+      "sha256": "9579447748f2e1847b8ea023d7c24507d7b93f2b9fad18d72be0ae2ca9bdd104"
+    },
+    {
+      "path": ".cargo/mutants.toml",
+      "sha256": "e83071bb217bf1dc0c06dfc1debdb67e799a1cea84d17262edf992c2101b4528"
+    }
+  ],
+  "limits": [
+    "local host and operating-system image are not a reproducible-build environment",
+    "network isolation was not claimed",
+    "wall-clock fields are informational only"
+  ]
+}

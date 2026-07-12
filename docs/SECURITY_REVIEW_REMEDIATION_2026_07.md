@@ -80,7 +80,7 @@ did not explicitly require a lifecycle policy maximum of exactly one. This
 remediation proposes that constructor invariant because zero creates an
 uninhabited policy and larger maxima are redundant for a fixed-quantity mode.
 It narrows the accepted pre-alpha policy-candidate state space and changes a
-public exhaustive error enum. Approval of RFC-0002 is approval of that semantic
+public exhaustive error enum. Approval of RFC-0003 is approval of that semantic
 and source-compatibility change.
 
 That approval also confirms these associated choices:

@@ -2,6 +2,20 @@
 
 Use this checklist for Class C-E changes. A checkbox means the reviewer inspected evidence; it does not mean the author stated that evidence exists.
 
+## Semantic contracts and independent review
+
+- [ ] The pull request names every affected `ZRM-SC-*` contract and exact clause.
+- [ ] The contract is traceable to `SPECIFICATION.md` or an approved RFC and does not broaden the normative accepted state space.
+- [ ] Any unresolved semantic behavior fails closed or blocks the change as `BLOCK_AMBIGUOUS_SPEC`.
+- [ ] An accepted-state decision table and invalid-state/counterexample matrix exist.
+- [ ] The oracle reviewer derived expected behavior before receiving implementation rationale or implementation-authored tests, or the review is explicitly labeled corroborative rather than independent.
+- [ ] The oracle/reference artifact has separate author/tool/model/version provenance and a stable path or digest.
+- [ ] Implementation-to-oracle discrepancies are classified and dispositioned; the oracle was not edited merely to fit observed code.
+- [ ] Counterexample review includes identifier/content substitution, domain/version/role substitution, downgrade, stale/revoked policy, coverage defects, overflow, replay, partial mutation, concurrent conflict, unchecked optional data, and composition failure where applicable.
+- [ ] The author is not counted as the required independent approver.
+- [ ] Class D/E changes have two independent approvals, including an authority-boundary reviewer.
+- [ ] Integrated composition receives a distinct review after component-level review.
+
 ## Semantics
 
 - [ ] Exact typed statement is defined.
@@ -20,6 +34,8 @@ Use this checklist for Class C-E changes. A checkbox means the reviewer inspecte
 - [ ] Raw bytes and metadata remain untrusted.
 - [ ] Verified facts are sealed and cannot be caller-constructed.
 - [ ] Program/key/profile/statement/policy bindings are exact.
+- [ ] Identifier equality cannot substitute for authenticated content binding.
+- [ ] Governed registries, not requests, supply authoritative policy and verifier contents.
 - [ ] Revocation and rotation are handled.
 - [ ] No host boolean is the sole authority for a safety property.
 - [ ] Generated proof/artifact is reverified before use.
@@ -33,6 +49,8 @@ Use this checklist for Class C-E changes. A checkbox means the reviewer inspecte
 - [ ] Domain separators and field order are documented.
 - [ ] Independent vectors exist.
 - [ ] One-field mutations change the correct commitments.
+- [ ] Raw bytes cannot impersonate sealed canonical-byte provenance at an authority API.
+- [ ] Default diagnostics redact full nonces and sensitive opaque values.
 
 ## State and accounting
 
@@ -42,6 +60,9 @@ Use this checklist for Class C-E changes. A checkbox means the reviewer inspecte
 - [ ] Arithmetic is checked, explicit-width, and unit-safe.
 - [ ] No floating point enters semantic authority.
 - [ ] State root and journal are derived deterministically.
+- [ ] Resource-kind policy constructors reject unsatisfiable combinations.
+- [ ] Current v1 rejects zero quantity unless a versioned policy explicitly grants marker semantics.
+- [ ] Verifier cost rows are selected from the authenticated model rather than supplied by the caller.
 
 ## Atomicity and concurrency
 
@@ -102,13 +123,12 @@ Use this checklist for Class C-E changes. A checkbox means the reviewer inspecte
 
 ## Final review outcome
 
-- [ ] Reviewer is not an author of the implementation under review.
-- [ ] Class D/E has two distinct non-author approvals, including an
-      authority-boundary approval.
+Select exactly one:
 
-- [ ] Approve
-- [ ] Approve with tracked follow-up
-- [ ] Request changes
-- [ ] Block due to unresolved critical obligation
+- [ ] `APPROVE`
+- [ ] `APPROVE_WITH_TRACKED_GAPS`
+- [ ] `REQUEST_CHANGES`
+- [ ] `BLOCK_AMBIGUOUS_SPEC`
+- [ ] `BLOCK_UNSATISFIED_AUTHORITY_OBLIGATION`
 
 Reviewer rationale:

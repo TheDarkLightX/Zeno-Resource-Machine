@@ -6,6 +6,7 @@ members = [
     "crates/zrm-kernel",
     "crates/zrm-policy",
     "crates/zrm-types",
+    "crates/zrm-verifier-api",
 ]
 exclude = ["fuzz"]
 

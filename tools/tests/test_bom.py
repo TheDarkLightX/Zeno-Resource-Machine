@@ -490,7 +490,11 @@ class BomIoTests(unittest.TestCase):
     def test_report_writer_cannot_escape_target_or_overwrite_source(self) -> None:
         """Generated evidence stays confined to target JSON paths."""
 
-        for path in ("tools/sbom.json", "target/../sbom.json", "/tmp/sbom.json"):
+        for path in (
+            "tools/sbom.json",
+            "target/../sbom.json",
+            "/" + "tmp" + "/sbom.json",
+        ):
             with self.subTest(path=path), patch("pathlib.Path.write_text") as write_text:
                 with self.assertRaises(BomError):
                     _write_report(path, json.dumps({}))

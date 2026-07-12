@@ -8,24 +8,52 @@
 - [ ] D, stable authority implementation
 - [ ] E, breaking protocol or release change
 
+## Semantic contract impact
+
+- Affected contract IDs (`ZRM-SC-*`):
+- Exact contract clauses:
+- Normative specification/RFC clauses:
+- [ ] This change does not affect a semantic contract. Rationale:
+- [ ] Any changed accepted behavior is authorized by an approved specification/RFC change.
+- [ ] The contract and implementation fail closed on every unresolved behavior.
+
+## Semantic change declaration
+
+```text
+Authority created, removed, or changed:
+Attacker-controlled inputs:
+Governed/trusted inputs:
+Derived values:
+Newly accepted states:
+Newly rejected states:
+Invariants preserved or added:
+Failure and no-op behavior:
+Canonical bytes, hashes, or identity impact:
+State, replay, concurrency, and atomicity impact:
+Resource and verifier bounds:
+Residual gaps and non-claims:
+```
+
 ## Invariants and disaster states
 
 ## Typed API and authority boundary
 
-## Semantic change declaration
+## Independent semantic review — required for Class C-E
 
-- Authority affected:
-- Attacker-controlled fields:
-- Governed fields:
-- New valid states:
-- New invalid states:
-- Invariants preserved or changed:
-- Cryptographic bindings added or changed:
-- Replay/freshness implications:
-- Resource-bound implications:
-- Upgrade/revocation implications:
-- Failure behavior and precedence:
-- Independently derived tests/oracle:
+- Oracle reviewer and provenance:
+- Oracle/review-packet path and digest:
+- Information supplied before the oracle pass:
+- Implementation rationale/tests withheld during the oracle pass:
+- Accepted-state decision table:
+- Invalid-state and counterexample matrix:
+- Reference model/vector source:
+- Implementation-to-oracle differential result:
+- Disagreements and disposition:
+- Independent review outcome:
+
+- [ ] The author is not counted as the required independent approver.
+- [ ] The oracle was not changed merely to match observed implementation behavior.
+- [ ] Class D/E has two independent approvals, including an authority-boundary reviewer.
 
 ## Tests and gates
 

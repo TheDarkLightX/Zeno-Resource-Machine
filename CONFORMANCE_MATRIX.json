@@ -30,7 +30,10 @@
       "wp0_multi_axis_code_quality_controls",
       "wp0_source_sbom_and_cryptography_cbom_controls",
       "wp3a_canonical_resource_role_partition",
-      "wp3b_intrinsic_resource_construction"
+      "wp3b_intrinsic_resource_construction",
+      "wp3c_intrinsic_body_role_and_ordinal_binding",
+      "wp5_bounded_artifact_input_slice",
+      "draft_class_e_semantic_closure_rfc_package"
     ],
     "non_claims": [
       "no_complete_semantic_kernel",
@@ -46,6 +49,7 @@
       "no_release_provenance",
       "no_reproducible_release",
       "no_security_audit",
+      "no_approved_semantic_closure_rfc",
       "no_production_authority"
     ]
   },
@@ -120,7 +124,7 @@
         "evidence/wp1-class-c-review-2026-07-11.json",
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
         "evidence/wp3b-local-gates-2026-07-11.json",
-        "rfcs/0002-security-review-api-quarantine.md",
+        "rfcs/RFC-0003-security-review-api-quarantine.md",
         "worklogs/2026-07-12-security-review-remediation.md",
         "evidence/security-remediation-local-gates-2026-07-12.json"
       ],
@@ -154,18 +158,21 @@
         "crates/zrm-types/src/lib.rs",
         "crates/zrm-types/src/opaque.rs",
         "crates/zrm-crypto/src/lib.rs",
-        "crates/zrm-kernel/src/resource.rs"
+        "crates/zrm-kernel/src/resource.rs",
+        "crates/zrm-kernel/src/role_bound_resource.rs"
       ],
       "test_refs": [
         "crates/zrm-types/src/lib.rs",
         "crates/zrm-crypto/src/lib.rs",
         "crates/zrm-crypto/tests/vectors.rs",
         "crates/zrm-kernel/tests/intrinsic_resource.rs",
-        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs"
+        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic.rs"
       ],
       "formal_refs": [
         "crates/zrm-types/src/lib.rs",
-        "crates/zrm-kernel/src/resource/kani_harnesses.rs"
+        "crates/zrm-kernel/src/resource/kani_harnesses.rs",
+        "crates/zrm-kernel/src/role_bound_resource/kani_harnesses.rs"
       ],
       "evidence_refs": [
         "vectors/resource_wire_v1.json",
@@ -173,10 +180,12 @@
         "evidence/wp1-class-c-review-2026-07-11.json",
         "evidence/wp2-local-gates-2026-07-11.json",
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
-        "evidence/wp3b-local-gates-2026-07-11.json"
+        "evidence/wp3b-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md",
+        "evidence/wp3c-local-gates-2026-07-12.json"
       ],
-      "next_action": "make IntrinsicResourceV1 obligatory for later resource-policy, role, transition, and state validation while preserving opaque construction and exact domain framing",
-      "non_claim": "opaque primitives and WP3b intrinsic resource fields enforce local nonzero invariants only; caller-provided values remain unauthenticated and no final resource, policy, state, or transition authority follows",
+      "next_action": "make RoleBoundIntrinsicResourceV1 obligatory for later resource-policy, logic-claim, transition, and state validation while preserving opaque construction and exact domain framing",
+      "non_claim": "opaque primitives, WP3b intrinsic fields, and the WP3c body-to-role binding enforce local representation and substitution invariants only; caller-provided values remain unauthenticated and no final resource, policy, state, or transition authority follows",
       "normative_refs": [
         "SPECIFICATION.md#103-required-domain-strings",
         "SPECIFICATION.md#12-primitive-newtypes"
@@ -195,7 +204,7 @@
       "status": "implemented_partial",
       "defense_layer": "unrepresentable",
       "disaster_state": "one resource is simultaneously treated as consumed, read-only, and newly created",
-      "construction_rule": "Bound all three role counts before allocation, reject within-role duplicates and all cross-role collisions in deterministic precedence, sort each valid role by ResourceId, and derive role-local ordinals only from the sealed canonical partition",
+      "construction_rule": "Bound all three role counts before allocation, reject within-role duplicates and all cross-role collisions in deterministic precedence, sort each valid role by ResourceId, derive role-local ordinals only from the sealed canonical partition, and bind intrinsic bodies only through their internally derived ResourceId",
       "required_evidence": [
         "role collision tests",
         "property tests over permutations",
@@ -204,25 +213,32 @@
       "implementation_refs": [
         "crates/zrm-kernel/src/lib.rs",
         "crates/zrm-kernel/src/resource_roles.rs",
+        "crates/zrm-kernel/src/role_bound_resource.rs",
         "crates/zrm-policy/src/limits.rs"
       ],
       "test_refs": [
         "crates/zrm-kernel/tests/resource_roles.rs",
         "crates/zrm-kernel/tests/resource_role_atlas.rs",
-        "fuzz/fuzz_targets/resource_roles_v1.rs"
+        "crates/zrm-kernel/tests/role_bound_intrinsic.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic_atlas.rs",
+        "fuzz/fuzz_targets/resource_roles_v1.rs",
+        "fuzz/fuzz_targets/role_bound_intrinsic_v1.rs"
       ],
       "formal_refs": [
         "crates/zrm-kernel/src/resource_roles/kani_harnesses.rs",
         "crates/zrm-kernel/src/resource_roles/kani_harnesses/count.rs",
         "crates/zrm-kernel/src/resource_roles/kani_harnesses/collision.rs",
-        "crates/zrm-kernel/src/resource_roles/kani_harnesses/duplicate.rs"
+        "crates/zrm-kernel/src/resource_roles/kani_harnesses/duplicate.rs",
+        "crates/zrm-kernel/src/role_bound_resource/kani_harnesses.rs"
       ],
       "evidence_refs": [
         "worklogs/2026-07-11-wp3-resource-roles.md",
-        "evidence/wp3a-local-gates-2026-07-11.json"
+        "evidence/wp3a-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md",
+        "evidence/wp3c-local-gates-2026-07-12.json"
       ],
-      "next_action": "make CanonicalResourceRolesV1 an obligatory input to the later prevalidated-transition stage before logic verification, then define canonical role bytes and list roots through Class E review",
-      "non_claim": "this candidate proves only a local structural partition under caller-supplied validated limits; it authenticates no policy or resource body and performs no membership, freshness, logic, accounting, root, state, commit, or canonical-ABI check",
+      "next_action": "make RoleBoundIntrinsicResourceV1 an obligatory input to later resource-policy and logic-claim construction before proof verification, then define canonical role bytes and list roots through Class E review",
+      "non_claim": "WP3a and WP3c prove only a local structural partition plus exact intrinsic-body ID, role, and ordinal consistency within a caller-proposed unauthenticated partition; they prove no complete body coverage and authenticate no policy, membership, freshness, logic, accounting, root, state, commit, or canonical ABI",
       "normative_refs": [
         "SPECIFICATION.md#92-role-disjointness",
         "SPECIFICATION.md#18-resource-roles-and-canonical-order"
@@ -782,10 +798,13 @@
       ],
       "implementation_refs": [
         "crates/zrm-codec/src/resource_wire_v1.rs",
-        "fuzz/fuzz_targets/resource_wire_v1_decode.rs"
+        "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
+        "crates/zrm-verifier-api/src/artifact.rs"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "crates/zrm-verifier-api/src/artifact.rs",
+        "crates/zrm-verifier-api/tests/artifact.rs",
         "fuzz/corpus/resource_wire_v1_decode/absent",
         "fuzz/corpus/resource_wire_v1_decode/oversize-boundary",
         "fuzz/corpus/resource_wire_v1_decode/present"
@@ -794,10 +813,13 @@
         "crates/zrm-codec/src/kani_harnesses.rs"
       ],
       "evidence_refs": [
-        "evidence/WP1_MUTATION_MAP.md"
+        "evidence/WP1_MUTATION_MAP.md",
+        "evidence/wp5-bounded-artifact-2026-07-12.json",
+        "evidence/wp5-integrated-2026-07-12.json",
+        "worklogs/2026-07-12-wp5-bounded-artifact.md"
       ],
-      "next_action": "add explicit count, depth, string, allocation, and diagnostic-JSON bounds when those later wire types are introduced",
-      "non_claim": "the bounded canonical decoder covers ResourceWireV1 only; no generic envelope, nested collection, string, map, or diagnostic JSON decoder exists",
+      "next_action": "authenticate machine and verifier per-artifact limits, add governed aggregate budgets before verifier dispatch, and add explicit count, depth, string, and diagnostic-JSON bounds when those wire types are introduced",
+      "non_claim": "the bounded canonical decoder covers ResourceWireV1 and WP5 covers one owned byte copy under a caller-supplied per-artifact limit plus deterministic capacity-overflow and injected-refusal mapping; no authenticated policy limit, aggregate budget, real allocator-OOM evidence, generic envelope, nested collection, string, map, diagnostic JSON, proof-format canonicality, or verified-artifact decoder exists",
       "normative_refs": [
         "SPECIFICATION.md#11-canonical-encoding-rules",
         "SPECIFICATION.md#136-resourcewirev1-canonical-bytes",
@@ -806,7 +828,8 @@
       ],
       "target_level": "ZRM-L0",
       "work_packages": [
-        "WP1"
+        "WP1",
+        "WP5"
       ],
       "blocking_dependencies": [
         "ZRM-CBC-001"
@@ -965,7 +988,7 @@
         "crates/zrm-policy/tests/policy_model.rs",
         "crates/zrm-policy/tests/resource_dimension_atlas.rs",
         "reference_models/tests/test_resource_kind_policy_v1.py",
-        "reference_models/tests/test_resource_kind_policy_v1_rfc0002_proposed.py"
+        "reference_models/tests/test_resource_kind_policy_v1_rfc0003_proposed.py"
       ],
       "formal_refs": [
         "crates/zrm-codec/src/kani_harnesses.rs",
@@ -975,8 +998,8 @@
         "evidence/WP1_MUTATION_MAP.md",
         "reference_models/RESOURCE_KIND_POLICY_V1_ORACLE.md",
         "reference_models/resource_kind_policy_v1_counterexamples.json",
-        "reference_models/RESOURCE_KIND_POLICY_V1_RFC0002_PROPOSED.md",
-        "reference_models/resource_kind_policy_v1_rfc0002_proposed_counterexamples.json",
+        "reference_models/RESOURCE_KIND_POLICY_V1_RFC0003_PROPOSED.md",
+        "reference_models/resource_kind_policy_v1_rfc0003_proposed_counterexamples.json",
         "evidence/SECURITY_REMEDIATION_MUTATION_MAP.md",
         "worklogs/2026-07-12-security-review-remediation.md",
         "evidence/security-remediation-local-gates-2026-07-12.json"
@@ -1051,10 +1074,10 @@
       "formal_refs": [],
       "evidence_refs": [
         "vectors/resource_wire_v1.json",
-        "rfcs/0002-security-review-api-quarantine.md",
+        "rfcs/RFC-0003-security-review-api-quarantine.md",
         "worklogs/2026-07-12-security-review-remediation.md"
       ],
-      "next_action": "define the old/new compatibility matrix and migration replay before any version-two wire or policy schema is accepted; keep the pre-alpha public API removals recorded in RFC-0002",
+      "next_action": "define the old/new compatibility matrix and migration replay before any version-two wire or policy schema is accepted; keep the pre-alpha public API removals recorded in RFC-0003",
       "non_claim": "ResourceWireV1 version one is rejected or accepted exactly, and pre-alpha API quarantine has a source migration note; no version-two decoder, canonical policy codec, compatibility proof, persisted-state migration, or stable package ABI exists",
       "normative_refs": [
         "SPECIFICATION.md#112-schema-evolution"
@@ -1205,6 +1228,7 @@
       ],
       "implementation_refs": [
         "Cargo.toml",
+        "crates/zrm-verifier-api/Cargo.toml",
         "tools/check_architecture.py"
       ],
       "test_refs": [
@@ -1217,10 +1241,12 @@
         "worklogs/2026-07-11-wp2-policy-model.md",
         "evidence/wp2-local-gates-2026-07-11.json",
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
-        "evidence/wp3b-local-gates-2026-07-11.json"
+        "evidence/wp3b-local-gates-2026-07-11.json",
+        "evidence/wp5-integrated-2026-07-12.json",
+        "worklogs/2026-07-12-wp5-bounded-artifact.md"
       ],
-      "next_action": "retain exact review of the five-crate graph and extend the allowlist only when a separately scoped core or adapter boundary is introduced",
-      "non_claim": "the checker covers the current types, crypto, codec, policy, and kernel crates only; it does not validate future verifier, adapter, store, or runtime wiring",
+      "next_action": "retain exact review of the six-crate graph and extend the allowlist only when a separately scoped core or adapter boundary is introduced",
+      "non_claim": "the checker covers the current types, crypto, codec, policy, kernel, and inert verifier-input crates; it does not validate future verifier backends, adapters, stores, runtime wiring, or runtime semantic isolation",
       "normative_refs": [
         "SPECIFICATION.md#6-layering-and-dependency-direction",
         "SPECIFICATION.md#37-recommended-rust-workspace-architecture"
@@ -1251,19 +1277,26 @@
         "crates/zrm-crypto/src/lib.rs",
         "crates/zrm-kernel/src/lib.rs",
         "crates/zrm-kernel/src/resource.rs",
+        "crates/zrm-kernel/src/role_bound_resource.rs",
         "crates/zrm-policy/src/lib.rs",
+        "crates/zrm-verifier-api/src/lib.rs",
         "crates/zrm-types/src/lib.rs"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
         "crates/zrm-kernel/tests/intrinsic_resource.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic_atlas.rs",
         "crates/zrm-policy/tests/policy_model.rs",
+        "crates/zrm-verifier-api/tests/artifact.rs",
         "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
-        "fuzz/fuzz_targets/intrinsic_resource_v1.rs"
+        "fuzz/fuzz_targets/intrinsic_resource_v1.rs",
+        "fuzz/fuzz_targets/role_bound_intrinsic_v1.rs"
       ],
       "formal_refs": [
         "crates/zrm-codec/src/kani_harnesses.rs",
         "crates/zrm-kernel/src/resource/kani_harnesses.rs",
+        "crates/zrm-kernel/src/role_bound_resource/kani_harnesses.rs",
         "crates/zrm-policy/src/cost.rs",
         "crates/zrm-types/src/lib.rs"
       ],
@@ -1272,10 +1305,14 @@
         "worklogs/2026-07-10-wp0-wp1.md",
         "worklogs/2026-07-11-wp2-policy-model.md",
         "evidence/wp2-local-gates-2026-07-11.json",
-        "worklogs/2026-07-11-wp3-intrinsic-resource.md"
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md",
+        "evidence/wp3c-local-gates-2026-07-12.json",
+        "evidence/wp5-integrated-2026-07-12.json",
+        "worklogs/2026-07-12-wp5-bounded-artifact.md"
       ],
       "next_action": "retain pinned Miri coverage and maintain an explicit unsafe inventory plus safety cases as adapters are added",
-      "non_claim": "unsafe is forbidden in current ZRM crates and their tests pass under Miri; this does not establish soundness of dependency unsafe code, unexercised architecture paths, or future adapters",
+      "non_claim": "unsafe is forbidden in the current six ZRM crates; prior full-suite evidence and the targeted 12-test WP5 Miri replay cover exercised executions only, while no WP5-specific Kani, WP5 fuzz, dependency-unsafe soundness, unexercised-path, or future-adapter claim follows",
       "normative_refs": [
         "SPECIFICATION.md#373-unsafe-code",
         "SPECIFICATION.md#42-defensive-rust-rules"
@@ -1316,13 +1353,15 @@
         "tools/rust_complexity.py",
         "crates/zrm-policy/src/lib.rs",
         "crates/zrm-policy/src/limits.rs",
-        "crates/zrm-kernel/src/resource.rs"
+        "crates/zrm-kernel/src/resource.rs",
+        "crates/zrm-verifier-api/src/artifact.rs"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
         "crates/zrm-kernel/tests/intrinsic_resource.rs",
         "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs",
         "crates/zrm-policy/tests/policy_model.rs",
+        "crates/zrm-verifier-api/tests/artifact.rs",
         "tools/tests/test_code_quality.py",
         "tools/tests/test_complexity.py",
         "tools/tests/test_policy_checks.py"
@@ -1335,10 +1374,12 @@
         "worklogs/2026-07-11-wp0-complexity-report.md",
         "worklogs/2026-07-11-wp0-code-quality-report.md",
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
-        "evidence/wp3b-local-gates-2026-07-11.json"
+        "evidence/wp3b-local-gates-2026-07-11.json",
+        "evidence/wp5-integrated-2026-07-12.json",
+        "worklogs/2026-07-12-wp5-bounded-artifact.md"
       ],
       "next_action": "retain the excellent tier with zero quality findings or exception debt, replay the behavior-and-evidence packet in hosted CI, and add a reviewed compiler-AST lane before claiming cyclomatic or cognitive-complexity coverage",
-      "non_claim": "the automated reports cover five lexical complexity metrics, sixteen structural quality rules, and completeness of five required design decisions; they do not expand macros, classify semantic criticality, compute cyclomatic or cognitive complexity, detect every diff-aware smell, or prove universal design-pattern optimality",
+      "non_claim": "the automated reports cover five lexical complexity metrics, sixteen structural quality rules, and completeness of five required design decisions; WP5 reuses ZRM-DESIGN-003 without adding a pattern, and the reports do not expand macros, classify semantic criticality, compute cyclomatic or cognitive complexity, detect every diff-aware smell, or prove universal design-pattern optimality",
       "normative_refs": [
         "SPECIFICATION.md#394-complexity-budgets",
         "QUALITY_GATES.md#6-gate-g3--complexity-and-auditability"
@@ -1372,6 +1413,8 @@
         "crates/zrm-policy/src/verifier.rs",
         "crates/zrm-policy/src/cost.rs",
         "crates/zrm-kernel/src/resource.rs",
+        "crates/zrm-kernel/src/role_bound_resource.rs",
+        "crates/zrm-verifier-api/src/artifact.rs",
         "tools/check_architecture.py"
       ],
       "test_refs": [
@@ -1380,7 +1423,11 @@
         "crates/zrm-policy/src/cost.rs",
         "crates/zrm-policy/src/verifier/tests.rs",
         "crates/zrm-kernel/tests/intrinsic_resource.rs",
-        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs"
+        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic_atlas.rs",
+        "crates/zrm-verifier-api/src/artifact.rs",
+        "crates/zrm-verifier-api/tests/artifact.rs"
       ],
       "formal_refs": [],
       "evidence_refs": [
@@ -1392,10 +1439,15 @@
         "evidence/wp3b-local-gates-2026-07-11.json",
         "worklogs/2026-07-12-security-review-remediation.md",
         "evidence/SECURITY_REMEDIATION_MUTATION_MAP.md",
-        "evidence/security-remediation-local-gates-2026-07-12.json"
+        "evidence/security-remediation-local-gates-2026-07-12.json",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md",
+        "evidence/WP3C_ROLE_BOUND_INTRINSIC_MUTATION_MAP.md",
+        "evidence/wp3c-local-gates-2026-07-12.json",
+        "evidence/wp5-integrated-2026-07-12.json",
+        "worklogs/2026-07-12-wp5-bounded-artifact.md"
       ],
-      "next_action": "retain zero missed critical mutants for zero-quantity, API-quarantine, resource, transition, accounting, state, registry, and commit guards as those layers are added",
-      "non_claim": "the recorded campaigns cover WP1, pre-RFC WP2 arithmetic and policy dimensions, the authority-API quarantine, WP3a, and the policy-independent WP3b constructor; compile-fail/API checks are separate from semantic registry proof, and no complete transition kernel, authority registry, state, persistence, or commit guard exists",
+      "next_action": "retain zero missed generated mutants and named zero-quantity, API-quarantine, protocol-ceiling, selected-limit, and allocation-refusal mutants as resource, transition, accounting, state, registry, and commit guards are added",
+      "non_claim": "recorded campaigns cover WP1, pre-RFC WP2 internal arithmetic and policy dimensions, the authority-API quarantine, WP3a, WP3b, WP3c, and the bounded WP5 artifact boundary; compile-fail/API checks do not prove a semantic registry, and no complete transition kernel, authority registry, verifier dispatch, state, persistence, or commit guard exists",
       "normative_refs": [
         "SPECIFICATION.md#404-mutation-tests"
       ],
@@ -1429,6 +1481,7 @@
         "fuzz/fuzz_targets/policy_cost_v1.rs",
         "fuzz/fuzz_targets/intrinsic_resource_v1.rs",
         "fuzz/fuzz_targets/policy_resource_dimensions_v1.rs",
+        "fuzz/fuzz_targets/role_bound_intrinsic_v1.rs",
         "fuzz/Cargo.toml"
       ],
       "test_refs": [
@@ -1447,8 +1500,17 @@
         "fuzz/corpus/policy_resource_dimensions_v1/lifecycle-maximum-zero",
         "fuzz/corpus/policy_resource_dimensions_v1/lifecycle-maximum-one",
         "fuzz/corpus/policy_resource_dimensions_v1/lifecycle-maximum-two",
+        "fuzz/corpus/role_bound_intrinsic_v1/absent",
+        "fuzz/corpus/role_bound_intrinsic_v1/consumed",
+        "fuzz/corpus/role_bound_intrinsic_v1/referenced",
+        "fuzz/corpus/role_bound_intrinsic_v1/created-permuted",
+        "fuzz/corpus/role_bound_intrinsic_v1/stale-consumed-identity",
+        "fuzz/corpus/role_bound_intrinsic_v1/stale-referenced-quantity",
+        "fuzz/corpus/role_bound_intrinsic_v1/stale-created-nonce",
+        "fuzz/corpus/role_bound_intrinsic_v1/stale-created-expiry",
         "crates/zrm-codec/tests/resource_wire_v1.rs",
-        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs"
+        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic_atlas.rs"
       ],
       "formal_refs": [],
       "evidence_refs": [
@@ -1459,10 +1521,12 @@
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
         "evidence/wp3b-local-gates-2026-07-11.json",
         "worklogs/2026-07-12-security-review-remediation.md",
-        "evidence/security-remediation-local-gates-2026-07-12.json"
+        "evidence/security-remediation-local-gates-2026-07-12.json",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md",
+        "evidence/wp3c-local-gates-2026-07-12.json"
       ],
       "next_action": "accumulate sustained fuzz duration, retain the resource-dimension full-width grammar, add canonical policy decoders only after the Class E ABI RFC, commit minimized failures, and add later proof-envelope grammars",
-      "non_claim": "the campaigns cover the ResourceWireV1 decoder, quarantined WP2 cost arithmetic, the policy-dimension predicate, and the WP3b intrinsic constructor grammar; they grant no SHA-256 proof, canonical policy, authenticated cost model, proof envelope, registry, final resource, or complete semantic-kernel assurance",
+      "non_claim": "recorded campaigns cover the ResourceWireV1 decoder, quarantined WP2 internal arithmetic, the policy-dimension predicate, WP3b intrinsic construction, and patch-bound WP3c placement and stale-body substitution; they grant no SHA-256 proof, canonical policy, authenticated cost model, proof envelope, registry, final resource, or complete semantic-kernel assurance",
       "normative_refs": [
         "SPECIFICATION.md#405-fuzzing"
       ],
@@ -1606,10 +1670,13 @@
         "evidence/wp3b-remediation-attestation-2026-07-11.json",
         "worklogs/2026-07-12-security-review-remediation.md",
         "evidence/security-remediation-agent-reviews-2026-07-12.json",
-        "evidence/security-remediation-local-gates-2026-07-12.json"
+        "evidence/security-remediation-local-gates-2026-07-12.json",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md",
+        "evidence/wp3c-agent-reviews-2026-07-12.json",
+        "evidence/wp3c-local-gates-2026-07-12.json"
       ],
-      "next_action": "obtain final human behavior/evidence review after clean hosted gates, retain isolated implementation/oracle/adversarial artifacts, and prove live distinct-reviewer branch controls before authority or release promotion",
-      "non_claim": "independent subagent oracle and adversarial tracks strengthen technical evidence but do not replace required human approval or an external production audit; static CODEOWNERS and documentation do not prove live host enforcement",
+      "next_action": "obtain final human behavior and assurance-evidence review of each candidate slice after clean hosted gates, retain isolated oracle and adversarial artifacts, and prove live distinct-reviewer branch controls before authority or release promotion",
+      "non_claim": "WP1 has scoped human approval; receipt-bound agent oracle and adversarial reviews strengthen technical evidence but do not replace required human approval or an external production audit, and static CODEOWNERS do not prove live host enforcement",
       "normative_refs": [
         "SPECIFICATION.md#45-generated-code-policy",
         "SPECIFICATION.md#46-agent-implementation-contract"
@@ -1776,21 +1843,26 @@
       ],
       "implementation_refs": [
         "crates/zrm-types/src/opaque.rs",
-        "crates/zrm-codec/src/resource_wire_v1.rs"
+        "crates/zrm-codec/src/resource_wire_v1.rs",
+        "crates/zrm-verifier-api/src/artifact.rs"
       ],
       "test_refs": [
         "crates/zrm-types/src/opaque.rs",
         "crates/zrm-codec/tests/resource_wire_v1.rs",
-        "crates/zrm-kernel/tests/intrinsic_resource.rs"
+        "crates/zrm-kernel/tests/intrinsic_resource.rs",
+        "crates/zrm-verifier-api/src/artifact.rs",
+        "crates/zrm-verifier-api/tests/artifact.rs"
       ],
       "formal_refs": [],
       "evidence_refs": [
-        "rfcs/0002-security-review-api-quarantine.md",
+        "rfcs/RFC-0003-security-review-api-quarantine.md",
         "worklogs/2026-07-12-security-review-remediation.md",
-        "evidence/security-remediation-local-gates-2026-07-12.json"
+        "evidence/security-remediation-local-gates-2026-07-12.json",
+        "evidence/wp5-integrated-2026-07-12.json",
+        "worklogs/2026-07-12-wp5-bounded-artifact.md"
       ],
       "next_action": "extend constant redaction and disclosure review to future proof artifacts, witnesses, private state, log sinks, errors, and evidence bundles; add zeroization where private profiles introduce secrets",
-      "non_claim": "default opaque values and every ResourceWireV1 32-byte array candidate are redacted, with nonce-value-independent nested intrinsic formatting; numeric wire scalars remain visible, and no logging framework, private witness type, zeroization policy, log-sink audit, or complete private diagnostic envelope exists",
+      "non_claim": "default opaque values and ResourceWireV1 32-byte array candidates are redacted, nested intrinsic formatting is nonce-value-independent, and WP5 prevents ordinary Debug formatting of BoundedArtifactV1; numeric wire scalars remain visible, and no logging framework, private witness type, zeroization policy, log-sink audit, or complete private diagnostic envelope exists",
       "normative_refs": [
         "SPECIFICATION.md#264-sensitive-diagnostics",
         "SPECIFICATION.md#42-defensive-rust-rules"
@@ -1823,21 +1895,27 @@
         "crates/zrm-types/src/lib.rs",
         "crates/zrm-codec/src/resource_wire_v1.rs",
         "crates/zrm-kernel/src/resource.rs",
+        "crates/zrm-kernel/src/role_bound_resource.rs",
         "crates/zrm-policy/src/limits.rs",
         "crates/zrm-policy/src/cost.rs",
+        "crates/zrm-verifier-api/src/artifact.rs",
         "tools/check_architecture.py"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
         "crates/zrm-policy/tests/policy_model.rs",
         "crates/zrm-policy/src/cost.rs",
+        "crates/zrm-verifier-api/src/artifact.rs",
+        "crates/zrm-verifier-api/tests/artifact.rs",
         "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
         "fuzz/fuzz_targets/policy_cost_v1.rs",
         "fuzz/fuzz_targets/policy_resource_dimensions_v1.rs",
-        "fuzz/fuzz_targets/intrinsic_resource_v1.rs"
+        "fuzz/fuzz_targets/intrinsic_resource_v1.rs",
+        "fuzz/fuzz_targets/role_bound_intrinsic_v1.rs"
       ],
       "formal_refs": [
         "crates/zrm-kernel/src/resource/kani_harnesses.rs",
+        "crates/zrm-kernel/src/role_bound_resource/kani_harnesses.rs",
         "crates/zrm-policy/src/limits.rs",
         "crates/zrm-policy/src/cost.rs"
       ],
@@ -1849,10 +1927,14 @@
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
         "evidence/wp3b-local-gates-2026-07-11.json",
         "worklogs/2026-07-12-security-review-remediation.md",
-        "evidence/security-remediation-local-gates-2026-07-12.json"
+        "evidence/security-remediation-local-gates-2026-07-12.json",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md",
+        "evidence/wp3c-local-gates-2026-07-12.json",
+        "evidence/wp5-integrated-2026-07-12.json",
+        "worklogs/2026-07-12-wp5-bounded-artifact.md"
       ],
-      "next_action": "freeze policy and cost-model authority bytes, implement sorted unique internally selected cost rows and the complete pre-dispatch cost plan, then add backend worst-case and end-to-end load evidence in WP5 and WP9",
-      "non_claim": "WP1 byte bounds, bounded WP3b field validation and 603-byte commitment construction, plus WP2 machine ceilings and internal candidate arithmetic are implemented; the default public API cannot produce a caller-row quote, and no authenticated cost model, governed charge, complete dispatch plan, backend work bound, storage runtime, rate limit, or end-to-end DoS claim exists",
+      "next_action": "authenticate machine and verifier artifact limits, add governed aggregate artifact budgets, freeze cost-model authority bytes, implement sorted authenticated cost rows and the complete pre-dispatch cost plan, then add backend worst-case and end-to-end load evidence in WP5 and WP9",
+      "non_claim": "WP1 byte bounds, bounded WP3b field validation, bounded WP3c role lookup, WP2 machine ceilings and internal candidate arithmetic, plus WP5's caller-supplied single-artifact ceiling and deterministic refusal mapping are implemented; the default public API cannot produce a caller-row quote, and no real allocator-OOM, aggregate-budget, authenticated cost model, governed charge, complete dispatch plan, backend work bound, storage runtime, rate limit, or end-to-end DoS claim exists",
       "normative_refs": [
         "SPECIFICATION.md#15-machine-policy",
         "SPECIFICATION.md#405-fuzzing",
@@ -1893,7 +1975,7 @@
         "crates/zrm-policy/tests/resource_dimension_atlas.rs",
         "fuzz/fuzz_targets/policy_resource_dimensions_v1.rs",
         "reference_models/tests/test_resource_kind_policy_v1.py",
-        "reference_models/tests/test_resource_kind_policy_v1_rfc0002_proposed.py"
+        "reference_models/tests/test_resource_kind_policy_v1_rfc0003_proposed.py"
       ],
       "formal_refs": [
         "crates/zrm-policy/src/resource_kind/kani_harnesses.rs"
@@ -1901,9 +1983,9 @@
       "evidence_refs": [
         "reference_models/RESOURCE_KIND_POLICY_V1_ORACLE.md",
         "reference_models/resource_kind_policy_v1_counterexamples.json",
-        "reference_models/RESOURCE_KIND_POLICY_V1_RFC0002_PROPOSED.md",
-        "reference_models/resource_kind_policy_v1_rfc0002_proposed_counterexamples.json",
-        "rfcs/0002-security-review-api-quarantine.md",
+        "reference_models/RESOURCE_KIND_POLICY_V1_RFC0003_PROPOSED.md",
+        "reference_models/resource_kind_policy_v1_rfc0003_proposed_counterexamples.json",
+        "rfcs/RFC-0003-security-review-api-quarantine.md",
         "evidence/SECURITY_REMEDIATION_MUTATION_MAP.md",
         "worklogs/2026-07-12-security-review-remediation.md"
       ],
@@ -1911,7 +1993,7 @@
       "non_claim": "the implemented predicate consumes an inert policy candidate and candidate dimensions only; no canonical policy bytes, active-policy authentication, final ResourceV1 capability, accounting proof, marker permission, accepted transition, or commit exists",
       "normative_refs": [
         "SPECIFICATION.md#14-resource-kind-policy",
-        "rfcs/0002-security-review-api-quarantine.md#resource-dimensions"
+        "rfcs/RFC-0003-security-review-api-quarantine.md#resource-dimensions"
       ],
       "target_level": "ZRM-L1",
       "work_packages": [

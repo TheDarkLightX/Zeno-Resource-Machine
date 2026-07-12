@@ -1,4 +1,4 @@
-# RFC-0002: Pre-authority API quarantine and boundary hardening
+# RFC-0003: Pre-authority API quarantine and boundary hardening
 
 **Status:** Review
 **Authors:** ZRM maintainers, implementation prepared for review

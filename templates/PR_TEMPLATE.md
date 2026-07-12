@@ -14,29 +14,56 @@
 - [ ] D — stable authority implementation
 - [ ] E — protocol/authority/release breaking
 
+## Semantic contract impact
+
+- Affected contract IDs (`ZRM-SC-*`):
+- Exact contract clauses:
+- Normative specification/RFC clauses:
+- [ ] No semantic contract impact; rationale is recorded below.
+- [ ] Any broadened or changed accepted behavior is authorized by an approved specification/RFC change.
+- [ ] Every unresolved behavior fails closed or blocks this change.
+
 ## Motivation
 
 ## Non-goals
+
+## Semantic change declaration
+
+```text
+Authority created, removed, or changed:
+Attacker-controlled inputs:
+Governed/trusted inputs:
+Derived values:
+Newly accepted states:
+Newly rejected states:
+Invariants preserved or added:
+Failure and no-op behavior:
+Canonical bytes, hashes, or identity impact:
+State, replay, concurrency, and atomicity impact:
+Resource and verifier bounds:
+Residual gaps and non-claims:
+```
 
 ## Invariants and CBC obligations
 
 ## Authority boundary
 
-## Semantic change declaration
+## Independent semantic review — required for Class C-E
 
-- Authority affected:
-- Attacker-controlled fields:
-- Governed fields:
-- New valid states:
-- New invalid states:
-- Invariants preserved:
-- Invariants changed:
-- Cryptographic bindings added or changed:
-- Replay/freshness implications:
-- Resource-bound implications:
-- Upgrade/revocation implications:
-- Failure behavior and precedence:
-- Independently derived tests/oracle:
+- Oracle reviewer and provenance:
+- Oracle/review-packet path and digest:
+- Information supplied before the oracle pass:
+- Implementation rationale/tests withheld during the oracle pass:
+- Accepted-state decision table:
+- Invalid-state and counterexample matrix:
+- Reference model/vector source:
+- Implementation-to-oracle differential result:
+- Disagreements and disposition:
+- Independent review outcome:
+
+- [ ] The author is not counted as the required independent approver.
+- [ ] The oracle was not changed merely to match observed implementation behavior.
+- [ ] Class D/E has two independent approvals, including an authority-boundary reviewer.
 
 ## Canonical ABI / migration impact
 
@@ -60,6 +87,8 @@ Behavior-and-evidence summary for human review:
 - Specified behaviors confirmed:
 - Exact assurance results:
 - CBC obligations covered:
+- Semantic contracts covered:
+- Counterexamples attempted:
 - Remaining gaps and non-claims:
 
 - [ ] unit/invariant
@@ -68,6 +97,8 @@ Behavior-and-evidence summary for human review:
 - [ ] mutation
 - [ ] fuzz
 - [ ] differential
+- [ ] independent oracle/vector replay
+- [ ] compile-fail/API sealing
 - [ ] Miri/Loom
 - [ ] Kani
 - [ ] deductive/theorem/model
@@ -92,7 +123,7 @@ Independent specification-counterexample review:
 
 ## Performance/resource impact
 
-## Documentation, vectors, and matrix updates
+## Documentation, contracts, vectors, and matrix updates
 
 ## Rollback plan
 
@@ -108,7 +139,18 @@ Work log/provenance:
 ## Required reviewers and sign-off
 
 - Semantic owner:
-- Independent non-author counterexample reviewer:
+- Independent oracle/counterexample reviewer (Class C-E):
+- Adversarial reviewer (Class C-E):
 - Authority-boundary reviewer (Class D/E):
 - Compatibility/formal reviewer (Class E):
 - Release owner (Class E):
+
+## Integration target
+
+- Intended permanent base branch:
+- Required predecessor commits and ancestry result:
+- [ ] This PR targets the default branch, or its temporary stacked base is
+      explicitly identified above.
+- [ ] If a stacked base already merged, this PR was retargeted and refreshed
+      before merge.
+- [ ] The final reviewed payload will be reachable from the default branch.

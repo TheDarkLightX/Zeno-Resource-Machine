@@ -10,11 +10,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 SKIP_DIRECTORIES = {".git", "__pycache__", "artifacts", "target"}
+SKIP_FILES = {".git"}
 TEXT_SUFFIXES = {"", ".json", ".lock", ".md", ".py", ".rs", ".toml", ".txt", ".yaml", ".yml"}
 MAX_REPOSITORY_FILE_BYTES = 1_048_576
 CONTEXT_MARKERS = (
     "/" + "home" + "/",
     "/" + "mnt" + "/" + "data" + "/",
+    "/" + "tmp" + "/",
     "sand" + "box:",
     "Down" + "loads/",
 )
@@ -31,28 +33,28 @@ REMOTE_ACTION = re.compile(r"^\s*uses:\s*([^\s#]+)(?:\s+#.*)?$", re.MULTILINE)
 PINNED_ACTION = re.compile(r"^[^@]+@[0-9a-f]{40}$")
 
 
-def repository_files() -> list[Path]:
+def repository_files(root: Path = ROOT) -> list[Path]:
     """Return deterministic repository files while excluding build and VCS data."""
 
     files: list[Path] = []
-    for directory, directory_names, file_names in os.walk(ROOT):
+    for directory, directory_names, file_names in os.walk(root):
         directory_names[:] = sorted(name for name in directory_names if name not in SKIP_DIRECTORIES)
-        for file_name in sorted(file_names):
+        for file_name in sorted(name for name in file_names if name not in SKIP_FILES):
             path = Path(directory) / file_name
             if path.suffix in TEXT_SUFFIXES:
                 files.append(path)
     return files
 
 
-def repository_file_metadata_failures() -> list[str]:
+def repository_file_metadata_failures(root: Path = ROOT) -> list[str]:
     """Reject symlinks, unexpected executable modes, and oversized files."""
 
     failures: list[str] = []
-    for directory, directory_names, file_names in os.walk(ROOT):
+    for directory, directory_names, file_names in os.walk(root):
         directory_names[:] = sorted(name for name in directory_names if name not in SKIP_DIRECTORIES)
-        for file_name in sorted(file_names):
+        for file_name in sorted(name for name in file_names if name not in SKIP_FILES):
             path = Path(directory) / file_name
-            relative_path = path.relative_to(ROOT)
+            relative_path = path.relative_to(root)
             if path.is_symlink():
                 failures.append(f"{relative_path}: repository symlink requires explicit review")
                 continue

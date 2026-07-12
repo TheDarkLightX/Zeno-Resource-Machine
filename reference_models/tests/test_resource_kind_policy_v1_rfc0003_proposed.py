@@ -1,4 +1,4 @@
-"""Independent tests for the proposed RFC-0002 quantity semantics."""
+"""Independent tests for the proposed RFC-0003 quantity semantics."""
 
 from __future__ import annotations
 
@@ -17,11 +17,11 @@ from reference_models.resource_kind_policy_v1 import (
     decide_policy_construction as decide_baseline_policy,
     decide_resource_quantity as decide_baseline_resource,
 )
-from reference_models.resource_kind_policy_v1_rfc0002_proposed import (
+from reference_models.resource_kind_policy_v1_rfc0003_proposed import (
     ProposedDecisionKind,
     ProposedReason,
-    decide_rfc0002_policy_construction,
-    decide_rfc0002_resource_quantity,
+    decide_rfc0003_policy_construction,
+    decide_rfc0003_resource_quantity,
 )
 
 
@@ -30,7 +30,7 @@ UNIT_V = "unit-v"
 REFERENCE_MODELS = Path(__file__).resolve().parents[1]
 COUNTEREXAMPLES = (
     REFERENCE_MODELS
-    / "resource_kind_policy_v1_rfc0002_proposed_counterexamples.json"
+    / "resource_kind_policy_v1_rfc0003_proposed_counterexamples.json"
 )
 BASELINE_SHA256 = {
     "RESOURCE_KIND_POLICY_V1_ORACLE.md": (
@@ -89,10 +89,10 @@ class FrozenBaselineTests(unittest.TestCase):
 
 
 class ProposedPolicyConstructionTests(unittest.TestCase):
-    """RFC-0002 policy construction follows the supplied amendment."""
+    """RFC-0003 policy construction follows the supplied amendment."""
 
     def test_lifecycle_maximum_exactly_one_constructs(self) -> None:
-        decision = decide_rfc0002_policy_construction(
+        decision = decide_rfc0003_policy_construction(
             policy(AccountingMode.LIFECYCLE_NON_FUNGIBLE, 1)
         )
         self.assertEqual(decision.kind, ProposedDecisionKind.ACCEPT)
@@ -101,7 +101,7 @@ class ProposedPolicyConstructionTests(unittest.TestCase):
     def test_lifecycle_maxima_other_than_one_reject(self) -> None:
         for quantity_max in (0, 2, U128_MAX):
             with self.subTest(quantity_max=quantity_max):
-                decision = decide_rfc0002_policy_construction(
+                decision = decide_rfc0003_policy_construction(
                     policy(AccountingMode.LIFECYCLE_NON_FUNGIBLE, quantity_max)
                 )
                 self.assertEqual(decision.kind, ProposedDecisionKind.REJECT)
@@ -115,7 +115,7 @@ class ProposedPolicyConstructionTests(unittest.TestCase):
             if mode is AccountingMode.LIFECYCLE_NON_FUNGIBLE:
                 continue
             with self.subTest(mode=mode):
-                decision = decide_rfc0002_policy_construction(policy(mode, 0))
+                decision = decide_rfc0003_policy_construction(policy(mode, 0))
                 self.assertEqual(decision.kind, ProposedDecisionKind.ACCEPT)
                 self.assertIn(
                     "an admitted resource may not exist", decision.non_claims
@@ -126,13 +126,13 @@ class ProposedPolicyConstructionTests(unittest.TestCase):
             if mode is AccountingMode.LIFECYCLE_NON_FUNGIBLE:
                 continue
             with self.subTest(mode=mode):
-                decision = decide_rfc0002_policy_construction(
+                decision = decide_rfc0003_policy_construction(
                     policy(mode, U128_MAX)
                 )
                 self.assertEqual(decision.kind, ProposedDecisionKind.ACCEPT)
 
     def test_constructor_precedence_schema_then_validity_then_lifecycle(self) -> None:
-        schema_first = decide_rfc0002_policy_construction(
+        schema_first = decide_rfc0003_policy_construction(
             policy(
                 AccountingMode.LIFECYCLE_NON_FUNGIBLE,
                 2,
@@ -141,7 +141,7 @@ class ProposedPolicyConstructionTests(unittest.TestCase):
                 validity_end_epoch=1,
             )
         )
-        validity_second = decide_rfc0002_policy_construction(
+        validity_second = decide_rfc0003_policy_construction(
             policy(
                 AccountingMode.LIFECYCLE_NON_FUNGIBLE,
                 2,
@@ -149,7 +149,7 @@ class ProposedPolicyConstructionTests(unittest.TestCase):
                 validity_end_epoch=1,
             )
         )
-        lifecycle_third = decide_rfc0002_policy_construction(
+        lifecycle_third = decide_rfc0003_policy_construction(
             policy(AccountingMode.LIFECYCLE_NON_FUNGIBLE, 2)
         )
         self.assertEqual(schema_first.reason, ProposedReason.UNSUPPORTED_SCHEMA)
@@ -162,14 +162,14 @@ class ProposedPolicyConstructionTests(unittest.TestCase):
         )
 
     def test_width_checks_remain_fail_closed(self) -> None:
-        invalid_validity = decide_rfc0002_policy_construction(
+        invalid_validity = decide_rfc0003_policy_construction(
             policy(
                 AccountingMode.CONSERVED_FUNGIBLE,
                 1,
                 validity_end_epoch=U64_MAX + 1,
             )
         )
-        invalid_maximum = decide_rfc0002_policy_construction(
+        invalid_maximum = decide_rfc0003_policy_construction(
             policy(AccountingMode.CONSERVED_FUNGIBLE, U128_MAX + 1)
         )
         self.assertEqual(
@@ -181,25 +181,25 @@ class ProposedPolicyConstructionTests(unittest.TestCase):
 
 
 class ProposedResourceDecisionTests(unittest.TestCase):
-    """RFC-0002 resource decisions expose the supplied relative precedence."""
+    """RFC-0003 resource decisions expose the supplied relative precedence."""
 
     def test_every_mode_accepts_positive_quantity_one_at_maximum_one(self) -> None:
         for mode in AccountingMode:
             with self.subTest(mode=mode):
-                decision = decide_rfc0002_resource_quantity(
+                decision = decide_rfc0003_resource_quantity(
                     policy(mode, 1), resource(1)
                 )
                 self.assertEqual(decision.kind, ProposedDecisionKind.ACCEPT)
 
     def test_unit_mismatch_precedes_lifecycle_and_zero(self) -> None:
-        decision = decide_rfc0002_resource_quantity(
+        decision = decide_rfc0003_resource_quantity(
             policy(AccountingMode.LIFECYCLE_NON_FUNGIBLE, 1),
             resource(0, unit_id=UNIT_V),
         )
         self.assertEqual(decision.reason, ProposedReason.UNIT_MISMATCH)
 
     def test_lifecycle_exact_one_precedes_general_zero(self) -> None:
-        decision = decide_rfc0002_resource_quantity(
+        decision = decide_rfc0003_resource_quantity(
             policy(AccountingMode.LIFECYCLE_NON_FUNGIBLE, 1), resource(0)
         )
         self.assertEqual(
@@ -207,7 +207,7 @@ class ProposedResourceDecisionTests(unittest.TestCase):
         )
 
     def test_lifecycle_exact_one_precedes_general_maximum(self) -> None:
-        decision = decide_rfc0002_resource_quantity(
+        decision = decide_rfc0003_resource_quantity(
             policy(AccountingMode.LIFECYCLE_NON_FUNGIBLE, 1), resource(2)
         )
         self.assertEqual(
@@ -215,7 +215,7 @@ class ProposedResourceDecisionTests(unittest.TestCase):
         )
 
     def test_general_zero_precedes_maximum_for_empty_policy(self) -> None:
-        decision = decide_rfc0002_resource_quantity(
+        decision = decide_rfc0003_resource_quantity(
             policy(AccountingMode.CONSERVED_FUNGIBLE, 0), resource(0)
         )
         self.assertEqual(
@@ -224,7 +224,7 @@ class ProposedResourceDecisionTests(unittest.TestCase):
         )
 
     def test_positive_quantity_rejects_above_empty_policy_maximum(self) -> None:
-        decision = decide_rfc0002_resource_quantity(
+        decision = decide_rfc0003_resource_quantity(
             policy(AccountingMode.CONSERVED_FUNGIBLE, 0), resource(1)
         )
         self.assertEqual(decision.reason, ProposedReason.QUANTITY_EXCEEDS_MAXIMUM)
@@ -232,16 +232,16 @@ class ProposedResourceDecisionTests(unittest.TestCase):
     def test_zero_rejects_for_every_mode(self) -> None:
         for mode in AccountingMode:
             with self.subTest(mode=mode):
-                decision = decide_rfc0002_resource_quantity(
+                decision = decide_rfc0003_resource_quantity(
                     policy(mode, 1), resource(0)
                 )
                 self.assertEqual(decision.kind, ProposedDecisionKind.REJECT)
 
     def test_evidence_only_has_no_zero_marker_permission(self) -> None:
-        zero = decide_rfc0002_resource_quantity(
+        zero = decide_rfc0003_resource_quantity(
             policy(AccountingMode.EVIDENCE_ONLY, 1), resource(0)
         )
-        one = decide_rfc0002_resource_quantity(
+        one = decide_rfc0003_resource_quantity(
             policy(AccountingMode.EVIDENCE_ONLY, 1), resource(1)
         )
         self.assertEqual(
@@ -256,13 +256,13 @@ class ProposedResourceDecisionTests(unittest.TestCase):
         self.assertIn("evidence meaning remains unestablished", one.non_claims)
 
     def test_u128_maximum_is_preserved_for_non_lifecycle_mode(self) -> None:
-        decision = decide_rfc0002_resource_quantity(
+        decision = decide_rfc0003_resource_quantity(
             policy(AccountingMode.TRANSFORMABLE, U128_MAX), resource(U128_MAX)
         )
         self.assertEqual(decision.kind, ProposedDecisionKind.ACCEPT)
 
     def test_quantity_above_u128_rejects_without_wrapping(self) -> None:
-        decision = decide_rfc0002_resource_quantity(
+        decision = decide_rfc0003_resource_quantity(
             policy(AccountingMode.CONSERVED_FUNGIBLE, U128_MAX),
             resource(U128_MAX + 1),
         )
@@ -283,7 +283,7 @@ class FrozenBaselineDifferentialTests(unittest.TestCase):
                     is BaselineDecisionKind.ACCEPT
                 )
                 proposed_accepts = (
-                    decide_rfc0002_policy_construction(candidate).kind
+                    decide_rfc0003_policy_construction(candidate).kind
                     is ProposedDecisionKind.ACCEPT
                 )
                 if baseline_accepts and not proposed_accepts:
@@ -316,7 +316,7 @@ class FrozenBaselineDifferentialTests(unittest.TestCase):
                         is BaselineDecisionKind.ACCEPT
                     )
                     proposed_accepts = (
-                        decide_rfc0002_resource_quantity(
+                        decide_rfc0003_resource_quantity(
                             candidate_policy, candidate_resource
                         ).kind
                         is ProposedDecisionKind.ACCEPT
@@ -341,7 +341,7 @@ class FrozenBaselineDifferentialTests(unittest.TestCase):
             for quantity_max in range(5):
                 candidate_policy = policy(mode, quantity_max)
                 baseline_policy = decide_baseline_policy(candidate_policy)
-                proposed_policy = decide_rfc0002_policy_construction(
+                proposed_policy = decide_rfc0003_policy_construction(
                     candidate_policy
                 )
                 if (
@@ -353,7 +353,7 @@ class FrozenBaselineDifferentialTests(unittest.TestCase):
                     baseline = decide_baseline_resource(
                         candidate_policy, resource(quantity_atoms)
                     )
-                    proposed = decide_rfc0002_resource_quantity(
+                    proposed = decide_rfc0003_resource_quantity(
                         candidate_policy, resource(quantity_atoms)
                     )
                     if (
@@ -382,7 +382,7 @@ class FrozenBaselineDifferentialTests(unittest.TestCase):
                     baseline = decide_baseline_resource(
                         candidate_policy, candidate_resource
                     )
-                    proposed = decide_rfc0002_resource_quantity(
+                    proposed = decide_rfc0003_resource_quantity(
                         candidate_policy, candidate_resource
                     )
                     self.assertEqual(baseline.kind.value, proposed.kind.value)
@@ -390,11 +390,11 @@ class FrozenBaselineDifferentialTests(unittest.TestCase):
 
 
 class ProposedCounterexampleRecordTests(unittest.TestCase):
-    """RFC-0002 findings remain complete and executable."""
+    """RFC-0003 findings remain complete and executable."""
 
     def test_findings_have_required_review_fields(self) -> None:
         document = json.loads(COUNTEREXAMPLES.read_text(encoding="utf-8"))
-        self.assertIn("non-normative unless RFC-0002 is accepted", document["normative_status"])
+        self.assertIn("non-normative unless RFC-0003 is accepted", document["normative_status"])
         required = {
             "boundary",
             "attacker_capabilities",
@@ -423,11 +423,11 @@ class ProposedCounterexampleRecordTests(unittest.TestCase):
                 validity_start_epoch=policy_input["validity_start_epoch"],
                 validity_end_epoch=policy_input["validity_end_epoch"],
             )
-            if example["operation"] == "decide_rfc0002_policy_construction":
-                actual = decide_rfc0002_policy_construction(candidate_policy)
+            if example["operation"] == "decide_rfc0003_policy_construction":
+                actual = decide_rfc0003_policy_construction(candidate_policy)
             else:
                 resource_input = example["resource"]
-                actual = decide_rfc0002_resource_quantity(
+                actual = decide_rfc0003_resource_quantity(
                     candidate_policy,
                     ResourceQuantityCandidateV1(
                         unit_id=resource_input["unit_id"],
@@ -452,7 +452,7 @@ class ProposedCounterexampleRecordTests(unittest.TestCase):
                 validity_start_epoch=policy_input["validity_start_epoch"],
                 validity_end_epoch=policy_input["validity_end_epoch"],
             )
-            if example["operation"] == "decide_rfc0002_policy_construction":
+            if example["operation"] == "decide_rfc0003_policy_construction":
                 actual = decide_baseline_policy(candidate_policy)
             else:
                 resource_input = example["resource"]

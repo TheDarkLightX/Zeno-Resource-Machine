@@ -1,0 +1,15 @@
+[package]
+name = "zrm-verifier-api"
+description = "Bounded untrusted verifier artifacts for the Zeno Resource Machine"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish = false
+
+[dependencies]
+zrm-policy.workspace = true
+
+[lints]
+workspace = true

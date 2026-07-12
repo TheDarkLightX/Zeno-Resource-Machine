@@ -3,6 +3,8 @@
 **Version:** 0.1.0-draft.2
 **Date:** 2026-07-10
 **Status:** Pre-alpha normative design specification
+**Author:** Dana Edwards
+**Drafting assistance:** GPT-5.6
 **Audience:** protocol designers, implementers, formal-methods engineers, security reviewers, proof-system integrators, and coding agents
 
 > **zkVMs prove that code ran. ZRM defines what the result is allowed to change.**
@@ -921,7 +923,7 @@ while non-lifecycle quantity zero reports the general zero failure. A
 non-lifecycle policy with `quantity_max = 0` remains a constructible empty
 candidate. This fixed-mode lifecycle rule is an in-place pre-alpha v1 semantic
 amendment: no canonical resource-kind-policy bytes, persisted policy identity,
-or governed activation path exists to migrate. RFC-0002 approval remains
+or governed activation path exists to migrate. RFC-0003 approval remains
 required before this candidate rule can be promoted or used by an
 authority-bearing path.
 

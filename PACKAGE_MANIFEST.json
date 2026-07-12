@@ -3,14 +3,14 @@
   "package": "Zeno Resource Machine high-assurance specification package",
   "version": "0.1.0-draft.3",
   "date": "2026-07-12",
-  "status": "reviewed scoped ZRM-L0 implementation plus unreviewed security-remediation, WP0 assurance, pre-RFC WP2 policy, WP3a role, and WP3b intrinsic-resource candidates; no authority, release, or production claim",
-  "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate security remediation and WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model, WP3a structural-role, and WP3b intrinsic-resource candidates",
-  "manifest_scope": "normative specification-package payload only; code, tests, worklogs, and evidence records are outside this inventory",
+  "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a through WP3c resource stages, an unreviewed WP5 bounded-artifact candidate, an unreviewed security-remediation candidate, a derived semantic-contract review suite, and three unapproved Class E RFCs; no release or production claim",
+  "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model, WP3a through WP3c resource-stage, WP5 bounded-artifact, and security-remediation candidates; WP5 establishes bounded byte ownership only, and the security remediation narrows pre-authority APIs and resource dimensions without creating policy, verification, admission, commit, release, or production authority; semantic contracts, RFC drafts, model-obligation summaries, and independent-review packets are design or process oracles, not implementation conformance evidence",
+  "manifest_scope": "specification-package payload, including normative sources and derived semantic-review controls; code, tests, worklogs, and evidence records are outside this inventory",
   "digest_algorithm": "SHA-256",
   "path_order": "UTF-8 bytewise lexicographic",
   "license": "MIT; LICENSE is a hashed payload",
-  "file_count": 14,
-  "total_file_count_including_manifest": 15,
+  "file_count": 48,
+  "total_file_count_including_manifest": 49,
   "manifest_self_excluded_from_payload_hashes": true,
   "archive_digest": {
     "embedded": false,
@@ -24,13 +24,13 @@
     },
     {
       "path": "CONFORMANCE_MATRIX.json",
-      "bytes": 81582,
-      "sha256": "bfea3758d87ed04327a67b2d1f30485dd4cb9de77925072987b22a6b49f594c5"
+      "bytes": 87359,
+      "sha256": "09b36b4f1ae31957262cc2b3f9b8b48a8040482a69d81bb40809577da6704450"
     },
     {
       "path": "CONTRIBUTING.md",
-      "bytes": 7256,
-      "sha256": "3ddf040d57040df111800ebdafe5ac2e1b3d91302006419bcb3d40b95cfaf76f"
+      "bytes": 8287,
+      "sha256": "6f8e8a3faa5610a36b0f3c45af6aff2d1305655a3fdd213ded43580ec7dbb3ea"
     },
     {
       "path": "IMPLEMENTATION_PLAN.md",
@@ -49,13 +49,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 22047,
-      "sha256": "6d5ef7ea41184f8d5631917a9d6d323ff7aca1a35a9989e30be907978f61fc21"
+      "bytes": 24891,
+      "sha256": "637325b51829b2eb726cb5b08372c559e8da98587f4922c3432d54aef5f17b8f"
     },
     {
       "path": "REVIEW_CHECKLIST.md",
-      "bytes": 5054,
-      "sha256": "1f8be142237e30e1440a77c5d0f0e9d3833f23509cd964ea09881d5e619973a7"
+      "bytes": 6973,
+      "sha256": "680d7ff1128df0555684991b34f2340eb2638e7502c89ef0e37b7ec16a2add69"
     },
     {
       "path": "SECURITY.md",
@@ -63,9 +63,169 @@
       "sha256": "e52081d0f20a188fe3243460452c33b6eac090280e39883585573c465a545aee"
     },
     {
+      "path": "SEMANTIC_CONTRACTS.md",
+      "bytes": 8946,
+      "sha256": "b28ca16303f7d9101e57c649ccb2562d23605441046ed45ce7d531e78e6625fc"
+    },
+    {
       "path": "SPECIFICATION.md",
-      "bytes": 126424,
-      "sha256": "75f94984baf872a22482e39d24118f6d3a203b6642853fe1fcf35c46efe33887"
+      "bytes": 126482,
+      "sha256": "a10b41d9d2a3e0060154665ebb6af9fcff67aa7fa16d39e395e645cf95584e0a"
+    },
+    {
+      "path": "contracts/ZRM-SC-001.md",
+      "bytes": 4702,
+      "sha256": "fc28f4369a06cd20671fe5e4b9401bf078ef2f96144046de62649cc0db7e3710"
+    },
+    {
+      "path": "contracts/ZRM-SC-002.md",
+      "bytes": 4948,
+      "sha256": "7167a1761abda0bc9b460ab53126fe5854f9e5081ea2c26d1d65793e7c7cdda9"
+    },
+    {
+      "path": "contracts/ZRM-SC-003.md",
+      "bytes": 4432,
+      "sha256": "b0bb49e33cdf1950b8cad8d1e035a36d46154e2edce20d085a2f5f1aa4755945"
+    },
+    {
+      "path": "contracts/ZRM-SC-004.md",
+      "bytes": 4394,
+      "sha256": "a0aa9d2427f48d1c477fcda8a5fc393502f4e15c41ca1fd960aded067962d27b"
+    },
+    {
+      "path": "contracts/ZRM-SC-005.md",
+      "bytes": 3668,
+      "sha256": "5268c2992fc9f90be365ce37d404cf34e9c35493b6c1dd7fa53ce1fdd2aae626"
+    },
+    {
+      "path": "contracts/ZRM-SC-006.md",
+      "bytes": 5113,
+      "sha256": "52dc5707bf0eda8e21b66b54211eb61f975e93d786909eb42bb690eed5a2912d"
+    },
+    {
+      "path": "contracts/ZRM-SC-007.md",
+      "bytes": 4537,
+      "sha256": "05e449bebb6390ed9926c0a18f60af691be45ffb149f2b4e34332476b69c824a"
+    },
+    {
+      "path": "contracts/ZRM-SC-008.md",
+      "bytes": 4166,
+      "sha256": "c05e2d7d88b522fb0b8461733abb9c12aac2c7e90011b4cc68295b107950ae9e"
+    },
+    {
+      "path": "contracts/ZRM-SC-009.md",
+      "bytes": 3969,
+      "sha256": "37fe3965299303f8a12516852b804cd5c33feb6d4f75891416bb5ee8e647298b"
+    },
+    {
+      "path": "contracts/ZRM-SC-010.md",
+      "bytes": 4435,
+      "sha256": "9a1440788e762e8a3913ea3db97bfee623ada4091f26c8882e99e8013f283fd9"
+    },
+    {
+      "path": "contracts/ZRM-SC-011.md",
+      "bytes": 4729,
+      "sha256": "56329c0087465d924e6c5c0a637c4c70f33285f3fb3db89295a06b1b535ea42c"
+    },
+    {
+      "path": "contracts/ZRM-SC-012.md",
+      "bytes": 4655,
+      "sha256": "3874501009dfdf773a7b58d5489039f92b06c26d395afc234e2bd5c705f1cdb9"
+    },
+    {
+      "path": "contracts/ZRM-SC-013.md",
+      "bytes": 6833,
+      "sha256": "b451d6233c97b02ec54e4a7d68b70cf26026bb39764f30b476e1637593355938"
+    },
+    {
+      "path": "docs/AUTHORITY_MAP.md",
+      "bytes": 8017,
+      "sha256": "11a8fdc63290133820ece1ca1bf0a67646edadd50a3a274e41ff3e42c3958f6f"
+    },
+    {
+      "path": "docs/SECURITY_REVIEW_REMEDIATION_2026_07.md",
+      "bytes": 6345,
+      "sha256": "54d1e49f2826197dee2a3f41408d17ec4ed7e02ee8c2c6028de37182f95ce8ae"
+    },
+    {
+      "path": "formal/state-machine/semantic_closure_v1/README.md",
+      "bytes": 5903,
+      "sha256": "045533cebc408dcab415a9396f7f9bb0b0dc69f48acc90a697cdf12a1b9d351c"
+    },
+    {
+      "path": "formal/state-machine/semantic_closure_v1/abstraction_and_refinement_obligations.md",
+      "bytes": 11996,
+      "sha256": "07fb51b2eef326b91b0c6dba3d33d4dfc547b14dcf213cfae2298a23b45e01bd"
+    },
+    {
+      "path": "formal/state-machine/semantic_closure_v1/intent_map.json",
+      "bytes": 9175,
+      "sha256": "b1f7783362c3deaef09fc342a6b14325ace75ea479984a9714e305e32f94f982"
+    },
+    {
+      "path": "formal/state-machine/semantic_closure_v1/recursive_abstraction_and_refinement_obligations.md",
+      "bytes": 9353,
+      "sha256": "120a3bab2ff94f7867792b5044724f4336b5243b484614cb9f4ca5a4312ea611"
+    },
+    {
+      "path": "formal/state-machine/semantic_closure_v1/recursive_semantic_decisions.json",
+      "bytes": 6153,
+      "sha256": "576d90367a2474df207f80056d69e291f970ecd053ba9b1c1797853b045f3a8f"
+    },
+    {
+      "path": "formal/state-machine/semantic_closure_v1/semantic_decisions.json",
+      "bytes": 10319,
+      "sha256": "76ff0cd9d47c299d95da24f43fbbd53a9abcbb080bd07c117e115cbb09edb7cb"
+    },
+    {
+      "path": "reference_models/RESOURCE_KIND_POLICY_V1_ORACLE.md",
+      "bytes": 11666,
+      "sha256": "98e3f1950b586a48faf0a4684d1d779f18b74f911671e784af6626c2eb84d2a3"
+    },
+    {
+      "path": "reference_models/RESOURCE_KIND_POLICY_V1_RFC0003_PROPOSED.md",
+      "bytes": 14052,
+      "sha256": "2423be19f2c07389fbeb24b77989b71cf2afeeb2aee22cada19734a639627905"
+    },
+    {
+      "path": "reference_models/resource_kind_policy_v1_counterexamples.json",
+      "bytes": 15077,
+      "sha256": "d5fe2b126748cccce346518310a9329b8709d678fa4bf454e5176af978fda334"
+    },
+    {
+      "path": "reference_models/resource_kind_policy_v1_rfc0003_proposed_counterexamples.json",
+      "bytes": 18983,
+      "sha256": "c6f3ba775098eb5a2e66558efdbfa9f4900ea31d81ceea30d7418e2b144d12fd"
+    },
+    {
+      "path": "reviews/RFC-0001-semantic-design-packet.md",
+      "bytes": 9905,
+      "sha256": "166f2522142a843633b2a7d26a016de95b048c2b733b6bf081400af233923b31"
+    },
+    {
+      "path": "reviews/RFC-0002-semantic-design-packet.md",
+      "bytes": 8982,
+      "sha256": "3bf7ad8eced8c4efa861af0d43c43958024f8932d1cbf2c31e9ab5848be0900c"
+    },
+    {
+      "path": "rfcs/README.md",
+      "bytes": 1532,
+      "sha256": "819dd3780c5452cda6b0ef809d70b2779cc873dfa3d24bf5b7908192e706dc3f"
+    },
+    {
+      "path": "rfcs/RFC-0001-policy-context-fact-and-commit-authority.md",
+      "bytes": 38774,
+      "sha256": "f9b690722180f8ffaf4c3a27f937b8181545dc446828799d98df07025f371431"
+    },
+    {
+      "path": "rfcs/RFC-0002-recursive-semantic-journal-composition.md",
+      "bytes": 28166,
+      "sha256": "f4f84396d864ef43dbc20f4ca9d08bec9ca1b4375a955d5b110a7ee062896274"
+    },
+    {
+      "path": "rfcs/RFC-0003-security-review-api-quarantine.md",
+      "bytes": 16440,
+      "sha256": "d02b473636ade9b81b71df7a44c394a5a957236815394623638b08f2b28318a1"
     },
     {
       "path": "templates/ADR_TEMPLATE.md",
@@ -79,21 +239,34 @@
     },
     {
       "path": "templates/PR_TEMPLATE.md",
-      "bytes": 2376,
-      "sha256": "6044c8f6dc6865f79e8d7729ea42ba948871f755bbbf20d9a4915c4c7ba12a98"
+      "bytes": 4039,
+      "sha256": "77b88b63f95ebe89954f1337fb7da2911d74bc9870463176bfa5ec2268faf555"
     },
     {
       "path": "templates/RFC_TEMPLATE.md",
       "bytes": 2625,
       "sha256": "276dfce2fdea4c3a04eb3c867c49153e8c1fde74baa3b719f793f850362dc6bc"
+    },
+    {
+      "path": "templates/SEMANTIC_CONTRACT_TEMPLATE.md",
+      "bytes": 4606,
+      "sha256": "2f1ecc68a00bb227a09269b7eb2494f37bdad3ea20701c6302eb55389b263601"
+    },
+    {
+      "path": "templates/SEMANTIC_REVIEW_PACKET_TEMPLATE.md",
+      "bytes": 5944,
+      "sha256": "2fd164f6140724c24a61134448de2d2dcea91e0773449b85a29edcd9087fa546"
     }
   ],
   "non_claims": [
-    "no complete semantic kernel; WP3a is structural and WP3b establishes only policy-independent intrinsic resource facts",
-    "ResourceWireV1 is a frozen-draft WP1 codec; IntrinsicResourceV1 adds no new canonical ABI, and there is no stable package-wide ABI",
+    "no complete semantic kernel; WP3a through WP3c establish only structural roles, policy-independent intrinsic facts, and consistency within a caller-proposed partition",
+    "ResourceWireV1 is a frozen-draft WP1 codec; IntrinsicResourceV1 and RoleBoundIntrinsicResourceV1 add no new canonical ABI, and there is no stable package-wide ABI",
     "no final policy-valid ResourceV1; zero-quantity marker permission is not expressible by the current policy schema",
     "no canonical policy bytes, policy hashes, authenticated policy activation, or trusted validation context",
     "no complete policy migration or rollback design",
+    "semantic contracts are derived review oracles and do not constitute implementation, verification, audit, or production evidence",
+    "RFC-0001, RFC-0002, and RFC-0003 are unapproved Class E drafts and create no policy, verifier, commit, release, or production authority",
+    "internal bounded-model evidence is corroborative, finite, assumption-bound, and not publicly replayable from this package",
     "no security audit",
     "no production authority",
     "no privacy or physical-resource truth claim"

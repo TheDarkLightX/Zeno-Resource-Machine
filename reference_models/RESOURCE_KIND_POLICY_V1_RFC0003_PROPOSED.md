@@ -1,10 +1,10 @@
-# ResourceKindPolicyV1 RFC-0002 proposed quantity oracle
+# ResourceKindPolicyV1 RFC-0003 proposed quantity oracle
 
-**Status:** proposed semantic amendment; non-normative unless RFC-0002 is
+**Status:** proposed semantic amendment; non-normative unless RFC-0003 is
 accepted through the repository's governed RFC process
 
 This artifact is separate from the frozen prior-specification oracle. It does
-not reinterpret or replace that baseline. It makes the RFC-0002 review proposal
+not reinterpret or replace that baseline. It makes the RFC-0003 review proposal
 executable so reviewers can inspect the exact state-space delta before deciding
 whether to accept the amendment.
 
@@ -15,15 +15,15 @@ Change classification:
   Class C proposed reference-semantic artifact. It changes no production or
   authority path and cannot make its own proposal normative.
 Goal:
-  Encode the supplied RFC-0002 quantity, lifecycle, and reason-precedence
+  Encode the supplied RFC-0003 quantity, lifecycle, and reason-precedence
   amendment beside the frozen baseline, then prove the bounded differential
   corpus contains exactly the intended delta.
 Affected crates/modules:
-  New Python-only RFC-0002 artifacts under reference_models/. Existing baseline
+  New Python-only RFC-0003 artifacts under reference_models/. Existing baseline
   oracle files remain byte-for-byte unchanged.
 Exact typed statement or API:
-  decide_rfc0002_policy_construction(PolicyCandidateV1) -> ProposedDecision
-  decide_rfc0002_resource_quantity(
+  decide_rfc0003_policy_construction(PolicyCandidateV1) -> ProposedDecision
+  decide_rfc0003_resource_quantity(
     PolicyCandidateV1,
     ResourceQuantityCandidateV1,
   ) -> ProposedDecision
@@ -43,7 +43,7 @@ Canonical bytes or hashes affected:
   authority bytes.
 Compatibility/versioning impact:
   If accepted, lifecycle policies with quantity_max 0 or greater than 1 move
-  from baseline construction acceptance to rejection. RFC-0002 proposes an
+  from baseline construction acceptance to rejection. RFC-0003 proposes an
   in-place pre-alpha amendment because no canonical policy bytes, durable policy
   identity, or activation path exists; reviewers must approve that precondition.
 Tests to add first:
@@ -61,7 +61,7 @@ Performance/resource bounds:
   Constant time and space per decision. Differential tests enumerate a fixed
   bounded domain.
 Non-claims and known gaps:
-  RFC-0002 is not accepted by this artifact. No policy codec/hash, migration,
+  RFC-0003 is not accepted by this artifact. No policy codec/hash, migration,
   authenticated activation, transition accounting, proof, or runtime refinement
   is established. CBC status remains unchanged.
 
@@ -76,7 +76,7 @@ Invalid states prevented:
   zero policy-bound quantities, unlike units, over-maximum quantities, reversed
   windows, and out-of-width integers.
 Extension point or closed-set reason:
-  AccountingMode remains the closed v1 set. RFC-0002 changes one mode's
+  AccountingMode remains the closed v1 set. RFC-0003 changes one mode's
   construction invariant and does not add an enum variant.
 Alternatives rejected:
   Editing the frozen baseline; deriving behavior from production code; treating
@@ -84,7 +84,7 @@ Alternatives rejected:
   decision relation.
 Pattern-specific failure modes:
   Callers may mistake a proposed decision for current normative behavior. File,
-  type, function, reason, and documentation names therefore carry RFC0002 or
+  type, function, reason, and documentation names therefore carry RFC0003 or
   Proposed labels.
 Enforcement and tests:
   Standard-library unit tests, machine-readable counterexample replay, baseline
@@ -93,9 +93,9 @@ Technical AI-review status:
   Proposed and awaiting independent semantic review and governed RFC decision.
 ```
 
-## RFC-0002 candidate amendment
+## RFC-0003 candidate amendment
 
-The proposed model takes the following RFC-0002 candidate rules as input rather
+The proposed model takes the following RFC-0003 candidate rules as input rather
 than deriving them from an implementation:
 
 1. V1 has no marker permission. Every policy-bound resource quantity is
@@ -161,7 +161,7 @@ the isolated oracle track at
 
 The comparison domain uses otherwise-valid v1 candidates and matching units.
 
-| Surface | Frozen baseline | RFC-0002 proposal | Delta class |
+| Surface | Frozen baseline | RFC-0003 proposal | Delta class |
 | --- | --- | --- | --- |
 | lifecycle policy max 0 | accept | reject lifecycle maximum | acceptance-set removal |
 | lifecycle policy max 1 | accept | accept | none |
@@ -181,7 +181,7 @@ acceptance may appear outside the baseline relation.
 
 ## Remaining proposal ambiguities
 
-1. RFC-0002 selects an in-place pre-alpha amendment on the recorded condition
+1. RFC-0003 selects an in-place pre-alpha amendment on the recorded condition
    that no canonical or durable lifecycle policy identity exists. Review must
    verify and approve that condition; finding any durable external record
    requires a new schema/version and migration design.
@@ -192,7 +192,7 @@ acceptance may appear outside the baseline relation.
 4. A non-lifecycle maximum of 0 intentionally constructs an empty candidate,
    but no authenticated activation or operational disablement semantics are
    established here.
-5. The proposed in-place v1 disposition is not self-approving. Until RFC-0002
+5. The proposed in-place v1 disposition is not self-approving. Until RFC-0003
    receives the required human and independent approvals, the narrowed
    lifecycle state space remains an implementation candidate only.
 
@@ -200,19 +200,19 @@ acceptance may appear outside the baseline relation.
 
 ```text
 Summary:
-  Added a separate non-normative RFC-0002 proposed oracle, decision tables,
+  Added a separate non-normative RFC-0003 proposed oracle, decision tables,
   machine-readable counterexamples, baseline-integrity checks, and exact bounded
   differential tests. The frozen baseline was not edited. The proposed artifacts
   are reachable on the integration branch through commit 9f2c2de.
 Files changed:
-  reference_models/RESOURCE_KIND_POLICY_V1_RFC0002_PROPOSED.md
-  reference_models/resource_kind_policy_v1_rfc0002_proposed.py
-  reference_models/resource_kind_policy_v1_rfc0002_proposed_counterexamples.json
-  reference_models/tests/test_resource_kind_policy_v1_rfc0002_proposed.py
+  reference_models/RESOURCE_KIND_POLICY_V1_RFC0003_PROPOSED.md
+  reference_models/resource_kind_policy_v1_rfc0003_proposed.py
+  reference_models/resource_kind_policy_v1_rfc0003_proposed_counterexamples.json
+  reference_models/tests/test_resource_kind_policy_v1_rfc0003_proposed.py
 Typed statements/APIs changed:
   No protocol API changed. ProposedDecision, ProposedDecisionKind,
-  ProposedReason, decide_rfc0002_policy_construction, and
-  decide_rfc0002_resource_quantity exist only in the proposed Python model.
+  ProposedReason, decide_rfc0003_policy_construction, and
+  decide_rfc0003_resource_quantity exist only in the proposed Python model.
 Invariants added or preserved:
   V1 positive quantities; exact units; u64/u128 widths; schema then validity then
   lifecycle-constructor precedence; lifecycle maximum exactly 1; unit then
@@ -241,7 +241,7 @@ Commands run and exact results:
     implemented model and differential tests passed.
     Final recorded semantic result: OK, 45 tests.
   python3 -m json.tool
-    reference_models/resource_kind_policy_v1_rfc0002_proposed_counterexamples.json
+    reference_models/resource_kind_policy_v1_rfc0003_proposed_counterexamples.json
     Exit 0; JSON parsed successfully.
   sha256sum over all four baseline oracle artifacts
     All hashes matched the frozen values recorded above.
@@ -255,7 +255,7 @@ Performance/resource-bound impact:
   Each oracle decision is constant time and space. Test enumeration is fixed and
   bounded.
 Remaining gaps and non-claims:
-  RFC-0002 is not accepted by this commit. No Rust production source, Rust test,
+  RFC-0003 is not accepted by this commit. No Rust production source, Rust test,
   implementation branch, or other worktree was inspected. No canonical policy
   codec, durable policy identity, authenticated activation, transition
   accounting, formal proof, runtime comparison, CBC promotion, or release claim

@@ -140,7 +140,7 @@ misread as an authority-bearing result.
 ## Implementation summary
 
 - `ResourceKindPolicyV1` now rejects zero quantities in every v1 accounting
-  mode and enforces the RFC-0002 lifecycle maximum candidate rule with explicit
+  mode and enforces the RFC-0003 lifecycle maximum candidate rule with explicit
   constructor and resource error precedence.
 - Caller-row quote, quote-result, request, compatibility, and admission-success
   APIs are absent from the default external surface. Internal predicates remain
@@ -166,7 +166,7 @@ misread as an authority-bearing result.
 - Default `Debug` formatting is constant-redacted for every opaque 32-byte type
   and every 32-byte array candidate in `ResourceWireV1`; numeric wire scalars
   remain visible.
-- Frozen prior semantics and the RFC-0002 proposal remain separate executable
+- Frozen prior semantics and the RFC-0003 proposal remain separate executable
   Python models with an exact bounded differential corpus. CBC-046 records the
   positive, bounded, mode-canonical dimension obligation.
 
@@ -189,7 +189,7 @@ Normative, assurance, and process artifacts:
 
 - `README.md`, `SPECIFICATION.md`, `AGENTS.md`, `QUALITY_GATES.md`,
   `IMPLEMENTATION_PLAN.md`, `CONFORMANCE_MATRIX.json`, `SECURITY.md`
-- `rfcs/0002-security-review-api-quarantine.md`
+- `rfcs/RFC-0003-security-review-api-quarantine.md`
 - `docs/AUTHORITY_MAP.md`, `docs/SECURITY_REVIEW_REMEDIATION_2026_07.md`,
   `docs/dependency-reviews/sha2-0.11.0.md`
 - the baseline and proposed resource-kind reference-model packages
@@ -267,7 +267,7 @@ the local-gate receipt.
 ## Formal/model evidence
 
 - Frozen prior-specification model: 21 tests.
-- RFC-0002 proposed/differential model: 24 tests. The bounded delta contains
+- RFC-0003 proposed/differential model: 24 tests. The bounded delta contains
   four removed lifecycle policy maxima, three removed lifecycle resource
   states, no added accepted state, and five reason-only changes.
 - Kani: the resource-kind harness ranges over all five modes and full-width
@@ -327,6 +327,37 @@ No production input limit or asymptotic bound changes.
 | full configured mutation | PASS; cargo-mutants 26.0.0; 393 tested, 291 caught, 102 unviable, 0 missed, 0 timed out | `target/security-remediation-mutants` and final receipt |
 | `cargo kani --workspace --quiet` | PASS; 18 harnesses; 0 reachable failures | Kani 0.60.0 output and final receipt |
 | advisory/dependency/BOM gates | PASS; 1,160-advisory database; 14 root and 23 fuzz locked dependencies; deny checks green; 23 components, 65 edges, 1 cryptography component | audit, deny, SBOM, CBOM output and final receipt |
+
+## Default-branch integration refresh
+
+The original security-remediation endpoint `7023db6` was merged locally with
+default-branch endpoint `271c858` after WP3c, WP5, the semantic-contract suite,
+and the semantic-closure RFCs landed. Nine textual conflicts were resolved by
+preserving both the newer mainline semantics and this branch's narrower
+security controls.
+
+The security RFC and its executable proposed oracle were renumbered from the
+branch-local `RFC-0002` identity to `RFC-0003` because main already assigns
+`RFC-0002` to recursive semantic journal composition. The two original
+security evidence receipts remain byte-for-byte unchanged and retain their
+historical branch-local label. A successor integration receipt must bind the
+renamed artifacts and this combined tree; the old receipts do not establish
+the integrated result by themselves.
+
+Focused integrated replay before the merge commit reported:
+
+- 46 live conformance obligations;
+- 48 specification-package payload hashes;
+- 103 tooling tests and 45 reference-model tests;
+- 130 Rust tests and 7 compile-fail doctests;
+- exact architecture allowlists, zero complexity advisories, and the
+  `excellent-candidate` structural tier;
+- clean formatting, compilation, Clippy, documentation, corpus, and repository
+  hygiene checks.
+
+This refresh changes no canonical resource bytes or authority capability. It
+keeps RFC-0003 unapproved, the security remediation unreviewed, and production
+readiness false.
 
 ## Self-review
 
