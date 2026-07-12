@@ -63,14 +63,8 @@ fn try_new_with_reservation(
     if selected_max_bytes > PolicyLimitsV1::MAX_PROOF_ARTIFACT_BYTES {
         return Err(ArtifactErrorV1::LimitExceedsProtocolCeiling);
     }
-    // On a target narrower than `u32`, an unrepresentable selected bound is
-    // larger than every possible slice, so `usize::MAX` preserves the
-    // comparison without a platform-dependent rejection branch.
-    let selected_max_bytes = match usize::try_from(selected_max_bytes) {
-        Ok(limit) => limit,
-        Err(_) => usize::MAX,
-    };
-    if bytes.len() > selected_max_bytes {
+    let byte_len = u64::try_from(bytes.len()).map_err(|_| ArtifactErrorV1::ArtifactTooLarge)?;
+    if byte_len > u64::from(selected_max_bytes) {
         return Err(ArtifactErrorV1::ArtifactTooLarge);
     }
     let mut bounded =
