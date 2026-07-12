@@ -1,0 +1,19 @@
+diff --git a/crates/zrm-kernel/src/role_bound_resource.rs b/crates/zrm-kernel/src/role_bound_resource.rs
+index 77636a1..25d250b 100644
+--- a/crates/zrm-kernel/src/role_bound_resource.rs
++++ b/crates/zrm-kernel/src/role_bound_resource.rs
+@@ -118,7 +118,13 @@ impl CanonicalResourceRolesV1 {
+         &self,
+         resource: &IntrinsicResourceV1,
+     ) -> Result<RoleBoundIntrinsicResourceV1, IntrinsicRoleBindingErrorV1> {
+-        let position = bind_position(self, &resource.resource_id())?;
++        let wrong_present_id = self
++            .consumed()
++            .first()
++            .or_else(|| self.referenced().first())
++            .or_else(|| self.created().first())
++            .ok_or(IntrinsicRoleBindingErrorV1::ResourceAbsentFromRoles)?;
++        let position = bind_position(self, wrong_present_id)?;
+         Ok(RoleBoundIntrinsicResourceV1 {
+             resource: *resource,
+             position,

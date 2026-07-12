@@ -1,0 +1,19 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-fuzz-campaign",
+  "tool": {"name": "cargo-fuzz", "version": "0.13.1", "executable_sha256": "eb5646f86c5e4e77aaf04fb56127eb2c152f2e60fbd110135ef76fbb818dce60"},
+  "command": ["cargo", "+nightly-2025-03-02", "fuzz", "run", "role_bound_intrinsic_v1", "target/wp3c-fuzz-corpus", "--", "-seed=1", "-max_total_time=30", "-max_len=21", "-timeout=5", "-print_final_stats=1"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:41:02-04:00",
+  "duration_ms": 32000,
+  "status": "pass",
+  "scope": ["time-bounded structure-aware WP3c campaign", "present and absent placement", "permutations", "17 valid stale-body mutations"],
+  "result_root": "sha256:01c5797ca8d7a9146790fb89ccbde70c0c6d3bd82cad199be413a842bdce5848",
+  "result_summary": "577769 executions in 31 seconds; cov=414; ft=450; 24 new units; peak RSS=414 MiB; 0 failures",
+  "captured_output_sha256": "01c5797ca8d7a9146790fb89ccbde70c0c6d3bd82cad199be413a842bdce5848",
+  "assumptions": ["internal generated fixtures and partitions fail loudly instead of skipping assertions", "different-body equality is treated as a hash collision failure"],
+  "exclusions": ["configured 900-second nightly duration", "unbounded input exploration"],
+  "non_claims": ["coverage-guided discovery does not prove completeness or hash injectivity"]
+}

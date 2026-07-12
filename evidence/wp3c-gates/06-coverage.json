@@ -1,0 +1,19 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-line-and-branch-coverage",
+  "tool": {"name": "cargo-llvm-cov", "version": "0.8.5", "executable_sha256": "ecbea65f967351c54ed1b32863b3bb583ab074d65c1701c1a13577df5ce784ac"},
+  "command": ["cargo", "+nightly-2025-03-02", "llvm-cov", "--workspace", "--all-features", "--locked", "--branch", "--json", "--output-path", "target/wp3c-evidence-coverage.json"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:31:38-04:00",
+  "duration_ms": 6283,
+  "status": "pass",
+  "scope": ["workspace line and branch coverage", "zrm-policy and zrm-kernel critical crate thresholds", "new WP3c production module"],
+  "result_root": "sha256:3a615210ca4f1b8cc2e430290ea3fb7c93bae54c4aca79d0ba4f582cf3d919f9",
+  "result_summary": "workspace lines=1790/1811 branches=113/114; policy lines=672/674 branches=56/56; kernel lines=423/423 branches=20/20; new module lines=40/40 functions=8/8 and 0 instrumented branch sites",
+  "captured_output_sha256": "157934a2ff1daa805d2296379ac8323211435f620ad75648a7b5dc2d0a6ab2df",
+  "assumptions": ["LLVM source mapping identifies intended files"],
+  "exclusions": ["the pinned branch flag is unstable", "no changed-module branch percentage is claimed because that file has zero instrumented branch sites"],
+  "non_claims": ["coverage does not prove assertion adequacy or correctness"]
+}

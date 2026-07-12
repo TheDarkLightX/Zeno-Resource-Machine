@@ -3,8 +3,8 @@
   "package": "Zeno Resource Machine high-assurance specification package",
   "version": "0.1.0-draft.2",
   "date": "2026-07-12",
-  "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a structural resource roles, WP3b intrinsic resource construction, a derived semantic-contract review suite, and two unapproved Class E semantic-closure RFCs; no release or production claim",
-  "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model, WP3a structural-role, and WP3b intrinsic-resource candidates; semantic contracts, RFC drafts, model-obligation summaries, and independent-review packets are design or process oracles, not implementation conformance evidence",
+  "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a through WP3c resource stages, a derived semantic-contract review suite, and two unapproved Class E semantic-closure RFCs; no release or production claim",
+  "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model and WP3a through WP3c resource-stage candidates; semantic contracts, RFC drafts, model-obligation summaries, and independent-review packets are design or process oracles, not implementation conformance evidence",
   "manifest_scope": "specification-package payload, including normative sources and derived semantic-review controls; code, tests, worklogs, and evidence records are outside this inventory",
   "digest_algorithm": "SHA-256",
   "path_order": "UTF-8 bytewise lexicographic",
@@ -24,8 +24,8 @@
     },
     {
       "path": "CONFORMANCE_MATRIX.json",
-      "bytes": 73721,
-      "sha256": "6b9fec75d98fc4be238efc80291358c848c41835cfc9ca4a72257611e2cadf2d"
+      "bytes": 76880,
+      "sha256": "847ee844eee749039fbd4c6150e0819670ee406dceb7c48b3d6148fb52d47437"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -49,8 +49,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 21851,
-      "sha256": "a5ec30e68799266aa857a743405eba66aa845f6475fbb36a7d82b67d0eedb5bf"
+      "bytes": 23008,
+      "sha256": "d7f6108b240190cb9b1c562636746d261f4497d647562fc4d64f57d1ae1c9c8c"
     },
     {
       "path": "REVIEW_CHECKLIST.md",
@@ -224,8 +224,8 @@
     }
   ],
   "non_claims": [
-    "no complete semantic kernel; WP3a is structural and WP3b establishes only policy-independent intrinsic resource facts",
-    "ResourceWireV1 is a frozen-draft WP1 codec; IntrinsicResourceV1 adds no new canonical ABI, and there is no stable package-wide ABI",
+    "no complete semantic kernel; WP3a through WP3c establish only structural roles, policy-independent intrinsic facts, and consistency within a caller-proposed partition",
+    "ResourceWireV1 is a frozen-draft WP1 codec; IntrinsicResourceV1 and RoleBoundIntrinsicResourceV1 add no new canonical ABI, and there is no stable package-wide ABI",
     "no final policy-valid ResourceV1; zero-quantity marker permission is not expressible by the current policy schema",
     "no canonical policy bytes, policy hashes, authenticated policy activation, or trusted validation context",
     "no complete policy migration or rollback design",

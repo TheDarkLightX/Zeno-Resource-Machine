@@ -1,0 +1,19 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-kani",
+  "tool": {"name": "cargo-kani", "version": "0.60.0", "executable_sha256": "9b4d25b0b1c500d5d33f5adc0ec8ca3d5fd9cae5cd89d2f183dc262f7f105a54"},
+  "command": ["cargo", "+1.87.0", "kani", "--workspace"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:34:23-04:00",
+  "duration_ms": 370000,
+  "status": "pass",
+  "scope": ["17 workspace harnesses", "WP3c fixed four-member partition", "symbolic query over four present IDs and one absent ID"],
+  "result_root": "sha256:5ee42ac650f27da61c9bb8e0aa55d1ba9c9127e5dd69fe55d2b55cee91bc07e5",
+  "result_summary": "17 harnesses verified; 0 failures; WP3c harness 856 checks with 7 unreachable checks and 4/4 covers satisfied",
+  "captured_output_sha256": "5ee42ac650f27da61c9bb8e0aa55d1ba9c9127e5dd69fe55d2b55cee91bc07e5",
+  "assumptions": ["each harness assumption defines its bounded domain", "expected-valid fixture construction is asserted as a proof obligation"],
+  "exclusions": ["arbitrary partitions", "256-entry WP3c partitions", "SHA-256", "unbounded state spaces"],
+  "non_claims": ["Kani success is limited to the stated harness predicates and bounds"]
+}

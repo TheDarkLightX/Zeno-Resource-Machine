@@ -1,0 +1,19 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-cargo-audit-fuzz",
+  "tool": {"name": "cargo-audit", "version": "0.22.1", "executable_sha256": "9899e591c3abee79bd54e88c3b03d27bcf8dd073fb1690af9cd3089be1267a67"},
+  "command": ["cargo", "+1.87.0", "audit", "--deny", "warnings", "--file", "fuzz/Cargo.lock"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:38:12-04:00",
+  "duration_ms": 1032,
+  "status": "pass",
+  "scope": ["fuzz/Cargo.lock", "23 dependency records", "1159 loaded advisories"],
+  "result_root": "sha256:ad62563997471cb4932cc2d241b2803d9a79ed170953c64bd15d3c58bad31164",
+  "result_summary": "no vulnerability warning or error was reported",
+  "captured_output_sha256": "ad62563997471cb4932cc2d241b2803d9a79ed170953c64bd15d3c58bad31164",
+  "assumptions": ["the fetched RustSec advisory database was available to the pinned tool"],
+  "exclusions": ["unpublished vulnerabilities", "fuzzer runtime correctness"],
+  "non_claims": ["advisory cleanliness does not prove supply-chain safety"]
+}

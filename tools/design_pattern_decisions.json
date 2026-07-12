@@ -22,7 +22,8 @@
       ],
       "enforcement_refs": [
         "tools/check_code_quality.py",
-        "tools/rust_quality.py"
+        "tools/rust_quality.py",
+        "crates/zrm-kernel/src/role_bound_resource.rs"
       ],
       "review_triggers": [
         "A new boolean field or parameter represents verification, validity, authorization, commitment, acceptance, or trust.",
@@ -85,7 +86,8 @@
       "enforcement_refs": [
         "tools/check_code_quality.py",
         "crates/zrm-types/src/lib.rs",
-        "crates/zrm-kernel/src/resource.rs"
+        "crates/zrm-kernel/src/resource.rs",
+        "crates/zrm-kernel/src/role_bound_resource.rs"
       ],
       "review_triggers": [
         "An authority-relevant value gains public fields, Default, a string representation, or a raw byte alias.",

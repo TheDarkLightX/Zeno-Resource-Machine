@@ -1,0 +1,20 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-architecture",
+  "tool": {"name": "python3", "version": "3.12.3", "executable_sha256": "1643dacd9feaedc58f3cc581e4d22577dfe25c09b10282936186ccf0f2e61118"},
+  "command": ["python3", "tools/check_architecture.py"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:35:04-04:00",
+  "duration_ms": 20,
+  "status": "pass",
+  "scope": ["exact internal and external dependency allowlists"],
+  "result_root": "sha256:a2ab3ea8e8cfb2a5b6493e143841142c979f854b4b4310259f3fd94df0258f66",
+  "result_summary": "all dependency allowlists matched",
+  "captured_output_sha256": "a2ab3ea8e8cfb2a5b6493e143841142c979f854b4b4310259f3fd94df0258f66",
+  "script_sha256": "779cf16b3648075e2972ddf32df4fa6756640743fb2d83264853988cdf751b49",
+  "assumptions": ["Cargo manifests are the dependency source of truth"],
+  "exclusions": ["runtime behavior"],
+  "non_claims": ["dependency direction alone does not prove semantic isolation"]
+}

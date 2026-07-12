@@ -1,0 +1,20 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-conformance",
+  "tool": {"name": "python3", "version": "3.12.3", "executable_sha256": "1643dacd9feaedc58f3cc581e4d22577dfe25c09b10282936186ccf0f2e61118"},
+  "command": ["python3", "tools/check_conformance.py"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:49:15-04:00",
+  "duration_ms": 245,
+  "status": "pass",
+  "scope": ["45 CBC obligations", "live references", "promotion states", "dependency graph"],
+  "result_root": "sha256:23ab9f3de51c01208957eb7179b3e0eb751de092cde0626551ed9ebe6a96bcc6",
+  "result_summary": "45 obligations passed live-anchor, promotion-state, and acyclic-dependency checks",
+  "captured_output_sha256": "23ab9f3de51c01208957eb7179b3e0eb751de092cde0626551ed9ebe6a96bcc6",
+  "script_sha256": "f9379324aa35464c07fb656c59dd97952b8f7ebb0a6549538169cf06004b8456",
+  "assumptions": ["matrix references are repository-relative"],
+  "exclusions": ["truth of external evidence"],
+  "non_claims": ["matrix consistency does not promote WP3c"]
+}
