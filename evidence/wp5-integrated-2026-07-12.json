@@ -56,11 +56,11 @@
     },
     {
       "path": "evidence/wp5-gates/07-coverage.json",
-      "sha256": "c5e6795de4902eebcc68dab6ca4e552b9e8aa3ddd4605fd3c04153de08841cc8"
+      "sha256": "54f443ed00303ea3e39abcb05cbdbe9cb1fc0da6e084680a3f488dd5b6a42d8c"
     },
     {
       "path": "evidence/wp5-gates/08-generated-mutation.json",
-      "sha256": "d6ab0a976718643f1a79f549af37c6af9d8830f5e394c20ad18eaf24b3a3c445"
+      "sha256": "9b4667d858661f2f9c9df5e2e337b88763113bd44db85a88c309863dff4d2e24"
     },
     {
       "path": "evidence/wp5-gates/09-manual-mutants.json",

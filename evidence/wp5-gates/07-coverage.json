@@ -19,7 +19,7 @@
     "--branch",
     "--json",
     "--output-path",
-    "/tmp/wp5-integrated-coverage.json",
+    "target/wp5-integrated-coverage.json",
     "--locked"
   ],
   "environment_policy_root": "sha256:68344fafd9cb9be0b9f6621c43238850ce65abf3f62c0f6eedc71d9d86eb2432",
@@ -29,9 +29,9 @@
   "scope": [
     "zrm-verifier-api artifact boundary"
   ],
-  "result_root": "sha256:7c26289286a24d6b27237e665c9a9877936b27afe06bd1ddc6de1936ea9eb214",
+  "result_root": "sha256:a0f9e016c3b942f85112020e7b252691a047083566fdbea0cf97ed16b3e2e90b",
   "result_summary": "artifact.rs: 69/70 lines, 4/4 branches, 14/15 functions, 44/51 regions",
-  "captured_output_sha256": "7c26289286a24d6b27237e665c9a9877936b27afe06bd1ddc6de1936ea9eb214",
+  "captured_output_sha256": "a0f9e016c3b942f85112020e7b252691a047083566fdbea0cf97ed16b3e2e90b",
   "assumptions": [
     "the replay started from the clean source revision and restored every manual mutant"
   ],

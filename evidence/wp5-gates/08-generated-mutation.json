@@ -23,7 +23,7 @@
     "--build-timeout",
     "60",
     "--output",
-    "/tmp/wp5-mutants-integrated"
+    "target/wp5-mutants-integrated"
   ],
   "environment_policy_root": "sha256:68344fafd9cb9be0b9f6621c43238850ce65abf3f62c0f6eedc71d9d86eb2432",
   "started_at": null,
@@ -32,9 +32,9 @@
   "scope": [
     "zrm-verifier-api production source"
   ],
-  "result_root": "sha256:bddbc229a42d88812fe58692d9fbd97e8c62fb7817515d182f41463118e87127",
+  "result_root": "sha256:7f86bfda330946caedc0e656b0acb66f82f65e75fa5fe8b0ac64b6e094c23323",
   "result_summary": "19 generated: 12 caught, 7 compiler-unviable, 0 missed, 0 timed out",
-  "captured_output_sha256": "bddbc229a42d88812fe58692d9fbd97e8c62fb7817515d182f41463118e87127",
+  "captured_output_sha256": "7f86bfda330946caedc0e656b0acb66f82f65e75fa5fe8b0ac64b6e094c23323",
   "assumptions": [
     "the replay started from the clean source revision and restored every manual mutant"
   ],

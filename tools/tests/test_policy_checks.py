@@ -15,7 +15,7 @@ from tools.check_conformance import (
     validate_reference,
 )
 from tools.check_coverage import CoverageError, coverage_totals, enforce_thresholds
-from tools.check_repository_hygiene import action_pin_failures, repository_files
+from tools.check_repository_hygiene import CONTEXT_MARKERS, action_pin_failures, repository_files
 
 
 class ConformanceHelperTests(unittest.TestCase):
@@ -114,6 +114,11 @@ class RepositoryHygieneTraversalTests(unittest.TestCase):
             readme.write_text("public payload\n")
 
             self.assertEqual(repository_files(root), [readme])
+
+    def test_temporary_absolute_paths_are_publication_markers(self) -> None:
+        """Generated evidence must use repository-relative ignored paths."""
+
+        self.assertIn("/" + "tmp" + "/", CONTEXT_MARKERS)
 
 
 class CoveragePolicyTests(unittest.TestCase):

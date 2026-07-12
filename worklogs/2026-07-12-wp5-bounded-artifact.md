@@ -200,13 +200,13 @@ PASS
 
 cargo +nightly-2025-03-02 llvm-cov --package zrm-verifier-api \
   --all-targets --branch --json \
-  --output-path /tmp/wp5-integrated-coverage.json --locked
+  --output-path target/wp5-integrated-coverage.json --locked
 PASS for artifact.rs: 69/70 lines (98.57%); 4/4 branches (100%);
 14/15 functions (93.33%); 44/51 regions (86.27%)
 
 cargo +1.87.0 mutants --in-place -p zrm-verifier-api \
   --file 'crates/zrm-verifier-api/src/*.rs' \
-  --timeout 20 --build-timeout 60 --output /tmp/wp5-mutants-integrated
+  --timeout 20 --build-timeout 60 --output target/wp5-mutants-integrated
 PASS: 19 generated; 12 caught; 7 compiler-unviable; 0 missed; 0 timed out
 
 manual refusal mutants
