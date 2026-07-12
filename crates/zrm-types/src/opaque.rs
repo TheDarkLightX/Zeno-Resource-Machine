@@ -31,16 +31,8 @@ impl NonZeroBytes32 {
     }
 }
 
-fn write_hex(
-    type_name: &str,
-    bytes: &[u8; DIGEST_BYTES],
-    formatter: &mut fmt::Formatter<'_>,
-) -> fmt::Result {
-    write!(formatter, "{type_name}(")?;
-    for byte in bytes {
-        write!(formatter, "{byte:02x}")?;
-    }
-    formatter.write_str(")")
+fn write_redacted(type_name: &str, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+    write!(formatter, "{type_name}([REDACTED])")
 }
 
 // Every type below has the same representation invariant. Centralizing that
@@ -80,7 +72,7 @@ macro_rules! define_nonzero_bytes32 {
 
         impl fmt::Debug for $name {
             fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
-                write_hex(stringify!($name), self.as_bytes(), formatter)
+                write_redacted(stringify!($name), formatter)
             }
         }
     };
@@ -283,7 +275,7 @@ define_nonzero_bytes32!(
 
 #[cfg(test)]
 mod tests {
-    use super::{CryptoSuiteId, MachineId, ZeroValueError};
+    use super::{CryptoSuiteId, MachineId, ResourceNonce, ZeroValueError};
 
     #[test]
     fn opaque_identifier_rejects_all_zero_bytes() {
@@ -296,10 +288,21 @@ mod tests {
         let identifier = MachineId::try_from(bytes)?;
         assert_eq!(identifier.as_bytes(), &bytes);
         assert_eq!(identifier.into_bytes(), bytes);
-        assert_eq!(
-            std::format!("{identifier:?}"),
-            std::format!("MachineId({})", "5a".repeat(32))
-        );
+        assert_eq!(std::format!("{identifier:?}"), "MachineId([REDACTED])");
+        Ok(())
+    }
+
+    #[test]
+    fn resource_nonce_debug_is_value_independent_and_bytes_remain_explicitly_available()
+    -> Result<(), ZeroValueError> {
+        let first_bytes = [0xa5; 32];
+        let second_bytes = [0x5a; 32];
+        let first = ResourceNonce::try_from(first_bytes)?;
+        let second = ResourceNonce::try_from(second_bytes)?;
+        assert_eq!(std::format!("{first:?}"), "ResourceNonce([REDACTED])");
+        assert_eq!(std::format!("{first:?}"), std::format!("{second:?}"));
+        assert_eq!(first.as_bytes(), &first_bytes);
+        assert_eq!(second.into_bytes(), second_bytes);
         Ok(())
     }
 

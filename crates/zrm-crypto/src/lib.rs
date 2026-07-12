@@ -2,6 +2,16 @@
 //!
 //! This crate will expose only closed, versioned protocol hash operations. It
 //! does not accept caller-selected authority domains or runtime hash suites.
+//!
+//! Resource identifiers are derived only at the canonical codec boundary. The
+//! former raw-slice operation is intentionally absent from this public API:
+//!
+//! ```compile_fail
+//! use zrm_crypto::derive_resource_id_from_canonical_wire;
+//!
+//! let malformed_same_length_bytes = [0_u8; 595];
+//! let _ = derive_resource_id_from_canonical_wire(&malformed_same_length_bytes);
+//! ```
 
 #![no_std]
 
@@ -11,15 +21,10 @@ extern crate std;
 use core::fmt;
 
 use sha2::{Digest, Sha256};
-use zrm_types::{
-    CryptoSuiteId, DomainId, MachineId, Nullifier, RESOURCE_WIRE_V1_ABSENT_EXPIRY_BYTES,
-    RESOURCE_WIRE_V1_PRESENT_EXPIRY_BYTES, ResourceId, ZeroValueError,
-};
+use zrm_types::{CryptoSuiteId, DomainId, MachineId, Nullifier, ResourceId, ZeroValueError};
 
 const SHA256_SUITE_DOMAIN: &[u8] = b"zrm.crypto_suite.sha256.v1";
-const RESOURCE_V1_DOMAIN: &[u8] = b"zrm.resource.v1";
 const TRANSPARENT_NULLIFIER_V1_DOMAIN: &[u8] = b"zrm.nullifier.transparent.v1";
-const INNER_LENGTH_BYTES: u32 = 4;
 const TRANSPARENT_NULLIFIER_PAYLOAD_BYTES: u32 = 96;
 
 /// Normative bytes of `SHA256_REFERENCE_V1_ID`.
@@ -31,7 +36,10 @@ pub const SHA256_REFERENCE_V1_ID_BYTES: [u8; 32] = [
 /// Failure while framing or converting a closed protocol hash operation.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum HashConstructionError {
-    /// A canonical resource wire length was neither 595 nor 603 bytes.
+    /// A resource wire length was neither 595 nor 603 bytes.
+    ///
+    /// Retained so callers matching the pre-alpha error enum do not need an
+    /// unrelated migration when raw resource hashing leaves this crate.
     InvalidResourceWireLength(usize),
     /// A host length did not fit the protocol's explicit `u16` or `u32` frame.
     LengthOverflow,
@@ -87,40 +95,6 @@ pub fn sha256_reference_suite_id() -> Result<CryptoSuiteId, HashConstructionErro
     CryptoSuiteId::try_from(finish_hash(hasher)).map_err(map_zero_digest)
 }
 
-/// Derives `ResourceId` from already canonical `ResourceWireV1` bytes.
-///
-/// This operation validates the two frozen wire lengths and supplies both
-/// required length frames. Canonical parsing remains the responsibility of
-/// `zrm-codec`; hashing arbitrary same-length bytes does not grant authority.
-///
-/// # Errors
-///
-/// Returns [`HashConstructionError::InvalidResourceWireLength`] for any other
-/// length, [`HashConstructionError::LengthOverflow`] for an unrepresentable
-/// frame, or [`HashConstructionError::AllZeroDigest`] for a prohibited digest.
-pub fn derive_resource_id_from_canonical_wire(
-    canonical_wire: &[u8],
-) -> Result<ResourceId, HashConstructionError> {
-    let wire_length = canonical_wire.len();
-    if wire_length != RESOURCE_WIRE_V1_ABSENT_EXPIRY_BYTES
-        && wire_length != RESOURCE_WIRE_V1_PRESENT_EXPIRY_BYTES
-    {
-        return Err(HashConstructionError::InvalidResourceWireLength(
-            wire_length,
-        ));
-    }
-
-    let wire_length =
-        u32::try_from(wire_length).map_err(|_| HashConstructionError::LengthOverflow)?;
-    let payload_length = wire_length
-        .checked_add(INNER_LENGTH_BYTES)
-        .ok_or(HashConstructionError::LengthOverflow)?;
-    let mut hasher = start_framed_hash(RESOURCE_V1_DOMAIN, payload_length)?;
-    hasher.update(wire_length.to_be_bytes());
-    hasher.update(canonical_wire);
-    ResourceId::try_from(finish_hash(hasher)).map_err(map_zero_digest)
-}
-
 /// Derives the transparent v0.1 nullifier for one machine/domain/resource.
 ///
 /// This deterministic profile provides replay protection and no privacy.
@@ -146,8 +120,7 @@ pub fn derive_transparent_nullifier_v1(
 #[cfg(test)]
 mod tests {
     use super::{
-        HashConstructionError, SHA256_REFERENCE_V1_ID_BYTES,
-        derive_resource_id_from_canonical_wire, derive_transparent_nullifier_v1,
+        HashConstructionError, SHA256_REFERENCE_V1_ID_BYTES, derive_transparent_nullifier_v1,
         sha256_reference_suite_id,
     };
     use zrm_types::{CryptoSuiteId, DomainId, MachineId, ResourceId, ZeroValueError};
@@ -174,18 +147,6 @@ mod tests {
         assert_eq!(
             std::format!("{}", HashConstructionError::AllZeroDigest),
             "protocol hash produced a prohibited all-zero digest"
-        );
-    }
-
-    #[test]
-    fn resource_id_rejects_noncanonical_wire_lengths() {
-        assert_eq!(
-            derive_resource_id_from_canonical_wire(&[0; 594]),
-            Err(HashConstructionError::InvalidResourceWireLength(594))
-        );
-        assert_eq!(
-            derive_resource_id_from_canonical_wire(&[0; 604]),
-            Err(HashConstructionError::InvalidResourceWireLength(604))
         );
     }
 

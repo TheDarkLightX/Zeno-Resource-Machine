@@ -19,7 +19,7 @@ ALLOWED_INTERNAL_DEPENDENCIES = {
 ALLOWED_EXTERNAL_DEPENDENCIES = {
     "zrm-types": set(),
     "zrm-crypto": {"sha2"},
-    "zrm-codec": set(),
+    "zrm-codec": {"sha2"},
     "zrm-kernel": set(),
     "zrm-policy": set(),
 }

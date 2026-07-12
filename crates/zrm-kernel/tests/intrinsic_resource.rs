@@ -228,3 +228,18 @@ fn every_public_semantic_reject_family_leaves_borrowed_wire_unchanged() {
     invalid_flags.flags = 1;
     assert_reject_preserves_wire(&invalid_flags);
 }
+
+#[test]
+fn intrinsic_resource_debug_cannot_expose_or_fingerprint_nonce() -> Result<(), TestError> {
+    let first = IntrinsicResourceV1::try_from_wire(&fixture(None))?;
+    let mut second_wire = fixture(None);
+    second_wire.nonce = [0xa5; 32];
+    let second = IntrinsicResourceV1::try_from_wire(&second_wire)?;
+
+    assert_ne!(first.resource_id(), second.resource_id());
+    assert_eq!(std::format!("{first:?}"), std::format!("{second:?}"));
+    assert!(std::format!("{first:?}").contains("ResourceNonce([REDACTED])"));
+    assert!(!std::format!("{first:?}").contains(&"0f".repeat(32)));
+    assert!(!std::format!("{second:?}").contains(&"a5".repeat(32)));
+    Ok(())
+}

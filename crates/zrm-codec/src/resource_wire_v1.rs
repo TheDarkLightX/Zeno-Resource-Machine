@@ -1,9 +1,11 @@
 use alloc::vec::Vec;
+use core::fmt;
 
-use zrm_crypto::derive_resource_id_from_canonical_wire;
+use sha2::{Digest, Sha256};
+use zrm_crypto::HashConstructionError;
 use zrm_types::{
     MAX_RESOURCE_BYTES, RESOURCE_WIRE_V1_ABSENT_EXPIRY_BYTES,
-    RESOURCE_WIRE_V1_PRESENT_EXPIRY_BYTES, RejectCodeV1, ResourceId,
+    RESOURCE_WIRE_V1_PRESENT_EXPIRY_BYTES, RejectCodeV1, ResourceId, ZeroValueError,
 };
 
 use crate::cursor::Cursor;
@@ -14,13 +16,23 @@ const SCHEMA_VERSION: u16 = 1;
 const OBJECT_TAG: u16 = 1;
 const FIELD_COUNT: u16 = 18;
 const HEADER_BYTES: usize = 10;
+const RESOURCE_V1_DOMAIN: &[u8] = b"zrm.resource.v1";
+const INNER_LENGTH_BYTES: u32 = 4;
+
+struct Redacted;
+
+impl fmt::Debug for Redacted {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter.write_str("[REDACTED]")
+    }
+}
 
 /// Syntactically canonical version-one resource wire value.
 ///
 /// Every 32-byte field, quantity, epoch, nonce, and flag remains an inert wire
 /// candidate. Later work packages own semantic nonzero, quantity, epoch,
 /// policy, and flag validation.
-#[derive(Clone, Debug, Eq, PartialEq)]
+#[derive(Clone, Eq, PartialEq)]
 pub struct ResourceWireV1 {
     /// Candidate machine identifier bytes.
     pub machine_id: [u8; 32],
@@ -58,6 +70,32 @@ pub struct ResourceWireV1 {
     pub expiry_epoch: Option<u64>,
     /// Candidate raw version-one flags. Semantic construction requires zero.
     pub flags: u32,
+}
+
+impl fmt::Debug for ResourceWireV1 {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("ResourceWireV1")
+            .field("machine_id", &Redacted)
+            .field("domain_id", &Redacted)
+            .field("application_id", &Redacted)
+            .field("resource_kind_id", &Redacted)
+            .field("resource_logic_id", &Redacted)
+            .field("logic_profile_id", &Redacted)
+            .field("resource_kind_policy_id", &Redacted)
+            .field("unit_id", &Redacted)
+            .field("quantity_atoms", &self.quantity_atoms)
+            .field("label_root", &Redacted)
+            .field("value_root", &Redacted)
+            .field("controller_root", &Redacted)
+            .field("policy_root", &Redacted)
+            .field("provenance_root", &Redacted)
+            .field("nonce", &Redacted)
+            .field("created_epoch", &self.created_epoch)
+            .field("expiry_epoch", &self.expiry_epoch)
+            .field("flags", &self.flags)
+            .finish()
+    }
 }
 
 impl ResourceWireV1 {
@@ -108,9 +146,36 @@ impl ResourceWireV1 {
     ///
     /// Returns a typed encoding or closed hash-framing error.
     pub fn resource_id(&self) -> Result<ResourceId, ResourceIdDerivationError> {
-        let wire = self.encode().map_err(ResourceIdDerivationError::Encode)?;
-        derive_resource_id_from_canonical_wire(&wire).map_err(ResourceIdDerivationError::Hash)
+        derive_resource_id(self)
     }
+}
+
+fn derive_resource_id(resource: &ResourceWireV1) -> Result<ResourceId, ResourceIdDerivationError> {
+    let canonical_wire = resource
+        .encode()
+        .map_err(ResourceIdDerivationError::Encode)?;
+    let wire_length = u32::try_from(canonical_wire.len())
+        .map_err(|_| ResourceIdDerivationError::Hash(HashConstructionError::LengthOverflow))?;
+    let payload_length =
+        wire_length
+            .checked_add(INNER_LENGTH_BYTES)
+            .ok_or(ResourceIdDerivationError::Hash(
+                HashConstructionError::LengthOverflow,
+            ))?;
+    let domain_length = u16::try_from(RESOURCE_V1_DOMAIN.len())
+        .map_err(|_| ResourceIdDerivationError::Hash(HashConstructionError::LengthOverflow))?;
+
+    let mut hasher = Sha256::new();
+    hasher.update(domain_length.to_be_bytes());
+    hasher.update(RESOURCE_V1_DOMAIN);
+    hasher.update(payload_length.to_be_bytes());
+    hasher.update(wire_length.to_be_bytes());
+    hasher.update(&canonical_wire);
+    ResourceId::try_from(<[u8; 32]>::from(hasher.finalize())).map_err(map_all_zero_resource_id)
+}
+
+fn map_all_zero_resource_id(_: ZeroValueError) -> ResourceIdDerivationError {
+    ResourceIdDerivationError::Hash(HashConstructionError::AllZeroDigest)
 }
 
 /// Strictly decodes one bounded `ResourceWireV1` value.
