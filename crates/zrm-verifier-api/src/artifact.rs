@@ -3,6 +3,15 @@ use core::fmt;
 
 use zrm_policy::PolicyLimitsV1;
 
+fn reserve_copy_capacity(
+    destination: &mut Vec<u8>,
+    requested_bytes: usize,
+) -> Result<(), ArtifactErrorV1> {
+    destination
+        .try_reserve_exact(requested_bytes)
+        .map_err(|_| ArtifactErrorV1::AllocationLimitExceeded)
+}
+
 /// Failure while bounding one untrusted verifier artifact.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum ArtifactErrorV1 {
@@ -69,9 +78,7 @@ impl BoundedArtifactV1 {
             return Err(ArtifactErrorV1::ArtifactTooLarge);
         }
         let mut bounded = Vec::new();
-        bounded
-            .try_reserve_exact(bytes.len())
-            .map_err(|_| ArtifactErrorV1::AllocationLimitExceeded)?;
+        reserve_copy_capacity(&mut bounded, bytes.len())?;
         bounded.extend_from_slice(bytes);
         Ok(Self { bytes: bounded })
     }
@@ -92,5 +99,23 @@ impl BoundedArtifactV1 {
     #[must_use]
     pub fn is_empty(&self) -> bool {
         self.bytes.is_empty()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use alloc::vec::Vec;
+
+    use super::{reserve_copy_capacity, ArtifactErrorV1};
+
+    #[test]
+    fn capacity_overflow_maps_to_typed_allocation_refusal() {
+        let mut destination = Vec::new();
+
+        assert_eq!(
+            reserve_copy_capacity(&mut destination, usize::MAX),
+            Err(ArtifactErrorV1::AllocationLimitExceeded)
+        );
+        assert!(destination.is_empty());
     }
 }
