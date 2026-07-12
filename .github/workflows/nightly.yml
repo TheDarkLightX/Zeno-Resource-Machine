@@ -19,6 +19,7 @@ jobs:
           persist-credentials: false
       - name: Install pinned fuzz toolchain
         run: |
+          rustup toolchain install 1.87.0 --profile minimal
           rustup toolchain install nightly-2025-03-02 --profile minimal
           cargo +1.87.0 install --locked --version 0.13.1 cargo-fuzz
       - name: Replay and fuzz resource decoder, policy cost, roles, and intrinsic resources

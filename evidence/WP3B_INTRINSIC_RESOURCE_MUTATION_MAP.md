@@ -44,8 +44,8 @@ revision. Ignored build and report outputs did not change `git status`.
 The final focused campaigns ran:
 
 ```text
-cargo +1.87.0 mutants -p zrm-kernel -f crates/zrm-kernel/src/resource.rs --timeout 10 --build-timeout 60 --jobs 2 --output target/mutants-wp3b-final
-cargo +1.87.0 mutants -p zrm-kernel -f crates/zrm-kernel/src/resource/error.rs --timeout 10 --build-timeout 60 --jobs 2 --output target/mutants-wp3b-error-final
+cargo +1.87.0 mutants -p zrm-kernel -f crates/zrm-kernel/src/resource.rs --timeout 10 --build-timeout 60 --jobs 2 --output target/mutants-wp3b-evidence-resource
+cargo +1.87.0 mutants -p zrm-kernel -f crates/zrm-kernel/src/resource/error.rs --timeout 10 --build-timeout 60 --jobs 2 --output target/mutants-wp3b-evidence-error
 ```
 
 They tested 36 candidates: 12 were caught, 24 were unviable, zero were
@@ -56,7 +56,7 @@ substitution. The unmutated baselines passed.
 The full workspace campaign ran:
 
 ```text
-cargo +1.87.0 mutants --workspace --timeout 10 --build-timeout 60 --jobs 2 --output target/mutants-wp3b-workspace
+cargo +1.87.0 mutants --workspace --timeout 10 --build-timeout 60 --jobs 2 --output target/mutants-wp3b-evidence-workspace
 ```
 
 It tested 380 candidates: 280 were caught, 100 were unviable, zero were
