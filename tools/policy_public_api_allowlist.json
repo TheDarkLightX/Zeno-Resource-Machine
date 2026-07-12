@@ -1,0 +1,24 @@
+{
+  "schema": "zrm/compiler-public-api-allowlist/v1",
+  "package": "zrm-policy",
+  "toolchain": "1.87.0",
+  "rustdoc_format_version": 43,
+  "profiles": {
+    "default": {
+      "rustdoc_flags": [],
+      "sha256": "2a06081c7f4abae19665eff3b3bf063c9fd73751ac2d0674b673c25d11684d1d"
+    },
+    "fuzzing": {
+      "rustdoc_flags": [
+        "--cfg",
+        "fuzzing"
+      ],
+      "sha256": "0556da7d40303d7bf60379b094584dcb75bad95fc7bc0c256766f26a21be9287"
+    }
+  },
+  "non_claims": [
+    "The hash binds pinned rustdoc JSON bytes for the complete compiler-visible package API, including hidden documented items; it is not a protocol hash or authority capability.",
+    "RUSTC_BOOTSTRAP enables pinned rustdoc JSON generation only and grants no production or release authority.",
+    "Updating either digest is a Class E review action and requires inspecting the semantic API delta."
+  ]
+}

@@ -29,6 +29,8 @@ jobs:
           cargo +nightly-2025-03-02 fuzz run resource_wire_v1_decode -- -seed=1 -max_total_time=900 -max_len=16385 -timeout=5
           cargo +nightly-2025-03-02 fuzz run policy_cost_v1 -- -seed=1 -runs=3 -max_len=88 -timeout=5
           cargo +nightly-2025-03-02 fuzz run policy_cost_v1 -- -seed=1 -max_total_time=900 -max_len=88 -timeout=5
+          cargo +nightly-2025-03-02 fuzz run policy_resource_dimensions_v1 -- -seed=1 -runs=11 -max_len=34 -timeout=5
+          cargo +nightly-2025-03-02 fuzz run policy_resource_dimensions_v1 -- -seed=1 -max_total_time=900 -max_len=34 -timeout=5
           cargo +nightly-2025-03-02 fuzz run resource_roles_v1 -- -seed=1 -runs=10 -max_len=24684 -timeout=5
           cargo +nightly-2025-03-02 fuzz run resource_roles_v1 -- -seed=1 -max_total_time=900 -max_len=24684 -timeout=5
           cargo +nightly-2025-03-02 fuzz run intrinsic_resource_v1 -- -seed=1 -runs=18 -max_len=32 -timeout=5

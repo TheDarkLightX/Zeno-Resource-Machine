@@ -55,6 +55,13 @@ Critical reports include:
 - denial of service before byte/count/depth/resource limits apply;
 - leakage of witnesses, keys, private resource data, or sensitive diagnostics.
 
+Default diagnostic formatting must not disclose complete opaque identifiers,
+roots, commitments, nonces, or fixed-width resource-wire candidate fields.
+These values use constant redaction rather than fingerprints because even a
+truncated value permits correlation. Explicit raw-byte access is
+security-sensitive protocol code and must not be copied into logs or public
+evidence.
+
 ## Coordinated disclosure
 
 The maintainers should:

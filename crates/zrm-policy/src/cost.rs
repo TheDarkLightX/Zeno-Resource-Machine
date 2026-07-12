@@ -337,44 +337,6 @@ impl CandidateVerifierCostQuoteV1 {
     }
 }
 
-/// Exercises quarantined candidate arithmetic for the coverage-guided test target.
-///
-/// This symbol exists only under Cargo Fuzz's `cfg(fuzzing)` build and is absent
-/// from the default production API. Its plain integer result carries no policy,
-/// registry, verifier, budgeting, or commit authority.
-#[cfg(fuzzing)]
-#[doc(hidden)]
-pub fn fuzz_candidate_quote_units(
-    model: &VerifierCostModelV1,
-    row: &VerifierCostRowV1,
-    policy: &VerifierPolicyV1,
-    lengths: [u64; 2],
-) -> Result<u64, VerifierCostErrorV1> {
-    let [artifact_len, canonical_statement_len] = lengths;
-    let request = policy.candidate_cost_quote_request(artifact_len, canonical_statement_len);
-    model
-        .compute_untrusted_candidate_quote(row, &request)
-        .map(CandidateVerifierCostQuoteV1::units)
-}
-
-/// Exercises the quarantined maximal reservation arithmetic for fuzz testing.
-///
-/// This symbol exists only under Cargo Fuzz's `cfg(fuzzing)` build and is absent
-/// from the default production API. Its plain integer result carries no policy,
-/// registry, verifier, budgeting, or commit authority.
-#[cfg(fuzzing)]
-#[doc(hidden)]
-pub fn fuzz_candidate_reservation_units(
-    model: &VerifierCostModelV1,
-    row: &VerifierCostRowV1,
-    policy: &VerifierPolicyV1,
-) -> Result<u64, VerifierCostErrorV1> {
-    let request = policy.candidate_admission_reservation_request();
-    model
-        .compute_untrusted_candidate_quote(row, &request)
-        .map(CandidateVerifierCostQuoteV1::units)
-}
-
 /// Bounded typed failures for verifier-cost validation and calculation.
 ///
 /// Variants intentionally expose no proof, policy, or backend internals. Their
@@ -439,6 +401,13 @@ fn checked_add(left: u128, right: u128) -> Result<u128, VerifierCostErrorV1> {
 #[cfg(test)]
 #[path = "cost/tests.rs"]
 mod tests;
+
+#[cfg(fuzzing)]
+#[path = "cost/fuzz_assertions.rs"]
+mod fuzz_assertions;
+
+#[cfg(fuzzing)]
+pub use fuzz_assertions::fuzz_assert_untrusted_candidate_cost_invariants;
 
 #[cfg(kani)]
 #[path = "cost/kani_harnesses.rs"]

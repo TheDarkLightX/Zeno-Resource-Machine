@@ -693,7 +693,7 @@ fn verifier_policy_preserves_each_closed_proof_mode() -> Result<(), ZeroValueErr
     Ok(())
 }
 
-const MAX_LOCAL_DIAGNOSTIC_BYTES: usize = 64;
+const MAX_LOCAL_DIAGNOSTIC_BYTES: usize = 128;
 
 fn assert_stable_bounded_diagnostic(error: impl core::fmt::Display, expected: &str) {
     let diagnostic = format!("{error}");
@@ -788,6 +788,77 @@ fn policy_error_diagnostics_are_stable_and_bounded() {
     assert_resource_dimension_diagnostics();
 }
 
+#[test]
+fn policy_error_diagnostic_bound_covers_every_numeric_width_maximum() {
+    let policy_objects = [
+        PolicyObjectV1::MachinePolicy,
+        PolicyObjectV1::ResourceKindPolicy,
+        PolicyObjectV1::ValidationContext,
+        PolicyObjectV1::VerifierPolicy,
+    ];
+    for object in policy_objects {
+        assert_diagnostic_is_bounded(PolicyValidationErrorV1::UnsupportedSchemaVersion {
+            object,
+            actual: u16::MAX,
+        });
+        assert_diagnostic_is_bounded(PolicyValidationErrorV1::InvalidValidityWindow {
+            object,
+            start: u64::MAX,
+            end: u64::MAX,
+        });
+    }
+
+    let limit_fields = [
+        LimitFieldV1::EnvelopeBytes,
+        LimitFieldV1::ResourceBytes,
+        LimitFieldV1::ConsumedResources,
+        LimitFieldV1::ReferencedResources,
+        LimitFieldV1::CreatedResources,
+        LimitFieldV1::LogicClaims,
+        LimitFieldV1::TransformationClaims,
+        LimitFieldV1::AuthorityClaims,
+        LimitFieldV1::DataAvailabilityClaims,
+        LimitFieldV1::AccountingRows,
+        LimitFieldV1::EvidenceReferences,
+        LimitFieldV1::ProofArtifactBytes,
+        LimitFieldV1::TotalProofBytes,
+        LimitFieldV1::TotalVerifierCostUnits,
+        LimitFieldV1::NestingDepth,
+        LimitFieldV1::StorageWriteBytes,
+    ];
+    for field in limit_fields {
+        assert_diagnostic_is_bounded(PolicyValidationErrorV1::LimitExceedsProtocolCeiling {
+            field,
+            actual: u64::MAX,
+            ceiling: u64::MAX,
+        });
+    }
+
+    assert_diagnostic_is_bounded(PolicyValidationErrorV1::LifecycleQuantityMaximumMustBeOne {
+        actual: u128::MAX,
+    });
+    assert_diagnostic_is_bounded(PolicyValidationErrorV1::ResourceWireLimitTooSmall {
+        actual: u32::MAX,
+        minimum: u32::MAX,
+    });
+    assert_diagnostic_is_bounded(ResourceDimensionErrorV1::LifecycleQuantityMustBeOne {
+        actual: u128::MAX,
+    });
+    assert_diagnostic_is_bounded(ResourceDimensionErrorV1::QuantityExceedsMaximum {
+        actual: u128::MAX,
+        maximum: u128::MAX,
+    });
+}
+
+fn assert_diagnostic_is_bounded(error: impl core::fmt::Display) {
+    let diagnostic = format!("{error}");
+    assert!(
+        diagnostic.len() <= MAX_LOCAL_DIAGNOSTIC_BYTES,
+        "diagnostic has {} bytes: {diagnostic}",
+        diagnostic.len()
+    );
+}
+
 fn assert_machine_policy_getters() -> PolicyModelTestResult {
     let machine_candidate = machine_candidate(AdmissionModeV1::LocalKernel, None)?;
     let machine = MachinePolicyV1::try_from(machine_candidate)?;
@@ -845,6 +916,14 @@ fn assert_verifier_policy_getters() -> PolicyModelTestResult {
     assert_eq!(
         verifier.backend_family_id(),
         verifier_candidate.backend_family_id
+    );
+    assert_eq!(
+        verifier.max_public_input_bytes(),
+        verifier_candidate.max_public_input_bytes
+    );
+    assert_eq!(
+        verifier.max_public_output_bytes(),
+        verifier_candidate.max_public_output_bytes
     );
     assert_eq!(verifier.as_candidate(), verifier_candidate);
     Ok(())

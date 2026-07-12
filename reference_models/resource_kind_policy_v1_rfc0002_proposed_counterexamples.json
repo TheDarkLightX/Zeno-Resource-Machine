@@ -5,8 +5,9 @@
   "oracle": "resource_kind_policy_v1_rfc0002_proposed",
   "scope": "Proposed ResourceKindPolicyV1 construction and local resource unit/quantity decisions",
   "source_basis": [
-    "Maintainer-supplied RFC-0002 semantic amendment",
-    "Frozen prior-specification oracle at commit 5ea0c1b104b40e93f3896edf0d4e095d0a9de1c7",
+    "RFC-0002 semantic amendment candidate prepared for governed review",
+    "Frozen prior-specification oracle from isolated commit 5ea0c1b104b40e93f3896edf0d4e095d0a9de1c7, integrated as 721200c",
+    "Proposed oracle integrated as 9f2c2de",
     "Repository fail-closed, honest-claims, checked-arithmetic, and differential-reference requirements"
   ],
   "assumptions": [
@@ -19,8 +20,8 @@
   "remaining_ambiguities": [
     {
       "id": "RKP-RFC0002-AMB-001",
-      "statement": "The proposal does not provide migration or predecessor-policy treatment for lifecycle maxima other than 1.",
-      "required_resolution": "RFC-0002 acceptance must state whether and how existing policy identities remain readable, consumable, or migratable."
+      "statement": "The in-place pre-alpha disposition depends on there being no canonical, persisted, activated, or externally durable resource-kind-policy identity.",
+      "required_resolution": "Reviewers must verify and approve that precondition; any durable predecessor record requires a new schema/version and migration design."
     },
     {
       "id": "RKP-RFC0002-AMB-002",
@@ -34,8 +35,8 @@
     },
     {
       "id": "RKP-RFC0002-AMB-004",
-      "statement": "The proposal does not decide whether changing draft-v1 construction in place is compatible with future canonical bytes.",
-      "required_resolution": "RFC-0002 must select an in-place draft clarification or a schema/version transition before a policy codec is frozen."
+      "statement": "RFC-0002 selects an in-place draft-v1 amendment under the no-durable-policy precondition, but this artifact cannot approve that governance choice.",
+      "required_resolution": "Obtain explicit human and required independent approval before promotion or authority integration."
     }
   ],
   "findings": [

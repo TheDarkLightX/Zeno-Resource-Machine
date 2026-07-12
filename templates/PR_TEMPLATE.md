@@ -22,6 +22,22 @@
 
 ## Authority boundary
 
+## Semantic change declaration
+
+- Authority affected:
+- Attacker-controlled fields:
+- Governed fields:
+- New valid states:
+- New invalid states:
+- Invariants preserved:
+- Invariants changed:
+- Cryptographic bindings added or changed:
+- Replay/freshness implications:
+- Resource-bound implications:
+- Upgrade/revocation implications:
+- Failure behavior and precedence:
+- Independently derived tests/oracle:
+
 ## Canonical ABI / migration impact
 
 ## Security and disaster-state analysis
@@ -65,6 +81,13 @@ Commands and results:
 
 For each unchecked conditional gate, explain why it is not applicable. Mark unavailable, timed-out, or unrun tools as gaps.
 
+Independent specification-counterexample review:
+
+- Reviewer:
+- Normative rules sampled:
+- Counterexamples proposed:
+- Disposition/evidence:
+
 ## Dependency and supply-chain impact
 
 ## Performance/resource impact
@@ -85,6 +108,7 @@ Work log/provenance:
 ## Required reviewers and sign-off
 
 - Semantic owner:
+- Independent non-author counterexample reviewer:
 - Authority-boundary reviewer (Class D/E):
 - Compatibility/formal reviewer (Class E):
 - Release owner (Class E):

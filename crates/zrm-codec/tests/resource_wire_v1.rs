@@ -391,7 +391,7 @@ fn resource_id_result_is_a_distinct_opaque_type() -> Result<(), TestError> {
 }
 
 #[test]
-fn malformed_same_length_bytes_have_no_typed_resource_id_path() -> Result<(), TestError> {
+fn strict_decoder_rejects_malformed_same_length_bytes() -> Result<(), TestError> {
     let mut wrong_magic = ABSENT_VECTOR.to_vec();
     set_byte(&mut wrong_magic, 0, 0)?;
 

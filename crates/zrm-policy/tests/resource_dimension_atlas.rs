@@ -1,4 +1,4 @@
-//! Independent finite oracle for resource-kind quantity and unit validation.
+//! Implementation-side finite atlas for resource-kind quantity and unit validation.
 
 use zrm_policy::{
     AccountingModeV1, DataAvailabilityRequirementV1, PolicyValidationErrorV1,
@@ -87,7 +87,7 @@ fn actual_unit(expected: UnitId, unit_relation: UnitRelation) -> Result<UnitId, 
 }
 
 #[test]
-fn resource_dimension_boundary_atlas_matches_independent_oracle() -> Result<(), ZeroValueError> {
+fn resource_dimension_boundary_atlas_matches_explicit_predicate() -> Result<(), ZeroValueError> {
     let maxima = [0, 1, 2, u128::MAX];
 
     for accounting_mode in accounting_modes() {

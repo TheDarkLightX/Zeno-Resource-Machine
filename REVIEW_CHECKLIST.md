@@ -70,6 +70,10 @@ Use this checklist for Class C-E changes. A checkbox means the reviewer inspecte
 ## Evidence
 
 - [ ] Accepted, boundary, and negative tests exist.
+- [ ] A non-author reviewer derived specification counterexamples independently
+      of the implementation and recorded their disposition.
+- [ ] The reference oracle was checked against normative semantics rather than
+      inferred only from current implementation behavior.
 - [ ] Every critical reject asserts state no-op.
 - [ ] Relevant critical mutant is killed.
 - [ ] Property/metamorphic tests cover the input family.
@@ -97,6 +101,10 @@ Use this checklist for Class C-E changes. A checkbox means the reviewer inspecte
 - [ ] Remaining disaster states and non-claims are preserved.
 
 ## Final review outcome
+
+- [ ] Reviewer is not an author of the implementation under review.
+- [ ] Class D/E has two distinct non-author approvals, including an
+      authority-boundary approval.
 
 - [ ] Approve
 - [ ] Approve with tracked follow-up

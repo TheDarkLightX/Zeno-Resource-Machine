@@ -177,12 +177,36 @@ fn untrusted_shape_helper_enforces_total_proof_bound_independently() -> TestResu
     machine.limits.max_total_proof_bytes = 600_000;
     let machine = MachinePolicyV1::try_from(machine)?;
 
-    let mut verifier = verifier_candidate()?;
-    verifier.max_artifact_bytes = 600_001;
-    let verifier = VerifierPolicyV1::try_from(verifier)?;
+    let mut verifier_candidate = verifier_candidate()?;
+    verifier_candidate.max_artifact_bytes = 600_000;
+    let verifier = VerifierPolicyV1::try_from(verifier_candidate)?;
+    assert_eq!(
+        machine.check_untrusted_verifier_candidate_shape(&verifier, 15),
+        Ok(())
+    );
+
+    verifier_candidate.max_artifact_bytes = 600_001;
+    let verifier = VerifierPolicyV1::try_from(verifier_candidate)?;
     assert_eq!(
         machine.check_untrusted_verifier_candidate_shape(&verifier, 15),
         Err(VerifierCompatibilityErrorV1::ArtifactLimitExceedsMachine)
+    );
+    Ok(())
+}
+
+#[test]
+fn untrusted_shape_helper_accepts_exact_machine_artifact_and_cost_caps() -> TestResult {
+    let machine =
+        MachinePolicyV1::try_from(machine_candidate(AdmissionModeV1::LocalKernel, None)?)?;
+    let limits = machine.limits();
+    let mut verifier_candidate = verifier_candidate()?;
+    verifier_candidate.max_artifact_bytes = u64::from(limits.max_proof_artifact_bytes());
+    verifier_candidate.max_verifier_cost_units = limits.max_total_verifier_cost_units();
+    let verifier = VerifierPolicyV1::try_from(verifier_candidate)?;
+
+    assert_eq!(
+        machine.check_untrusted_verifier_candidate_shape(&verifier, 15),
+        Ok(())
     );
     Ok(())
 }

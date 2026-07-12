@@ -38,9 +38,15 @@ pub(crate) use cost::CandidateVerifierCostQuoteRequestV1;
 #[cfg(any(test, kani))]
 pub(crate) use error::VerifierCompatibilityErrorV1;
 
+/// Runs assertion-only coverage-guided checks over quarantined cost arithmetic.
+///
+/// This fuzz-build-only function returns no quote, capability, policy decision,
+/// or cost value. It exists solely so an external Cargo Fuzz target can drive
+/// internal assertions without exposing authority-shaped results. See the
+/// function documentation for its panic contract and constant resource bound.
 #[cfg(fuzzing)]
 #[doc(hidden)]
-pub use cost::{fuzz_candidate_quote_units, fuzz_candidate_reservation_units};
+pub use cost::fuzz_assert_untrusted_candidate_cost_invariants;
 
 /// Supported logical policy schema version.
 pub const POLICY_SCHEMA_VERSION_V1: u16 = 1;

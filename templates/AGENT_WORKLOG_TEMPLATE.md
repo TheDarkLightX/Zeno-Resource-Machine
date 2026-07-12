@@ -16,6 +16,26 @@
 
 ## Authority boundary
 
+## Semantic change declaration
+
+- Authority affected:
+- Attacker-controlled fields:
+- Governed fields:
+- New valid states:
+- New invalid states:
+- Cryptographic bindings changed:
+- Replay/freshness implications:
+- Resource-bound implications:
+- Upgrade/revocation implications:
+- Failure behavior and precedence:
+
+## Independent tracks
+
+- Implementation track artifact:
+- Specification-oracle track artifact:
+- Adversarial-review track artifact:
+- Formal-assurance track artifact, if applicable:
+
 ## Proposed design
 
 ### Design-choice review

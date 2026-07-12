@@ -713,7 +713,7 @@ A valid resource MUST satisfy:
 - schema version is supported;
 - machine, domain, application, kind, logic, profile, policy, unit, controller, and roots are nonzero;
 - nonce is nonzero;
-- quantity is nonzero unless the resource-kind policy explicitly permits zero-quantity marker resources;
+- quantity is nonzero unless a versioned resource-kind policy explicitly permits zero-quantity marker resources; the v1 policy schema has no such permission, so every v1 policy-bound resource has positive quantity;
 - expiry, when present, is not less than creation epoch;
 - flags contain no unknown bits;
 - quantity does not exceed the resource-kind policy maximum;
@@ -883,12 +883,47 @@ EvidenceOnly
 
 Rules:
 
+- The v1 policy schema has no zero-quantity marker rule; every policy-bound v1
+  resource MUST have quantity greater than zero. `EvidenceOnly` does not imply
+  marker permission.
 - `LifecycleNonFungible` resources MUST have quantity `1`.
+- A v1 `LifecycleNonFungible` policy MUST declare `quantity_max = 1`; zero is
+  unsatisfiable and larger maxima are noncanonical for a fixed-quantity mode.
 - `EvidenceOnly` resources MUST NOT carry monetary or fungible quantity semantics.
 - `ConservedFungible` resources MUST have zero authorized mint and burn.
 - `AuthorityMintableFungible` mint/burn MUST bind an authorized fact.
 - `Transformable` unmatched deltas MUST bind an allowed transformation rule.
 - `accounting_mode` is policy, not a caller-selected transition label.
+
+For a typed `ResourceKindPolicyV1` candidate, constructor rejection precedence
+MUST be:
+
+```text
+unsupported schema
+  -> invalid validity window
+  -> LifecycleNonFungible quantity_max is not 1
+  -> construct
+```
+
+For dimensions checked against a constructed policy, rejection precedence MUST
+be:
+
+```text
+unit mismatch
+  -> LifecycleNonFungible quantity is not 1
+  -> zero quantity
+  -> quantity exceeds quantity_max
+  -> accept
+```
+
+Consequently, lifecycle quantity zero reports the lifecycle exact-one failure,
+while non-lifecycle quantity zero reports the general zero failure. A
+non-lifecycle policy with `quantity_max = 0` remains a constructible empty
+candidate. This fixed-mode lifecycle rule is an in-place pre-alpha v1 semantic
+amendment: no canonical resource-kind-policy bytes, persisted policy identity,
+or governed activation path exists to migrate. RFC-0002 approval remains
+required before this candidate rule can be promoted or used by an
+authority-bearing path.
 
 ---
 
@@ -2124,6 +2159,13 @@ Before this calculation, the registry MUST enforce the verifier policy's artifac
 
 The registry MUST construct the complete cost plan and sum all charges before invoking any transition-fact verifier. The plan includes every supplied logic, transformation, authority, and DA artifact. Dispatch-plan order is the fixed fact-class order just listed, followed by each class's canonical claim order.
 
+Before that governed registry exists, an implementation MUST NOT expose a
+public operation that accepts a caller-selected row and returns an
+authority-shaped checked quote. Likewise, a structural comparison between
+caller-provided machine and verifier candidates MUST NOT be exposed as verifier
+admission. Pre-registry arithmetic and compatibility predicates may exist only
+as internal assurance helpers and construct no public capability.
+
 When `admission_mode` is `RequiredVerifier`, the admission artifact and draft do not yet exist. The cost plan therefore adds one conservative admission reservation selected from the required admission verifier policy:
 
 ```text
@@ -2892,6 +2934,10 @@ Core crates MUST:
 - use `#[must_use]` on plans, decisions, and receipts;
 - use stable error enums;
 - avoid secret-bearing `Debug` implementations;
+- make default `Debug` output for opaque identifiers, roots, commitments, and
+  nonces constant and redacted; raw canonical-wire diagnostic formatting MUST
+  redact every fixed-width candidate field; diagnostic fingerprints MUST NOT
+  include those bytes;
 - zeroize secrets in future private profiles;
 - include `rust-version` and a pinned `rust-toolchain.toml`.
 

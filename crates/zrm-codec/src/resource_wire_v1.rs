@@ -153,13 +153,8 @@ fn derive_resource_id(resource: &ResourceWireV1) -> Result<ResourceId, ResourceI
     let canonical_wire = resource
         .encode()
         .map_err(ResourceIdDerivationError::Encode)?;
-    let wire_length = u32::try_from(canonical_wire.len())
-        .map_err(|_| ResourceIdDerivationError::HashFrameLengthOverflow)?;
-    let payload_length = wire_length
-        .checked_add(INNER_LENGTH_BYTES)
-        .ok_or(ResourceIdDerivationError::HashFrameLengthOverflow)?;
-    let domain_length = u16::try_from(RESOURCE_V1_DOMAIN.len())
-        .map_err(|_| ResourceIdDerivationError::HashFrameLengthOverflow)?;
+    let (wire_length, payload_length, domain_length) =
+        checked_resource_hash_frame_lengths(canonical_wire.len(), RESOURCE_V1_DOMAIN.len())?;
 
     let mut hasher = Sha256::new();
     hasher.update(domain_length.to_be_bytes());
@@ -167,7 +162,25 @@ fn derive_resource_id(resource: &ResourceWireV1) -> Result<ResourceId, ResourceI
     hasher.update(payload_length.to_be_bytes());
     hasher.update(wire_length.to_be_bytes());
     hasher.update(&canonical_wire);
-    ResourceId::try_from(<[u8; 32]>::from(hasher.finalize())).map_err(map_all_zero_resource_id)
+    resource_id_from_digest(hasher.finalize().into())
+}
+
+fn checked_resource_hash_frame_lengths(
+    wire_length: usize,
+    domain_length: usize,
+) -> Result<(u32, u32, u16), ResourceIdDerivationError> {
+    let wire_length = u32::try_from(wire_length)
+        .map_err(|_| ResourceIdDerivationError::HashFrameLengthOverflow)?;
+    let payload_length = wire_length
+        .checked_add(INNER_LENGTH_BYTES)
+        .ok_or(ResourceIdDerivationError::HashFrameLengthOverflow)?;
+    let domain_length = u16::try_from(domain_length)
+        .map_err(|_| ResourceIdDerivationError::HashFrameLengthOverflow)?;
+    Ok((wire_length, payload_length, domain_length))
+}
+
+fn resource_id_from_digest(digest: [u8; 32]) -> Result<ResourceId, ResourceIdDerivationError> {
+    ResourceId::try_from(digest).map_err(map_all_zero_resource_id)
 }
 
 fn map_all_zero_resource_id(_: ZeroValueError) -> ResourceIdDerivationError {
@@ -349,5 +362,63 @@ fn append_expiry_field(output: &mut Vec<u8>, expiry_epoch: Option<u64>) {
             output.push(1);
             output.extend_from_slice(&epoch.to_be_bytes());
         }
+    }
+}
+
+#[cfg(test)]
+mod hash_tests {
+    use super::{
+        RESOURCE_V1_DOMAIN, ResourceIdDerivationError, checked_resource_hash_frame_lengths,
+        resource_id_from_digest,
+    };
+    use zrm_types::{RESOURCE_WIRE_V1_ABSENT_EXPIRY_BYTES, RESOURCE_WIRE_V1_PRESENT_EXPIRY_BYTES};
+
+    #[test]
+    fn resource_hash_frame_lengths_derive_from_actual_inputs() {
+        assert_eq!(
+            checked_resource_hash_frame_lengths(
+                RESOURCE_WIRE_V1_ABSENT_EXPIRY_BYTES,
+                RESOURCE_V1_DOMAIN.len(),
+            ),
+            Ok((595, 599, 15))
+        );
+        assert_eq!(
+            checked_resource_hash_frame_lengths(
+                RESOURCE_WIRE_V1_PRESENT_EXPIRY_BYTES,
+                RESOURCE_V1_DOMAIN.len(),
+            ),
+            Ok((603, 607, 15))
+        );
+    }
+
+    #[test]
+    fn resource_hash_frame_lengths_reject_each_width_overflow() {
+        assert_eq!(
+            checked_resource_hash_frame_lengths(usize::MAX, RESOURCE_V1_DOMAIN.len()),
+            Err(ResourceIdDerivationError::HashFrameLengthOverflow)
+        );
+        #[cfg(target_pointer_width = "64")]
+        {
+            let maximum_u32_wire = 4_294_967_295_usize;
+            assert_eq!(
+                checked_resource_hash_frame_lengths(maximum_u32_wire, RESOURCE_V1_DOMAIN.len(),),
+                Err(ResourceIdDerivationError::HashFrameLengthOverflow)
+            );
+        }
+        assert_eq!(
+            checked_resource_hash_frame_lengths(
+                RESOURCE_WIRE_V1_ABSENT_EXPIRY_BYTES,
+                usize::from(u16::MAX) + 1,
+            ),
+            Err(ResourceIdDerivationError::HashFrameLengthOverflow)
+        );
+    }
+
+    #[test]
+    fn all_zero_resource_digest_fails_closed() {
+        assert_eq!(
+            resource_id_from_digest([0; 32]),
+            Err(ResourceIdDerivationError::AllZeroDigest)
+        );
     }
 }

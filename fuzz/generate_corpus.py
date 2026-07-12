@@ -9,6 +9,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parent.parent
+RESOURCE_WIRE_CORPUS = ROOT / "fuzz/corpus/resource_wire_v1_decode"
+POLICY_COST_CORPUS = ROOT / "fuzz/corpus/policy_cost_v1"
 OVERSIZE_SEED = ROOT / "fuzz/corpus/resource_wire_v1_decode/oversize-boundary"
 POLICY_SEQUENCE_SEED = ROOT / "fuzz/corpus/policy_cost_v1/sequence"
 POLICY_MAX_SEED = ROOT / "fuzz/corpus/policy_cost_v1/maxima"
@@ -147,16 +149,24 @@ def check_seed(path: Path, expected: bytes, label: str) -> bool:
 
 
 def check_seed_names(directory: Path, expected_names: set[str], label: str) -> bool:
-    """Reject unreviewed campaign discoveries in a deterministic corpus."""
+    """Reject missing, nested, linked, non-regular, or extra corpus entries."""
 
     if not directory.is_dir():
         print(f"fuzz corpus check failed: {label} corpus is missing", file=sys.stderr)
         return False
-    actual_names = {path.name for path in directory.iterdir() if path.is_file()}
-    if actual_names == expected_names:
+    actual_names: set[str] = set()
+    invalid_entries: list[str] = []
+    for path in directory.rglob("*"):
+        relative = path.relative_to(directory).as_posix()
+        if path.is_symlink() or not path.is_file():
+            invalid_entries.append(relative)
+        else:
+            actual_names.add(relative)
+    if actual_names == expected_names and not invalid_entries:
         return True
     print(
-        f"fuzz corpus check failed: {label} corpus contains missing or extra files",
+        f"fuzz corpus check failed: {label} corpus contains missing, extra, "
+        f"nested, linked, or non-regular entries",
         file=sys.stderr,
     )
     return False
@@ -181,12 +191,24 @@ def main() -> int:
     if arguments.check:
         if not check_seed(OVERSIZE_SEED, expected, "oversize-boundary"):
             return 1
+        if not check_seed_names(
+            RESOURCE_WIRE_CORPUS,
+            {"absent", "oversize-boundary", "present"},
+            "resource-wire",
+        ):
+            return 1
         if not check_seed(POLICY_SEQUENCE_SEED, policy_sequence, "policy sequence seed"):
             return 1
         if not check_seed(POLICY_MAX_SEED, policy_maxima, "policy maxima seed"):
             return 1
         if not check_seed(
             POLICY_SMALL_SUCCESS_SEED, policy_small_success, "policy success seed"
+        ):
+            return 1
+        if not check_seed_names(
+            POLICY_COST_CORPUS,
+            {"maxima", "sequence", "small-success"},
+            "policy-cost",
         ):
             return 1
         for name, role_seed in role_seeds.items():

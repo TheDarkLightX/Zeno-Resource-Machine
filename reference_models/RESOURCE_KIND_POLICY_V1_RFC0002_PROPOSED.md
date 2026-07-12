@@ -4,9 +4,9 @@
 accepted through the repository's governed RFC process
 
 This artifact is separate from the frozen prior-specification oracle. It does
-not reinterpret or replace that baseline. It makes the maintainer-supplied
-RFC-0002 proposal executable so reviewers can inspect the exact state-space
-delta before deciding whether to accept the amendment.
+not reinterpret or replace that baseline. It makes the RFC-0002 review proposal
+executable so reviewers can inspect the exact state-space delta before deciding
+whether to accept the amendment.
 
 ## Design packet
 
@@ -43,8 +43,9 @@ Canonical bytes or hashes affected:
   authority bytes.
 Compatibility/versioning impact:
   If accepted, lifecycle policies with quantity_max 0 or greater than 1 move
-  from baseline construction acceptance to rejection. A governed compatibility
-  and migration disposition remains required before runtime promotion.
+  from baseline construction acceptance to rejection. RFC-0002 proposes an
+  in-place pre-alpha amendment because no canonical policy bytes, durable policy
+  identity, or activation path exists; reviewers must approve that precondition.
 Tests to add first:
   All accounting modes; maximum 0/1/>1/u128::MAX; unit mismatch; positive
   quantities; EvidenceOnly zero; exact constructor and resource precedence; and
@@ -92,9 +93,9 @@ Technical AI-review status:
   Proposed and awaiting independent semantic review and governed RFC decision.
 ```
 
-## Supplied RFC-0002 amendment
+## RFC-0002 candidate amendment
 
-The proposed model takes the following maintainer-supplied rules as input rather
+The proposed model takes the following RFC-0002 candidate rules as input rather
 than deriving them from an implementation:
 
 1. V1 has no marker permission. Every policy-bound resource quantity is
@@ -112,9 +113,10 @@ authorize a different semantic order for typed v1 values.
 
 ## Frozen baseline integrity
 
-The proposed artifacts import but do not edit the baseline committed in
-`5ea0c1b104b40e93f3896edf0d4e095d0a9de1c7`. Its tracked file hashes at proposal
-start are:
+The proposed artifacts import but do not edit the baseline first recorded by
+the isolated oracle track at
+`5ea0c1b104b40e93f3896edf0d4e095d0a9de1c7` and integrated on this branch as
+`721200c`. Its tracked file hashes at proposal start are:
 
 | Baseline artifact | SHA-256 |
 | --- | --- |
@@ -179,8 +181,10 @@ acceptance may appear outside the baseline relation.
 
 ## Remaining proposal ambiguities
 
-1. RFC-0002 still needs an accepted compatibility decision for preexisting
-   lifecycle policy identities whose maximum is not 1.
+1. RFC-0002 selects an in-place pre-alpha amendment on the recorded condition
+   that no canonical or durable lifecycle policy identity exists. Review must
+   verify and approve that condition; finding any durable external record
+   requires a new schema/version and migration design.
 2. Stable protocol reject codes are not supplied. Proposed reason names express
    the requested relative precedence and remain noncanonical.
 3. The policy schema still cannot express a zero marker. `EvidenceOnly` remains
@@ -188,9 +192,9 @@ acceptance may appear outside the baseline relation.
 4. A non-lifecycle maximum of 0 intentionally constructs an empty candidate,
    but no authenticated activation or operational disablement semantics are
    established here.
-5. The proposal does not decide whether a future accepted amendment changes a
-   draft-v1 schema in place or requires a new schema version. That governance
-   decision is required before canonical bytes exist.
+5. The proposed in-place v1 disposition is not self-approving. Until RFC-0002
+   receives the required human and independent approvals, the narrowed
+   lifecycle state space remains an implementation candidate only.
 
 ## Agent work log
 
@@ -198,7 +202,8 @@ acceptance may appear outside the baseline relation.
 Summary:
   Added a separate non-normative RFC-0002 proposed oracle, decision tables,
   machine-readable counterexamples, baseline-integrity checks, and exact bounded
-  differential tests. The frozen baseline was not edited.
+  differential tests. The frozen baseline was not edited. The proposed artifacts
+  are reachable on the integration branch through commit 9f2c2de.
 Files changed:
   reference_models/RESOURCE_KIND_POLICY_V1_RFC0002_PROPOSED.md
   reference_models/resource_kind_policy_v1_rfc0002_proposed.py
@@ -251,7 +256,9 @@ Performance/resource-bound impact:
   bounded.
 Remaining gaps and non-claims:
   RFC-0002 is not accepted by this commit. No Rust production source, Rust test,
-  implementation branch, or other worktree was inspected. No migration, policy
-  codec, authenticated activation, transition accounting, formal proof, runtime
-  comparison, CBC promotion, or release claim is provided.
+  implementation branch, or other worktree was inspected. No canonical policy
+  codec, durable policy identity, authenticated activation, transition
+  accounting, formal proof, runtime comparison, CBC promotion, or release claim
+  is provided. The in-place pre-alpha disposition remains subject to human
+  approval and invalidation if durable predecessor state is discovered.
 ```

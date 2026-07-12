@@ -188,33 +188,106 @@ class ArchitecturePolicyTests(unittest.TestCase):
     def test_crate_private_candidate_helpers_are_accepted(self) -> None:
         """Internal arithmetic and shape helpers remain available for assurance."""
 
-        sources = {
-            "cost.rs": "pub(crate) fn compute_untrusted_candidate_quote() {}",
-            "error.rs": "pub(crate) enum VerifierCompatibilityErrorV1 {}",
-            "lib.rs": "pub(crate) use cost::CandidateVerifierCostQuoteV1;",
-            "verifier.rs": "pub(crate) fn check_untrusted_admission_candidate_shape() {}",
-        }
+        sources = allowed_authority_sources()
+        sources["cost.rs"] += "\npub(crate) fn compute_untrusted_candidate_quote() {}"
+        sources["error.rs"] += "\npub(crate) enum VerifierCompatibilityErrorV1 {}"
+        sources["lib.rs"] += "\npub(crate) use cost::CandidateVerifierCostQuoteV1;"
+        sources["verifier.rs"] += "\npub(crate) fn check_untrusted_admission_candidate_shape() {}"
         self.assertEqual(public_authority_api_failures(sources), [])
 
     def test_public_candidate_authority_methods_are_rejected(self) -> None:
         """Default public APIs cannot quote or return admission-like success."""
 
-        sources = {
-            "cost.rs": "pub fn compute_quote() {}",
-            "verifier.rs": "pub fn validate_admission_verifier_candidate() {}",
-        }
+        sources = allowed_authority_sources()
+        sources["cost.rs"] += "\npub fn compute_quote() {}"
+        sources["verifier.rs"] += "\npub fn validate_admission_verifier_candidate() {}"
         failures = public_authority_api_failures(sources)
-        self.assertEqual(len(failures), 2)
+        self.assertTrue(any("compute_quote" in failure for failure in failures))
+        self.assertTrue(
+            any("validate_admission_verifier_candidate" in failure for failure in failures)
+        )
 
     def test_public_quote_types_and_reexports_are_rejected(self) -> None:
         """Opaque candidate quote values cannot escape through the crate root."""
 
-        sources = {
-            "cost.rs": "pub struct VerifierCostQuoteV1;",
-            "lib.rs": "pub use cost::VerifierCostQuoteRequestV1;",
-        }
+        sources = allowed_authority_sources()
+        sources["cost.rs"] += "\npub struct VerifierCostQuoteV1;"
+        sources["lib.rs"] += "\npub use cost::VerifierCostQuoteRequestV1;"
         failures = public_authority_api_failures(sources)
-        self.assertEqual(len(failures), 2)
+        self.assertTrue(any("VerifierCostQuoteV1" in failure for failure in failures))
+        self.assertTrue(any("VerifierCostQuoteRequestV1" in failure for failure in failures))
+
+    def test_renamed_public_quote_operation_is_rejected_by_exact_allowlist(self) -> None:
+        """Renaming a quote escape cannot bypass the architecture gate."""
+
+        sources = allowed_authority_sources()
+        sources["cost.rs"] += "\npub fn calculate_candidate_cost() -> u64 { 0 }"
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("calculate_candidate_cost" in failure for failure in failures))
+
+    def test_allowlisted_name_on_wrong_owner_is_rejected(self) -> None:
+        """A method cannot reuse another type's allowlisted getter name."""
+
+        sources = allowed_authority_sources()
+        sources["cost.rs"] += """
+impl VerifierCostRowV1 {
+    pub fn max_charge_units(&self) -> u64 { 0 }
+}
+"""
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("max_charge_units" in failure for failure in failures))
+        self.assertTrue(any("function signatures" in failure for failure in failures))
+
+    def test_async_and_extern_public_functions_are_rejected(self) -> None:
+        """Rust function qualifiers cannot bypass the reviewed signature inventory."""
+
+        for declaration in (
+            "pub async fn calculate_candidate_cost() {}",
+            'pub extern "C" fn calculate_candidate_cost() {}',
+        ):
+            with self.subTest(declaration=declaration):
+                sources = allowed_authority_sources()
+                sources["cost.rs"] += f"\n{declaration}"
+                failures = public_authority_api_failures(sources)
+                self.assertTrue(any("calculate_candidate_cost" in failure for failure in failures))
+
+    def test_public_function_pointer_constant_is_rejected(self) -> None:
+        """A callable associated constant is part of the exact value inventory."""
+
+        sources = allowed_authority_sources()
+        sources["cost.rs"] += "\npub const QUOTE: fn() -> u64 = || 0;"
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("const/static" in failure for failure in failures))
+
+    def test_fuzz_assertion_cannot_return_a_cost_value(self) -> None:
+        """The fuzz-only public bridge remains a raw-input assertion sink."""
+
+        sources = allowed_authority_sources()
+        sources["fuzz_assertions.rs"] = (
+            "pub fn fuzz_assert_untrusted_candidate_cost_invariants(data: &[u8]) -> u64 { "
+            "data.len() as u64 }"
+        )
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("implicit unit return" in failure for failure in failures))
+
+    def test_fuzz_assertion_reexports_require_fuzz_configuration(self) -> None:
+        """The assertion sink is absent from the default public API."""
+
+        sources = allowed_authority_sources()
+        sources["lib.rs"] = sources["lib.rs"].replace("#[cfg(fuzzing)]\n", "", 1)
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("only under cfg(fuzzing)" in failure for failure in failures))
+
+
+def allowed_authority_sources() -> dict[str, str]:
+    """Return the live reviewed sources for focused counterexample mutation."""
+
+    from tools.check_architecture import AUTHORITY_SOURCE_PATHS, ROOT
+
+    return {
+        Path(path).name: (ROOT / path).read_text(encoding="utf-8")
+        for path in AUTHORITY_SOURCE_PATHS
+    }
 
 
 if __name__ == "__main__":

@@ -12,9 +12,31 @@
 
 ## Typed API and authority boundary
 
+## Semantic change declaration
+
+- Authority affected:
+- Attacker-controlled fields:
+- Governed fields:
+- New valid states:
+- New invalid states:
+- Invariants preserved or changed:
+- Cryptographic bindings added or changed:
+- Replay/freshness implications:
+- Resource-bound implications:
+- Upgrade/revocation implications:
+- Failure behavior and precedence:
+- Independently derived tests/oracle:
+
 ## Tests and gates
 
 List exact commands and results.
+
+Independent specification-counterexample review:
+
+- Reviewer:
+- Normative rules sampled:
+- Counterexamples proposed:
+- Disposition/evidence:
 
 ## Canonical ABI and vectors
 
@@ -29,3 +51,9 @@ List exact commands and results.
 ## Remaining gaps and non-claims
 
 ## Required reviewers
+
+- Semantic owner:
+- Independent non-author counterexample reviewer:
+- Authority-boundary reviewer (Class D/E):
+- Compatibility/formal reviewer (Class E):
+- Release owner (Class E):

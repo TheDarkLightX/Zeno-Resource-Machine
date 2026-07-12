@@ -106,7 +106,7 @@ fn lifecycle_policy_construction_accepts_exactly_maximum_one() {
 }
 
 #[kani::proof]
-fn full_width_resource_dimensions_match_the_independent_oracle() {
+fn full_width_resource_dimensions_match_the_explicit_predicate() {
     let selector: u8 = kani::any();
     kani::assume(selector < 5);
     let accounting_mode = accounting_mode(selector);

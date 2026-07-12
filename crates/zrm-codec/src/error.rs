@@ -70,8 +70,9 @@ impl fmt::Display for ResourceIdDerivationError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Self::Encode(error) => write!(formatter, "resource encoding failed: {error}"),
-            Self::HashFrameLengthOverflow => formatter
-                .write_str("resource hash derivation failed: hash frame length exceeds its explicit width"),
+            Self::HashFrameLengthOverflow => formatter.write_str(
+                "resource hash derivation failed: hash frame length exceeds its explicit width",
+            ),
             Self::AllZeroDigest => formatter.write_str(
                 "resource hash derivation failed: protocol hash produced a prohibited all-zero digest",
             ),
@@ -112,6 +113,10 @@ mod tests {
         assert_eq!(
             std::format!("{}", ResourceIdDerivationError::Encode(allocation)),
             "resource encoding failed: unable to reserve canonical resource bytes"
+        );
+        assert_eq!(
+            std::format!("{}", ResourceIdDerivationError::HashFrameLengthOverflow),
+            "resource hash derivation failed: hash frame length exceeds its explicit width"
         );
         assert_eq!(
             std::format!("{}", ResourceIdDerivationError::AllZeroDigest),
