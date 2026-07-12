@@ -1,0 +1,117 @@
+{
+  "schema": "zrm/recursive-semantic-decision-set/v1",
+  "package_id": "zrm-semantic-closure-esso-v1",
+  "date": "2026-07-12",
+  "status": "draft_requires_independent_review",
+  "normative_source": "rfcs/RFC-0002-recursive-semantic-journal-composition.md",
+  "assurance_model": {
+    "repository": "TheDarkLightX/ESSO",
+    "branch": "agent/zrm-semantic-closure-v1",
+    "pull_request": 1,
+    "model_id": "zrpf_semantic_composition_v1"
+  },
+  "decisions": [
+    {
+      "id": "ZRPF-SD-001",
+      "title": "AcceptedJournal is the postcommit semantic leaf",
+      "decision": "Postcommit recursive semantic aggregation accepts only an authenticated AcceptedJournal. JournalDraft belongs exclusively to the admission lifecycle.",
+      "rejected_alternatives": [
+        "generic journal bytes with an accepted Boolean",
+        "one leaf type for both admission and postcommit aggregation"
+      ]
+    },
+    {
+      "id": "ZRPF-SD-002",
+      "title": "Semantic and proof identity are separate",
+      "decision": "Semantic identity commits the ordered accepted journals and their state/effect summary. Proof identity additionally commits programs, releases, profiles, receipts, and tree topology.",
+      "rejected_alternatives": [
+        "recursive image ID is the economic identity",
+        "proof-tree root is the semantic epoch root"
+      ]
+    },
+    {
+      "id": "ZRPF-SD-003",
+      "title": "Segment order is dense and semantic",
+      "decision": "Each segment covers a nonempty dense position interval. Parent order is exact left-then-right concatenation; sorting or set union cannot replace ordered composition.",
+      "rejected_alternatives": [
+        "sort leaves by journal hash during aggregation",
+        "unordered set of child journal hashes"
+      ]
+    },
+    {
+      "id": "ZRPF-SD-004",
+      "title": "State continuity is exact",
+      "decision": "Composition requires left post-state root/version to equal right pre-state root/version under one exact scope and profile.",
+      "rejected_alternatives": [
+        "host assertion of continuity",
+        "same epoch is sufficient",
+        "ignore versions when roots match"
+      ]
+    },
+    {
+      "id": "ZRPF-SD-005",
+      "title": "Descendant uniqueness needs authenticated union",
+      "decision": "Transition, nullifier, created-resource, and profile-defined one-shot identity sets are pairwise disjoint across children and exactly unioned. A root alone is insufficient without a bounded witness or proof-carrying accumulator operation.",
+      "rejected_alternatives": [
+        "silently deduplicate child sets",
+        "trust parent-supplied set root",
+        "assume valid leaves cannot conflict across siblings"
+      ]
+    },
+    {
+      "id": "ZRPF-SD-006",
+      "title": "Aggregation creates no hidden effects",
+      "decision": "Accounting and commit effects are exact checked combinations of accepted child journal commitments. Recursive aggregation itself creates, removes, or reinterprets no ZRM effect.",
+      "rejected_alternatives": [
+        "aggregate-level reward or fee not represented by a ZRM transition",
+        "omit child effects after compression"
+      ]
+    },
+    {
+      "id": "ZRPF-SD-007",
+      "title": "Messages and carry compose at explicit boundaries",
+      "decision": "Internal message cancellation requires exact outbox/inbox key and payload matching; carry post/pre roots must match exactly. Unsupported profiles use named empty commitments.",
+      "rejected_alternatives": [
+        "cancel messages by count only",
+        "treat carry root as interchangeable with machine-state root"
+      ]
+    },
+    {
+      "id": "ZRPF-SD-008",
+      "title": "Semantic composition is partial associative and noncommutative",
+      "decision": "For the same ordered valid leaves and fixed profile, left- and right-associated composition produce the same complete semantic summary. Reordering is not equivalent and normally makes composition undefined.",
+      "rejected_alternatives": [
+        "commutative merge",
+        "tree-shape-specific semantic root"
+      ],
+      "model": "zrpf_semantic_composition_v1",
+      "mutant": "recursive_fold_omits_middle_leaf"
+    },
+    {
+      "id": "ZRPF-SD-009",
+      "title": "First profile favors explicit bounded witnesses",
+      "decision": "The reference composer uses bounded ordered manifests and sorted unique vectors, recomputing roots. Optimized accumulators require a separate profile and refinement evidence.",
+      "rejected_alternatives": [
+        "adopt an unaudited production accumulator immediately",
+        "make proof-system-specific accumulators part of ZRM core"
+      ]
+    },
+    {
+      "id": "ZRPF-SD-010",
+      "title": "DA and finality are not implied by recursion",
+      "decision": "A recursive proof preserves only the named DA certificates and semantic relation. It does not manufacture availability, ordering, consensus, or finality.",
+      "rejected_alternatives": [
+        "content root implies retrievability",
+        "recursive root implies canonical chain history"
+      ]
+    }
+  ],
+  "non_claims": [
+    "not approved protocol semantics until independent review and maintainer decision",
+    "no canonical byte or hash freeze",
+    "no production accumulator selection",
+    "no unbounded associativity proof",
+    "no recursive guest implementation or release identity",
+    "no data availability, consensus, finality, privacy, or production readiness claim"
+  ]
+}
