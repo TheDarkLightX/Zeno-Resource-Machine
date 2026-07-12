@@ -149,7 +149,6 @@ name = "zrm-codec"
 version = "0.1.0"
 dependencies = [
  "sha2",
- "zrm-crypto",
  "zrm-types",
 ]
 

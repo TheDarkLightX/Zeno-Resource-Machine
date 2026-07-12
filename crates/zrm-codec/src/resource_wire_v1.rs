@@ -2,7 +2,6 @@ use alloc::vec::Vec;
 use core::fmt;
 
 use sha2::{Digest, Sha256};
-use zrm_crypto::HashConstructionError;
 use zrm_types::{
     MAX_RESOURCE_BYTES, RESOURCE_WIRE_V1_ABSENT_EXPIRY_BYTES,
     RESOURCE_WIRE_V1_PRESENT_EXPIRY_BYTES, RejectCodeV1, ResourceId, ZeroValueError,
@@ -155,15 +154,12 @@ fn derive_resource_id(resource: &ResourceWireV1) -> Result<ResourceId, ResourceI
         .encode()
         .map_err(ResourceIdDerivationError::Encode)?;
     let wire_length = u32::try_from(canonical_wire.len())
-        .map_err(|_| ResourceIdDerivationError::Hash(HashConstructionError::LengthOverflow))?;
-    let payload_length =
-        wire_length
-            .checked_add(INNER_LENGTH_BYTES)
-            .ok_or(ResourceIdDerivationError::Hash(
-                HashConstructionError::LengthOverflow,
-            ))?;
+        .map_err(|_| ResourceIdDerivationError::HashFrameLengthOverflow)?;
+    let payload_length = wire_length
+        .checked_add(INNER_LENGTH_BYTES)
+        .ok_or(ResourceIdDerivationError::HashFrameLengthOverflow)?;
     let domain_length = u16::try_from(RESOURCE_V1_DOMAIN.len())
-        .map_err(|_| ResourceIdDerivationError::Hash(HashConstructionError::LengthOverflow))?;
+        .map_err(|_| ResourceIdDerivationError::HashFrameLengthOverflow)?;
 
     let mut hasher = Sha256::new();
     hasher.update(domain_length.to_be_bytes());
@@ -175,7 +171,7 @@ fn derive_resource_id(resource: &ResourceWireV1) -> Result<ResourceId, ResourceI
 }
 
 fn map_all_zero_resource_id(_: ZeroValueError) -> ResourceIdDerivationError {
-    ResourceIdDerivationError::Hash(HashConstructionError::AllZeroDigest)
+    ResourceIdDerivationError::AllZeroDigest
 }
 
 /// Strictly decodes one bounded `ResourceWireV1` value.

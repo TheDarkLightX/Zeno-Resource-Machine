@@ -36,11 +36,6 @@ pub const SHA256_REFERENCE_V1_ID_BYTES: [u8; 32] = [
 /// Failure while framing or converting a closed protocol hash operation.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub enum HashConstructionError {
-    /// A resource wire length was neither 595 nor 603 bytes.
-    ///
-    /// Retained so callers matching the pre-alpha error enum do not need an
-    /// unrelated migration when raw resource hashing leaves this crate.
-    InvalidResourceWireLength(usize),
     /// A host length did not fit the protocol's explicit `u16` or `u32` frame.
     LengthOverflow,
     /// The digest was all zero, which protocol identifier types prohibit.
@@ -50,12 +45,6 @@ pub enum HashConstructionError {
 impl fmt::Display for HashConstructionError {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Self::InvalidResourceWireLength(length) => {
-                write!(
-                    formatter,
-                    "invalid canonical ResourceWireV1 length: {length}"
-                )
-            }
             Self::LengthOverflow => {
                 formatter.write_str("hash frame length exceeds its explicit width")
             }
@@ -136,10 +125,6 @@ mod tests {
 
     #[test]
     fn hash_construction_errors_have_stable_diagnostics() {
-        assert_eq!(
-            std::format!("{}", HashConstructionError::InvalidResourceWireLength(7)),
-            "invalid canonical ResourceWireV1 length: 7"
-        );
         assert_eq!(
             std::format!("{}", HashConstructionError::LengthOverflow),
             "hash frame length exceeds its explicit width"

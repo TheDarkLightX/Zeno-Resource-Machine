@@ -12,7 +12,7 @@ ROOT = Path(__file__).resolve().parent.parent
 ALLOWED_INTERNAL_DEPENDENCIES = {
     "zrm-types": set(),
     "zrm-crypto": {"zrm-types"},
-    "zrm-codec": {"zrm-crypto", "zrm-types"},
+    "zrm-codec": {"zrm-types"},
     "zrm-kernel": {"zrm-codec", "zrm-policy", "zrm-types"},
     "zrm-policy": {"zrm-crypto", "zrm-types"},
 }
