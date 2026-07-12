@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import unittest
 from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from tools.check_architecture import dependency_failures
 from tools.check_conformance import (
@@ -14,7 +15,7 @@ from tools.check_conformance import (
     validate_reference,
 )
 from tools.check_coverage import CoverageError, coverage_totals, enforce_thresholds
-from tools.check_repository_hygiene import action_pin_failures
+from tools.check_repository_hygiene import action_pin_failures, repository_files
 
 
 class ConformanceHelperTests(unittest.TestCase):
@@ -97,6 +98,22 @@ class WorkflowPinTests(unittest.TestCase):
 
         workflow = "uses: actions/checkout@v4\n"
         self.assertEqual(len(action_pin_failures(workflow, Path("ci.yml"))), 1)
+
+
+class RepositoryHygieneTraversalTests(unittest.TestCase):
+    """Exercise repository traversal in ordinary and linked worktrees."""
+
+    def test_linked_worktree_git_pointer_is_not_public_payload(self) -> None:
+        """A worktree's local `.git` pointer must not enter privacy scans."""
+
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            git_directory = "/" + "home" + "/example/repository/.git/worktrees/test"
+            (root / ".git").write_text(f"gitdir: {git_directory}\n")
+            readme = root / "README.md"
+            readme.write_text("public payload\n")
+
+            self.assertEqual(repository_files(root), [readme])
 
 
 class CoveragePolicyTests(unittest.TestCase):

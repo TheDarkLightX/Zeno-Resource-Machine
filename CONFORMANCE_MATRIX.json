@@ -29,7 +29,8 @@
       "wp0_source_sbom_and_cryptography_cbom_controls",
       "wp3a_canonical_resource_role_partition",
       "wp3b_intrinsic_resource_construction",
-      "wp3c_intrinsic_body_role_and_ordinal_binding"
+      "wp3c_intrinsic_body_role_and_ordinal_binding",
+      "draft_class_e_semantic_closure_rfc_package"
     ],
     "non_claims": [
       "no_complete_semantic_kernel",
@@ -45,6 +46,7 @@
       "no_release_provenance",
       "no_reproducible_release",
       "no_security_audit",
+      "no_approved_semantic_closure_rfc",
       "no_production_authority"
     ]
   },

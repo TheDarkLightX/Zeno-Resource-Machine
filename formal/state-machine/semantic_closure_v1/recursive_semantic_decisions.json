@@ -1,0 +1,124 @@
+{
+  "schema": "zrm/recursive-semantic-decision-set/v1",
+  "package_id": "zrm-semantic-closure-v1",
+  "date": "2026-07-12",
+  "status": "draft_requires_independent_review",
+  "author": "Dana Edwards",
+  "drafting_assistance": "GPT-5.6",
+  "normative_source": "rfcs/RFC-0002-recursive-semantic-journal-composition.md",
+  "assurance": {
+    "visibility": "internal_not_publicly_replayable",
+    "role": "corroborative_only",
+    "model_id": "zrm_recursive_semantic_composition_v1"
+  },
+  "decisions": [
+    {
+      "id": "ZRM-RSC-SD-001",
+      "title": "AcceptedJournal is the postcommit semantic leaf",
+      "decision": "Postcommit recursive semantic aggregation accepts only an authenticated AcceptedJournal. JournalDraft belongs exclusively to the admission lifecycle.",
+      "rejected_alternatives": [
+        "generic journal bytes with an accepted Boolean",
+        "one leaf type for admission and postcommit aggregation"
+      ]
+    },
+    {
+      "id": "ZRM-RSC-SD-002",
+      "title": "Semantic and proof identity are separate",
+      "decision": "Semantic identity commits the ordered accepted journals and their state and semantic-effect summary. Proof identity additionally commits programs, releases, profiles, receipts, and tree topology.",
+      "rejected_alternatives": [
+        "recursive program identity is the economic identity",
+        "proof-tree root is the semantic epoch root"
+      ]
+    },
+    {
+      "id": "ZRM-RSC-SD-003",
+      "title": "Position derives from authenticated state version",
+      "decision": "A singleton leaf position equals its AcceptedJournal pre-state version. Its end position equals the authenticated post-state version, which must be exactly pre-state version plus one. Callers cannot supply positions.",
+      "rejected_alternatives": [
+        "host-assigned position",
+        "independent ordering counter without an authenticated binding",
+        "sort leaves by journal hash"
+      ],
+      "model": "zrm_recursive_semantic_composition_v1",
+      "mutant": "caller_substitutes_leaf_position"
+    },
+    {
+      "id": "ZRM-RSC-SD-004",
+      "title": "State continuity is exact",
+      "decision": "Composition requires the left post-state root and version to equal the right pre-state root and version under one exact scope and profile.",
+      "rejected_alternatives": [
+        "host assertion of continuity",
+        "same epoch is sufficient",
+        "ignore versions when roots match"
+      ]
+    },
+    {
+      "id": "ZRM-RSC-SD-005",
+      "title": "Descendant uniqueness needs authenticated union",
+      "decision": "Transition, nullifier, created-resource, and profile-defined one-shot identity sets are pairwise disjoint across children and exactly unioned. A root alone is insufficient without a bounded witness or proof-carrying accumulator operation.",
+      "rejected_alternatives": [
+        "silently deduplicate child sets",
+        "trust a parent-supplied set root",
+        "assume valid leaves cannot conflict across siblings"
+      ]
+    },
+    {
+      "id": "ZRM-RSC-SD-006",
+      "title": "Aggregation creates no hidden effects or commit metadata",
+      "decision": "Accounting and semantic effects are exact checked combinations of accepted child journal commitments. Aggregation creates, removes, or reinterprets no ZRM effect and does not synthesize replay or commit metadata.",
+      "rejected_alternatives": [
+        "aggregate-level reward or fee not represented by a ZRM transition",
+        "omit child semantic effects after compression",
+        "include commit metadata as a semantic effect"
+      ]
+    },
+    {
+      "id": "ZRM-RSC-SD-007",
+      "title": "First profile excludes messages and carry",
+      "decision": "SerializedSemanticCompositionV1 uses named empty inbox, outbox, and carry commitments with zero counts. Any nonempty or unsupported message or carry data rejects. Enabled message or carry algebra requires a separate Class E profile and RFC.",
+      "rejected_alternatives": [
+        "leave message cancellation underspecified",
+        "accept arbitrary roots with zero counts",
+        "infer carry semantics from the machine-state root"
+      ]
+    },
+    {
+      "id": "ZRM-RSC-SD-008",
+      "title": "Semantic composition is partial associative and noncommutative",
+      "decision": "For the same ordered valid leaves and fixed profile, left- and right-associated composition produce the same complete semantic summary. Reordering is not equivalent and normally makes composition undefined.",
+      "rejected_alternatives": [
+        "commutative merge",
+        "tree-shape-specific semantic root"
+      ],
+      "model": "zrm_recursive_semantic_composition_v1",
+      "mutant": "recursive_fold_omits_middle_leaf"
+    },
+    {
+      "id": "ZRM-RSC-SD-009",
+      "title": "First profile favors explicit bounded witnesses",
+      "decision": "The reference composer uses bounded ordered manifests and sorted unique vectors and recomputes roots. Optimized accumulators require a separate profile and refinement evidence.",
+      "rejected_alternatives": [
+        "adopt an unaudited production accumulator immediately",
+        "make proof-system-specific accumulators part of ZRM core"
+      ]
+    },
+    {
+      "id": "ZRM-RSC-SD-010",
+      "title": "Availability and finality are not implied by recursion",
+      "decision": "A recursive proof preserves only the named availability certificates and semantic relation. It does not manufacture availability, ordering, consensus, or finality.",
+      "rejected_alternatives": [
+        "content root implies retrievability",
+        "recursive root implies canonical chain history"
+      ]
+    }
+  ],
+  "non_claims": [
+    "not approved protocol semantics until independent review and maintainer decision",
+    "internal bounded evidence is not publicly replayable from this repository",
+    "no canonical byte or hash freeze",
+    "no production accumulator selection",
+    "no unbounded associativity proof",
+    "no recursive verifier implementation or release identity",
+    "no data availability, consensus, finality, privacy, or production readiness claim"
+  ]
+}
