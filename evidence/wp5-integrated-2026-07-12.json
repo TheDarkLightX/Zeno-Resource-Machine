@@ -29,6 +29,9 @@
     "promotion_allowed": false
   },
   "record_count": 23,
+  "correction_refs": [
+    "evidence/wp5-path-correction-2026-07-12.json"
+  ],
   "records": [
     {
       "path": "evidence/wp5-gates/01-rust-tests.json",
