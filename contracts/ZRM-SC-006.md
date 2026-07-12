@@ -7,9 +7,10 @@
 Only the governed verifier registry may create:
 
 - `VerifiedLogicFact`;
+- `VerifiedControllerFact`;
 - `VerifiedTransformationFact`;
-- `VerifiedAuthorityFact`;
 - `VerifiedDaFact`;
+- `VerifiedExternalAttestationFact`, where an active profile defines it;
 - `VerifiedAdmissionFact`;
 - profile-specific postcommit aggregation or anchor facts.
 
