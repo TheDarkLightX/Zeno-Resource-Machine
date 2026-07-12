@@ -11,7 +11,7 @@ permissions:
 jobs:
   fuzz-smoke:
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 110
     steps:
       - name: Check out source
         uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
@@ -22,7 +22,7 @@ jobs:
           rustup toolchain install 1.87.0 --profile minimal
           rustup toolchain install nightly-2025-03-02 --profile minimal
           cargo +1.87.0 install --locked --version 0.13.1 cargo-fuzz
-      - name: Replay and fuzz resource decoder, policy cost, roles, and intrinsic resources
+      - name: Replay and fuzz resource decoder, policy cost, roles, and bound resources
         run: |
           python3 fuzz/generate_corpus.py --check
           cargo +nightly-2025-03-02 fuzz run resource_wire_v1_decode -- -seed=1 -runs=2 -max_len=16385 -timeout=5
@@ -33,6 +33,8 @@ jobs:
           cargo +nightly-2025-03-02 fuzz run resource_roles_v1 -- -seed=1 -max_total_time=900 -max_len=24684 -timeout=5
           cargo +nightly-2025-03-02 fuzz run intrinsic_resource_v1 -- -seed=1 -runs=18 -max_len=32 -timeout=5
           cargo +nightly-2025-03-02 fuzz run intrinsic_resource_v1 -- -seed=1 -max_total_time=900 -max_len=32 -timeout=5
+          cargo +nightly-2025-03-02 fuzz run role_bound_intrinsic_v1 -- -seed=1 -runs=8 -max_len=21 -timeout=5
+          cargo +nightly-2025-03-02 fuzz run role_bound_intrinsic_v1 -- -seed=1 -max_total_time=900 -max_len=21 -timeout=5
 
   kani:
     runs-on: ubuntu-24.04
@@ -47,7 +49,7 @@ jobs:
           rustup toolchain install 1.87.0 --profile minimal
           cargo +1.87.0 install --locked --version 0.60.0 kani-verifier
           cargo kani setup
-      - name: Model-check scoped WP1 through WP3b harnesses
+      - name: Model-check scoped WP1 through WP3c harnesses
         run: cargo kani --workspace
 
   miri:

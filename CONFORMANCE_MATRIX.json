@@ -28,7 +28,8 @@
       "wp0_multi_axis_code_quality_controls",
       "wp0_source_sbom_and_cryptography_cbom_controls",
       "wp3a_canonical_resource_role_partition",
-      "wp3b_intrinsic_resource_construction"
+      "wp3b_intrinsic_resource_construction",
+      "wp3c_intrinsic_body_role_and_ordinal_binding"
     ],
     "non_claims": [
       "no_complete_semantic_kernel",
@@ -149,18 +150,21 @@
         "crates/zrm-types/src/lib.rs",
         "crates/zrm-types/src/opaque.rs",
         "crates/zrm-crypto/src/lib.rs",
-        "crates/zrm-kernel/src/resource.rs"
+        "crates/zrm-kernel/src/resource.rs",
+        "crates/zrm-kernel/src/role_bound_resource.rs"
       ],
       "test_refs": [
         "crates/zrm-types/src/lib.rs",
         "crates/zrm-crypto/src/lib.rs",
         "crates/zrm-crypto/tests/vectors.rs",
         "crates/zrm-kernel/tests/intrinsic_resource.rs",
-        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs"
+        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic.rs"
       ],
       "formal_refs": [
         "crates/zrm-types/src/lib.rs",
-        "crates/zrm-kernel/src/resource/kani_harnesses.rs"
+        "crates/zrm-kernel/src/resource/kani_harnesses.rs",
+        "crates/zrm-kernel/src/role_bound_resource/kani_harnesses.rs"
       ],
       "evidence_refs": [
         "vectors/resource_wire_v1.json",
@@ -168,10 +172,11 @@
         "evidence/wp1-class-c-review-2026-07-11.json",
         "evidence/wp2-local-gates-2026-07-11.json",
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
-        "evidence/wp3b-local-gates-2026-07-11.json"
+        "evidence/wp3b-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md"
       ],
-      "next_action": "make IntrinsicResourceV1 obligatory for later resource-policy, role, transition, and state validation while preserving opaque construction and exact domain framing",
-      "non_claim": "opaque primitives and WP3b intrinsic resource fields enforce local nonzero invariants only; caller-provided values remain unauthenticated and no final resource, policy, state, or transition authority follows",
+      "next_action": "make RoleBoundIntrinsicResourceV1 obligatory for later resource-policy, logic-claim, transition, and state validation while preserving opaque construction and exact domain framing",
+      "non_claim": "opaque primitives, WP3b intrinsic fields, and the WP3c body-to-role binding enforce local representation and substitution invariants only; caller-provided values remain unauthenticated and no final resource, policy, state, or transition authority follows",
       "normative_refs": [
         "SPECIFICATION.md#103-required-domain-strings",
         "SPECIFICATION.md#12-primitive-newtypes"
@@ -190,7 +195,7 @@
       "status": "implemented_partial",
       "defense_layer": "unrepresentable",
       "disaster_state": "one resource is simultaneously treated as consumed, read-only, and newly created",
-      "construction_rule": "Bound all three role counts before allocation, reject within-role duplicates and all cross-role collisions in deterministic precedence, sort each valid role by ResourceId, and derive role-local ordinals only from the sealed canonical partition",
+      "construction_rule": "Bound all three role counts before allocation, reject within-role duplicates and all cross-role collisions in deterministic precedence, sort each valid role by ResourceId, derive role-local ordinals only from the sealed canonical partition, and bind intrinsic bodies only through their internally derived ResourceId",
       "required_evidence": [
         "role collision tests",
         "property tests over permutations",
@@ -199,25 +204,31 @@
       "implementation_refs": [
         "crates/zrm-kernel/src/lib.rs",
         "crates/zrm-kernel/src/resource_roles.rs",
+        "crates/zrm-kernel/src/role_bound_resource.rs",
         "crates/zrm-policy/src/limits.rs"
       ],
       "test_refs": [
         "crates/zrm-kernel/tests/resource_roles.rs",
         "crates/zrm-kernel/tests/resource_role_atlas.rs",
-        "fuzz/fuzz_targets/resource_roles_v1.rs"
+        "crates/zrm-kernel/tests/role_bound_intrinsic.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic_atlas.rs",
+        "fuzz/fuzz_targets/resource_roles_v1.rs",
+        "fuzz/fuzz_targets/role_bound_intrinsic_v1.rs"
       ],
       "formal_refs": [
         "crates/zrm-kernel/src/resource_roles/kani_harnesses.rs",
         "crates/zrm-kernel/src/resource_roles/kani_harnesses/count.rs",
         "crates/zrm-kernel/src/resource_roles/kani_harnesses/collision.rs",
-        "crates/zrm-kernel/src/resource_roles/kani_harnesses/duplicate.rs"
+        "crates/zrm-kernel/src/resource_roles/kani_harnesses/duplicate.rs",
+        "crates/zrm-kernel/src/role_bound_resource/kani_harnesses.rs"
       ],
       "evidence_refs": [
         "worklogs/2026-07-11-wp3-resource-roles.md",
-        "evidence/wp3a-local-gates-2026-07-11.json"
+        "evidence/wp3a-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md"
       ],
-      "next_action": "make CanonicalResourceRolesV1 an obligatory input to the later prevalidated-transition stage before logic verification, then define canonical role bytes and list roots through Class E review",
-      "non_claim": "this candidate proves only a local structural partition under caller-supplied validated limits; it authenticates no policy or resource body and performs no membership, freshness, logic, accounting, root, state, commit, or canonical-ABI check",
+      "next_action": "make RoleBoundIntrinsicResourceV1 an obligatory input to later resource-policy and logic-claim construction before proof verification, then define canonical role bytes and list roots through Class E review",
+      "non_claim": "WP3a and WP3c prove only a local structural partition plus exact intrinsic-body ID, role, and ordinal consistency within a caller-proposed unauthenticated partition; they prove no complete body coverage and authenticate no policy, membership, freshness, logic, accounting, root, state, commit, or canonical ABI",
       "normative_refs": [
         "SPECIFICATION.md#92-role-disjointness",
         "SPECIFICATION.md#18-resource-roles-and-canonical-order"
@@ -1226,19 +1237,24 @@
         "crates/zrm-crypto/src/lib.rs",
         "crates/zrm-kernel/src/lib.rs",
         "crates/zrm-kernel/src/resource.rs",
+        "crates/zrm-kernel/src/role_bound_resource.rs",
         "crates/zrm-policy/src/lib.rs",
         "crates/zrm-types/src/lib.rs"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
         "crates/zrm-kernel/tests/intrinsic_resource.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic_atlas.rs",
         "crates/zrm-policy/tests/policy_model.rs",
         "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
-        "fuzz/fuzz_targets/intrinsic_resource_v1.rs"
+        "fuzz/fuzz_targets/intrinsic_resource_v1.rs",
+        "fuzz/fuzz_targets/role_bound_intrinsic_v1.rs"
       ],
       "formal_refs": [
         "crates/zrm-codec/src/kani_harnesses.rs",
         "crates/zrm-kernel/src/resource/kani_harnesses.rs",
+        "crates/zrm-kernel/src/role_bound_resource/kani_harnesses.rs",
         "crates/zrm-policy/src/cost.rs",
         "crates/zrm-types/src/lib.rs"
       ],
@@ -1247,7 +1263,8 @@
         "worklogs/2026-07-10-wp0-wp1.md",
         "worklogs/2026-07-11-wp2-policy-model.md",
         "evidence/wp2-local-gates-2026-07-11.json",
-        "worklogs/2026-07-11-wp3-intrinsic-resource.md"
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md"
       ],
       "next_action": "retain pinned Miri coverage and maintain an explicit unsafe inventory plus safety cases as adapters are added",
       "non_claim": "unsafe is forbidden in current ZRM crates and their tests pass under Miri; this does not establish soundness of dependency unsafe code, unexercised architecture paths, or future adapters",
@@ -1346,13 +1363,16 @@
         "crates/zrm-policy/src/resource_kind.rs",
         "crates/zrm-policy/src/verifier.rs",
         "crates/zrm-policy/src/cost.rs",
-        "crates/zrm-kernel/src/resource.rs"
+        "crates/zrm-kernel/src/resource.rs",
+        "crates/zrm-kernel/src/role_bound_resource.rs"
       ],
       "test_refs": [
         "crates/zrm-policy/tests/policy_model.rs",
         "crates/zrm-policy/src/cost.rs",
         "crates/zrm-kernel/tests/intrinsic_resource.rs",
-        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs"
+        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic_atlas.rs"
       ],
       "formal_refs": [],
       "evidence_refs": [
@@ -1361,10 +1381,11 @@
         "evidence/wp2-local-gates-2026-07-11.json",
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
         "evidence/WP3B_INTRINSIC_RESOURCE_MUTATION_MAP.md",
-        "evidence/wp3b-local-gates-2026-07-11.json"
+        "evidence/wp3b-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md"
       ],
       "next_action": "retain zero missed critical mutants as resource, transition, accounting, state, registry, and commit guards are added",
-      "non_claim": "the recorded mutation campaigns cover WP1, pre-RFC WP2, WP3a, and the policy-independent WP3b constructor; no complete transition kernel, authority registry, state, persistence, or commit guard exists",
+      "non_claim": "recorded campaigns cover WP1, pre-RFC WP2, WP3a, and the policy-independent WP3b constructor; WP3c structural-binding mutation evidence remains a candidate until patch-bound manual critical mutants are recorded, and no complete transition kernel, authority registry, state, persistence, or commit guard exists",
       "normative_refs": [
         "SPECIFICATION.md#404-mutation-tests"
       ],
@@ -1397,6 +1418,7 @@
         "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
         "fuzz/fuzz_targets/policy_cost_v1.rs",
         "fuzz/fuzz_targets/intrinsic_resource_v1.rs",
+        "fuzz/fuzz_targets/role_bound_intrinsic_v1.rs",
         "fuzz/Cargo.toml"
       ],
       "test_refs": [
@@ -1410,8 +1432,17 @@
         "fuzz/corpus/intrinsic_resource_v1/all-defects",
         "fuzz/corpus/intrinsic_resource_v1/expiry-before-creation",
         "fuzz/corpus/intrinsic_resource_v1/unknown-flags",
+        "fuzz/corpus/role_bound_intrinsic_v1/absent",
+        "fuzz/corpus/role_bound_intrinsic_v1/consumed",
+        "fuzz/corpus/role_bound_intrinsic_v1/referenced",
+        "fuzz/corpus/role_bound_intrinsic_v1/created-permuted",
+        "fuzz/corpus/role_bound_intrinsic_v1/stale-consumed-identity",
+        "fuzz/corpus/role_bound_intrinsic_v1/stale-referenced-quantity",
+        "fuzz/corpus/role_bound_intrinsic_v1/stale-created-nonce",
+        "fuzz/corpus/role_bound_intrinsic_v1/stale-created-expiry",
         "crates/zrm-codec/tests/resource_wire_v1.rs",
-        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs"
+        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs",
+        "crates/zrm-kernel/tests/role_bound_intrinsic_atlas.rs"
       ],
       "formal_refs": [],
       "evidence_refs": [
@@ -1420,10 +1451,11 @@
         "worklogs/2026-07-11-wp2-policy-model.md",
         "evidence/wp2-local-gates-2026-07-11.json",
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
-        "evidence/wp3b-local-gates-2026-07-11.json"
+        "evidence/wp3b-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md"
       ],
       "next_action": "accumulate sustained fuzz duration, add canonical policy decoders only after the Class E ABI RFC, commit minimized failures, and add later proof-envelope grammars",
-      "non_claim": "the campaigns cover the ResourceWireV1 decoder, isolated WP2 cost arithmetic, and the WP3b intrinsic constructor grammar; they grant no SHA-256 proof, canonical policy, proof-envelope, registry, final resource, or complete semantic-kernel assurance",
+      "non_claim": "recorded campaigns cover the ResourceWireV1 decoder, isolated WP2 cost arithmetic, and the WP3b intrinsic constructor grammar; WP3c structural-placement and stale-body-substitution fuzzing remains candidate evidence until its patch-bound campaign record is committed, and it grants no SHA-256 proof, canonical policy, proof-envelope, registry, final resource, or complete semantic-kernel assurance",
       "normative_refs": [
         "SPECIFICATION.md#405-fuzzing"
       ],
@@ -1561,10 +1593,11 @@
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
         "evidence/wp3b-agent-reviews-2026-07-11.json",
         "evidence/wp3b-local-gates-2026-07-11.json",
-        "evidence/wp3b-remediation-attestation-2026-07-11.json"
+        "evidence/wp3b-remediation-attestation-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md"
       ],
       "next_action": "obtain final human behavior and assurance-evidence review of each candidate slice after clean hosted gates; retain completed scoped reviews as separate records",
-      "non_claim": "WP1 has scoped human approval; WP3b independent agent reviews are complete and receipt-bound, while WP2 and WP3 still lack required human Class C review and remain untrusted contribution material that cannot authorize self-promotion",
+      "non_claim": "WP1 has scoped human approval; prior WP3b independent agent reviews are complete and receipt-bound, while WP2 and the current WP3c contribution still lack recorded human Class C review and cannot authorize self-promotion",
       "normative_refs": [
         "SPECIFICATION.md#45-generated-code-policy",
         "SPECIFICATION.md#46-agent-implementation-contract"
@@ -1767,6 +1800,7 @@
         "crates/zrm-types/src/lib.rs",
         "crates/zrm-codec/src/resource_wire_v1.rs",
         "crates/zrm-kernel/src/resource.rs",
+        "crates/zrm-kernel/src/role_bound_resource.rs",
         "crates/zrm-policy/src/limits.rs",
         "crates/zrm-policy/src/cost.rs"
       ],
@@ -1776,10 +1810,12 @@
         "crates/zrm-policy/src/cost.rs",
         "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
         "fuzz/fuzz_targets/policy_cost_v1.rs",
-        "fuzz/fuzz_targets/intrinsic_resource_v1.rs"
+        "fuzz/fuzz_targets/intrinsic_resource_v1.rs",
+        "fuzz/fuzz_targets/role_bound_intrinsic_v1.rs"
       ],
       "formal_refs": [
         "crates/zrm-kernel/src/resource/kani_harnesses.rs",
+        "crates/zrm-kernel/src/role_bound_resource/kani_harnesses.rs",
         "crates/zrm-policy/src/limits.rs",
         "crates/zrm-policy/src/cost.rs"
       ],
@@ -1789,10 +1825,11 @@
         "evidence/wp2-local-gates-2026-07-11.json",
         "worklogs/2026-07-11-wp0-complexity-report.md",
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
-        "evidence/wp3b-local-gates-2026-07-11.json"
+        "evidence/wp3b-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-role-bound-intrinsic.md"
       ],
       "next_action": "freeze policy and cost-model authority bytes, implement sorted unique cost-row coverage and the complete pre-dispatch cost plan, then add backend worst-case and end-to-end load evidence in WP5 and WP9",
-      "non_claim": "WP1 byte bounds, bounded WP3b field validation and 603-byte commitment construction, plus WP2 machine ceilings and isolated local per-row cost quotes are implemented; no authenticated cost model, governed charge, complete dispatch plan, backend work bound, storage runtime, rate limit, or end-to-end DoS claim exists",
+      "non_claim": "WP1 byte bounds, bounded WP3b field validation and 603-byte commitment construction, bounded WP3c role lookup, plus WP2 machine ceilings and isolated local per-row cost quotes are implemented; no authenticated cost model, governed charge, complete dispatch plan, backend work bound, storage runtime, rate limit, or end-to-end DoS claim exists",
       "normative_refs": [
         "SPECIFICATION.md#15-machine-policy",
         "SPECIFICATION.md#405-fuzzing",
