@@ -127,6 +127,9 @@ def role_bound_intrinsic_seeds() -> dict[str, bytes]:
         "stale-referenced-quantity": seed(2, 1, 1, 8, 22, 5),
         "stale-created-nonce": seed(3, 2, 1, 14, 23, 6),
         "stale-created-expiry": seed(3, 0, 1, 16, 24, 7),
+        "stale-nonce-noop-regression": seed(
+            1, 0, 1, 82, 114, 1_522_216_824_375_083_008
+        ),
     }
 
 
@@ -206,7 +209,7 @@ def main() -> int:
         print(
             "fuzz corpus check passed: resource boundary, three policy-cost seeds, "
             "ten resource-role seeds, eighteen intrinsic-resource seeds, and "
-            "eight role-bound-intrinsic seeds"
+            "nine role-bound-intrinsic seeds"
         )
         return 0
     OVERSIZE_SEED.parent.mkdir(parents=True, exist_ok=True)
@@ -227,7 +230,7 @@ def main() -> int:
     print(
         "generated resource boundary, three policy-cost seeds, "
         "ten resource-role seeds, eighteen intrinsic-resource seeds, and "
-        "eight role-bound-intrinsic seeds"
+        "nine role-bound-intrinsic seeds"
     )
     return 0
 

@@ -57,7 +57,7 @@ fn mutate_valid_field(resource: &mut ResourceWireV1, selector: u8) {
         11 => resource.controller_root = [112; 32],
         12 => resource.policy_root = [113; 32],
         13 => resource.provenance_root = [114; 32],
-        14 => resource.nonce = [115; 32],
+        14 => resource.nonce[0] ^= 1,
         15 => resource.created_epoch = 2,
         _ => resource.expiry_epoch = None,
     }
