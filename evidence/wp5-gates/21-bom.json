@@ -1,0 +1,37 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "47fb1e536e1e8f4ffc753d607d4b65e1b9bf287a",
+  "source_tree": "d6371e71bc9021dc066b4b2c81fe561963c1e6b0",
+  "dirty": false,
+  "gate_id": "WP5-integrated-bom",
+  "tool": {
+    "name": "python3",
+    "version": "3.12.3",
+    "executable_sha256": "1643dacd9feaedc58f3cc581e4d22577dfe25c09b10282936186ccf0f2e61118"
+  },
+  "command": [
+    "python3",
+    "tools/generate_bom.py",
+    "--sbom",
+    "target/wp5-integrated-sbom.json",
+    "--cbom",
+    "target/wp5-integrated-cbom.json"
+  ],
+  "environment_policy_root": "sha256:68344fafd9cb9be0b9f6621c43238850ce65abf3f62c0f6eedc71d9d86eb2432",
+  "started_at": null,
+  "duration_ms": null,
+  "status": "pass",
+  "scope": [
+    "source and cryptography inventory"
+  ],
+  "result_root": "sha256:ace5917c763354bc225738a1c0bc00ef911bfce6ef35a5460d85e4d81c786d0b",
+  "result_summary": "24 source components, 66 edges, 1 cryptography component; SBOM SHA-256 5221aec39b490570c3e922d4ec80a3394c3bf5fd51eaa095e412c0508a113083; CBOM SHA-256 b2f037c5a854cdfa0de456a26649643488c833d6ae517a9621623e5d10f9c028",
+  "captured_output_sha256": "ace5917c763354bc225738a1c0bc00ef911bfce6ef35a5460d85e4d81c786d0b",
+  "assumptions": [
+    "the replay started from the clean source revision and restored every manual mutant"
+  ],
+  "exclusions": [],
+  "non_claims": [
+    "inventories are not standardized release attestations"
+  ]
+}

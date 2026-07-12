@@ -1,0 +1,47 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "47fb1e536e1e8f4ffc753d607d4b65e1b9bf287a",
+  "source_tree": "d6371e71bc9021dc066b4b2c81fe561963c1e6b0",
+  "dirty": false,
+  "gate_id": "WP5-integrated-generated-mutation",
+  "tool": {
+    "name": "cargo-mutants",
+    "version": "26.0.0",
+    "executable_sha256": "0c01b08444b65d20be9a0dbe9786ae1c4844898de8872b457426397a24f0a771"
+  },
+  "command": [
+    "cargo",
+    "+1.87.0",
+    "mutants",
+    "--in-place",
+    "-p",
+    "zrm-verifier-api",
+    "--file",
+    "crates/zrm-verifier-api/src/*.rs",
+    "--timeout",
+    "20",
+    "--build-timeout",
+    "60",
+    "--output",
+    "target/wp5-mutants-integrated"
+  ],
+  "environment_policy_root": "sha256:68344fafd9cb9be0b9f6621c43238850ce65abf3f62c0f6eedc71d9d86eb2432",
+  "started_at": null,
+  "duration_ms": null,
+  "status": "pass",
+  "scope": [
+    "zrm-verifier-api production source"
+  ],
+  "result_root": "sha256:7f86bfda330946caedc0e656b0acb66f82f65e75fa5fe8b0ac64b6e094c23323",
+  "result_summary": "19 generated: 12 caught, 7 compiler-unviable, 0 missed, 0 timed out",
+  "captured_output_sha256": "7f86bfda330946caedc0e656b0acb66f82f65e75fa5fe8b0ac64b6e094c23323",
+  "assumptions": [
+    "the replay started from the clean source revision and restored every manual mutant"
+  ],
+  "exclusions": [
+    "compiler-unviable mutants grant no behavioral claim"
+  ],
+  "non_claims": [
+    "generated mutants are not exhaustive"
+  ]
+}

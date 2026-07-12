@@ -1,0 +1,39 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "47fb1e536e1e8f4ffc753d607d4b65e1b9bf287a",
+  "source_tree": "d6371e71bc9021dc066b4b2c81fe561963c1e6b0",
+  "dirty": false,
+  "gate_id": "WP5-integrated-manual-mutants",
+  "tool": {
+    "name": "cargo",
+    "version": "1.87.0 (99624be96 2025-05-06)",
+    "executable_sha256": "a9fb5ef0f95be70b324f3e88a4621a566320e2eb00635dc37f8a98e0a9fb7c9a"
+  },
+  "command": [
+    "cargo",
+    "+1.87.0",
+    "test",
+    "-p",
+    "zrm-verifier-api",
+    "--lib",
+    "injected_reservation_refusal_reaches_the_constructor_error_path",
+    "--locked"
+  ],
+  "environment_policy_root": "sha256:68344fafd9cb9be0b9f6621c43238850ce65abf3f62c0f6eedc71d9d86eb2432",
+  "started_at": null,
+  "duration_ms": null,
+  "status": "pass",
+  "scope": [
+    "two patch-bound allocation-refusal mutants"
+  ],
+  "result_root": "sha256:f4fdea0f95e33b53603c755812613893563a49c3651503700c1375395d596284",
+  "result_summary": "ignore_reservation_refusal and misclassify_reservation_refusal both exited 101; second output SHA-256 c22b4aeea876f528900f892cbf5aa11104ee87bfad00f60685840a50f54e716c",
+  "captured_output_sha256": "f4fdea0f95e33b53603c755812613893563a49c3651503700c1375395d596284",
+  "assumptions": [
+    "the replay started from the clean source revision and restored every manual mutant"
+  ],
+  "exclusions": [],
+  "non_claims": [
+    "manual mutants establish only the named guard sensitivity"
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "47fb1e536e1e8f4ffc753d607d4b65e1b9bf287a",
+  "source_tree": "d6371e71bc9021dc066b4b2c81fe561963c1e6b0",
+  "dirty": false,
+  "gate_id": "WP5-integrated-miri",
+  "tool": {
+    "name": "cargo-nightly",
+    "version": "1.87.0-nightly (2622e844b 2025-02-28)",
+    "executable_sha256": "02d19887fe4b1575e9c56c388c4d5ebf7a5932f128a115619775ad358a73f466"
+  },
+  "command": [
+    "cargo",
+    "+nightly-2025-03-02",
+    "miri",
+    "test",
+    "-p",
+    "zrm-verifier-api",
+    "--all-targets",
+    "--locked"
+  ],
+  "environment_policy_root": "sha256:68344fafd9cb9be0b9f6621c43238850ce65abf3f62c0f6eedc71d9d86eb2432",
+  "started_at": null,
+  "duration_ms": null,
+  "status": "pass",
+  "scope": [
+    "zrm-verifier-api exercised executions"
+  ],
+  "result_root": "sha256:197400570203f360c859b8a1933b91ed8f6cd47fba337dd6e9c2b1560ee1be02",
+  "result_summary": "4 unit and 8 integration tests passed under Miri",
+  "captured_output_sha256": "197400570203f360c859b8a1933b91ed8f6cd47fba337dd6e9c2b1560ee1be02",
+  "assumptions": [
+    "the replay started from the clean source revision and restored every manual mutant"
+  ],
+  "exclusions": [],
+  "non_claims": [
+    "Miri does not prove unexecuted paths or dependency soundness"
+  ]
+}

@@ -1,0 +1,111 @@
+{
+  "schema": "zrm/integration-evidence/v1",
+  "record_id": "wp5-main-integration-2026-07-12",
+  "recorded_at": "2026-07-12",
+  "source": {
+    "revision": "b6ab212958992c844bf469f555b9bd7eb79413dc",
+    "tree": "3da0471de2933acba93fd87d4387d1fbd8eb2331",
+    "base_revision": "105f236e18ff954a4295996c4d11538dcc391d74",
+    "reviewed_wp5_endpoint": "365ea983a066ac71d802d0c9e14eb29fa8fd05fc",
+    "evidence_source_revision": "47fb1e536e1e8f4ffc753d607d4b65e1b9bf287a",
+    "dirty": false
+  },
+  "ancestry": {
+    "base_is_ancestor": true,
+    "reviewed_wp5_endpoint_is_ancestor": true,
+    "evidence_source_is_ancestor": true
+  },
+  "source_sha256": {
+    "Cargo.lock": "d005599af4c34e7017a1b30988b8187c5cee7adf1ae571a2059de1bce9557f29",
+    "crates/zrm-verifier-api/src/artifact.rs": "ec882e4a25af5938eb9bcf9f20b5fca3edc5677f879015ae1156d75267c307b9",
+    "crates/zrm-verifier-api/src/lib.rs": "4c38162dc219837b68db714dfc8787e530ec6174ecaf58a62218dd41b5b59a53",
+    "crates/zrm-verifier-api/tests/artifact.rs": "6f89df3ffe8156af2b90155b5d42e8ff62538971ca6892c5ce46b271acadcf64"
+  },
+  "merge_resolution": {
+    "conflicted_files": [
+      "CONFORMANCE_MATRIX.json",
+      "PACKAGE_MANIFEST.json",
+      "README.md"
+    ],
+    "rule": "preserve both the merged semantic-closure candidate scope and the unreviewed WP5 bounded-artifact candidate scope without promoting either",
+    "rust_source_changed_from_reviewed_endpoint": false
+  },
+  "local_validation": [
+    {
+      "command": "python3 tools/check_package_manifest.py",
+      "status": "pass",
+      "result": "41 payload files matched"
+    },
+    {
+      "command": "python3 tools/check_conformance.py",
+      "status": "pass",
+      "result": "45 obligations with live anchors, valid states, and acyclic dependencies"
+    },
+    {
+      "command": "python3 tools/check_repository_hygiene.py",
+      "status": "pass"
+    },
+    {
+      "command": "python3 tools/check_architecture.py",
+      "status": "pass"
+    },
+    {
+      "command": "python3 tools/check_complexity.py",
+      "status": "pass",
+      "result": "38 files; 300 functions; zero warnings and exceptions"
+    },
+    {
+      "command": "python3 tools/check_code_quality.py",
+      "status": "pass",
+      "result": "excellent-candidate; 16 rules; 5 decisions; zero advisories"
+    },
+    {
+      "command": "python3 -m unittest discover -s tools/tests -p test_*.py",
+      "status": "pass",
+      "result": "76 tests"
+    },
+    {
+      "command": "cargo check --workspace --all-targets --all-features --locked",
+      "status": "pass"
+    },
+    {
+      "command": "cargo clippy --workspace --all-targets --all-features --locked -- -D warnings",
+      "status": "pass"
+    },
+    {
+      "command": "cargo test --workspace --all-targets --all-features --locked",
+      "status": "pass",
+      "result": "116 runtime tests"
+    },
+    {
+      "command": "cargo test --workspace --doc --locked",
+      "status": "pass",
+      "result": "3 compile-fail doctests"
+    },
+    {
+      "command": "cargo doc --workspace --no-deps --locked",
+      "status": "pass"
+    },
+    {
+      "command": "python3 vectors/independent_python/replay_resource_wire_v1.py --check",
+      "status": "pass",
+      "result": "6 binary artifacts and 4 protocol digests"
+    },
+    {
+      "command": "python3 fuzz/generate_corpus.py --check",
+      "status": "pass"
+    }
+  ],
+  "review_state": {
+    "prior_wp5_independent_agent_reviews_complete": true,
+    "combined_tree_structural_review_complete": false,
+    "human_class_c_review_complete": false,
+    "promotion_allowed": false
+  },
+  "non_claims": [
+    "this receipt does not authorize merge, release, or production promotion",
+    "the selected per-artifact limit remains caller supplied and unauthenticated",
+    "prior coverage and mutation results remain scoped to their exact reviewed source revision",
+    "no verifier fact, dispatch, semantic transition, state mutation, or production authority follows"
+  ]
+}

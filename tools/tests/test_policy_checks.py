@@ -15,7 +15,7 @@ from tools.check_conformance import (
     validate_reference,
 )
 from tools.check_coverage import CoverageError, coverage_totals, enforce_thresholds
-from tools.check_repository_hygiene import action_pin_failures, repository_files
+from tools.check_repository_hygiene import CONTEXT_MARKERS, action_pin_failures, repository_files
 
 
 class ConformanceHelperTests(unittest.TestCase):
@@ -115,6 +115,11 @@ class RepositoryHygieneTraversalTests(unittest.TestCase):
 
             self.assertEqual(repository_files(root), [readme])
 
+    def test_temporary_absolute_paths_are_publication_markers(self) -> None:
+        """Generated evidence must use repository-relative ignored paths."""
+
+        self.assertIn("/" + "tmp" + "/", CONTEXT_MARKERS)
+
 
 class CoveragePolicyTests(unittest.TestCase):
     """Exercise fail-closed line and branch threshold handling."""
@@ -201,6 +206,24 @@ class ArchitecturePolicyTests(unittest.TestCase):
             "dependencies": [{"name": "sha2"}, {"name": "zrm-types"}],
         }
         self.assertEqual(dependency_failures(package), [])
+
+    def test_exact_verifier_api_dependency_is_accepted(self) -> None:
+        """The inert verifier input boundary depends inward on policy only."""
+
+        package = {
+            "name": "zrm-verifier-api",
+            "dependencies": [{"name": "zrm-policy"}],
+        }
+        self.assertEqual(dependency_failures(package), [])
+
+    def test_verifier_api_cannot_add_backend_dependencies_silently(self) -> None:
+        """Network and proof backends require a separate reviewed adapter edge."""
+
+        package = {
+            "name": "zrm-verifier-api",
+            "dependencies": [{"name": "reqwest"}, {"name": "zrm-policy"}],
+        }
+        self.assertEqual(len(dependency_failures(package)), 1)
 
 
 if __name__ == "__main__":

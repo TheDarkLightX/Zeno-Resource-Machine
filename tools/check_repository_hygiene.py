@@ -16,6 +16,7 @@ MAX_REPOSITORY_FILE_BYTES = 1_048_576
 CONTEXT_MARKERS = (
     "/" + "home" + "/",
     "/" + "mnt" + "/" + "data" + "/",
+    "/" + "tmp" + "/",
     "sand" + "box:",
     "Down" + "loads/",
 )

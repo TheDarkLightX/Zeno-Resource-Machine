@@ -1,0 +1,38 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "47fb1e536e1e8f4ffc753d607d4b65e1b9bf287a",
+  "source_tree": "d6371e71bc9021dc066b4b2c81fe561963c1e6b0",
+  "dirty": false,
+  "gate_id": "WP5-integrated-cargo-deny-fuzz",
+  "tool": {
+    "name": "cargo-deny",
+    "version": "0.20.2",
+    "executable_sha256": "7fab0df83b212f66978fe73e96621fde56fcf20b4b87ebcef5fdf56cfbffa798"
+  },
+  "command": [
+    "cargo",
+    "+1.87.0",
+    "deny",
+    "--manifest-path",
+    "fuzz/Cargo.toml",
+    "check",
+    "--hide-inclusion-graph"
+  ],
+  "environment_policy_root": "sha256:68344fafd9cb9be0b9f6621c43238850ce65abf3f62c0f6eedc71d9d86eb2432",
+  "started_at": null,
+  "duration_ms": null,
+  "status": "pass",
+  "scope": [
+    "fuzz workspace dependency policy"
+  ],
+  "result_root": "sha256:293b51ed30fa8cd81730799580131dbe765ca99103f91d7db1430ef2650b7624",
+  "result_summary": "advisories, bans, licenses, and sources passed",
+  "captured_output_sha256": "293b51ed30fa8cd81730799580131dbe765ca99103f91d7db1430ef2650b7624",
+  "assumptions": [
+    "the replay started from the clean source revision and restored every manual mutant"
+  ],
+  "exclusions": [],
+  "non_claims": [
+    "no WP5-specific fuzz target was run"
+  ]
+}
