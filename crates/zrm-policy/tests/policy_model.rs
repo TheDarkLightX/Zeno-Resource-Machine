@@ -808,10 +808,23 @@ fn assert_resource_kind_policy_getters() -> PolicyModelTestResult {
     Ok(())
 }
 
+fn assert_policy_limit_count_getters() -> PolicyModelTestResult {
+    let mut candidate = strict_limits();
+    candidate.max_consumed_resources = 17;
+    candidate.max_referenced_resources = 19;
+    candidate.max_created_resources = 23;
+    let limits = PolicyLimitsV1::try_from(candidate)?;
+    assert_eq!(limits.max_consumed_resources(), 17);
+    assert_eq!(limits.max_referenced_resources(), 19);
+    assert_eq!(limits.max_created_resources(), 23);
+    Ok(())
+}
+
 #[test]
 fn validated_policy_getters_preserve_typed_candidates() -> PolicyModelTestResult {
     assert_machine_policy_getters()?;
-    assert_resource_kind_policy_getters()
+    assert_resource_kind_policy_getters()?;
+    assert_policy_limit_count_getters()
 }
 
 fn assert_verifier_policy_getters() -> PolicyModelTestResult {

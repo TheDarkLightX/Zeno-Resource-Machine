@@ -11,6 +11,7 @@ cargo-fuzz = true
 [dependencies]
 libfuzzer-sys = "=0.4.13"
 zrm-codec = { version = "=0.1.0", path = "../crates/zrm-codec" }
+zrm-kernel = { version = "=0.1.0", path = "../crates/zrm-kernel" }
 zrm-policy = { version = "=0.1.0", path = "../crates/zrm-policy" }
 zrm-types = { version = "=0.1.0", path = "../crates/zrm-types" }
 
@@ -24,6 +25,20 @@ bench = false
 [[bin]]
 name = "policy_cost_v1"
 path = "fuzz_targets/policy_cost_v1.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "resource_roles_v1"
+path = "fuzz_targets/resource_roles_v1.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "intrinsic_resource_v1"
+path = "fuzz_targets/intrinsic_resource_v1.rs"
 test = false
 doc = false
 bench = false

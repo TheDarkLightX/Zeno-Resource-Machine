@@ -84,7 +84,8 @@
       ],
       "enforcement_refs": [
         "tools/check_code_quality.py",
-        "crates/zrm-types/src/lib.rs"
+        "crates/zrm-types/src/lib.rs",
+        "crates/zrm-kernel/src/resource.rs"
       ],
       "review_triggers": [
         "An authority-relevant value gains public fields, Default, a string representation, or a raw byte alias.",

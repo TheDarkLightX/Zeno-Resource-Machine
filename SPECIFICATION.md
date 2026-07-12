@@ -364,7 +364,7 @@ Every member of \(C \cup R\) MUST also be live at `current_epoch` under its acce
 ### 9.2 Role disjointness
 
 \[
-C \cap R = \varnothing
+C \cap R = C \cap O = R \cap O = \varnothing
 \]
 
 and no duplicate commitment may appear within or across role lists.

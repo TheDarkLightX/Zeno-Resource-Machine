@@ -26,10 +26,12 @@
       "wp2_specialized_opaque_root_candidates",
       "wp2_policy_limits_unit_checks_and_verifier_cost_quotes",
       "wp0_multi_axis_code_quality_controls",
-      "wp0_source_sbom_and_cryptography_cbom_controls"
+      "wp0_source_sbom_and_cryptography_cbom_controls",
+      "wp3a_canonical_resource_role_partition",
+      "wp3b_intrinsic_resource_construction"
     ],
     "non_claims": [
-      "no_implemented_semantic_kernel",
+      "no_complete_semantic_kernel",
       "no_stable_canonical_abi",
       "no_canonical_policy_bytes_or_hashes",
       "no_authenticated_policy_activation_or_trusted_context",
@@ -99,11 +101,13 @@
       ],
       "implementation_refs": [
         "crates/zrm-codec/src/resource_wire_v1.rs",
-        "crates/zrm-crypto/src/lib.rs"
+        "crates/zrm-crypto/src/lib.rs",
+        "crates/zrm-kernel/src/resource.rs"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
-        "crates/zrm-crypto/tests/vectors.rs"
+        "crates/zrm-crypto/tests/vectors.rs",
+        "crates/zrm-kernel/tests/intrinsic_resource.rs"
       ],
       "formal_refs": [],
       "evidence_refs": [
@@ -111,10 +115,12 @@
         "vectors/independent_python/replay_resource_wire_v1.py",
         "evidence/WP1_MUTATION_MAP.md",
         "evidence/wp1-local-gates-2026-07-10.json",
-        "evidence/wp1-class-c-review-2026-07-11.json"
+        "evidence/wp1-class-c-review-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "retain exact draft-v1 vector compatibility and the reviewed syntactic-versus-semantic authority boundary in every later work package",
-      "non_claim": "this implements syntactic ResourceWireV1 and ResourceId derivation only; it does not create a semantically valid or authoritative resource",
+      "non_claim": "the frozen ResourceWireV1 and ResourceId binding now feed a policy-independent intrinsic resource stage; this does not create final policy-valid ResourceV1, authenticated policy, state membership, accepted transition, or commit authority",
       "normative_refs": [
         "SPECIFICATION.md#102-domain-separated-hash-function",
         "SPECIFICATION.md#11-canonical-encoding-rules",
@@ -141,24 +147,31 @@
       ],
       "implementation_refs": [
         "crates/zrm-types/src/lib.rs",
-        "crates/zrm-crypto/src/lib.rs"
+        "crates/zrm-types/src/opaque.rs",
+        "crates/zrm-crypto/src/lib.rs",
+        "crates/zrm-kernel/src/resource.rs"
       ],
       "test_refs": [
         "crates/zrm-types/src/lib.rs",
         "crates/zrm-crypto/src/lib.rs",
-        "crates/zrm-crypto/tests/vectors.rs"
+        "crates/zrm-crypto/tests/vectors.rs",
+        "crates/zrm-kernel/tests/intrinsic_resource.rs",
+        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs"
       ],
       "formal_refs": [
-        "crates/zrm-types/src/lib.rs"
+        "crates/zrm-types/src/lib.rs",
+        "crates/zrm-kernel/src/resource/kani_harnesses.rs"
       ],
       "evidence_refs": [
         "vectors/resource_wire_v1.json",
         "evidence/wp1-local-gates-2026-07-10.json",
         "evidence/wp1-class-c-review-2026-07-11.json",
-        "evidence/wp2-local-gates-2026-07-11.json"
+        "evidence/wp2-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
-      "next_action": "validate the WP2 root-type candidate behaviors through hosted assurance evidence and preserve opaque construction and closed domain framing as later identifier families are added",
-      "non_claim": "the WP1 identifier slice is reviewed; newly added WP2 root types remain candidate code, and all caller-provided identifiers remain inert data until later semantic verification",
+      "next_action": "make IntrinsicResourceV1 obligatory for later resource-policy, role, transition, and state validation while preserving opaque construction and exact domain framing",
+      "non_claim": "opaque primitives and WP3b intrinsic resource fields enforce local nonzero invariants only; caller-provided values remain unauthenticated and no final resource, policy, state, or transition authority follows",
       "normative_refs": [
         "SPECIFICATION.md#103-required-domain-strings",
         "SPECIFICATION.md#12-primitive-newtypes"
@@ -174,21 +187,37 @@
       "id": "ZRM-CBC-003",
       "title": "Consumed, referenced, and created roles are disjoint",
       "severity": "critical",
-      "status": "specified",
+      "status": "implemented_partial",
       "defense_layer": "unrepresentable",
       "disaster_state": "one resource is simultaneously treated as consumed, read-only, and newly created",
-      "construction_rule": "Canonicalize role sets and reject cross-role duplicates before logic verification",
+      "construction_rule": "Bound all three role counts before allocation, reject within-role duplicates and all cross-role collisions in deterministic precedence, sort each valid role by ResourceId, and derive role-local ordinals only from the sealed canonical partition",
       "required_evidence": [
         "role collision tests",
         "property tests over permutations",
         "bounded model"
       ],
-      "implementation_refs": [],
-      "test_refs": [],
-      "formal_refs": [],
-      "evidence_refs": [],
-      "next_action": "implement the rule and attach replayable evidence before status promotion",
-      "non_claim": "specification text alone does not satisfy this obligation",
+      "implementation_refs": [
+        "crates/zrm-kernel/src/lib.rs",
+        "crates/zrm-kernel/src/resource_roles.rs",
+        "crates/zrm-policy/src/limits.rs"
+      ],
+      "test_refs": [
+        "crates/zrm-kernel/tests/resource_roles.rs",
+        "crates/zrm-kernel/tests/resource_role_atlas.rs",
+        "fuzz/fuzz_targets/resource_roles_v1.rs"
+      ],
+      "formal_refs": [
+        "crates/zrm-kernel/src/resource_roles/kani_harnesses.rs",
+        "crates/zrm-kernel/src/resource_roles/kani_harnesses/count.rs",
+        "crates/zrm-kernel/src/resource_roles/kani_harnesses/collision.rs",
+        "crates/zrm-kernel/src/resource_roles/kani_harnesses/duplicate.rs"
+      ],
+      "evidence_refs": [
+        "worklogs/2026-07-11-wp3-resource-roles.md",
+        "evidence/wp3a-local-gates-2026-07-11.json"
+      ],
+      "next_action": "make CanonicalResourceRolesV1 an obligatory input to the later prevalidated-transition stage before logic verification, then define canonical role bytes and list roots through Class E review",
+      "non_claim": "this candidate proves only a local structural partition under caller-supplied validated limits; it authenticates no policy or resource body and performs no membership, freshness, logic, accounting, root, state, commit, or canonical-ABI check",
       "normative_refs": [
         "SPECIFICATION.md#92-role-disjointness",
         "SPECIFICATION.md#18-resource-roles-and-canonical-order"
@@ -197,9 +226,7 @@
       "work_packages": [
         "WP3"
       ],
-      "blocking_dependencies": [
-        "ZRM-CBC-001"
-      ]
+      "blocking_dependencies": []
     },
     {
       "id": "ZRM-CBC-004",
@@ -619,18 +646,22 @@
       "implementation_refs": [
         "crates/zrm-types/src/lib.rs",
         "crates/zrm-codec/src/resource_wire_v1.rs",
+        "crates/zrm-kernel/src/resource.rs",
         "crates/zrm-policy/src/limits.rs",
         "crates/zrm-policy/src/cost.rs"
       ],
       "test_refs": [
         "crates/zrm-types/src/lib.rs",
         "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "crates/zrm-kernel/tests/intrinsic_resource.rs",
+        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs",
         "crates/zrm-policy/tests/policy_model.rs",
         "crates/zrm-policy/src/cost.rs"
       ],
       "formal_refs": [
         "crates/zrm-types/src/lib.rs",
         "crates/zrm-codec/src/kani_harnesses.rs",
+        "crates/zrm-kernel/src/resource/kani_harnesses.rs",
         "crates/zrm-policy/src/limits.rs",
         "crates/zrm-policy/src/cost.rs"
       ],
@@ -638,10 +669,12 @@
         "evidence/WP1_MUTATION_MAP.md",
         "worklogs/2026-07-11-wp2-policy-model.md",
         "evidence/wp2-local-gates-2026-07-11.json",
-        "worklogs/2026-07-11-wp0-complexity-report.md"
+        "worklogs/2026-07-11-wp0-complexity-report.md",
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "extend checked arithmetic and Kani evidence to complete dispatch-plan summation and WP6 accounting and transformation paths",
-      "non_claim": "the evidence covers WP1 widths plus isolated WP2 policy ceilings and per-row verifier cost; no complete dispatch plan, accounting arithmetic, or transformation engine exists",
+      "non_claim": "the evidence covers WP1 widths, exact WP3b u128 quantity and u64 epoch preservation, plus isolated WP2 policy ceilings and per-row verifier cost; no final quantity validity, complete dispatch plan, accounting arithmetic, or transformation engine exists",
       "normative_refs": [
         "SPECIFICATION.md#102-domain-separated-hash-function",
         "SPECIFICATION.md#21-accounting-model",
@@ -1157,10 +1190,12 @@
       "evidence_refs": [
         "worklogs/2026-07-10-wp0-wp1.md",
         "worklogs/2026-07-11-wp2-policy-model.md",
-        "evidence/wp2-local-gates-2026-07-11.json"
+        "evidence/wp2-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
-      "next_action": "obtain human architecture review of the four-crate graph and extend the exact allowlist when the separately scoped verifier API is introduced",
-      "non_claim": "the checker covers the current types, crypto, codec, and policy crates only; it does not validate future verifier, adapter, kernel, store, or runtime wiring",
+      "next_action": "retain exact review of the five-crate graph and extend the allowlist only when a separately scoped core or adapter boundary is introduced",
+      "non_claim": "the checker covers the current types, crypto, codec, policy, and kernel crates only; it does not validate future verifier, adapter, store, or runtime wiring",
       "normative_refs": [
         "SPECIFICATION.md#6-layering-and-dependency-direction",
         "SPECIFICATION.md#37-recommended-rust-workspace-architecture"
@@ -1189,16 +1224,21 @@
         "Cargo.toml",
         "crates/zrm-codec/src/lib.rs",
         "crates/zrm-crypto/src/lib.rs",
+        "crates/zrm-kernel/src/lib.rs",
+        "crates/zrm-kernel/src/resource.rs",
         "crates/zrm-policy/src/lib.rs",
         "crates/zrm-types/src/lib.rs"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "crates/zrm-kernel/tests/intrinsic_resource.rs",
         "crates/zrm-policy/tests/policy_model.rs",
-        "fuzz/fuzz_targets/resource_wire_v1_decode.rs"
+        "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
+        "fuzz/fuzz_targets/intrinsic_resource_v1.rs"
       ],
       "formal_refs": [
         "crates/zrm-codec/src/kani_harnesses.rs",
+        "crates/zrm-kernel/src/resource/kani_harnesses.rs",
         "crates/zrm-policy/src/cost.rs",
         "crates/zrm-types/src/lib.rs"
       ],
@@ -1206,7 +1246,8 @@
         ".github/workflows/nightly.yml",
         "worklogs/2026-07-10-wp0-wp1.md",
         "worklogs/2026-07-11-wp2-policy-model.md",
-        "evidence/wp2-local-gates-2026-07-11.json"
+        "evidence/wp2-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md"
       ],
       "next_action": "retain pinned Miri coverage and maintain an explicit unsafe inventory plus safety cases as adapters are added",
       "non_claim": "unsafe is forbidden in current ZRM crates and their tests pass under Miri; this does not establish soundness of dependency unsafe code, unexercised architecture paths, or future adapters",
@@ -1249,10 +1290,13 @@
         "tools/rust_quality.py",
         "tools/rust_complexity.py",
         "crates/zrm-policy/src/lib.rs",
-        "crates/zrm-policy/src/limits.rs"
+        "crates/zrm-policy/src/limits.rs",
+        "crates/zrm-kernel/src/resource.rs"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "crates/zrm-kernel/tests/intrinsic_resource.rs",
+        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs",
         "crates/zrm-policy/tests/policy_model.rs",
         "tools/tests/test_code_quality.py",
         "tools/tests/test_complexity.py",
@@ -1264,7 +1308,9 @@
         "worklogs/2026-07-11-wp2-policy-model.md",
         "evidence/wp2-local-gates-2026-07-11.json",
         "worklogs/2026-07-11-wp0-complexity-report.md",
-        "worklogs/2026-07-11-wp0-code-quality-report.md"
+        "worklogs/2026-07-11-wp0-code-quality-report.md",
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "retain the excellent tier with zero quality findings or exception debt, replay the behavior-and-evidence packet in hosted CI, and add a reviewed compiler-AST lane before claiming cyclomatic or cognitive-complexity coverage",
       "non_claim": "the automated reports cover five lexical complexity metrics, sixteen structural quality rules, and completeness of five required design decisions; they do not expand macros, classify semantic criticality, compute cyclomatic or cognitive complexity, detect every diff-aware smell, or prove universal design-pattern optimality",
@@ -1299,20 +1345,26 @@
         "crates/zrm-policy/src/machine.rs",
         "crates/zrm-policy/src/resource_kind.rs",
         "crates/zrm-policy/src/verifier.rs",
-        "crates/zrm-policy/src/cost.rs"
+        "crates/zrm-policy/src/cost.rs",
+        "crates/zrm-kernel/src/resource.rs"
       ],
       "test_refs": [
         "crates/zrm-policy/tests/policy_model.rs",
-        "crates/zrm-policy/src/cost.rs"
+        "crates/zrm-policy/src/cost.rs",
+        "crates/zrm-kernel/tests/intrinsic_resource.rs",
+        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs"
       ],
       "formal_refs": [],
       "evidence_refs": [
         "evidence/WP1_MUTATION_MAP.md",
         "evidence/WP2_POLICY_MUTATION_MAP.md",
-        "evidence/wp2-local-gates-2026-07-11.json"
+        "evidence/wp2-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/WP3B_INTRINSIC_RESOURCE_MUTATION_MAP.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "retain zero missed critical mutants as resource, transition, accounting, state, registry, and commit guards are added",
-      "non_claim": "the mutation campaigns cover WP1 and the pre-RFC WP2 local policy slice only; no transition kernel, authority registry, state, persistence, or commit guard exists",
+      "non_claim": "the recorded mutation campaigns cover WP1, pre-RFC WP2, WP3a, and the policy-independent WP3b constructor; no complete transition kernel, authority registry, state, persistence, or commit guard exists",
       "normative_refs": [
         "SPECIFICATION.md#404-mutation-tests"
       ],
@@ -1344,6 +1396,7 @@
       "implementation_refs": [
         "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
         "fuzz/fuzz_targets/policy_cost_v1.rs",
+        "fuzz/fuzz_targets/intrinsic_resource_v1.rs",
         "fuzz/Cargo.toml"
       ],
       "test_refs": [
@@ -1353,17 +1406,24 @@
         "fuzz/corpus/resource_wire_v1_decode/absent",
         "fuzz/corpus/resource_wire_v1_decode/oversize-boundary",
         "fuzz/corpus/resource_wire_v1_decode/present",
-        "crates/zrm-codec/tests/resource_wire_v1.rs"
+        "fuzz/corpus/intrinsic_resource_v1/valid-zero-quantity",
+        "fuzz/corpus/intrinsic_resource_v1/all-defects",
+        "fuzz/corpus/intrinsic_resource_v1/expiry-before-creation",
+        "fuzz/corpus/intrinsic_resource_v1/unknown-flags",
+        "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "crates/zrm-kernel/tests/intrinsic_resource_atlas.rs"
       ],
       "formal_refs": [],
       "evidence_refs": [
         ".github/workflows/nightly.yml",
         "worklogs/2026-07-10-wp0-wp1.md",
         "worklogs/2026-07-11-wp2-policy-model.md",
-        "evidence/wp2-local-gates-2026-07-11.json"
+        "evidence/wp2-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "accumulate sustained fuzz duration, add canonical policy decoders only after the Class E ABI RFC, commit minimized failures, and add later proof-envelope grammars",
-      "non_claim": "the campaigns cover the ResourceWireV1 decoder and isolated WP2 cost arithmetic only; they grant no canonical policy, proof-envelope, registry, or semantic-kernel assurance",
+      "non_claim": "the campaigns cover the ResourceWireV1 decoder, isolated WP2 cost arithmetic, and the WP3b intrinsic constructor grammar; they grant no SHA-256 proof, canonical policy, proof-envelope, registry, final resource, or complete semantic-kernel assurance",
       "normative_refs": [
         "SPECIFICATION.md#405-fuzzing"
       ],
@@ -1497,10 +1557,14 @@
         "worklogs/2026-07-10-wp0-wp1.md",
         "evidence/wp1-class-c-review-2026-07-11.json",
         "worklogs/2026-07-11-wp2-policy-model.md",
-        "evidence/wp2-local-gates-2026-07-11.json"
+        "evidence/wp2-local-gates-2026-07-11.json",
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-agent-reviews-2026-07-11.json",
+        "evidence/wp3b-local-gates-2026-07-11.json",
+        "evidence/wp3b-remediation-attestation-2026-07-11.json"
       ],
-      "next_action": "obtain final human semantic and test-evidence review of the WP2 candidate after clean-revision gates; retain the completed WP1 review as a separately scoped record",
-      "non_claim": "WP1 has scoped human approval; WP2 agent evidence and ordinary gates remain unreviewed contribution material and cannot authorize self-promotion",
+      "next_action": "obtain final human behavior and assurance-evidence review of each candidate slice after clean hosted gates; retain completed scoped reviews as separate records",
+      "non_claim": "WP1 has scoped human approval; WP3b independent agent reviews are complete and receipt-bound, while WP2 and WP3 still lack required human Class C review and remain untrusted contribution material that cannot authorize self-promotion",
       "normative_refs": [
         "SPECIFICATION.md#45-generated-code-policy",
         "SPECIFICATION.md#46-agent-implementation-contract"
@@ -1702,6 +1766,7 @@
       "implementation_refs": [
         "crates/zrm-types/src/lib.rs",
         "crates/zrm-codec/src/resource_wire_v1.rs",
+        "crates/zrm-kernel/src/resource.rs",
         "crates/zrm-policy/src/limits.rs",
         "crates/zrm-policy/src/cost.rs"
       ],
@@ -1710,9 +1775,11 @@
         "crates/zrm-policy/tests/policy_model.rs",
         "crates/zrm-policy/src/cost.rs",
         "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
-        "fuzz/fuzz_targets/policy_cost_v1.rs"
+        "fuzz/fuzz_targets/policy_cost_v1.rs",
+        "fuzz/fuzz_targets/intrinsic_resource_v1.rs"
       ],
       "formal_refs": [
+        "crates/zrm-kernel/src/resource/kani_harnesses.rs",
         "crates/zrm-policy/src/limits.rs",
         "crates/zrm-policy/src/cost.rs"
       ],
@@ -1720,10 +1787,12 @@
         ".github/workflows/nightly.yml",
         "worklogs/2026-07-11-wp2-policy-model.md",
         "evidence/wp2-local-gates-2026-07-11.json",
-        "worklogs/2026-07-11-wp0-complexity-report.md"
+        "worklogs/2026-07-11-wp0-complexity-report.md",
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "freeze policy and cost-model authority bytes, implement sorted unique cost-row coverage and the complete pre-dispatch cost plan, then add backend worst-case and end-to-end load evidence in WP5 and WP9",
-      "non_claim": "WP1 byte bounds plus WP2 machine ceilings and isolated local per-row cost quotes are implemented; no authenticated cost model, governed charge, complete dispatch plan, backend work bound, storage runtime, rate limit, or end-to-end DoS claim exists",
+      "non_claim": "WP1 byte bounds, bounded WP3b field validation and 603-byte commitment construction, plus WP2 machine ceilings and isolated local per-row cost quotes are implemented; no authenticated cost model, governed charge, complete dispatch plan, backend work bound, storage runtime, rate limit, or end-to-end DoS claim exists",
       "normative_refs": [
         "SPECIFICATION.md#15-machine-policy",
         "SPECIFICATION.md#405-fuzzing",

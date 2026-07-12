@@ -3,6 +3,7 @@ resolver = "3"
 members = [
     "crates/zrm-codec",
     "crates/zrm-crypto",
+    "crates/zrm-kernel",
     "crates/zrm-policy",
     "crates/zrm-types",
 ]
@@ -17,7 +18,9 @@ repository = "https://github.com/TheDarkLightX/Zeno-Resource-Machine"
 
 [workspace.dependencies]
 sha2 = { version = "=0.11.0", default-features = false }
+zrm-codec = { version = "0.1.0", path = "crates/zrm-codec" }
 zrm-crypto = { version = "0.1.0", path = "crates/zrm-crypto" }
+zrm-kernel = { version = "0.1.0", path = "crates/zrm-kernel" }
 zrm-policy = { version = "0.1.0", path = "crates/zrm-policy" }
 zrm-types = { version = "0.1.0", path = "crates/zrm-types" }
 

@@ -1,0 +1,23 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "73a8612e00c8b9583a1d1d5ef3f3e6a853b09808",
+  "dirty": false,
+  "gate_id": "WP3b-mutation-errors",
+  "tool": {
+    "name": "cargo-mutants",
+    "version": "26.0.0",
+    "executable_sha256": "0c01b08444b65d20be9a0dbe9786ae1c4844898de8872b457426397a24f0a771"
+  },
+  "command": ["cargo", "+1.87.0", "mutants", "-p", "zrm-kernel", "-f", "crates/zrm-kernel/src/resource/error.rs", "--timeout", "10", "--build-timeout", "60", "--jobs", "2", "--output", "target/mutants-wp3b-evidence-error"],
+  "environment_policy_root": "sha256:8276e3c5f61fa9d37849c0245070362895669a67298996553df3c07f81eee8cf",
+  "started_at": "2026-07-11T20:35:27-04:00",
+  "duration_ms": 8786,
+  "status": "pass",
+  "scope": ["crates/zrm-kernel/src/resource/error.rs"],
+  "result_root": "sha256:d2c198efec21b16eae13b2f4135bf2fc8ebdf2c7700c75fc81ff81030a171559",
+  "result_summary": "3 tested; 3 caught; 0 unviable; 0 missed; 0 timed out",
+  "captured_output_sha256": "408cde6f42f448e566378072534573feb126855f57fc4c03517be6a78c37050d",
+  "assumptions": ["the unmutated baseline passed"],
+  "exclusions": ["semantic constructors are covered by the adjacent mutation record"],
+  "non_claims": ["diagnostic mutation strength does not prove semantic correctness"]
+}

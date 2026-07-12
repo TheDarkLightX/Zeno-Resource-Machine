@@ -93,6 +93,10 @@ define_nonzero_bytes32!(
     ResourceId,
     "Opaque resource commitment identifier. Raw construction is inert data; authoritative use requires canonical derivation and later semantic validation."
 );
+define_nonzero_bytes32!(
+    ResourceNonce,
+    "Opaque nonzero resource nonce. This local invariant establishes no freshness, uniqueness, or privacy."
+);
 define_nonzero_bytes32!(ResourceKindId, "Opaque resource-kind identifier.");
 define_nonzero_bytes32!(ResourceLogicId, "Opaque resource-logic identifier.");
 define_nonzero_bytes32!(LogicProfileId, "Opaque resource-logic profile identifier.");

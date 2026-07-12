@@ -1,0 +1,136 @@
+{
+  "schema": "zrm/review-record/v1",
+  "record_id": "wp3b-agent-reviews-2026-07-11",
+  "recorded_at": "2026-07-11",
+  "change_class": "C",
+  "reviewed_source": {
+    "revision": "73a8612e00c8b9583a1d1d5ef3f3e6a853b09808",
+    "tree": "f929d77a2322ec0770f146e7efa6e14b1b4fb058",
+    "base_revision": "e733958283290c18373621f3423befb120453119",
+    "branch": "agent/wp3-intrinsic-resource"
+  },
+  "remediation_source": {
+    "revision": "6a906de7868264f4e9864c30eb0f007a01445592",
+    "tree": "530ad0d86ddd995faca1ab47d51d377d5ac3bc6e",
+    "parent_revision": "268697b144f1f1306ef47b802d6af0e09c8cabdb",
+    "attestation": "evidence/wp3b-remediation-attestation-2026-07-11.json"
+  },
+  "scope": [
+    "ResourceWireV1 to IntrinsicResourceV1 typed boundary",
+    "complete body-to-ResourceId binding",
+    "zero-field, epoch, flag, and derivation-error precedence",
+    "u128 quantity and u64 epoch preservation",
+    "public API forgery resistance and reject-no-op behavior",
+    "tests, atlas, Kani, Miri, fuzz, coverage, and mutation claims",
+    "conformance non-claims and publication privacy"
+  ],
+  "reviews": [
+    {
+      "role": "work-package sequencing review",
+      "result": "pass",
+      "findings": [
+        "WP3b is the smallest honest next boundary",
+        "a final ResourceV1 would overclaim policy and state authority",
+        "zero-quantity marker permission is a real deferred schema gap"
+      ]
+    },
+    {
+      "role": "pre-implementation semantic design review",
+      "result": "pass_after_corrections",
+      "findings": [
+        "the API and closed local error shape were made explicit",
+        "the version-specific type fixes schema fields but proves no decoder provenance",
+        "local error precedence is documented as non-stable and non-final",
+        "compile-fail caller-forgery evidence and reject-no-op evidence were required"
+      ]
+    },
+    {
+      "role": "independent implementation and authority-boundary review",
+      "result": "pass_after_corrections",
+      "findings": [
+        "no semantic, body-to-ID substitution, authority-boundary, or code-quality blocker remained",
+        "documentation overclaims were narrowed",
+        "symbolic full-width preservation and arbitrary nonzero flag harnesses were added",
+        "the no-op test was broadened to every public semantic reject family"
+      ]
+    },
+    {
+      "role": "publication and privacy review",
+      "result": "pass_after_evidence_sync",
+      "findings": [
+        "no prohibited private context, credential, absolute local path, hidden-tool reference, or generated artifact was present",
+        "the worklog and conformance claims required synchronization with completed evidence"
+      ]
+    },
+    {
+      "role": "isolated post-commit diff review",
+      "result": "no_semantic_defect_three_publication_blockers",
+      "findings": [
+        "four serial 900-second fuzz campaigns required more than a 60-minute job budget",
+        "assurance claims required a revision-bound local evidence receipt and named mutation map",
+        "completed agent-review claims required a scoped revision-bound review receipt",
+        "an end-to-end byte-decoder-to-intrinsic fuzz target would be a useful later assurance extension",
+        "allocation-free resource-ID derivation remains a future determinism hardening opportunity"
+      ]
+    },
+    {
+      "role": "independent remediation closure review",
+      "result": "pass_zero_blockers",
+      "reviewed_revision": "6a906de7868264f4e9864c30eb0f007a01445592",
+      "findings": [
+        "all 27 canonical gate records and their index and environment bindings matched",
+        "the mutation map matched records 07 through 09 exactly",
+        "the nightly fuzz and Miri jobs retained measured execution headroom",
+        "CBC-039 preserved the human-review and promotion boundaries",
+        "the committed assurance delta contained no prohibited private context or publication artifact"
+      ]
+    }
+  ],
+  "publication_blocker_disposition": [
+    {
+      "finding": "insufficient sustained-fuzz job headroom",
+      "status": "resolved_by_patch_bound_attestation",
+      "evidence": ".github/workflows/nightly.yml sets a 90-minute fuzz job timeout; evidence/wp3b-remediation-attestation-2026-07-11.json records the independent closure check"
+    },
+    {
+      "finding": "missing revision-bound assurance and mutation receipts",
+      "status": "resolved_by_patch_bound_attestation",
+      "evidence": "evidence/wp3b-local-gates-2026-07-11.json, evidence/WP3B_INTRINSIC_RESOURCE_MUTATION_MAP.md, and evidence/wp3b-remediation-attestation-2026-07-11.json"
+    },
+    {
+      "finding": "missing review receipt",
+      "status": "resolved_by_patch_bound_attestation",
+      "evidence": "this review record and evidence/wp3b-remediation-attestation-2026-07-11.json"
+    }
+  ],
+  "suggestion_disposition": [
+    {
+      "suggestion": "end-to-end bytes through decoder into intrinsic construction fuzzing",
+      "status": "deferred",
+      "reason": "the current WP1 decoder target and WP3b structure-aware target are separate honest evidence lanes; combined ingress fuzzing remains useful future work"
+    },
+    {
+      "suggestion": "stronger field-specific compile-fail harness",
+      "status": "tracked",
+      "reason": "private fields and the sole constructor currently prevent injection; a dedicated UI diagnostic assertion can harden regression specificity"
+    },
+    {
+      "suggestion": "allocation-free or streaming ResourceId derivation",
+      "status": "deferred_before_final_authority",
+      "reason": "the current path is bounded and fail-closed, while allocation-dependent valid-input behavior must be reconsidered before a final consensus or authority claim"
+    }
+  ],
+  "review_state": {
+    "independent_agent_reviews_complete": true,
+    "semantic_blockers_open": 0,
+    "publication_blockers_open": 0,
+    "human_class_c_review_complete": false,
+    "promotion_allowed": false
+  },
+  "non_claims": [
+    "agent review does not replace human Class C review",
+    "review does not prove unbounded correctness or cryptographic correctness",
+    "review does not establish policy validity, funds safety, or production readiness",
+    "deferred suggestions remain explicit assurance debt"
+  ]
+}

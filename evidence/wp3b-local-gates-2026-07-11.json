@@ -1,0 +1,159 @@
+{
+  "schema": "zrm/evidence-index/v1",
+  "record_id": "wp3b-local-gates-2026-07-11",
+  "recorded_at": "2026-07-11",
+  "source": {
+    "revision": "73a8612e00c8b9583a1d1d5ef3f3e6a853b09808",
+    "tree": "f929d77a2322ec0770f146e7efa6e14b1b4fb058",
+    "base_revision": "e733958283290c18373621f3423befb120453119",
+    "branch": "agent/wp3-intrinsic-resource",
+    "dirty": false,
+    "replay_location": "detached clean worktree or clean local clone",
+    "hosted_ci_revision": null,
+    "hosted_ci_run_id": null
+  },
+  "environment_policy": {
+    "path": "evidence/wp3b-environment-policy-2026-07-11.json",
+    "root": "sha256:8276e3c5f61fa9d37849c0245070362895669a67298996553df3c07f81eee8cf"
+  },
+  "change_class": "C",
+  "review_state": {
+    "independent_agent_reviews_complete": true,
+    "review_receipt": "evidence/wp3b-agent-reviews-2026-07-11.json",
+    "human_class_c_review_complete": false,
+    "promotion_allowed": false
+  },
+  "record_count": 27,
+  "records": [
+    {
+      "path": "evidence/wp3b-gates/01-rust-tests.json",
+      "sha256": "fd88510604a91fc84d7f4a7900bb6049619f37f6692f5640f59acd57b018e9a5"
+    },
+    {
+      "path": "evidence/wp3b-gates/02-rust-doc-tests.json",
+      "sha256": "0837a6b7b57018499bd07c4a4f97a22500b393d8d59f06a6e7d7e1588e7f4956"
+    },
+    {
+      "path": "evidence/wp3b-gates/03-clippy.json",
+      "sha256": "3810df9c7f6adaf0ea2f329c1637ab049b099a5a0f9cd55b054fa94472884baf"
+    },
+    {
+      "path": "evidence/wp3b-gates/04-rustfmt.json",
+      "sha256": "1c197e0ca3886f6db8834c022b9084aadf61fcbd416a4124c4030646f40c21ca"
+    },
+    {
+      "path": "evidence/wp3b-gates/05-rustdoc.json",
+      "sha256": "c56ef197bd697c644187201735e5ec48a2946c5cfbfd12dbcdcc1e81616332a5"
+    },
+    {
+      "path": "evidence/wp3b-gates/06-coverage.json",
+      "sha256": "304865c82e5e840c7a733f22153bcb1ad3252c59680702dff0e318c17224368b"
+    },
+    {
+      "path": "evidence/wp3b-gates/07-mutation-resource.json",
+      "sha256": "40fb5019aac4e821a47c1c78ff217535c28b171756ad7c868ca632f24eb55952"
+    },
+    {
+      "path": "evidence/wp3b-gates/08-mutation-errors.json",
+      "sha256": "41f3e9f21f16bb51624b456254afa8913687225d53bbc5da4d6cc6ca4c443621"
+    },
+    {
+      "path": "evidence/wp3b-gates/09-mutation-workspace.json",
+      "sha256": "aa4b113675dc3bcac6d08d0656ad393f4e852f58ea19ba61d397e2b00540c02e"
+    },
+    {
+      "path": "evidence/wp3b-gates/10-kani.json",
+      "sha256": "56f734d651613c7c05f140d7885358049f5f2dd0d4dce98ccd90f4b20326381d"
+    },
+    {
+      "path": "evidence/wp3b-gates/11-miri.json",
+      "sha256": "055403a2f1a40ca28d4300e5d4d855cde58251506bfa66654a1d0e1462f5591b"
+    },
+    {
+      "path": "evidence/wp3b-gates/12-fuzz-replay.json",
+      "sha256": "401fe3e2a06c54ada49b57bae7922ce006e6681fec079e1b10995826f50be688"
+    },
+    {
+      "path": "evidence/wp3b-gates/13-fuzz-campaign.json",
+      "sha256": "c856338ee12c2111179741794778243ba2e02c39b822ca19141fd71d773aa1f4"
+    },
+    {
+      "path": "evidence/wp3b-gates/14-conformance.json",
+      "sha256": "79701a6b4086a937061583ab724d27cf77ee1443eef36f8ad5fef3e5c1ffea3c"
+    },
+    {
+      "path": "evidence/wp3b-gates/15-package-manifest.json",
+      "sha256": "d32a59a0c581d955c0d6e1cb1ebc76baf406f84165349852e80bf6a7175178bc"
+    },
+    {
+      "path": "evidence/wp3b-gates/16-repository-hygiene.json",
+      "sha256": "6a780895b922daccd952faf7ebfa9c24316e5ad6544e19f587f6d2062d6ff9f7"
+    },
+    {
+      "path": "evidence/wp3b-gates/17-architecture.json",
+      "sha256": "737b625b1d537788473a696bd72e3a215764f23bdbcf1fd52dbaf9a0c0d1bb51"
+    },
+    {
+      "path": "evidence/wp3b-gates/18-complexity.json",
+      "sha256": "7549536592bc4cc636a1765d282c5b7f91c61bd70201abeb679a7b7e0ddbf71c"
+    },
+    {
+      "path": "evidence/wp3b-gates/19-code-quality.json",
+      "sha256": "85bc022b1ce8696529e1327fa31df53337c8a687d5210020a8ede8efd0c59eaa"
+    },
+    {
+      "path": "evidence/wp3b-gates/20-python-tests.json",
+      "sha256": "47159f2249852290a542753b8ccf436fa04dfb1fdd61a002fdc1df9827524957"
+    },
+    {
+      "path": "evidence/wp3b-gates/21-vector-replay.json",
+      "sha256": "d07af676cb8923aeee2de3c40e47c93ad8b551474799a3f7bae33f18c8dfdc0f"
+    },
+    {
+      "path": "evidence/wp3b-gates/22-corpus-replay.json",
+      "sha256": "946a51edee2a79f37c871dcf2437364f11344619226c75590aa183bab417a452"
+    },
+    {
+      "path": "evidence/wp3b-gates/23-cargo-audit-root.json",
+      "sha256": "ffeb5a22200e86516f3b944aa18cea4f683ff8799729a3b4ac66fe68707b5f23"
+    },
+    {
+      "path": "evidence/wp3b-gates/24-cargo-audit-fuzz.json",
+      "sha256": "e8bd821d546d115d990979278e40023f7d4ee283cdd85879844ba04db0d5bbb0"
+    },
+    {
+      "path": "evidence/wp3b-gates/25-cargo-deny-root.json",
+      "sha256": "8458447d02ad87354afca9fa31c6ad4d535addd7520103aa51868a7f36e6738b"
+    },
+    {
+      "path": "evidence/wp3b-gates/26-cargo-deny-fuzz.json",
+      "sha256": "ade53be4a031525dde6048cbe1f160b5297f90ee6dfa146eb7c2a3a96566958d"
+    },
+    {
+      "path": "evidence/wp3b-gates/27-bom.json",
+      "sha256": "3b21ccf8dd692c00cbcf9153f197f846ccbc995e89537a0badb7c0ad3d393e60"
+    }
+  ],
+  "implemented_scope": [
+    "sealed IntrinsicResourceV1 with internally derived exact ResourceId",
+    "fourteen nonzero field invariants, epoch ordering, and closed v1 flags",
+    "exact u128 quantity and u64 epoch preservation",
+    "deterministic local error precedence and reject-no-op behavior",
+    "complete 65536-mask defect atlas, mutation, Kani, Miri, and fuzz evidence"
+  ],
+  "remaining_gaps": [
+    "human Class C review",
+    "hosted CI and scheduled nightly replay",
+    "explicit policy-schema permission for zero-quantity marker resources",
+    "combined byte-decoder-to-intrinsic fuzzing",
+    "allocation-free resource-ID derivation before final authority use",
+    "authenticated policy, state, transition, accounting, commit, and production assurance"
+  ],
+  "non_claims": [
+    "this index does not authorize merge or production promotion",
+    "the records do not prove unbounded or cryptographic correctness",
+    "zero quantity remains unresolved and is not policy-valid marker authority",
+    "IntrinsicResourceV1 is not a final or authenticated resource",
+    "no end-to-end funds-safety or production-readiness claim is made"
+  ]
+}
