@@ -3,6 +3,8 @@
 **Version:** 0.1.0-draft.2
 **Date:** 2026-07-10
 **Status:** Pre-alpha normative design specification
+**Author:** Dana Edwards
+**Drafting assistance:** GPT-5.6
 **Audience:** protocol designers, implementers, formal-methods engineers, security reviewers, proof-system integrators, and coding agents
 
 > **zkVMs prove that code ran. ZRM defines what the result is allowed to change.**

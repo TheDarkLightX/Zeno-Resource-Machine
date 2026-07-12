@@ -14,7 +14,7 @@ Machine-readable release posture:
 public_implementation_claim_allowed = true
 claim_scope = reviewed initial repository-local WP0 controls and WP1 canonical-codec slice
 merged_candidate_scope = WP2 policy model, WP0 assurance extensions, WP3a structural resource roles, and WP3b intrinsic resource construction
-unreviewed_candidate_scope = WP3c intrinsic-body role and ordinal binding
+unreviewed_candidate_scope = WP3c intrinsic-body role and ordinal binding, Class E semantic-closure RFC package
 production_ready = false
 current_level = ZRM-L0
 ```
@@ -43,6 +43,8 @@ WP3b adds a sealed `IntrinsicResourceV1` stage. It rejects zero identifiers, roo
 The WP3c candidate composes those stages into `RoleBoundIntrinsicResourceV1`. The sole binding operation looks up the intrinsic body's internally derived `ResourceId` in the supplied sealed canonical partition and stores the exact resulting role and ordinal. A caller cannot inject a mismatched identifier, role, or ordinal independently of that partition. The partition itself remains caller-proposed and unauthenticated. Absence rejects without changing either input. Separation of different bodies relies on the schema-fixed SHA-256 resource-ID derivation and its collision-resistance assumption; concrete mutation tests do not prove hash injectivity. The revision-bound local evidence index records the exhaustive small atlas, ordinal ceiling, coverage, generated and manual mutation, Kani, targeted Miri, fuzz, quality, and supply-chain results. Human Class C review and hosted CI remain pending. This per-resource result proves neither complete body coverage of the partition nor policy, state, logic, transition, or commit authority.
 
 `ResourceWireV1` remains an inert syntactic candidate, and neither `IntrinsicResourceV1` nor `RoleBoundIntrinsicResourceV1` is a final policy-valid resource. The current policy schema cannot express the specification's explicit permission for zero-quantity marker resources, so these stages preserve zero as unresolved data. The repository does not yet implement final `ResourceV1`, authenticated policy activation, a complete semantic transition kernel, authenticated facts, state membership, persistence, atomic commit, proof adapters, application adapters, or a production release. Host-side branch, vulnerability-reporting, and release-environment controls remain incomplete. There is no stable package-wide ABI, external security audit, or production-readiness claim. Detailed status and remaining evidence are machine-readable in [`CONFORMANCE_MATRIX.json`](CONFORMANCE_MATRIX.json).
+
+The current documentation branch also contains two unapproved Class E semantic-closure RFCs covering policy suspension, authority-context freshness, acyclic semantic-effect commitment, linearizable retry classification, uncertain commit outcomes, and serialized recursive journal composition. They change no implemented Rust authority and require independent semantic review before approval. See [`rfcs/README.md`](rfcs/README.md) and the [`semantic-closure review package`](formal/state-machine/semantic_closure_v1/README.md).
 
 > **zkVMs prove that code ran. ZRM defines what the result is allowed to change.**
 
@@ -363,6 +365,8 @@ Not included in v0.1:
 - [`SECURITY.md`](SECURITY.md) — security posture and disclosure policy.
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — change classes, review requirements, and contribution workflow.
 - [`REVIEW_CHECKLIST.md`](REVIEW_CHECKLIST.md) — high-assurance review checklist.
+- [`rfcs/README.md`](rfcs/README.md) — draft protocol and authority RFC index.
+- [`formal/state-machine/semantic_closure_v1/README.md`](formal/state-machine/semantic_closure_v1/README.md) — draft semantic decisions, review oracles, and refinement obligations.
 - [`templates/RFC_TEMPLATE.md`](templates/RFC_TEMPLATE.md) — protocol and architecture proposal template.
 - [`templates/ADR_TEMPLATE.md`](templates/ADR_TEMPLATE.md) — architectural decision record template.
 - [`templates/AGENT_WORKLOG_TEMPLATE.md`](templates/AGENT_WORKLOG_TEMPLATE.md) — agent evidence report template.
