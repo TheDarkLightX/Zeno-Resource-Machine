@@ -137,3 +137,13 @@ Work log/provenance:
 - Authority-boundary reviewer (Class D/E):
 - Compatibility/formal reviewer (Class E):
 - Release owner (Class E):
+
+## Integration target
+
+- Intended permanent base branch:
+- Required predecessor commits and ancestry result:
+- [ ] This PR targets the default branch, or its temporary stacked base is
+      explicitly identified above.
+- [ ] If a stacked base already merged, this PR was retargeted and refreshed
+      before merge.
+- [ ] The final reviewed payload will be reachable from the default branch.
