@@ -1,0 +1,20 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-package-manifest",
+  "tool": {"name": "python3", "version": "3.12.3", "executable_sha256": "1643dacd9feaedc58f3cc581e4d22577dfe25c09b10282936186ccf0f2e61118"},
+  "command": ["python3", "tools/check_package_manifest.py"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:49:15-04:00",
+  "duration_ms": 20,
+  "status": "pass",
+  "scope": ["14 public specification payload files"],
+  "result_root": "sha256:d1fe81862018a260a1c1faebf987310f78e50d7625580b8fbd05dcbbf4275d5d",
+  "result_summary": "all declared payload sizes and SHA-256 digests matched",
+  "captured_output_sha256": "d1fe81862018a260a1c1faebf987310f78e50d7625580b8fbd05dcbbf4275d5d",
+  "script_sha256": "3c3330502a2d07638aa229c7b8711f60ba7d7104aefd991a0ff5aa2bf785611f",
+  "assumptions": ["manifest payload list is the intended public specification package"],
+  "exclusions": ["Rust build artifacts"],
+  "non_claims": ["digest agreement does not prove document correctness"]
+}

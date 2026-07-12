@@ -1,0 +1,19 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-cargo-deny-fuzz",
+  "tool": {"name": "cargo-deny", "version": "0.20.2", "executable_sha256": "7fab0df83b212f66978fe73e96621fde56fcf20b4b87ebcef5fdf56cfbffa798"},
+  "command": ["cargo", "+1.88.0", "deny", "--manifest-path", "fuzz/Cargo.toml", "check"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:38:12-04:00",
+  "duration_ms": 1780,
+  "status": "pass",
+  "scope": ["fuzz-workspace advisories, bans, licenses, and sources policy"],
+  "result_root": "sha256:f1a0fca39d4280363937aabd77783990ea6480bd9ca257816de3b68fc8efa845",
+  "result_summary": "advisories, bans, licenses, and sources all passed",
+  "captured_output_sha256": "f1a0fca39d4280363937aabd77783990ea6480bd9ca257816de3b68fc8efa845",
+  "assumptions": ["deny.toml is the reviewed dependency policy"],
+  "exclusions": ["fuzzer runtime correctness"],
+  "non_claims": ["policy compliance does not prove dependency safety"]
+}

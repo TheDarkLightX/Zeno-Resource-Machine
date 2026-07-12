@@ -2,7 +2,7 @@
   "schema": "zrm/specification-package-manifest/v1",
   "package": "Zeno Resource Machine high-assurance specification package",
   "version": "0.1.0-draft.2",
-  "date": "2026-07-11",
+  "date": "2026-07-12",
   "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a structural roles, WP3b intrinsic resources, and WP3c body-to-role binding; no release or production claim",
   "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model and WP3a through WP3c resource-stage candidates",
   "manifest_scope": "normative specification-package payload only; code, tests, worklogs, and evidence records are outside this inventory",
@@ -24,8 +24,8 @@
     },
     {
       "path": "CONFORMANCE_MATRIX.json",
-      "bytes": 76380,
-      "sha256": "a0572f453826aae1c8a08f92ce76813683da14e982eabad1bd8b40c6bace8a63"
+      "bytes": 76786,
+      "sha256": "2fa21bf18386a5dad98bf56178dbae8dde3d22efbb5bd38be6829be2d75d7224"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -49,8 +49,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 21870,
-      "sha256": "6348b2fa572370f8b2cc7e308fc2565e381e213bbd16c8dad71edeab371f521b"
+      "bytes": 22117,
+      "sha256": "871cb3adc9b36099999d6cda7b160a17c0eefe3c613a124ab1b39773ba51693f"
     },
     {
       "path": "REVIEW_CHECKLIST.md",

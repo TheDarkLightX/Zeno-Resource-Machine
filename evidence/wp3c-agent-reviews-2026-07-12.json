@@ -1,0 +1,109 @@
+{
+  "schema": "zrm/review-record/v1",
+  "record_id": "wp3c-agent-reviews-2026-07-12",
+  "recorded_at": "2026-07-12",
+  "change_class": "C",
+  "reviewed_source": {
+    "revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+    "tree": "a8ecd89a03e22fc0a40ec85ca0fa035320118bf6",
+    "base_revision": "794e8255ca6d63d3068c90ade3c47a24075648b9",
+    "branch": "agent/wp3-role-bound-resource"
+  },
+  "reviewed_evidence": {
+    "index": "evidence/wp3c-local-gates-2026-07-12.json",
+    "index_sha256": "3201e744b4d8f4d3fac15d3a5d508dcd470b50ac423a49f88070dd7df44d1214",
+    "record_count": 27,
+    "review_state": "pre-commit assurance delta over immutable implementation source"
+  },
+  "scope": [
+    "IntrinsicResourceV1 plus CanonicalResourceRolesV1 to RoleBoundIntrinsicResourceV1 boundary",
+    "body-derived ResourceId lookup and exact role-local ordinal",
+    "caller forgery resistance, absence rejection, stale-body substitution, and reject-no-op behavior",
+    "tests, exhaustive atlas, ordinal ceiling, generated and manual mutation, Kani, targeted Miri, fuzz, coverage, and quality claims",
+    "conformance non-claims, public documentation, publication privacy, and unrelated staged-work exclusion"
+  ],
+  "reviews": [
+    {
+      "role": "work-package sequencing review",
+      "result": "pass",
+      "findings": [
+        "WP3c is a useful policy-independent composition boundary",
+        "a final ResourceV1 remains blocked by unresolved resource-policy authority and zero-quantity marker semantics",
+        "no canonical bytes, hash domains, roots, or stable reject codes should be introduced in this slice"
+      ]
+    },
+    {
+      "role": "independent implementation and authority-boundary review",
+      "result": "pass_after_corrections",
+      "findings": [
+        "the compile-fail example was corrected to supply both private fields",
+        "expected-valid Kani fixture failures were made proof failures instead of vacuous exits",
+        "authority wording was narrowed to consistency within one caller-proposed unauthenticated partition",
+        "complete body coverage and SHA-256 collision resistance were made explicit non-claims"
+      ]
+    },
+    {
+      "role": "independent follow-up assurance review",
+      "result": "pass_after_corrections",
+      "findings": [
+        "silent fuzz fixture exits were replaced by fail-loud assertions",
+        "the public wrapper now reaches exact ordinal 255",
+        "three patch-bound compiling authority mutants closed the compiler-unviable automatic-mutant gap",
+        "Kani and branch-coverage scopes were recorded without overclaim"
+      ]
+    },
+    {
+      "role": "independent final evidence and publication audit",
+      "result": "pass_zero_blockers_after_receipt",
+      "findings": [
+        "27 of 27 gate records parse, pass, and bind the exact implementation source and environment root",
+        "the index contains the exact record set and hashes",
+        "all three manual patches match their hashes and apply cleanly to the recorded source",
+        "README, worklog, conformance, package manifest, promotion boundary, and non-claims align",
+        "38 intended public paths contain no prohibited private names, credentials, local absolute paths, or sandbox markers",
+        "unrelated staged RFC work remains outside the WP3c path set"
+      ]
+    }
+  ],
+  "finding_disposition": [
+    {
+      "finding": "private-field compile-fail example could fail for the wrong reason",
+      "status": "resolved",
+      "evidence": "crates/zrm-kernel/src/role_bound_resource.rs external compile-fail example"
+    },
+    {
+      "finding": "Kani and fuzz fixtures could exit without exercising the intended oracle",
+      "status": "resolved",
+      "evidence": "crates/zrm-kernel/src/role_bound_resource/kani_harnesses.rs and fuzz/fuzz_targets/role_bound_intrinsic_v1.rs"
+    },
+    {
+      "finding": "automatic authority-function replacements were compiler-unviable",
+      "status": "resolved",
+      "evidence": "evidence/wp3c-gates/08-manual-critical-mutants.json and evidence/WP3C_ROLE_BOUND_INTRINSIC_MUTATION_MAP.md"
+    },
+    {
+      "finding": "worklog fuzz count did not match the patch-bound record",
+      "status": "resolved",
+      "evidence": "worklogs/2026-07-11-wp3-role-bound-intrinsic.md reports 577769 executions"
+    }
+  ],
+  "excluded_review_attempts": [
+    {
+      "result": "no_evidence",
+      "reason": "an external peer-review helper returned an authentication failure and no review conclusion"
+    }
+  ],
+  "review_state": {
+    "independent_agent_reviews_complete": true,
+    "semantic_blockers_open": 0,
+    "evidence_blockers_open": 0,
+    "human_class_c_review_complete": false,
+    "promotion_allowed": false
+  },
+  "non_claims": [
+    "agent review does not replace human Class C behavior and evidence review",
+    "the supplied partition remains caller-proposed and unauthenticated",
+    "review does not prove SHA-256 injectivity, arbitrary-partition correctness, funds safety, or production readiness",
+    "hosted CI and immutable post-commit assurance-delta attestation remain separate gates"
+  ]
+}

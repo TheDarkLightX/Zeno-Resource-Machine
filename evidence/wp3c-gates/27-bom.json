@@ -1,0 +1,22 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-source-and-cryptography-inventory",
+  "tool": {"name": "python3", "version": "3.12.3", "executable_sha256": "1643dacd9feaedc58f3cc581e4d22577dfe25c09b10282936186ccf0f2e61118"},
+  "command": ["python3", "tools/generate_bom.py", "--sbom", "target/zrm-sbom-wp3c-evidence-final.json", "--cbom", "target/zrm-cbom-wp3c-evidence-final.json"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:49:15-04:00",
+  "duration_ms": 198,
+  "status": "pass",
+  "scope": ["locked source dependency inventory", "registered cryptography inventory"],
+  "result_root": "sha256:5ecc0ca78cf454e2c1caf2d2a35da312375e1eaba65e82f7de34c7f24b0b6517",
+  "result_summary": "23 source components; 65 dependency edges; 1 cryptography component",
+  "captured_output_sha256": "4253cf1d4428cf02c7e411badda15583d9563bf096c0b103325e0b79a8429a5b",
+  "sbom_sha256": "77cd3d9af3feff59d9dc32cbb1f193ffc12373087654698c8c0c3ba94e245a08",
+  "cbom_sha256": "c7d4e73f74258e1dda49b749e6ac8e481784c66241bd2af3a106fb946e90a2b1",
+  "script_sha256": "4f1deabe74b118945d4b7ee7fdad69d0ec1f9a875d03ca9c81ebbb6b22ad8f46",
+  "assumptions": ["Cargo metadata and lockfiles are inventory sources of truth"],
+  "exclusions": ["standardized release SBOM conformance", "independent reproducible build"],
+  "non_claims": ["inventory completeness does not prove dependency correctness"]
+}

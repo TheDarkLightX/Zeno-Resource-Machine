@@ -1,0 +1,19 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-rust-tests",
+  "tool": {"name": "cargo", "version": "1.87.0 (99624be96 2025-05-06)", "executable_sha256": "a9fb5ef0f95be70b324f3e88a4621a566320e2eb00635dc37f8a98e0a9fb7c9a"},
+  "command": ["cargo", "+1.87.0", "test", "--workspace", "--all-features", "--locked"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:31:16-04:00",
+  "duration_ms": 1747,
+  "status": "pass",
+  "scope": ["workspace unit and integration tests", "WP3c public boundary", "256-assignment atlas", "ordinal-255 boundary"],
+  "result_root": "sha256:f3198ed66a3c54c8f8632284b18378dd7376605c791d1df52534bdfecc52f7e3",
+  "result_summary": "104 unit and integration tests plus 2 compile-fail doctests passed; 0 failed",
+  "captured_output_sha256": "f3198ed66a3c54c8f8632284b18378dd7376605c791d1df52534bdfecc52f7e3",
+  "assumptions": ["the detached worktree exactly matched source_revision"],
+  "exclusions": ["unbounded state spaces", "cryptographic collision proof"],
+  "non_claims": ["passing tests do not prove production or funds safety"]
+}

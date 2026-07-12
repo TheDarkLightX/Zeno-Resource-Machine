@@ -164,9 +164,9 @@ signatures must prevent that drift.
 placement tests, mutation analysis, fuzzing, Kani, coverage, and independent
 review.
 
-**Technical AI-review status:** Design review is in progress. Human attention is
-reserved for specified behavior, evidence, remaining semantic gaps, and
-non-claims.
+**Technical AI-review status:** Complete after independent authority-boundary
+review and correction. Human attention remains reserved for specified
+behavior, evidence, remaining semantic gaps, and non-claims.
 
 ### Known gaps and non-claims
 
@@ -189,7 +189,7 @@ non-claims.
 
 ## Verification record
 
-Candidate implementation replay before the patch-bound evidence commit:
+Implementation and patch-bound replay:
 
 | Check | Result |
 | --- | --- |
@@ -199,13 +199,19 @@ Candidate implementation replay before the patch-bound evidence commit:
 | Coverage | workspace 98.84% lines / 99.12% branches; policy 99.70% / 100%; kernel 100% / 100% |
 | New production module coverage | 40/40 lines and 8/8 functions; LLVM reports zero instrumented branch sites in this file, so no changed-module branch percentage is claimed |
 | Automatic focused mutation | 9 candidates: 3 caught, 6 compiler-unviable, 0 missed, 0 timed out |
+| Full workspace mutation | 389 candidates: 283 caught, 106 compiler-unviable, 0 missed, 0 timed out |
 | Kani workspace | 17/17 harnesses verified, 0 failures |
 | Corrected WP3c Kani harness | 856 checks passed; all 4 reachability covers satisfied; 7 unreachable-code checks reported |
-| Targeted Miri | 11 WP3c-relevant tests passed, 0 failed |
-| Structure-aware fuzz | 667,011 executions in 31 seconds, 0 failures, final coverage 414 and feature count 450 |
+| Targeted Miri | 12 WP3c-relevant tests passed, 0 failed |
+| Structure-aware fuzz | 577,769 executions in 31 seconds, 0 failures, final coverage 414 and feature count 450 |
 | Code quality | `excellent-candidate`; 16 rules, 5 design decisions, 0 findings or advisories |
 | Complexity | 36 Rust files, 288 functions, 0 warnings, 0 exceptions |
 | Repository policy | formatting, compile, Clippy, rustdoc, architecture, conformance, package manifest, corpus, vector replay, BOM, hygiene, and 73 Python tool tests passed |
+
+The evidence is bound to implementation revision
+`ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64` and tree
+`a8ecd89a03e22fc0a40ec85ca0fa035320118bf6` by
+`evidence/wp3c-local-gates-2026-07-12.json`.
 
 The first independent authority review found three blockers: an insufficiently
 targeted private-field compile-fail example, potentially vacuous Kani fixture
@@ -214,9 +220,11 @@ All three were corrected. Its follow-up review then found silent fuzz-fixture
 exits and insufficient evidence for two compiler-unviable authority mutants.
 The fuzz harness now fails loudly on every internally generated fixture,
 partition, ordinal conversion, or different-body ID collision. Patch-bound
-manual compiling mutants remain required for wrong-ID lookup, absent fallback,
-and corrupted placement before this candidate is ready for human Class C
-review.
+manual compiling mutants for wrong-ID lookup, absent fallback, and corrupted
+ordinal all compiled and were killed by the focused tests. Their exact patches,
+hashes, killing outputs, and clean-tree restoration are recorded in
+`evidence/wp3c-gates/08-manual-critical-mutants.json` and
+`evidence/WP3C_ROLE_BOUND_INTRINSIC_MUTATION_MAP.md`.
 
 The external peer-review helper returned HTTP 401 and supplied no review
 evidence. Human Class C review, hosted CI, merge approval, and every production

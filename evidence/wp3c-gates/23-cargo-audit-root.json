@@ -1,0 +1,19 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-cargo-audit-root",
+  "tool": {"name": "cargo-audit", "version": "0.22.1", "executable_sha256": "9899e591c3abee79bd54e88c3b03d27bcf8dd073fb1690af9cd3089be1267a67"},
+  "command": ["cargo", "+1.87.0", "audit", "--deny", "warnings"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:38:12-04:00",
+  "duration_ms": 809,
+  "status": "pass",
+  "scope": ["root Cargo.lock", "14 dependency records", "1159 loaded advisories"],
+  "result_root": "sha256:8e43fa4bd0015d058ddf43dcbe33fbf4418a3909fdb57b3721a24ebe447bf34f",
+  "result_summary": "no vulnerability warning or error was reported",
+  "captured_output_sha256": "8e43fa4bd0015d058ddf43dcbe33fbf4418a3909fdb57b3721a24ebe447bf34f",
+  "assumptions": ["the fetched RustSec advisory database was available to the pinned tool"],
+  "exclusions": ["unpublished vulnerabilities", "semantic dependency defects"],
+  "non_claims": ["advisory cleanliness does not prove supply-chain safety"]
+}

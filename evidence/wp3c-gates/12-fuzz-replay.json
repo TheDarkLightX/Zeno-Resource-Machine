@@ -1,0 +1,19 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-fuzz-replay",
+  "tool": {"name": "cargo-fuzz", "version": "0.13.1", "executable_sha256": "eb5646f86c5e4e77aaf04fb56127eb2c152f2e60fbd110135ef76fbb818dce60"},
+  "command": ["cargo", "+nightly-2025-03-02", "fuzz", "run", "role_bound_intrinsic_v1", "target/wp3c-fuzz-corpus", "--", "-seed=1", "-runs=8", "-max_len=21", "-timeout=5"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:40:43-04:00",
+  "duration_ms": 13696,
+  "status": "pass",
+  "scope": ["8 committed role-binding corpus seeds", "structure-aware placement and stale-body oracle"],
+  "result_root": "sha256:9de61a1ef5c127ff7e15c5c5a97631f5ef4ffed66d72330dd197a5f1c46c1c85",
+  "result_summary": "9 executions including initialization; cov=383; ft=413; 0 crashes, assertions, hangs, or timeouts",
+  "captured_output_sha256": "9de61a1ef5c127ff7e15c5c5a97631f5ef4ffed66d72330dd197a5f1c46c1c85",
+  "assumptions": ["target corpus was an ignored exact copy of the 8 committed seeds"],
+  "exclusions": ["raw byte decoding", "SHA-256 correctness", "sustained exploration"],
+  "non_claims": ["fixed-corpus replay is regression evidence, not proof"]
+}

@@ -1,0 +1,20 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-corpus-replay",
+  "tool": {"name": "python3", "version": "3.12.3", "executable_sha256": "1643dacd9feaedc58f3cc581e4d22577dfe25c09b10282936186ccf0f2e61118"},
+  "command": ["python3", "fuzz/generate_corpus.py", "--check"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:49:15-04:00",
+  "duration_ms": 20,
+  "status": "pass",
+  "scope": ["resource decoder, policy cost, resource roles, intrinsic resource, and role-bound intrinsic deterministic corpora"],
+  "result_root": "sha256:213c00f358e0d4e4545c9ba6ba77e414be70291b9f4963cb66a6bee83a588cd8",
+  "result_summary": "all declared seeds matched exactly; WP3c corpus contained exactly 8 reviewed files",
+  "captured_output_sha256": "213c00f358e0d4e4545c9ba6ba77e414be70291b9f4963cb66a6bee83a588cd8",
+  "script_sha256": "b9420d57be2490b849b9eec6a4e1c33145592ddd7c76c5aa1624248a81d4efdd",
+  "assumptions": ["extra campaign discoveries are rejected from deterministic corpus directories"],
+  "exclusions": ["coverage-guided completeness"],
+  "non_claims": ["seed integrity does not prove fuzz completeness"]
+}
