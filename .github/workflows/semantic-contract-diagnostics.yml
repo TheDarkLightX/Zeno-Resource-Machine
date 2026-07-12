@@ -1,0 +1,50 @@
+name: Semantic Contract Diagnostics
+
+on:
+  push:
+    branches:
+      - agent/semantic-contracts-v1
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostics:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Run compact repository checks
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -eu
+          mkdir source
+          curl --fail --silent --show-error --location \
+            -H "Authorization: Bearer ${GH_TOKEN}" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/tarball/${GITHUB_SHA}" \
+            | tar -xz --strip-components=1 -C source
+          cd source
+          mkdir -p target
+          failures=0
+          run_check() {
+            name="$1"
+            shift
+            output="$(mktemp)"
+            if "$@" >"${output}" 2>&1; then
+              echo "${name}: PASS"
+            else
+              echo "${name}: FAIL"
+              tail -n 30 "${output}"
+              failures=1
+            fi
+            rm -f "${output}"
+          }
+          run_check hygiene python3 tools/check_repository_hygiene.py
+          run_check conformance python3 tools/check_conformance.py
+          run_check architecture python3 tools/check_architecture.py
+          run_check complexity python3 tools/check_complexity.py --report target/complexity-report.json
+          run_check code-quality python3 tools/check_code_quality.py --report target/code-quality-report.json
+          run_check package-manifest python3 tools/check_package_manifest.py
+          run_check tool-tests python3 -m unittest discover -s tools/tests -v
+          exit "${failures}"
