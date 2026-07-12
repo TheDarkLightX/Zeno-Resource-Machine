@@ -126,7 +126,9 @@ default-build API from rustdoc. This scan handles outer and inner attributes,
 Rust comments, and raw attribute identifiers. Policy `path` attributes are
 exact-allowlisted and must resolve to regular files inside the complete scanned
 policy source tree. Linked source directories, source inclusion, and unreviewed
-macro definitions fail closed. Digest updates require Class E review.
+macro definitions or invocation paths fail closed. Macro imports, aliases, glob
+imports, and protected-root shadowing are rejected. Digest updates require
+Class E review.
 
 The future governed interface must have this shape:
 

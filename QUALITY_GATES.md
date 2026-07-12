@@ -167,9 +167,11 @@ profiles, preventing outer, inner, or comment-obfuscated `cfg(doc)` from hiding
 default-build APIs. Policy `path` attributes are exact-allowlisted and resolve
 only to regular Rust sources inside the complete scanned policy tree. Raw
 attribute identifiers, linked source directories, source inclusion, and
-unreviewed macro definitions fail closed. A digest update is a reviewed Class E
-action, not an automatic golden-file refresh. Source inventory remains defense
-in depth and does not substitute for the compiler-derived gate.
+unreviewed macro definitions or invocation paths fail closed. Macro imports,
+aliases, glob imports, and protected-root shadowing are rejected. A digest
+update is a reviewed Class E action, not an automatic golden-file refresh.
+Source inventory remains defense in depth and does not substitute for the
+compiler-derived gate.
 
 ---
 

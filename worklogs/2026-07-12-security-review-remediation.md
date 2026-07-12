@@ -157,7 +157,8 @@ misread as an authority-bearing result.
   `cfg` and `cfg_attr`, nested-module, unreviewed `path`-module, macro-generated,
   and value-returning fuzz escapes. Reviewed `path` attributes resolve only to
   regular files within the complete scanned policy source tree; linked source
-  directories and unreviewed source inclusion fail closed.
+  roots/directories, unreviewed source inclusion, dependency macro invocations,
+  macro imports/aliases, glob imports, and protected-root shadowing fail closed.
 - The canonical codec owns private resource-ID hashing. Hash frame widths are
   checked from the actual encoded bytes and actual domain length rather than
   duplicated wire-size constants.
@@ -314,7 +315,7 @@ No production input limit or asymptotic bound changes.
 | `cargo test --workspace --all-targets --locked` | PASS, 111 tests | local working-tree replay |
 | `cargo test --workspace --doc --locked` | PASS, 5 compile-fail doctests | local working-tree replay |
 | strict workspace Clippy and rustfmt | PASS, zero denied warnings | local working-tree replay |
-| `python3 -m unittest discover -s tools/tests -v` | PASS, 96 tests | tooling regressions |
+| `python3 -m unittest discover -s tools/tests -v` | PASS, 98 tests | tooling regressions |
 | reference-model discovery | PASS, 45 tests | frozen and proposed oracles |
 | architecture, complexity, code-quality | PASS; exact allowlist; zero advisories; `excellent-candidate` | generated local reports |
 | configured branch coverage | PASS; workspace 99.14%/100%, policy 99.86%/100%, kernel 100%/100% | `target/llvm-cov-branch.json` |

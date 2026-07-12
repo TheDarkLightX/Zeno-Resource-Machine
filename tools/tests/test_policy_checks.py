@@ -3,11 +3,15 @@
 from __future__ import annotations
 
 import re
+import shutil
+import tempfile
 import tomllib
 import unittest
 from pathlib import Path
 
 from tools.check_architecture import (
+    ROOT as ARCHITECTURE_ROOT,
+    authority_api_failures,
     compiler_api_projection_digest,
     dependency_failures,
     policy_source_cfg_failures,
@@ -195,13 +199,15 @@ class ArchitecturePolicyTests(unittest.TestCase):
     def test_compiler_api_projection_ignores_only_source_spans(self) -> None:
         """Host paths do not change the digest, while API content still does."""
 
+        first_host_path = "/" + "home" + "/first/.cargo/registry/source.rs"
+        second_host_path = "/" + "home" + "/second/.cargo/registry/source.rs"
         baseline = {
             "format_version": 43,
             "index": {
                 "1": {
                     "name": "quote",
                     "visibility": "public",
-                    "span": {"filename": "/home/first/.cargo/registry/source.rs"},
+                    "span": {"filename": first_host_path},
                 }
             },
         }
@@ -211,7 +217,7 @@ class ArchitecturePolicyTests(unittest.TestCase):
                 "1": {
                     "name": "quote",
                     "visibility": "public",
-                    "span": {"filename": "/home/second/.cargo/registry/source.rs"},
+                    "span": {"filename": second_host_path},
                 }
             },
         }
@@ -221,7 +227,7 @@ class ArchitecturePolicyTests(unittest.TestCase):
                 "1": {
                     "name": "admit",
                     "visibility": "public",
-                    "span": {"filename": "/home/second/.cargo/registry/source.rs"},
+                    "span": {"filename": second_host_path},
                 }
             },
         }
@@ -372,6 +378,50 @@ impl VerifierCostRowV1 {
             {"crates/zrm-policy/src/resource_kind.rs": source}
         )
         self.assertTrue(any("macro definition" in failure for failure in failures))
+
+    def test_dependency_macro_and_alias_cannot_escape_inventory(self) -> None:
+        """Allowed inward dependencies cannot synthesize a hidden policy API."""
+
+        direct = policy_source_cfg_failures(
+            {
+                "crates/zrm-policy/src/resource_kind.rs": (
+                    "zrm_types::escape!(cfg(not(doc)));"
+                )
+            }
+        )
+        self.assertTrue(any("unreviewed macro" in failure for failure in direct))
+
+        aliased = policy_source_cfg_failures(
+            {
+                "crates/zrm-policy/src/resource_kind.rs": (
+                    "use zrm_types::escape as assert; assert!(cfg(not(doc)));"
+                )
+            }
+        )
+        self.assertTrue(any("shadow a reviewed macro" in failure for failure in aliased))
+
+    def test_linked_policy_source_root_rejects_before_source_reads(self) -> None:
+        """The policy source root and repository ancestors must be regular."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            policy_parent = root / "crates/zrm-policy"
+            policy_parent.mkdir(parents=True)
+            actual = root / "actual-src"
+            shutil.copytree(ARCHITECTURE_ROOT / "crates/zrm-policy/src", actual)
+            (policy_parent / "src").symlink_to(actual, target_is_directory=True)
+            failures = authority_api_failures(root)
+        self.assertTrue(any("source-root" in failure for failure in failures))
+
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            crates = root / "crates"
+            crates.mkdir()
+            actual_policy = root / "actual-policy"
+            shutil.copytree(ARCHITECTURE_ROOT / "crates/zrm-policy", actual_policy)
+            (crates / "zrm-policy").symlink_to(actual_policy, target_is_directory=True)
+            failures = authority_api_failures(root)
+        self.assertTrue(any("source-root" in failure for failure in failures))
 
     def test_public_function_pointer_constant_is_rejected(self) -> None:
         """A callable associated constant is part of the exact value inventory."""

@@ -76,6 +76,17 @@ ALLOWED_POLICY_PATH_ATTRIBUTES = {
     },
     "crates/zrm-policy/src/verifier.rs": {"verifier/tests.rs"},
 }
+ALLOWED_POLICY_MACRO_INVOCATIONS = {
+    "assert",
+    "assert_eq",
+    "kani::cover",
+    "matches",
+    "std::format",
+    "write",
+}
+ALLOWED_POLICY_EXTERN_CRATES = {
+    "crates/zrm-policy/src/lib.rs": {"extern crate std;"},
+}
 
 PUBLIC_FUNCTION_ALLOWLIST = {
     "cost.rs": {
@@ -488,10 +499,13 @@ def fuzz_assertion_surface_failures(sources: dict[str, str]) -> list[str]:
 def authority_api_failures(root: Path) -> list[str]:
     """Read policy sources and enforce the fail-closed public API quarantine."""
 
-    sources = {path: (root / path).read_text(encoding="utf-8") for path in AUTHORITY_SOURCE_PATHS}
     policy_sources: dict[str, str] = {}
     filesystem_failures: list[str] = []
     policy_root = root / "crates/zrm-policy/src"
+    for path in (root, root / "crates", root / "crates/zrm-policy", policy_root):
+        if path.is_symlink() or not path.is_dir():
+            label = path.name or "<repository-root>"
+            return [f"{label} is not a regular policy source-root component"]
     for directory, directory_names, file_names in os.walk(policy_root):
         directory_names.sort()
         file_names.sort()
@@ -512,8 +526,16 @@ def authority_api_failures(root: Path) -> list[str]:
                 filesystem_failures.append(f"{relative} is not a regular policy source")
                 continue
             policy_sources[relative] = path.read_text(encoding="utf-8")
-    failures = public_authority_api_failures(sources)
-    failures.extend(filesystem_failures)
+    sources: dict[str, str] = {}
+    for path in AUTHORITY_SOURCE_PATHS:
+        source = policy_sources.get(path)
+        if source is None:
+            filesystem_failures.append(f"{path} is missing from the scanned policy source set")
+        else:
+            sources[path] = source
+    failures = list(filesystem_failures)
+    if len(sources) == len(AUTHORITY_SOURCE_PATHS):
+        failures.extend(public_authority_api_failures(sources))
     failures.extend(policy_source_cfg_failures(policy_sources))
     return failures
 
@@ -525,6 +547,49 @@ def policy_source_cfg_failures(sources: dict[str, str]) -> list[str]:
     for path, source in sources.items():
         failures.extend(authority_cfg_failures(path, source))
         failures.extend(policy_path_attribute_failures(path, source, sources))
+        failures.extend(policy_macro_invocation_failures(path, source))
+    return failures
+
+
+def policy_macro_invocation_failures(path: str, source: str) -> list[str]:
+    """Reject macros that could synthesize an API outside the rustdoc profile."""
+
+    try:
+        structural_source = strip_rust_non_code(source)
+    except ComplexityError as error:
+        return [f"{path} cannot be lexed for macro invocations: {error}"]
+    invocation_pattern = re.compile(
+        r"(?<![A-Za-z0-9_])((?:(?:r#)?[A-Za-z_][A-Za-z0-9_]*::)*"
+        r"(?:r#)?[A-Za-z_][A-Za-z0-9_]*)\s*!\s*[\(\{\[]"
+    )
+    invocations = set(invocation_pattern.findall(structural_source))
+    failures = [
+        f"{path} invokes unreviewed macro {name}"
+        for name in sorted(invocations - ALLOWED_POLICY_MACRO_INVOCATIONS)
+    ]
+
+    protected_names = "assert|assert_eq|matches|write|format|cover"
+    for statement in re.findall(r"\b(?:pub\s+)?use\b[^;]*;", structural_source):
+        if re.search(r"::\s*\*\s*;", statement):
+            failures.append(f"{path} uses an unreviewed glob import")
+        if re.search(rf"\b(?:as\s+)?(?:{protected_names})\b", statement):
+            failures.append(f"{path} can shadow a reviewed macro name")
+    if re.search(r"#\s*!?\s*\[\s*(?:r#)?macro_use\b", structural_source):
+        failures.append(f"{path} uses unreviewed macro_use import")
+    extern_crates = Counter(
+        " ".join(statement.split())
+        for statement in re.findall(r"\bextern\s+crate\b[^;]*;", structural_source)
+    )
+    failures.extend(
+        exact_surface_failures(
+            path,
+            "extern crate bindings",
+            extern_crates,
+            Counter(ALLOWED_POLICY_EXTERN_CRATES.get(path, set())),
+        )
+    )
+    if re.search(r"\bmod\s+(?:r#)?(?:core|std|kani)\b", structural_source):
+        failures.append(f"{path} shadows a reviewed macro root")
     return failures
 
 
