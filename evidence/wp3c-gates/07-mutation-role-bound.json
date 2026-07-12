@@ -1,0 +1,19 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-mutation-role-bound",
+  "tool": {"name": "cargo-mutants", "version": "26.0.0", "executable_sha256": "0c01b08444b65d20be9a0dbe9786ae1c4844898de8872b457426397a24f0a771"},
+  "command": ["cargo", "+1.87.0", "mutants", "-p", "zrm-kernel", "-f", "crates/zrm-kernel/src/role_bound_resource.rs", "--timeout", "10", "--build-timeout", "60", "--jobs", "2", "--output", "target/wp3c-mutants-focused-evidence"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:32:03-04:00",
+  "duration_ms": 8136,
+  "status": "pass",
+  "scope": ["crates/zrm-kernel/src/role_bound_resource.rs"],
+  "result_root": "sha256:cec68bbd3dddffe3947fefa1aa9a206c98c252b2527b952d75718073d2b75372",
+  "result_summary": "9 tested; 3 caught; 6 compiler-unviable; 0 missed; 0 timed out",
+  "captured_output_sha256": "f0bb94a06c91fc7c5e5d4604233fa29946b8c1efe556b3e7fa85e7a7555b5364",
+  "assumptions": ["the unmutated baseline passed"],
+  "exclusions": ["compiler-unviable authority mutants are covered by the separate manual record"],
+  "non_claims": ["unviable mutants are compile-time outcomes, not killed runtime mutants"]
+}

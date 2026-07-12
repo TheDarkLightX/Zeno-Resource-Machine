@@ -1,0 +1,78 @@
+{
+  "schema": "zrm/evidence-index/v1",
+  "record_id": "wp3c-local-gates-2026-07-12",
+  "recorded_at": "2026-07-12",
+  "source": {
+    "revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+    "tree": "a8ecd89a03e22fc0a40ec85ca0fa035320118bf6",
+    "base_revision": "794e8255ca6d63d3068c90ade3c47a24075648b9",
+    "branch": "agent/wp3-role-bound-resource",
+    "dirty": false,
+    "replay_location": "detached clean worktree; repository hygiene replayed in a clean local clone",
+    "hosted_ci_revision": null,
+    "hosted_ci_run_id": null
+  },
+  "environment_policy": {
+    "path": "evidence/wp3c-environment-policy-2026-07-12.json",
+    "root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75"
+  },
+  "change_class": "C",
+  "review_state": {
+    "independent_agent_reviews_complete": true,
+    "review_receipt": "evidence/wp3c-agent-reviews-2026-07-12.json",
+    "human_class_c_review_complete": false,
+    "promotion_allowed": false
+  },
+  "record_count": 27,
+  "records": [
+    {"path": "evidence/wp3c-gates/01-rust-tests.json", "sha256": "88e49e5021e3b8f4f09724dd402fca2137790f94a5e45c3e5668865e1f866af8"},
+    {"path": "evidence/wp3c-gates/02-rust-doc-tests.json", "sha256": "c6928da0a217d105b6ac498bd1247881a30c2ca30ad76b34247014be5443e4db"},
+    {"path": "evidence/wp3c-gates/03-clippy.json", "sha256": "43e360454e1ca7c4e48ea7991c65148d5bff8f652a77e2a842fd1ad735902dd8"},
+    {"path": "evidence/wp3c-gates/04-rustfmt.json", "sha256": "92c30907ae3fe4725b479bba3d2c917ffbda1f1cf3954ca3296d91573dec368c"},
+    {"path": "evidence/wp3c-gates/05-rustdoc.json", "sha256": "8ab73656356d8c160df3cbce888e6132b72a593686a42fa10808c2b51788b7b5"},
+    {"path": "evidence/wp3c-gates/06-coverage.json", "sha256": "11be86dfcdd47959d8a582c4f4a664d7ba4bbba07998e3519466dff4e8005125"},
+    {"path": "evidence/wp3c-gates/07-mutation-role-bound.json", "sha256": "8e4b4a012bf4ddd4d0dcd2f0171f6984973fde4fa500310396ac9d87372d8b0d"},
+    {"path": "evidence/wp3c-gates/08-manual-critical-mutants.json", "sha256": "e76150352a89ff91e4f92f205e7916f6291d429f9c2c372ffadaedbd896d8060"},
+    {"path": "evidence/wp3c-gates/09-mutation-workspace.json", "sha256": "e530651a31ca8caf6f261c26dfe9697b547ccc2a92ae6dbe9426e1e0d18b4db8"},
+    {"path": "evidence/wp3c-gates/10-kani.json", "sha256": "1d8abc4057739013ffd169e99316355f51fcb352d3d4c192167bff4f6bc2a3f5"},
+    {"path": "evidence/wp3c-gates/11-miri-targeted.json", "sha256": "6d17745548785eb6f2b3a3d87ae24ff1978fe0bd97981c754b60f252708c943d"},
+    {"path": "evidence/wp3c-gates/12-fuzz-replay.json", "sha256": "b0207fffe1da38d9da61600c6fedeccc5f9c93efec3f3f2fd1b9a2dc77263d1b"},
+    {"path": "evidence/wp3c-gates/13-fuzz-campaign.json", "sha256": "55a5cdb5f5002eeb2e1a408d4a2011d2021db4c7f6f2f8b8db0fc9bfbafe9ba0"},
+    {"path": "evidence/wp3c-gates/14-conformance.json", "sha256": "71f4815e02d57789a3b3020afc9b11a909d74513574f263418ca66009fa52d84"},
+    {"path": "evidence/wp3c-gates/15-package-manifest.json", "sha256": "5b0eb5ea0bbd90fa40a3cb7b31a83ea76d7898243dd6cb2426ea893b60920ab0"},
+    {"path": "evidence/wp3c-gates/16-repository-hygiene.json", "sha256": "ace4f7642c76475583efbd9830b5cb023d39cc4c8ec5621c4586703bd0a46b8c"},
+    {"path": "evidence/wp3c-gates/17-architecture.json", "sha256": "42dfbb2af822b36f8f3f5511ff49ccdaef45de94bbd21412639848a5947b7f07"},
+    {"path": "evidence/wp3c-gates/18-complexity.json", "sha256": "ab6bef143d51d32ab35187cd8189dd59ec9dad770acc5ea4a2da977c375cbf17"},
+    {"path": "evidence/wp3c-gates/19-code-quality.json", "sha256": "4cfc32b2562b48c03bb07e0086057123d36d9dda9045b3fa74669122ea7de705"},
+    {"path": "evidence/wp3c-gates/20-python-tests.json", "sha256": "365d1e134d180b5099535c38618aec4a98b912157072d58738afe846a2296e8f"},
+    {"path": "evidence/wp3c-gates/21-vector-replay.json", "sha256": "a3950371b4fb61f8e794e9f671093a7fa3c34bb4d9298104220c985c3ca0c338"},
+    {"path": "evidence/wp3c-gates/22-corpus-replay.json", "sha256": "657c7043ff829d7dc015f66a86cbe1e0820baf11106dcacc74c4fb7ea4601c73"},
+    {"path": "evidence/wp3c-gates/23-cargo-audit-root.json", "sha256": "f48a1754c2948b6e38c72af550990e5af54cf56955020af23615ea489addb19d"},
+    {"path": "evidence/wp3c-gates/24-cargo-audit-fuzz.json", "sha256": "ae402c65e9f4b0e3c686d0e590921cf71e6546eac45bb7435448034d34409e8b"},
+    {"path": "evidence/wp3c-gates/25-cargo-deny-root.json", "sha256": "21e44dedbeedb06c32c3298a480b7f8fb7182f752b5e5e93fe5517de93a23083"},
+    {"path": "evidence/wp3c-gates/26-cargo-deny-fuzz.json", "sha256": "cb9623bb05aae807b27a4b58f59910b6f2a5a0ef86a3e664b3adcef519a32847"},
+    {"path": "evidence/wp3c-gates/27-bom.json", "sha256": "48a0734c514489b029bc6820c9157e958abf625c2edff5f48de4443ec13d0d19"}
+  ],
+  "implemented_scope": [
+    "sealed composition of IntrinsicResourceV1 with an exact canonical ResourceRolePositionV1",
+    "lookup only by the intrinsic body's internally derived ResourceId",
+    "typed absence rejection with reject-no-op behavior",
+    "role-local permutation invariance and ordinal ceiling 255",
+    "256-assignment independent atlas plus patch-bound mutation, Kani, Miri, fuzz, coverage, and quality evidence"
+  ],
+  "remaining_gaps": [
+    "human Class C review",
+    "hosted CI and scheduled nightly replay",
+    "complete one-body-per-partition-position coverage",
+    "authenticated policy, membership, logic, transition, state, commit, and journal authority",
+    "Class E decision for zero-quantity marker semantics and resource-policy authority",
+    "finite-state model-checking assurance for later replay, stale-plan, atomicity, crash, and concurrency stages"
+  ],
+  "non_claims": [
+    "this index does not authorize merge or production promotion",
+    "the supplied partition remains caller-proposed and unauthenticated",
+    "different-body separation relies on the schema-fixed SHA-256 collision-resistance assumption",
+    "the records do not prove unbounded or cryptographic correctness",
+    "no end-to-end funds-safety, exact-once state, or production-readiness claim is made"
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-manual-critical-mutants",
+  "tool": {"name": "cargo", "version": "1.87.0 (99624be96 2025-05-06)", "executable_sha256": "a9fb5ef0f95be70b324f3e88a4621a566320e2eb00635dc37f8a98e0a9fb7c9a"},
+  "command": ["cargo", "+1.87.0", "test", "-p", "zrm-kernel", "--test", "role_bound_intrinsic", "--test", "role_bound_intrinsic_atlas", "--locked"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:29:49-04:00",
+  "duration_ms": 4698,
+  "status": "pass",
+  "scope": ["body-derived lookup key", "absent-resource rejection", "returned ordinal integrity"],
+  "result_root": "sha256:a71c28b23702237613c7760268ceac3a02c7f080a2ab43bcf1660acff1750e23",
+  "result_summary": "3 applied individually; 3 compiled before tests; 3 killed; 0 survived; source tree restored after each",
+  "mutants": [
+    {"id": "WP3C-MUT-WRONG-PRESENT-ID", "patch_path": "evidence/wp3c-mutants/wrong-present-id.diff.txt", "patch_sha256": "d5d76a15b88477366e693aa3630b37749fb660f373631f0601b15ac60b0913b9", "compiled": true, "kill_exit_code": 101, "killed_by": ["absent_resource_rejects_without_changing_either_input", "exact_wp1_vectors_bind_in_every_structural_role", "every_valid_body_field_mutation_rejects_against_the_stale_partition", "wrapper_preserves_the_role_local_ordinal_ceiling"], "captured_output_sha256": "880b52c7f372559a5b846e4d2d48e9b7b25b7f2312338a2ce83e20178ecdc5bc"},
+    {"id": "WP3C-MUT-ABSENT-FALLBACK", "patch_path": "evidence/wp3c-mutants/absent-fallback.diff.txt", "patch_sha256": "0aee3f2308eb9aa23b4a7b6672c2af73b9731e4e4f423bb19dbe5e6289436a87", "compiled": true, "kill_exit_code": 101, "killed_by": ["absent_resource_rejects_without_changing_either_input", "every_valid_body_field_mutation_rejects_against_the_stale_partition"], "captured_output_sha256": "41c1639520a183a4e26628213d088beea59e50e0fd8f79b9257b2ca616895fd3"},
+    {"id": "WP3C-MUT-CORRUPT-ORDINAL", "patch_path": "evidence/wp3c-mutants/corrupt-ordinal.diff.txt", "patch_sha256": "7202162941f6cbd14b1c5106b4d21ae98ebdbe4167740a0c3e41ef2d8a292f77", "compiled": true, "kill_exit_code": 101, "killed_by": ["exact_wp1_vectors_bind_in_every_structural_role", "wrapper_preserves_the_role_local_ordinal_ceiling"], "captured_output_sha256": "8e7ecbb319869671c485aa340b4c58dddd7d2cec87ff567f6d374c3351514183"}
+  ],
+  "restored_tree": "a8ecd89a03e22fc0a40ec85ca0fa035320118bf6",
+  "captured_output_sha256": "a71c28b23702237613c7760268ceac3a02c7f080a2ab43bcf1660acff1750e23",
+  "assumptions": ["patches were applied individually to source_revision", "Cargo reached test execution, establishing that each mutant compiled", "the worktree matched restored_tree afterward"],
+  "exclusions": ["all possible semantic faults"],
+  "non_claims": ["mutation killing demonstrates test sensitivity, not correctness proof"]
+}

@@ -2,7 +2,8 @@
 //!
 //! `WP3a` canonicalizes bounded, inert resource identifiers into disjoint role
 //! lists. `WP3b` converts a fixed-schema version-one wire candidate into a sealed
-//! intrinsically valid resource body with an exactly derived identifier. These
+//! intrinsically valid resource body with an exactly derived identifier. `WP3c`
+//! binds that body to its exact structural role and canonical ordinal. These
 //! stages establish no authenticated policy, transition, membership, proof,
 //! state, or commit authority.
 
@@ -16,9 +17,11 @@ extern crate std;
 
 mod resource;
 mod resource_roles;
+mod role_bound_resource;
 
 pub use resource::{IntrinsicResourceErrorV1, IntrinsicResourceFieldV1, IntrinsicResourceV1};
 pub use resource_roles::{
     CanonicalResourceRolesV1, ResourceRoleListsCandidateV1, ResourceRolePartitionErrorV1,
     ResourceRolePositionV1, ResourceRoleV1,
 };
+pub use role_bound_resource::{IntrinsicRoleBindingErrorV1, RoleBoundIntrinsicResourceV1};

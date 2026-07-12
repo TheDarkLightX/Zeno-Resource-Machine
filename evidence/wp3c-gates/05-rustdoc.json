@@ -1,0 +1,19 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-rustdoc",
+  "tool": {"name": "rustdoc", "version": "rustc 1.87.0 component", "executable_sha256": "97c49f8e6d45760f6352a7c4ac7a0f0440e3e13d595e54e95a4e7e1d1f953a28"},
+  "command": ["cargo", "+1.87.0", "doc", "--workspace", "--no-deps", "--locked"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:31:26-04:00",
+  "duration_ms": 3036,
+  "status": "pass",
+  "scope": ["public workspace documentation"],
+  "result_root": "sha256:9b7e6321e9705ce88be9c5babdc5ac2b899120ac226064bbe372fecd5203a658",
+  "result_summary": "workspace documentation generated successfully",
+  "captured_output_sha256": "9b7e6321e9705ce88be9c5babdc5ac2b899120ac226064bbe372fecd5203a658",
+  "assumptions": ["dependencies are excluded intentionally"],
+  "exclusions": ["documentation truth beyond reviewed claims"],
+  "non_claims": ["successful generation does not prove documentation completeness"]
+}
