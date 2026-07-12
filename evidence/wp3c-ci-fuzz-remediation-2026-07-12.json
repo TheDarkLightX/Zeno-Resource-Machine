@@ -1,0 +1,69 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "record_id": "wp3c-ci-fuzz-remediation-2026-07-12",
+  "recorded_at": "2026-07-12",
+  "gate_id": "WP3c-hosted-fuzz-noop-remediation",
+  "status": "pass-with-hosted-rerun-pending",
+  "source": {
+    "revision": "f525bd929ee92bfd7b93376550586b9edc9022a2",
+    "tree": "b6e7ed016d8637fc81df9a3f5c7882e9cd89cf1b",
+    "parent_revision": "e78d5f2421cc495a422bca6fdf56e4d5ecc9711d",
+    "branch": "agent/wp3-role-bound-resource",
+    "dirty": false,
+    "replay_location": "clean immutable git archive"
+  },
+  "hosted_failure": {
+    "pull_request": 10,
+    "head_revision": "e78d5f2421cc495a422bca6fdf56e4d5ecc9711d",
+    "workflow_run_id": 29185378151,
+    "job_id": 86630413769,
+    "job": "fuzz-smoke",
+    "failure": "the selected nonce mutation assigned the nonce's existing value, so the fail-loud changed-body assertion rejected a no-op test case",
+    "production_code_failure": false
+  },
+  "remediation": [
+    "nonce mutation toggles one byte and therefore differs from every target nonce constructed by this fuzz grammar",
+    "the exact 21-byte hosted counterexample is a named deterministic corpus seed",
+    "CI and nightly replay all nine exact seeds before their time-bounded campaign",
+    "time-bounded discovery runs on an ignored target-directory copy so generated units cannot alter the reviewed source corpus"
+  ],
+  "counterexample": {
+    "path": "fuzz/corpus/role_bound_intrinsic_v1/stale-nonce-noop-regression",
+    "bytes": 21,
+    "sha256": "c0ff71617183ce559a42201acc5071b034393dc1f12abb16b2518c84be0fcc62",
+    "expected_after_fix": "the resource body changes, its derived ResourceId changes, and binding against the stale partition rejects"
+  },
+  "results": [
+    {
+      "tool": "cargo-fuzz 0.13.1",
+      "command": "replay the exact named hosted counterexample once",
+      "result": "pass; target executed the fixed input without panic"
+    },
+    {
+      "tool": "cargo-fuzz 0.13.1",
+      "command": "replay the exact nine-entry role-bound-intrinsic corpus",
+      "result": "pass; all 9 files loaded and 10 initialization runs completed without failure"
+    },
+    {
+      "tool": "cargo-fuzz 0.13.1",
+      "command": "45-second seed-1 role_bound_intrinsic_v1 campaign over an ignored corpus copy",
+      "result": "pass; 1,122,376 executions in 46 seconds; cov=414; ft=450; 24 new units; peak RSS=414 MiB; 0 failures"
+    },
+    {
+      "tool": "repository tooling",
+      "command": "clean-archive hygiene, conformance, package, architecture, corpus, complexity, code-quality, and tooling gates",
+      "result": "pass; 73 tooling tests; exact nine-entry corpus; 0 quality findings or advisories"
+    }
+  ],
+  "review_state": {
+    "hosted_rerun_complete": false,
+    "human_class_c_review_complete": false,
+    "promotion_allowed": false
+  },
+  "non_claims": [
+    "the failure and fix concern the assurance harness, not the production role-binding implementation",
+    "a 46-second fuzz campaign is PR-smoke evidence and does not prove exhaustive input coverage",
+    "the local pass remains subject to a clean hosted rerun at the published remediation revision",
+    "this record does not replace human Class C behavior and evidence review or authorize production promotion"
+  ]
+}
