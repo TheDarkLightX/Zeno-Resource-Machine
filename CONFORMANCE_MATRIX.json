@@ -1,7 +1,7 @@
 {
   "schema": "zrm/cbc-conformance-matrix/v1",
   "version": 1,
-  "updated_at": "2026-07-11",
+  "updated_at": "2026-07-12",
   "status": "scoped_wp0_wp1_implementation",
   "obligation_family": {
     "abbreviation": "CBC",
@@ -28,7 +28,8 @@
       "wp0_multi_axis_code_quality_controls",
       "wp0_source_sbom_and_cryptography_cbom_controls",
       "wp3a_canonical_resource_role_partition",
-      "wp3b_intrinsic_resource_construction"
+      "wp3b_intrinsic_resource_construction",
+      "draft_class_e_semantic_closure_rfc_package"
     ],
     "non_claims": [
       "no_complete_semantic_kernel",
@@ -44,6 +45,7 @@
       "no_release_provenance",
       "no_reproducible_release",
       "no_security_audit",
+      "no_approved_semantic_closure_rfc",
       "no_production_authority"
     ]
   },

@@ -1,0 +1,167 @@
+{
+  "schema": "zrm/semantic-intent-map/v1",
+  "package_id": "zrm-semantic-closure-v1",
+  "status": "draft_design_oracle",
+  "source_rfcs": [
+    "rfcs/RFC-0001-policy-context-fact-and-commit-authority.md",
+    "rfcs/RFC-0002-recursive-semantic-journal-composition.md"
+  ],
+  "nodes": [
+    {
+      "id": "I-POLICY-CREATION-SELECTION",
+      "text": "Creation uses the exact selected current policy, or rejects while creation is suspended.",
+      "contracts": ["ZRM-SC-002", "ZRM-SC-003"],
+      "model": "zrm_policy_creation_suspension_v1",
+      "invariants": ["CreationUsesExactCurrentPolicy", "SuspendedCreationRejects"],
+      "mutants": ["creation_under_wrong_policy", "revoked_current_remains_selected"]
+    },
+    {
+      "id": "I-POLICY-PREDECESSOR-NARROW",
+      "text": "A predecessor policy is an explicit compatibility grant for an existing resource role and grants no creation authority.",
+      "contracts": ["ZRM-SC-002", "ZRM-SC-009"],
+      "model": "zrm_policy_creation_suspension_v1",
+      "invariants": ["PredecessorDispositionIsExplicit", "CreationUsesExactCurrentPolicy"],
+      "mutants": []
+    },
+    {
+      "id": "I-POLICY-HARD-REVOCATION",
+      "text": "Hard revocation removes normal policy authority at the new authenticated snapshot and atomically replaces or suspends the selected creation policy.",
+      "contracts": ["ZRM-SC-002", "ZRM-SC-006", "ZRM-SC-012"],
+      "model": "zrm_policy_creation_suspension_v1",
+      "invariants": ["CurrentPolicyNotRevoked", "UseRequiresCurrentOrAcceptedPredecessor"],
+      "mutants": ["revoked_current_remains_selected"]
+    },
+    {
+      "id": "I-POLICY-UPDATE-CONTEXT",
+      "text": "A policy update atomically changes every authenticated context component and writes governance replay and audit records.",
+      "contracts": ["ZRM-SC-003", "ZRM-SC-010", "ZRM-SC-012"],
+      "model": "zrm_plan_freshness_v1",
+      "invariants": ["MachineRootAndStateVersionAdvanceTogether", "GovernanceReplayAndAuditMoveTogether"],
+      "mutants": ["policy_change_reuses_machine_root"]
+    },
+    {
+      "id": "I-CONTEXT-SNAPSHOT-EXACT",
+      "text": "A plan can newly commit only under the exact authenticated state, policy, epoch, and ordering context under which it was prepared.",
+      "contracts": ["ZRM-SC-003", "ZRM-SC-005", "ZRM-SC-010", "ZRM-SC-011"],
+      "model": "zrm_plan_freshness_v1",
+      "invariants": ["FreshCommitOnly", "RejectedCommitIsNoOp"],
+      "mutants": ["stale_plan_commits"]
+    },
+    {
+      "id": "I-FACT-PRODUCTION-ONLY",
+      "text": "Only an authenticated Production verifier policy can mint an authority-bearing fact on a production path.",
+      "contracts": ["ZRM-SC-006"],
+      "model": "zrm_verifier_fact_freshness_v1",
+      "invariants": ["VerifiedFactsAreProductionOnly"],
+      "mutants": ["development_fact_grants_authority"]
+    },
+    {
+      "id": "I-FACT-BINDING-EXACT",
+      "text": "A fact grants authority only for its exact lifecycle class, policy snapshot, verifier release, context, and statement.",
+      "contracts": ["ZRM-SC-006", "ZRM-SC-008"],
+      "model": "zrm_verifier_fact_freshness_v1",
+      "invariants": ["AuthorityRequiresExactCurrentBinding", "RejectResultsGrantNoAuthority"],
+      "mutants": []
+    },
+    {
+      "id": "I-EFFECT-COMMITMENT-DAG",
+      "text": "Semantic effects, journal, replay metadata, and atomic commit bundle form an acyclic commitment graph with no transitive self-reference.",
+      "contracts": ["ZRM-SC-009", "ZRM-SC-010", "ZRM-SC-011"],
+      "model": "zrm_atomic_commit_recovery_v1",
+      "invariants": [],
+      "mutants": [],
+      "unmodeled_obligation": "Static schema-dependency cycle analysis and independent canonical vectors are required."
+    },
+    {
+      "id": "I-REPLAY-LINEARIZABLE",
+      "text": "Replay lookup, exact or conflicting classification, freshness comparison, and new commit share one serializable or linearizable boundary.",
+      "contracts": ["ZRM-SC-005", "ZRM-SC-010", "ZRM-SC-011"],
+      "model": "zrm_replay_linearization_v1",
+      "invariants": ["AbsentReplayIsPristine", "PresentReplayHasOneEffect", "ConflictBRequiresDurableA"],
+      "mutants": ["replay_lookup_outside_commit_boundary"]
+    },
+    {
+      "id": "I-EXACT-ONCE-COMPLETE",
+      "text": "Resource consumption, nullifier insertion, semantic effects, replay record, and accepted journal become durable together exactly once.",
+      "contracts": ["ZRM-SC-005", "ZRM-SC-010", "ZRM-SC-011"],
+      "model": "zrm_exact_once_v1",
+      "invariants": ["ReplayAndNullifierMoveTogether", "JournalAndReplayMoveTogether", "EffectCountMatchesReplay"],
+      "mutants": ["retry_duplicates_effect"]
+    },
+    {
+      "id": "I-OUTCOME-UNKNOWN",
+      "text": "An indeterminate commit result grants neither success nor confirmed rejection; a read-only retry descriptor resolves against durable state without reapplying effects.",
+      "contracts": ["ZRM-SC-005", "ZRM-SC-011"],
+      "model": "zrm_commit_outcome_resolution_v1",
+      "invariants": ["UnknownCarriesDescriptor", "ResolutionIsReadOnly", "AlreadyCommittedRequiresExactRecord"],
+      "mutants": ["unknown_reported_as_rejected", "resolution_reapplies_effect"]
+    },
+    {
+      "id": "I-COMMIT-ATOMIC-DURABLE",
+      "text": "Durable visibility is the complete pre-state or complete post-state; no partial authority-bearing effect is visible.",
+      "contracts": ["ZRM-SC-010", "ZRM-SC-011"],
+      "model": "zrm_atomic_commit_recovery_v1",
+      "invariants": ["DurableWritesAreAtomic", "PreStateHasNoDurableEffects", "PostStateHasAllDurableEffects"],
+      "mutants": ["partial_durable_commit"]
+    },
+    {
+      "id": "I-RECURSIVE-DERIVED-ORDER",
+      "text": "Every recursive leaf position derives from its authenticated pre-state version, and every parent covers the exact dense left-then-right range.",
+      "contracts": ["ZRM-SC-006", "ZRM-SC-011"],
+      "rfc": "RFC-0002",
+      "model": "zrm_recursive_semantic_composition_v1",
+      "invariants": ["LeafPositionsDerived", "SingletonRangesMatchStateVersions", "LoadedLeavesAreComposable"],
+      "mutants": ["caller_substitutes_leaf_position"]
+    },
+    {
+      "id": "I-RECURSIVE-EMPTY-BOUNDARIES",
+      "text": "The first recursive profile admits only named empty message and carry commitments with zero counts.",
+      "contracts": ["ZRM-SC-006", "ZRM-SC-011"],
+      "rfc": "RFC-0002",
+      "model": "zrm_recursive_semantic_composition_v1",
+      "invariants": ["FirstProfileMessagesAreEmpty", "FirstProfileCarryIsEmpty"],
+      "mutants": ["nonempty_message_smuggled_as_empty"]
+    },
+    {
+      "id": "I-RECURSIVE-ASSOCIATIVITY",
+      "text": "For one ordered, state-contiguous, descendant-disjoint journal sequence, every valid association derives the same semantic summary, while reordering remains non-equivalent.",
+      "contracts": ["ZRM-SC-006", "ZRM-SC-011"],
+      "rfc": "RFC-0002",
+      "model": "zrm_recursive_semantic_composition_v1",
+      "invariants": ["LoadedLeavesAreComposable", "SemanticCompositionAssociative"],
+      "mutants": ["recursive_fold_omits_middle_leaf"]
+    }
+  ],
+  "edges": [
+    {"from": "I-POLICY-CREATION-SELECTION", "to": "I-POLICY-UPDATE-CONTEXT", "kind": "requires"},
+    {"from": "I-POLICY-HARD-REVOCATION", "to": "I-POLICY-UPDATE-CONTEXT", "kind": "requires"},
+    {"from": "I-POLICY-UPDATE-CONTEXT", "to": "I-CONTEXT-SNAPSHOT-EXACT", "kind": "requires"},
+    {"from": "I-CONTEXT-SNAPSHOT-EXACT", "to": "I-REPLAY-LINEARIZABLE", "kind": "requires"},
+    {"from": "I-EFFECT-COMMITMENT-DAG", "to": "I-COMMIT-ATOMIC-DURABLE", "kind": "requires"},
+    {"from": "I-REPLAY-LINEARIZABLE", "to": "I-EXACT-ONCE-COMPLETE", "kind": "requires"},
+    {"from": "I-EXACT-ONCE-COMPLETE", "to": "I-OUTCOME-UNKNOWN", "kind": "requires"},
+    {"from": "I-COMMIT-ATOMIC-DURABLE", "to": "I-OUTCOME-UNKNOWN", "kind": "requires"},
+    {"from": "I-COMMIT-ATOMIC-DURABLE", "to": "I-RECURSIVE-DERIVED-ORDER", "kind": "requires"},
+    {"from": "I-RECURSIVE-DERIVED-ORDER", "to": "I-RECURSIVE-ASSOCIATIVITY", "kind": "requires"},
+    {"from": "I-RECURSIVE-EMPTY-BOUNDARIES", "to": "I-RECURSIVE-ASSOCIATIVITY", "kind": "requires"}
+  ],
+  "coverage_rule": "Every leaf intent maps to at least one semantic contract and at least one model invariant or an explicit unmodeled obligation.",
+  "unmodeled_intents": [
+    {
+      "id": "I-OUTBOX-AT-LEAST-ONCE",
+      "reason": "External receiver behavior is outside the local finite model; RFC-0001 preserves an explicit at-least-once non-claim."
+    },
+    {
+      "id": "I-HARD-REVOCATION-RECOVERY",
+      "reason": "Recovery and migration authority are deferred to a separate RFC."
+    },
+    {
+      "id": "I-RECURSIVE-ENABLED-MESSAGES-CARRY",
+      "reason": "The first composition profile rejects enabled message and carry semantics; future profiles require a separate Class E RFC."
+    },
+    {
+      "id": "I-EFFECT-COMMITMENT-DAG-CHECK",
+      "reason": "The commitment dependency graph requires a static schema-cycle checker and canonical-vector review; the bounded state machines do not model hash-preimage dependency cycles."
+    }
+  ]
+}

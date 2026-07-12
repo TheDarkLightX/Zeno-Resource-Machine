@@ -1,7 +1,9 @@
 # Work log: semantic-closure remediation
 
 **Change class:** E
-**Status:** implementation in progress; requires independent review
+**Status:** authoring and bounded assurance complete; requires independent review
+**Author:** Dana Edwards
+**Drafting assistance:** GPT-5.6
 
 ## Goal
 
@@ -120,6 +122,34 @@ Before publication:
 - public privacy scan and repository gates;
 - later Loom, crash injection, Kani, differential Rust, and parameterized proof
   obligations remain required before implementation promotion.
+
+## Authoring-track assurance results
+
+The internal bounded suite now contains eight positive models covering policy
+creation/suspension, context and plan freshness, exact-once effects, verifier
+fact freshness, atomic recovery, replay linearization, unknown-outcome
+resolution, and recursive semantic composition.
+
+Recorded results:
+
+```text
+positive models validated                    8 / 8
+positive models 1-inductive                  8 / 8
+two independent SMT backends agreed          8 / 8
+determinism trials matched                    2 / 2 per model
+targeted disaster mutants counterexampled   14 / 14
+timeouts, unknowns, generic errors            0
+solver disagreements                          0
+```
+
+Every mutant was accepted only when the checker produced a concrete
+`InvNotInductive` witness. Parser failure, unsupported input, timeout, unknown,
+generic error, or backend disagreement did not count as semantic evidence.
+
+Detailed model sources, tool metadata, hashes, and replay identifiers remain in
+the private assurance workspace and are intentionally absent from this public
+package. These results are corroborative authoring evidence, not independent
+review or an implementation-refinement proof.
 
 ## Dependencies and resources
 

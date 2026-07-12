@@ -2,6 +2,9 @@
 
 **A proof-system-neutral semantic kernel for exact-once, proof-carrying resource transitions.**
 
+**Author:** Dana Edwards
+**Drafting assistance:** GPT-5.6
+
 > **Status: incubation / pre-alpha.** The protocol, schemas, APIs, and security model are not stable. No production-readiness, privacy, consensus, token-value, physical-resource, or safety-critical claim is made.
 
 Machine-readable release posture:
@@ -36,6 +39,8 @@ The current development branch also contains the bounded CBC-003 structural role
 WP3b adds a sealed `IntrinsicResourceV1` stage. It rejects zero identifiers, roots, and nonce, expiry before creation, and every nonzero v1 flag; preserves exact quantity and epoch widths; and derives its own `ResourceId` from the complete existing canonical wire value. The type fixes the v1 field set but proves no strict-decoder provenance. It establishes only policy-independent body consistency and body-to-ID binding.
 
 `ResourceWireV1` remains an inert syntactic candidate, and `IntrinsicResourceV1` is not a final policy-valid resource. The current policy schema cannot express the specification's explicit permission for zero-quantity marker resources, so this stage preserves zero as unresolved data. The repository does not yet implement final `ResourceV1`, authenticated policy activation, a complete semantic transition kernel, authenticated facts, state membership, persistence, atomic commit, proof adapters, application adapters, or a production release. Host-side branch, vulnerability-reporting, and release-environment controls remain incomplete. There is no stable package-wide ABI, external security audit, or production-readiness claim. Detailed status and remaining evidence are machine-readable in [`CONFORMANCE_MATRIX.json`](CONFORMANCE_MATRIX.json).
+
+The current documentation branch also contains two unapproved Class E semantic-closure RFCs covering policy suspension, authority-context freshness, acyclic semantic-effect commitment, linearizable retry classification, uncertain commit outcomes, and serialized recursive journal composition. They change no implemented Rust authority and require independent semantic review before approval. See [`rfcs/README.md`](rfcs/README.md) and the [`semantic-closure review package`](formal/state-machine/semantic_closure_v1/README.md).
 
 > **zkVMs prove that code ran. ZRM defines what the result is allowed to change.**
 
@@ -356,6 +361,8 @@ Not included in v0.1:
 - [`SECURITY.md`](SECURITY.md) — security posture and disclosure policy.
 - [`CONTRIBUTING.md`](CONTRIBUTING.md) — change classes, review requirements, and contribution workflow.
 - [`REVIEW_CHECKLIST.md`](REVIEW_CHECKLIST.md) — high-assurance review checklist.
+- [`rfcs/README.md`](rfcs/README.md) — draft protocol and authority RFC index.
+- [`formal/state-machine/semantic_closure_v1/README.md`](formal/state-machine/semantic_closure_v1/README.md) — draft semantic decisions, review oracles, and refinement obligations.
 - [`templates/RFC_TEMPLATE.md`](templates/RFC_TEMPLATE.md) — protocol and architecture proposal template.
 - [`templates/ADR_TEMPLATE.md`](templates/ADR_TEMPLATE.md) — architectural decision record template.
 - [`templates/AGENT_WORKLOG_TEMPLATE.md`](templates/AGENT_WORKLOG_TEMPLATE.md) — agent evidence report template.
