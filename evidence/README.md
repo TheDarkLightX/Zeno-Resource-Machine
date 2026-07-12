@@ -38,3 +38,10 @@ coverage, mutation, or Miri results beyond their exact source revision.
 `wp5-path-correction-2026-07-12.json` binds the pre-merge privacy correction
 for two generic execution-output locations, their exact-source reruns, the
 successor index, and the unchanged behavioral results.
+
+`security-remediation-main-integration-2026-07-12.json` binds PR #9's merge
+onto the WP3c, semantic-closure, and WP5 default-branch history. It preserves
+the original security receipts byte-for-byte, records the branch-local
+RFC-0002 to integrated RFC-0003 identity correction, binds every renamed oracle
+artifact, and reports the combined-tree replay. It does not approve RFC-0003 or
+promote the security remediation.
