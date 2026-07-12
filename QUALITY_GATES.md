@@ -169,9 +169,10 @@ only to regular Rust sources inside the complete scanned policy tree. Raw
 attribute identifiers, linked source directories, source inclusion, and
 unreviewed macro definitions or invocation paths fail closed. Macro imports,
 aliases, glob imports, protected-root shadowing, and non-ASCII policy source are
-rejected. A digest update is a reviewed Class E action, not an automatic
-golden-file refresh. Source inventory remains defense in depth and does not
-substitute for the compiler-derived gate.
+rejected. Cargo dependency renames are forbidden so an allowed inward package
+cannot acquire a protected local macro root. A digest update is a reviewed
+Class E action, not an automatic golden-file refresh. Source inventory remains
+defense in depth and does not substitute for the compiler-derived gate.
 
 ---
 

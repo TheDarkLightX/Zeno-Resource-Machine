@@ -245,9 +245,12 @@ def dependency_failures(package: dict[str, object]) -> list[str]:
         for dependency in dependencies
         if isinstance(dependency, dict) and isinstance(dependency.get("name"), str)
     }
+    renamed = sorted(
+        repr(dependency.get("rename"))
+        for dependency in dependencies
+        if isinstance(dependency, dict) and dependency.get("rename") is not None
+    )
     allowed = ALLOWED_INTERNAL_DEPENDENCIES[package_name] | ALLOWED_EXTERNAL_DEPENDENCIES[package_name]
-    if declared == allowed:
-        return []
     failures: list[str] = []
     unexpected = declared - allowed
     missing = allowed - declared
@@ -255,6 +258,8 @@ def dependency_failures(package: dict[str, object]) -> list[str]:
         failures.append(f"{package_name} has undeclared dependency edges {sorted(unexpected)}")
     if missing:
         failures.append(f"{package_name} is missing declared dependency edges {sorted(missing)}")
+    if renamed:
+        failures.append(f"{package_name} uses unreviewed dependency renames {renamed}")
     return failures
 
 

@@ -128,7 +128,8 @@ exact-allowlisted and must resolve to regular files inside the complete scanned
 policy source tree. Linked source directories, source inclusion, and unreviewed
 macro definitions or invocation paths fail closed. Macro imports, aliases, glob
 imports, protected-root shadowing, and non-ASCII policy source are rejected.
-Digest updates require Class E review.
+Cargo dependency renames are forbidden so an allowed inward package cannot
+acquire a protected local macro root. Digest updates require Class E review.
 
 The future governed interface must have this shape:
 

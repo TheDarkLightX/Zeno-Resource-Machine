@@ -187,6 +187,19 @@ class ArchitecturePolicyTests(unittest.TestCase):
         }
         self.assertEqual(len(dependency_failures(package)), 1)
 
+    def test_dependency_rename_cannot_create_protected_macro_root(self) -> None:
+        """An allowed package cannot enter policy under a trusted local alias."""
+
+        package = {
+            "name": "zrm-policy",
+            "dependencies": [
+                {"name": "zrm-crypto", "rename": "kani"},
+                {"name": "zrm-types", "rename": None},
+            ],
+        }
+        failures = dependency_failures(package)
+        self.assertTrue(any("dependency renames" in failure for failure in failures))
+
     def test_exact_crypto_dependencies_are_accepted(self) -> None:
         """The reviewed crypto dependency set passes exactly."""
 
