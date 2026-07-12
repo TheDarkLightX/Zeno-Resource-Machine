@@ -335,6 +335,10 @@ impl VerifierCostRowV1 {
             "mod escape { #![cfg_attr(doc, cfg(any()))] "
             "impl ResourceKindPolicyV1 { "
             "pub fn calculate_candidate_cost(&self) -> u64 { 0 } } }",
+            "#[r#cfg(not(doc))] impl ResourceKindPolicyV1 { "
+            "pub fn calculate_candidate_cost(&self) -> u64 { 0 } }",
+            "#[r#cfg_attr(doc, cfg(any()))] impl ResourceKindPolicyV1 { "
+            "pub fn calculate_candidate_cost(&self) -> u64 { 0 } }",
         ):
             with self.subTest(source=source):
                 failures = policy_source_cfg_failures(
@@ -345,14 +349,29 @@ impl VerifierCostRowV1 {
     def test_unreviewed_policy_path_attribute_is_rejected(self) -> None:
         """A module cannot escape the complete in-tree policy-source scan."""
 
-        sources = {
-            "crates/zrm-policy/src/resource_kind.rs": (
-                '#[path = "../../hidden.inc"] mod hidden;'
-            )
-        }
-        failures = policy_source_cfg_failures(sources)
-        self.assertTrue(any("path attributes" in failure for failure in failures))
-        self.assertTrue(any("outside the scanned" in failure for failure in failures))
+        for source in (
+            '#[path = "../../hidden.inc"] mod hidden;',
+            '#[r#path = "../../hidden.inc"] mod hidden;',
+        ):
+            with self.subTest(source=source):
+                sources = {"crates/zrm-policy/src/resource_kind.rs": source}
+                failures = policy_source_cfg_failures(sources)
+                self.assertTrue(any("path attributes" in failure for failure in failures))
+                self.assertTrue(any("outside the scanned" in failure for failure in failures))
+
+    def test_macro_generated_conditional_api_is_rejected(self) -> None:
+        """A macro cannot synthesize a rustdoc-hidden public item."""
+
+        source = (
+            "macro_rules! escape { ($meta:meta) => { #[$meta] "
+            "impl ResourceKindPolicyV1 { "
+            "pub fn calculate_candidate_cost(&self) -> u64 { 0 } } } } "
+            "escape!(cfg(not(doc)));"
+        )
+        failures = policy_source_cfg_failures(
+            {"crates/zrm-policy/src/resource_kind.rs": source}
+        )
+        self.assertTrue(any("macro definition" in failure for failure in failures))
 
     def test_public_function_pointer_constant_is_rejected(self) -> None:
         """A callable associated constant is part of the exact value inventory."""

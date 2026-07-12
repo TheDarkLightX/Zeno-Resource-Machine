@@ -336,17 +336,24 @@ def authority_cfg_failures(path: str, source: str) -> list[str]:
         structural_source = strip_rust_non_code(source)
     except ComplexityError as error:
         return [f"{path} cannot be lexed for conditional compilation: {error}"]
-    cfg_pattern = re.compile(r"#\s*!?\s*\[\s*cfg\s*\(([^\]]*)\)\s*\]", re.DOTALL)
+    cfg_pattern = re.compile(
+        r"#\s*!?\s*\[\s*(?:r#)?cfg\s*\(([^\]]*)\)\s*\]", re.DOTALL
+    )
     for expression in cfg_pattern.findall(structural_source):
         normalized = re.sub(r"\s+", "", expression)
         if normalized not in ALLOWED_AUTHORITY_CFG_EXPRESSIONS:
             failures.append(
                 f"{path} uses unreviewed conditional-compilation profile {normalized}"
             )
-    if re.search(r"#\s*!?\s*\[\s*cfg_attr\s*\(", structural_source) is not None:
+    if (
+        re.search(r"#\s*!?\s*\[\s*(?:r#)?cfg_attr\s*\(", structural_source)
+        is not None
+    ):
         failures.append(f"{path} uses unreviewed cfg_attr conditional compilation")
-    if re.search(r"\binclude\s*!\s*\(", structural_source) is not None:
+    if re.search(r"\b(?:r#)?include\s*!\s*\(", structural_source) is not None:
         failures.append(f"{path} uses unreviewed source inclusion")
+    if re.search(r"\bmacro_rules\s*!|\bmacro\s+(?:r#)?[A-Za-z_]", structural_source):
+        failures.append(f"{path} uses an unreviewed macro definition")
     return failures
 
 
@@ -484,12 +491,27 @@ def authority_api_failures(root: Path) -> list[str]:
     sources = {path: (root / path).read_text(encoding="utf-8") for path in AUTHORITY_SOURCE_PATHS}
     policy_sources: dict[str, str] = {}
     filesystem_failures: list[str] = []
-    for path in sorted((root / "crates/zrm-policy/src").rglob("*.rs")):
-        relative = path.relative_to(root).as_posix()
-        if path.is_symlink() or not path.is_file():
-            filesystem_failures.append(f"{relative} is not a regular policy source")
-            continue
-        policy_sources[relative] = path.read_text(encoding="utf-8")
+    policy_root = root / "crates/zrm-policy/src"
+    for directory, directory_names, file_names in os.walk(policy_root):
+        directory_names.sort()
+        file_names.sort()
+        for name in list(directory_names):
+            path = Path(directory) / name
+            if path.is_symlink():
+                relative = path.relative_to(root).as_posix()
+                filesystem_failures.append(
+                    f"{relative} is a linked policy source directory"
+                )
+                directory_names.remove(name)
+        for name in file_names:
+            if not name.endswith(".rs"):
+                continue
+            path = Path(directory) / name
+            relative = path.relative_to(root).as_posix()
+            if path.is_symlink() or not path.is_file():
+                filesystem_failures.append(f"{relative} is not a regular policy source")
+                continue
+            policy_sources[relative] = path.read_text(encoding="utf-8")
     failures = public_authority_api_failures(sources)
     failures.extend(filesystem_failures)
     failures.extend(policy_source_cfg_failures(policy_sources))
@@ -517,7 +539,9 @@ def policy_path_attribute_failures(
         structural_source = strip_rust_non_code(source)
     except ComplexityError as error:
         return [f"{path} cannot be lexed for path attributes: {error}"]
-    pattern = re.compile(r"#\s*!?\s*\[\s*path\b[^\]]*\]", re.DOTALL)
+    pattern = re.compile(
+        r"#\s*!?\s*\[\s*(?:r#)?path\b[^\]]*\]", re.DOTALL
+    )
     targets: list[str] = []
     for match in pattern.finditer(structural_source):
         attribute = source[match.start() : match.end()]
@@ -526,7 +550,7 @@ def policy_path_attribute_failures(
         except ComplexityError as error:
             return [f"{path} has an invalid path attribute: {error}"]
         parsed = re.fullmatch(
-            r'#\s*!?\s*\[\s*path\s*=\s*"([^"\r\n]+)"\s*\]',
+            r'#\s*!?\s*\[\s*(?:r#)?path\s*=\s*"([^"\r\n]+)"\s*\]',
             attribute,
             re.DOTALL,
         )
