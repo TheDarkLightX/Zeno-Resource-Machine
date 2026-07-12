@@ -1,0 +1,329 @@
+{
+  "schema": "zrm/reference-counterexample-set/v1",
+  "oracle": "resource_kind_policy_v1",
+  "scope": "ResourceKindPolicyV1 policy-shape and local resource unit/quantity decisions",
+  "source_basis": [
+    "SPECIFICATION.md sections 5.5, 11.2, 13.2, 14, 21, 25, and 26",
+    "AGENTS.md sections 3.1, 3.4, 9.3, and 9.7",
+    "CONFORMANCE_MATRIX.json obligations ZRM-CBC-013 through ZRM-CBC-016 and ZRM-CBC-036 through ZRM-CBC-037"
+  ],
+  "assumptions": [
+    "ResourceKindPolicyV1 does not require its admitted resource set to be nonempty.",
+    "quantity_max is a general resource upper bound and is not normalized by accounting mode.",
+    "EvidenceOnly is not an explicit zero-quantity marker permission.",
+    "Schema version 1 is the only version supported by this oracle.",
+    "Reason precedence inside the ResourcePolicy stage is oracle-local unless the draft assigns a stable code."
+  ],
+  "normative_ambiguities": [
+    {
+      "id": "RKP-AMB-001",
+      "statement": "The draft does not say that a policy must admit at least one resource.",
+      "effect": "A quantity_max of zero constructs but admits no resource under the v1 no-zero rule.",
+      "required_resolution": "Add an inhabited-policy invariant if disabling creation through an empty bound is forbidden."
+    },
+    {
+      "id": "RKP-AMB-002",
+      "statement": "The draft requires each LifecycleNonFungible resource to have quantity 1 but does not require LifecycleNonFungible quantity_max to equal 1.",
+      "effect": "Forcing quantity_max == 1 at policy construction is not derivable from the prior specification.",
+      "required_resolution": "An exact lifecycle-maximum equality requires an approved semantic amendment with compatibility and decision-precedence rules."
+    },
+    {
+      "id": "RKP-AMB-003",
+      "statement": "The v1 policy schema has no explicit permits_zero_quantity_marker field.",
+      "effect": "EvidenceOnly cannot safely serve as implicit zero-marker permission.",
+      "required_resolution": "Add a versioned explicit permission and define its interaction with accounting modes before admitting zero."
+    },
+    {
+      "id": "RKP-AMB-004",
+      "statement": "No quantity-only predicate distinguishes nonmonetary evidence from a fungible interpretation of the same positive integer.",
+      "effect": "Positive EvidenceOnly quantity acceptance is structural and cannot establish the required application meaning.",
+      "required_resolution": "Define mode-specific accounting/lifecycle semantics or add a policy commitment that makes the nonfungible evidence interpretation machine-checkable."
+    },
+    {
+      "id": "RKP-AMB-005",
+      "statement": "The draft fixes stage order but no stable ResourceKindPolicyV1 reason codes or complete within-stage precedence.",
+      "effect": "Schema-before-validity and unit-before-quantity select local oracle reasons only.",
+      "required_resolution": "Freeze reason codes and precedence before cross-language rejection parity is claimed."
+    }
+  ],
+  "findings": [
+    {
+      "id": "RKP-CE-001",
+      "title": "A general maximum check is insufficient for lifecycle quantity",
+      "boundary": "ResourcePolicy validation of a LifecycleNonFungible resource",
+      "attacker_capabilities": [
+        "Choose untrusted resource quantity fields under a selected policy",
+        "Submit a quantity that is within the policy maximum"
+      ],
+      "preconditions": [
+        "The selected v1 policy is LifecycleNonFungible with unit unit-u and quantity_max 2",
+        "The resource uses unit unit-u and quantity 2"
+      ],
+      "invariant": "Every admitted LifecycleNonFungible resource has quantity exactly 1.",
+      "minimal_counterexample": {
+        "operation": "decide_resource_quantity",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "LifecycleNonFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 2,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        },
+        "resource": {
+          "unit_id": "unit-u",
+          "quantity_atoms": 2
+        }
+      },
+      "expected_result": {
+        "decision": "reject",
+        "reason": "lifecycle_quantity_must_equal_one"
+      },
+      "formal_or_property_obligation": "For every valid lifecycle policy p and quantity q, acceptance implies q == 1 and q <= p.quantity_max.",
+      "residual_risk": "This local rule does not establish lifecycle authorization, uniqueness, or exact transition coverage."
+    },
+    {
+      "id": "RKP-CE-002",
+      "title": "Lifecycle maximum zero is not forbidden by the prior policy schema",
+      "boundary": "ResourceKindPolicyV1 construction",
+      "attacker_capabilities": [
+        "Propose an inert policy candidate for governed review"
+      ],
+      "preconditions": [
+        "The v1 policy is LifecycleNonFungible with quantity_max 0",
+        "All other modeled fields are valid"
+      ],
+      "invariant": "A reference interpreter does not strengthen policy-construction rules beyond the normative specification.",
+      "minimal_counterexample": {
+        "operation": "decide_policy_construction",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "LifecycleNonFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 0,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        }
+      },
+      "expected_result": {
+        "decision": "accept",
+        "reason": "policy_shape_accepted",
+        "follow_up": "No resource quantity is admitted because zero lacks explicit permission and one exceeds the maximum."
+      },
+      "formal_or_property_obligation": "Policy construction accepts every u128 quantity_max unless a separate normative mode-coherence rule forbids it.",
+      "residual_risk": "If empty policies are unintended, the draft needs an inhabited-policy rule; adding it changes specified behavior."
+    },
+    {
+      "id": "RKP-CE-003",
+      "title": "Lifecycle maximum above one does not relax the exact resource quantity",
+      "boundary": "Composition of policy construction and ResourcePolicy validation",
+      "attacker_capabilities": [
+        "Propose an inert lifecycle policy candidate",
+        "Submit a resource under that selected policy"
+      ],
+      "preconditions": [
+        "The v1 policy is LifecycleNonFungible with quantity_max 2",
+        "The resource quantity and unit are exactly 1 and unit-u"
+      ],
+      "invariant": "The exact lifecycle-resource rule and the general maximum rule are independent conjuncts.",
+      "minimal_counterexample": {
+        "operation": "decide_resource_quantity",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "LifecycleNonFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 2,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        },
+        "resource": {
+          "unit_id": "unit-u",
+          "quantity_atoms": 1
+        }
+      },
+      "expected_result": {
+        "decision": "accept",
+        "reason": "resource_quantity_accepted"
+      },
+      "formal_or_property_obligation": "For lifecycle p with p.quantity_max >= 1, quantity 1 is structurally admissible regardless of how much larger the maximum is.",
+      "residual_risk": "Requiring quantity_max == 1 may be a desirable canonicalization rule, but it needs an approved semantic amendment and migration decision."
+    },
+    {
+      "id": "RKP-CE-004",
+      "title": "EvidenceOnly is not implicit zero-marker permission",
+      "boundary": "ResourcePolicy validation of an EvidenceOnly resource",
+      "attacker_capabilities": [
+        "Select EvidenceOnly in an inert policy candidate",
+        "Submit a zero-quantity resource"
+      ],
+      "preconditions": [
+        "The v1 policy has EvidenceOnly mode and quantity_max 1",
+        "The resource has the matching unit and quantity 0"
+      ],
+      "invariant": "Zero quantity is admitted only when resource-kind policy explicitly permits a zero-quantity marker.",
+      "minimal_counterexample": {
+        "operation": "decide_resource_quantity",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "EvidenceOnly",
+          "unit_id": "unit-u",
+          "quantity_max": 1,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        },
+        "resource": {
+          "unit_id": "unit-u",
+          "quantity_atoms": 0
+        }
+      },
+      "expected_result": {
+        "decision": "reject",
+        "reason": "zero_quantity_requires_explicit_marker_permission"
+      },
+      "formal_or_property_obligation": "Until a versioned explicit permission exists, acceptance implies quantity_atoms > 0 for every accounting mode.",
+      "residual_risk": "The schema cannot presently express the specification's intended zero-marker exception."
+    },
+    {
+      "id": "RKP-CE-005",
+      "title": "Positive EvidenceOnly quantity has observationally ambiguous meaning",
+      "boundary": "Application interpretation after structural ResourcePolicy validation",
+      "attacker_capabilities": [
+        "Choose application semantics for a positive EvidenceOnly quantity",
+        "Present the same policy and resource fields under a fungible interpretation"
+      ],
+      "preconditions": [
+        "The v1 policy has EvidenceOnly mode, matching unit, and quantity_max 1",
+        "The resource quantity is 1"
+      ],
+      "invariant": "EvidenceOnly resources do not carry monetary or fungible quantity semantics.",
+      "minimal_counterexample": {
+        "operation": "decide_resource_quantity",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "EvidenceOnly",
+          "unit_id": "unit-u",
+          "quantity_max": 1,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        },
+        "resource": {
+          "unit_id": "unit-u",
+          "quantity_atoms": 1
+        },
+        "indistinguishable_interpretations": [
+          "one evidence-presence marker",
+          "one transferable evidence credit"
+        ]
+      },
+      "expected_result": {
+        "decision": "accept",
+        "reason": "evidence_only_quantity_structurally_accepted",
+        "non_claim": "nonmonetary and nonfungible semantics remain unestablished"
+      },
+      "formal_or_property_obligation": "Either define a machine-checkable evidence interpretation or prove that transition and application policies cannot use EvidenceOnly quantity fungibly.",
+      "residual_risk": "A quantity-only oracle cannot distinguish the two interpretations, so structural acceptance must not be promoted into a semantic compliance claim."
+    },
+    {
+      "id": "RKP-CE-006",
+      "title": "Equal atoms with different units remain incomparable",
+      "boundary": "ResourcePolicy unit validation",
+      "attacker_capabilities": [
+        "Choose a resource unit distinct from the selected policy unit"
+      ],
+      "preconditions": [
+        "The policy unit is unit-u and maximum is 1",
+        "The resource unit is unit-v and quantity is 1"
+      ],
+      "invariant": "A resource unit equals its selected resource-kind policy unit.",
+      "minimal_counterexample": {
+        "operation": "decide_resource_quantity",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "ConservedFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 1,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        },
+        "resource": {
+          "unit_id": "unit-v",
+          "quantity_atoms": 1
+        }
+      },
+      "expected_result": {
+        "decision": "reject",
+        "reason": "unit_mismatch"
+      },
+      "formal_or_property_obligation": "Resource admission implies exact UnitId equality; conversion belongs to an explicit transformation rule.",
+      "residual_risk": "This check does not define conversion ratios, rounding, or transformation authority."
+    },
+    {
+      "id": "RKP-CE-007",
+      "title": "The u128 maximum is accepted without narrowing",
+      "boundary": "Resource quantity representation and maximum comparison",
+      "attacker_capabilities": [
+        "Submit the largest representable resource quantity"
+      ],
+      "preconditions": [
+        "The policy maximum and resource quantity are both 2^128 - 1",
+        "The policy mode is AuthorityMintableFungible and units match"
+      ],
+      "invariant": "Every representable u128 boundary value is preserved exactly and compared without truncation.",
+      "minimal_counterexample": {
+        "operation": "decide_resource_quantity",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "AuthorityMintableFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 340282366920938463463374607431768211455,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        },
+        "resource": {
+          "unit_id": "unit-u",
+          "quantity_atoms": 340282366920938463463374607431768211455
+        }
+      },
+      "expected_result": {
+        "decision": "accept",
+        "reason": "resource_quantity_accepted"
+      },
+      "formal_or_property_obligation": "The decision at u128::MAX equals the mathematical bounded-integer decision and performs no narrowing conversion.",
+      "residual_risk": "Transition sums still require checked arithmetic and may overflow even when each individual quantity is representable."
+    },
+    {
+      "id": "RKP-CE-008",
+      "title": "A value above u128 must reject instead of wrapping",
+      "boundary": "Untrusted numeric input before protocol quantity interpretation",
+      "attacker_capabilities": [
+        "Supply a host-language integer larger than the protocol width"
+      ],
+      "preconditions": [
+        "The policy maximum is 2^128 - 1",
+        "The resource quantity is 2^128"
+      ],
+      "invariant": "Values outside u128 are rejected and never narrowed or wrapped.",
+      "minimal_counterexample": {
+        "operation": "decide_resource_quantity",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "ConservedFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 340282366920938463463374607431768211455,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        },
+        "resource": {
+          "unit_id": "unit-u",
+          "quantity_atoms": 340282366920938463463374607431768211456
+        }
+      },
+      "expected_result": {
+        "decision": "reject",
+        "reason": "quantity_out_of_range"
+      },
+      "formal_or_property_obligation": "For every host integer q outside [0, 2^128 - 1], resource quantity admission rejects before semantic comparison.",
+      "residual_risk": "A strict wire decoder should make this host-language case unreachable; adapters still need differential evidence."
+    }
+  ]
+}
