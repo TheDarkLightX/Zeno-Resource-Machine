@@ -125,7 +125,8 @@ jobs:
           cargo +nightly-2025-03-02 fuzz run intrinsic_resource_v1 -- -seed=1 -runs=18 -max_len=32 -timeout=5
           cargo +nightly-2025-03-02 fuzz run intrinsic_resource_v1 -- -seed=1 -max_total_time=45 -max_len=32 -timeout=5
           rm -rf target/ci-role-bound-intrinsic-corpus
-          cp -R fuzz/corpus/role_bound_intrinsic_v1 target/ci-role-bound-intrinsic-corpus
+          mkdir -p target/ci-role-bound-intrinsic-corpus
+          cp -R fuzz/corpus/role_bound_intrinsic_v1/. target/ci-role-bound-intrinsic-corpus/
           cargo +nightly-2025-03-02 fuzz run role_bound_intrinsic_v1 target/ci-role-bound-intrinsic-corpus -- -seed=1 -runs=9 -max_len=21 -timeout=5
           cargo +nightly-2025-03-02 fuzz run role_bound_intrinsic_v1 target/ci-role-bound-intrinsic-corpus -- -seed=1 -max_total_time=45 -max_len=21 -timeout=5
 
