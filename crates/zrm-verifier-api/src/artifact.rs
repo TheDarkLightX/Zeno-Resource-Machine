@@ -106,7 +106,7 @@ impl BoundedArtifactV1 {
 mod tests {
     use alloc::vec::Vec;
 
-    use super::{reserve_copy_capacity, ArtifactErrorV1};
+    use super::{ArtifactErrorV1, reserve_copy_capacity};
 
     #[test]
     fn capacity_overflow_maps_to_typed_allocation_refusal() {
