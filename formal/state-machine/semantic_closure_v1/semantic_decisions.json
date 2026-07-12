@@ -1,0 +1,211 @@
+{
+  "schema": "zrm/semantic-decision-set/v1",
+  "package_id": "zrm-semantic-closure-v1",
+  "date": "2026-07-12",
+  "status": "draft_requires_independent_review",
+  "author": "Dana Edwards",
+  "drafting_assistance": "GPT-5.6",
+  "normative_source": "rfcs/RFC-0001-policy-context-fact-and-commit-authority.md",
+  "assurance": {
+    "visibility": "internal_not_publicly_replayable",
+    "role": "corroborative_only",
+    "model_ids": [
+      "zrm_policy_creation_suspension_v1",
+      "zrm_plan_freshness_v1",
+      "zrm_exact_once_v1",
+      "zrm_verifier_fact_freshness_v1",
+      "zrm_atomic_commit_recovery_v1",
+      "zrm_replay_linearization_v1",
+      "zrm_commit_outcome_resolution_v1"
+    ]
+  },
+  "decisions": [
+    {
+      "id": "ZRM-SD-001",
+      "title": "Creation selection is enabled or suspended",
+      "status": "selected",
+      "decision": "Each resource kind has one authenticated CreationSelection: Enabled(CurrentPolicyId) or Suspended. Creation is permitted only under the exact selected current policy; Suspended permits no creation.",
+      "rejected_alternatives": [
+        "require an active creation policy during emergency containment",
+        "allow any accepted predecessor to create",
+        "caller-selected creation policy"
+      ],
+      "contracts": ["ZRM-SC-002", "ZRM-SC-003"],
+      "model": "zrm_policy_creation_suspension_v1"
+    },
+    {
+      "id": "ZRM-SD-002",
+      "title": "Predecessors grant narrow compatibility",
+      "status": "selected",
+      "decision": "AcceptedPredecessor policies may validate existing resources only for explicitly permitted reference or consumption. Disposition alone grants no creation, mint, burn, reward, transformation, or verifier-fallback authority.",
+      "rejected_alternatives": [
+        "predecessor creation during a grace window",
+        "implicit authority from semantic-content similarity"
+      ],
+      "contracts": ["ZRM-SC-002", "ZRM-SC-009"],
+      "model": "zrm_policy_creation_suspension_v1"
+    },
+    {
+      "id": "ZRM-SD-003",
+      "title": "Hard revocation prioritizes containment",
+      "status": "selected",
+      "decision": "HardRevoked policies authorize no normal use from the effective authenticated snapshot onward. Revoking the selected creation policy must atomically select an authorized replacement or set creation to Suspended. Recovery requires a separate governed rule.",
+      "rejected_alternatives": [
+        "revocation affects creation only",
+        "automatic migration on revocation",
+        "leave a revoked policy selected"
+      ],
+      "contracts": ["ZRM-SC-002", "ZRM-SC-006", "ZRM-SC-012"],
+      "model": "zrm_policy_creation_suspension_v1"
+    },
+    {
+      "id": "ZRM-SD-004",
+      "title": "Uncommitted authority is exact-context-bound",
+      "status": "selected",
+      "decision": "Any change to pre-state root, state version, policy root, logical epoch, ordering context, crypto suite, or accumulator profile invalidates all uncommitted prevalidation results, facts, drafts, admissions, and plans from the old context.",
+      "rejected_alternatives": [
+        "reuse when policy contents appear equivalent",
+        "bind only state version",
+        "bind wall-clock time instead of authenticated logical context"
+      ],
+      "contracts": ["ZRM-SC-003", "ZRM-SC-005", "ZRM-SC-006", "ZRM-SC-010"],
+      "model": "zrm_plan_freshness_v1"
+    },
+    {
+      "id": "ZRM-SD-005",
+      "title": "Verifier facts bind class, snapshot, release, and statement",
+      "status": "selected",
+      "decision": "A sealed fact is usable only for its exact lifecycle class, parent binding, claim and child statement, policy snapshot, validation context, verifier policy, program or key, verifier release, authenticated output, and validity window. Production authority accepts only Production-mode policies.",
+      "rejected_alternatives": [
+        "fact authority from policy ID equality alone",
+        "Development or Test receipts accepted under matching bytes",
+        "one fact type for admission and postcommit receipts"
+      ],
+      "contracts": ["ZRM-SC-006", "ZRM-SC-008"],
+      "model": "zrm_verifier_fact_freshness_v1"
+    },
+    {
+      "id": "ZRM-SD-006",
+      "title": "Effect commitment is acyclic",
+      "status": "selected",
+      "decision": "Finalization derives bounded SemanticEffects. Its root is committed by the journal; the journal hash is then committed by replay and commit metadata; the atomic commit bundle contains semantic effects plus metadata. No hash preimage contains itself transitively.",
+      "rejected_alternatives": [
+        "include replay metadata in the effects root that the replay record references",
+        "storage adapter adds implicit authority-bearing writes",
+        "caller-supplied effect totals are authoritative"
+      ],
+      "contracts": ["ZRM-SC-009", "ZRM-SC-010", "ZRM-SC-011"],
+      "model": "zrm_atomic_commit_recovery_v1"
+    },
+    {
+      "id": "ZRM-SD-007",
+      "title": "Replay classification and commit share one linearization boundary",
+      "status": "selected",
+      "decision": "Replay lookup, exact-versus-conflicting classification, freshness comparison, policy-selected admission, and a new commit execute within one serializable transaction or refinement-equivalent linearizable critical section.",
+      "rejected_alternatives": [
+        "replay lookup outside the commit transaction",
+        "separate non-atomic freshness checks",
+        "journal accepted before durability"
+      ],
+      "contracts": ["ZRM-SC-010", "ZRM-SC-011"],
+      "models": ["zrm_plan_freshness_v1", "zrm_replay_linearization_v1"]
+    },
+    {
+      "id": "ZRM-SD-008",
+      "title": "Exact retry is read-only idempotent success",
+      "status": "selected",
+      "decision": "When the durable replay record exactly matches transition identity, journal hash, and semantic-effects root, retry returns AlreadyCommitted(existing AcceptedJournal) and performs no write.",
+      "rejected_alternatives": [
+        "reject every retry",
+        "reapply effects when the old context was fresh",
+        "return success from transition identity alone"
+      ],
+      "contracts": ["ZRM-SC-005", "ZRM-SC-011"],
+      "models": ["zrm_exact_once_v1", "zrm_replay_linearization_v1"]
+    },
+    {
+      "id": "ZRM-SD-009",
+      "title": "Mismatched replay identity is a conflict",
+      "status": "selected",
+      "decision": "An existing transition identity with a different journal hash, semantic-effects root, or semantic identity returns TransitionReplayConflict and performs no write.",
+      "rejected_alternatives": [
+        "first writer silently authorizes later contents",
+        "last writer overwrites the replay record"
+      ],
+      "contracts": ["ZRM-SC-005", "ZRM-SC-011"],
+      "model": "zrm_replay_linearization_v1"
+    },
+    {
+      "id": "ZRM-SD-010",
+      "title": "Admission and postcommit facts are separate authority classes",
+      "status": "selected",
+      "decision": "Admission binds a JournalDraft before commit; postcommit aggregation binds an AcceptedJournal after durable commit. Neither can substitute for the other.",
+      "rejected_alternatives": [
+        "one generic recursive receipt type",
+        "postcommit proof retroactively authorizes a transition",
+        "admission proof implies durability"
+      ],
+      "contracts": ["ZRM-SC-006", "ZRM-SC-011"],
+      "model": "zrm_verifier_fact_freshness_v1"
+    },
+    {
+      "id": "ZRM-SD-011",
+      "title": "External delivery remains at-least-once",
+      "status": "selected",
+      "decision": "ZRM may atomically persist a transition-derived outbox entry, but external delivery is at-least-once unless the receiver supplies an idempotency contract.",
+      "rejected_alternatives": [
+        "treat network send as part of database atomicity",
+        "drop messages after uncertain acknowledgement"
+      ],
+      "contracts": ["ZRM-SC-011"],
+      "model": null
+    },
+    {
+      "id": "ZRM-SD-012",
+      "title": "Policy rollback is a new version",
+      "status": "selected",
+      "decision": "Reactivating earlier policy contents is a new governance update with a new state version, machine-state root, and validation context. An old authenticated snapshot tuple is never recreated.",
+      "rejected_alternatives": [
+        "restore the old root and version",
+        "allow outstanding plans to resume after rollback"
+      ],
+      "contracts": ["ZRM-SC-003", "ZRM-SC-012"],
+      "model": "zrm_plan_freshness_v1"
+    },
+    {
+      "id": "ZRM-SD-013",
+      "title": "Indeterminate durability returns OutcomeUnknown",
+      "status": "selected",
+      "decision": "A transport, I/O, or durability failure that prevents authoritative classification returns OutcomeUnknown with an inert retry descriptor. It is never reported as confirmed rejection or success.",
+      "rejected_alternatives": [
+        "map timeout to rejection",
+        "assume failure means no write",
+        "retry by reusing an authority-bearing commit plan"
+      ],
+      "contracts": ["ZRM-SC-005", "ZRM-SC-011"],
+      "model": "zrm_commit_outcome_resolution_v1"
+    },
+    {
+      "id": "ZRM-SD-014",
+      "title": "Policy update changes the complete authenticated context",
+      "status": "selected",
+      "decision": "A policy update atomically derives and persists the new policy root, incremented state version, new machine-state root, new validation-context hash, governance replay record, and governance audit record.",
+      "rejected_alternatives": [
+        "change policy root without machine-state root",
+        "reuse an earlier context tuple",
+        "write governance audit outside the atomic update"
+      ],
+      "contracts": ["ZRM-SC-003", "ZRM-SC-010", "ZRM-SC-012"],
+      "models": ["zrm_policy_creation_suspension_v1", "zrm_plan_freshness_v1"]
+    }
+  ],
+  "non_claims": [
+    "not approved protocol semantics until independent review and maintainer decision",
+    "internal bounded evidence is not publicly replayable from this repository",
+    "no canonical byte or hash freeze for new objects",
+    "no concrete implementation or refinement proof",
+    "no automatic recovery for hard-revoked resources",
+    "no exact-once external delivery",
+    "no production readiness"
+  ]
+}
