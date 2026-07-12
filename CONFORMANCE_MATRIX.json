@@ -29,7 +29,8 @@
       "wp0_source_sbom_and_cryptography_cbom_controls",
       "wp3a_canonical_resource_role_partition",
       "wp3b_intrinsic_resource_construction",
-      "wp3c_intrinsic_body_role_and_ordinal_binding"
+      "wp3c_intrinsic_body_role_and_ordinal_binding",
+      "wp5_bounded_artifact_input_slice"
     ],
     "non_claims": [
       "no_complete_semantic_kernel",
@@ -786,10 +787,12 @@
       ],
       "implementation_refs": [
         "crates/zrm-codec/src/resource_wire_v1.rs",
-        "fuzz/fuzz_targets/resource_wire_v1_decode.rs"
+        "fuzz/fuzz_targets/resource_wire_v1_decode.rs",
+        "crates/zrm-verifier-api/src/artifact.rs"
       ],
       "test_refs": [
         "crates/zrm-codec/tests/resource_wire_v1.rs",
+        "crates/zrm-verifier-api/tests/artifact.rs",
         "fuzz/corpus/resource_wire_v1_decode/absent",
         "fuzz/corpus/resource_wire_v1_decode/oversize-boundary",
         "fuzz/corpus/resource_wire_v1_decode/present"
@@ -798,10 +801,11 @@
         "crates/zrm-codec/src/kani_harnesses.rs"
       ],
       "evidence_refs": [
-        "evidence/WP1_MUTATION_MAP.md"
+        "evidence/WP1_MUTATION_MAP.md",
+        "worklogs/2026-07-12-wp5-bounded-artifact.md"
       ],
-      "next_action": "add explicit count, depth, string, allocation, and diagnostic-JSON bounds when those later wire types are introduced",
-      "non_claim": "the bounded canonical decoder covers ResourceWireV1 only; no generic envelope, nested collection, string, map, or diagnostic JSON decoder exists",
+      "next_action": "add governed aggregate budgets and deterministic allocation-refusal evidence before verifier dispatch; add explicit count, depth, string, and diagnostic-JSON bounds when those wire types are introduced",
+      "non_claim": "the bounded canonical decoder covers ResourceWireV1 and WP5 covers one owned byte copy under a caller-supplied per-artifact limit only; no authenticated policy limit, aggregate budget, deterministic allocation-refusal test, generic envelope, nested collection, string, map, diagnostic JSON, or verified-artifact decoder exists",
       "normative_refs": [
         "SPECIFICATION.md#11-canonical-encoding-rules",
         "SPECIFICATION.md#136-resourcewirev1-canonical-bytes",

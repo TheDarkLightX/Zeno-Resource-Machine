@@ -15,6 +15,7 @@ ALLOWED_INTERNAL_DEPENDENCIES = {
     "zrm-codec": {"zrm-crypto", "zrm-types"},
     "zrm-kernel": {"zrm-codec", "zrm-policy", "zrm-types"},
     "zrm-policy": {"zrm-crypto", "zrm-types"},
+    "zrm-verifier-api": {"zrm-policy"},
 }
 ALLOWED_EXTERNAL_DEPENDENCIES = {
     "zrm-types": set(),
@@ -22,6 +23,7 @@ ALLOWED_EXTERNAL_DEPENDENCIES = {
     "zrm-codec": set(),
     "zrm-kernel": set(),
     "zrm-policy": set(),
+    "zrm-verifier-api": set(),
 }
 
 

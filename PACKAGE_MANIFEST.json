@@ -24,8 +24,8 @@
     },
     {
       "path": "CONFORMANCE_MATRIX.json",
-      "bytes": 76786,
-      "sha256": "2fa21bf18386a5dad98bf56178dbae8dde3d22efbb5bd38be6829be2d75d7224"
+      "bytes": 77254,
+      "sha256": "420c2a5c25c2e16e7d70881596c067d636e20155fabb69afa012e7eb00dea8a1"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -49,8 +49,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 22117,
-      "sha256": "871cb3adc9b36099999d6cda7b160a17c0eefe3c613a124ab1b39773ba51693f"
+      "bytes": 22756,
+      "sha256": "a7c085d563b2e13a9bbb2e07ba4f5d366afffde0d6d5dcdba752b971cb0a854f"
     },
     {
       "path": "REVIEW_CHECKLIST.md",
