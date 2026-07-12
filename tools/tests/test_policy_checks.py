@@ -2,10 +2,16 @@
 
 from __future__ import annotations
 
+import re
+import tomllib
 import unittest
 from pathlib import Path
 
-from tools.check_architecture import dependency_failures, public_authority_api_failures
+from tools.check_architecture import (
+    compiler_api_projection_digest,
+    dependency_failures,
+    public_authority_api_failures,
+)
 from tools.check_conformance import (
     ConformanceError,
     github_anchor,
@@ -185,6 +191,48 @@ class ArchitecturePolicyTests(unittest.TestCase):
         }
         self.assertEqual(dependency_failures(package), [])
 
+    def test_compiler_api_projection_ignores_only_source_spans(self) -> None:
+        """Host paths do not change the digest, while API content still does."""
+
+        baseline = {
+            "format_version": 43,
+            "index": {
+                "1": {
+                    "name": "quote",
+                    "visibility": "public",
+                    "span": {"filename": "/home/first/.cargo/registry/source.rs"},
+                }
+            },
+        }
+        relocated = {
+            "format_version": 43,
+            "index": {
+                "1": {
+                    "name": "quote",
+                    "visibility": "public",
+                    "span": {"filename": "/home/second/.cargo/registry/source.rs"},
+                }
+            },
+        }
+        changed_api = {
+            "format_version": 43,
+            "index": {
+                "1": {
+                    "name": "admit",
+                    "visibility": "public",
+                    "span": {"filename": "/home/second/.cargo/registry/source.rs"},
+                }
+            },
+        }
+        self.assertEqual(
+            compiler_api_projection_digest(baseline),
+            compiler_api_projection_digest(relocated),
+        )
+        self.assertNotEqual(
+            compiler_api_projection_digest(baseline),
+            compiler_api_projection_digest(changed_api),
+        )
+
     def test_crate_private_candidate_helpers_are_accepted(self) -> None:
         """Internal arithmetic and shape helpers remain available for assurance."""
 
@@ -251,6 +299,18 @@ impl VerifierCostRowV1 {
                 failures = public_authority_api_failures(sources)
                 self.assertTrue(any("calculate_candidate_cost" in failure for failure in failures))
 
+    def test_doc_hidden_nested_public_module_is_rejected(self) -> None:
+        """Rustdoc-only configuration cannot hide a default-build API."""
+
+        sources = allowed_authority_sources()
+        sources["lib.rs"] += (
+            "\n#[cfg(not(doc))] pub mod escape { "
+            "pub async fn calculate_candidate_cost() -> u64 { 0 } }"
+        )
+        failures = public_authority_api_failures(sources)
+        self.assertTrue(any("conditional-compilation" in failure for failure in failures))
+        self.assertTrue(any("public modules" in failure for failure in failures))
+
     def test_public_function_pointer_constant_is_rejected(self) -> None:
         """A callable associated constant is part of the exact value inventory."""
 
@@ -277,6 +337,34 @@ impl VerifierCostRowV1 {
         sources["lib.rs"] = sources["lib.rs"].replace("#[cfg(fuzzing)]\n", "", 1)
         failures = public_authority_api_failures(sources)
         self.assertTrue(any("only under cfg(fuzzing)" in failure for failure in failures))
+
+
+class MutationConfigTests(unittest.TestCase):
+    """Keep the fuzz-only cargo-mutants exclusion path-exact."""
+
+    def test_fuzz_assertion_exclusion_is_path_anchored(self) -> None:
+        """A future similarly named source file cannot inherit the exclusion."""
+
+        root = Path(__file__).resolve().parents[2]
+        config = tomllib.loads((root / ".cargo/mutants.toml").read_text(encoding="utf-8"))
+        patterns = [
+            pattern
+            for pattern in config["exclude_re"]
+            if "fuzz_assertions" in pattern
+        ]
+        expected = r"^crates/zrm-policy/src/cost/fuzz_assertions\.rs:"
+        self.assertEqual(patterns, [expected])
+        matcher = re.compile(patterns[0])
+        self.assertIsNotNone(
+            matcher.search(
+                "crates/zrm-policy/src/cost/fuzz_assertions.rs:19:5: replace read_u64"
+            )
+        )
+        self.assertIsNone(
+            matcher.search(
+                "crates/zrm-policy/src/other_fuzz_assertions.rs:19:5: replace read_u64"
+            )
+        )
 
 
 def allowed_authority_sources() -> dict[str, str]:

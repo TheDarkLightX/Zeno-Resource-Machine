@@ -55,6 +55,13 @@ AUTHORITY_SOURCE_PATHS = (
     "crates/zrm-policy/src/lib.rs",
     "crates/zrm-policy/src/verifier.rs",
 )
+ALLOWED_AUTHORITY_CFG_EXPRESSIONS = {
+    "test",
+    "kani",
+    "fuzzing",
+    "any(test,kani)",
+    "any(test,kani,fuzzing)",
+}
 
 PUBLIC_FUNCTION_ALLOWLIST = {
     "cost.rs": {
@@ -190,6 +197,14 @@ PUBLIC_REEXPORT_ALLOWLIST = {
     "verifier.rs": set(),
 }
 
+PUBLIC_MODULE_ALLOWLIST = {
+    "cost.rs": set(),
+    "fuzz_assertions.rs": set(),
+    "error.rs": set(),
+    "lib.rs": set(),
+    "verifier.rs": set(),
+}
+
 
 def dependency_failures(package: dict[str, object]) -> list[str]:
     """Return undeclared or missing dependency edges for one workspace crate."""
@@ -230,14 +245,17 @@ def public_authority_api_failures(sources: dict[str, str]) -> list[str]:
         r"^\s*pub\s+(?:struct|enum|union|type|trait)\s+([A-Za-z0-9_]+)\b",
         re.MULTILINE,
     )
+    public_module = re.compile(r"\bpub\s+(?:unsafe\s+)?mod\s+([A-Za-z0-9_]+)\b")
     for path, source in sources.items():
         role = Path(path).name
         if role not in PUBLIC_FUNCTION_ALLOWLIST:
             failures.append(f"{path} has no reviewed authority API allowlist")
             continue
+        failures.extend(authority_cfg_failures(path, source))
         functions = Counter(public_function.findall(source))
         function_signatures = public_function_signatures(source)
         types = Counter(public_type.findall(source))
+        modules = Counter(public_module.findall(source))
         values = public_value_signatures(source)
         reexports = public_reexport_names(source)
         failures.extend(
@@ -264,6 +282,14 @@ def public_authority_api_failures(sources: dict[str, str]) -> list[str]:
         failures.extend(
             exact_surface_failures(
                 path,
+                "public modules",
+                modules,
+                Counter(PUBLIC_MODULE_ALLOWLIST[role]),
+            )
+        )
+        failures.extend(
+            exact_surface_failures(
+                path,
                 "public const/static values",
                 values,
                 Counter(PUBLIC_VALUE_ALLOWLIST[role]),
@@ -285,6 +311,24 @@ def public_authority_api_failures(sources: dict[str, str]) -> list[str]:
             failures.append(f"{path} publicly re-exports quarantined type {name}")
 
     failures.extend(fuzz_assertion_surface_failures(sources))
+    return failures
+
+
+def authority_cfg_failures(path: str, source: str) -> list[str]:
+    """Reject build-profile escapes that compiler rustdoc cannot inventory."""
+
+    failures: list[str] = []
+    cfg_pattern = re.compile(r"#\s*\[\s*cfg\s*\(([^\]]*)\)\s*\]", re.DOTALL)
+    for expression in cfg_pattern.findall(source):
+        normalized = re.sub(r"\s+", "", expression)
+        if normalized not in ALLOWED_AUTHORITY_CFG_EXPRESSIONS:
+            failures.append(
+                f"{path} uses unreviewed conditional-compilation profile {normalized}"
+            )
+    if re.search(r"#\s*\[\s*cfg_attr\s*\(", source) is not None:
+        failures.append(f"{path} uses unreviewed cfg_attr conditional compilation")
+    if re.search(r"\binclude\s*!\s*\(", source) is not None:
+        failures.append(f"{path} uses unreviewed source inclusion")
     return failures
 
 
@@ -435,11 +479,17 @@ def compiler_public_api_failures(root: Path) -> list[str]:
     package = allowlist.get("package")
     toolchain = allowlist.get("toolchain")
     format_version = allowlist.get("rustdoc_format_version")
+    projection = allowlist.get("projection")
     profiles = allowlist.get("profiles")
     if not isinstance(package, str) or not isinstance(toolchain, str):
         return ["compiler public API package and toolchain must be strings"]
     if not isinstance(format_version, int) or not isinstance(profiles, dict):
         return ["compiler public API format version or profiles are invalid"]
+    if projection != {
+        "drop_object_keys": ["span"],
+        "encoding": "canonical-json-utf8-sort-keys-compact",
+    }:
+        return ["compiler public API projection policy is invalid"]
     if set(profiles) != {"default", "fuzzing"}:
         return ["compiler public API profiles must be exactly default and fuzzing"]
 
@@ -506,13 +556,40 @@ def compiler_public_api_failures(root: Path) -> list[str]:
             )
         if rustdoc.get("includes_private") is not False:
             failures.append(f"compiler public API profile {profile_name} unexpectedly includes private items")
-        actual_digest = hashlib.sha256(raw).hexdigest()
+        actual_digest = compiler_api_projection_digest(rustdoc)
         if actual_digest != expected_digest:
             failures.append(
                 f"compiler public API profile {profile_name} digest {actual_digest} "
                 f"does not match reviewed {expected_digest}"
             )
     return failures
+
+
+def compiler_api_projection_digest(rustdoc: object) -> str:
+    """Hash a canonical semantic projection without host-specific source spans."""
+
+    projection = drop_object_keys(rustdoc, {"span"})
+    canonical = json.dumps(
+        projection,
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    ).encode("utf-8")
+    return hashlib.sha256(canonical).hexdigest()
+
+
+def drop_object_keys(value: object, keys: set[str]) -> object:
+    """Recursively remove non-semantic object keys while preserving array order."""
+
+    if isinstance(value, dict):
+        return {
+            key: drop_object_keys(child, keys)
+            for key, child in value.items()
+            if key not in keys
+        }
+    if isinstance(value, list):
+        return [drop_object_keys(child, keys) for child in value]
+    return value
 
 
 def main() -> int:

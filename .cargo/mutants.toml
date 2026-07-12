@@ -8,7 +8,7 @@ exclude_re = [
     # by the exact architecture allowlist, and its assertions are exercised by
     # the committed cargo-fuzz target and corpus. It returns no authority-shaped
     # value. Mutation coverage for this bridge remains an explicit non-claim.
-    "fuzz_assertions",
+    "^crates/zrm-policy/src/cost/fuzz_assertions\\.rs:",
 
     # Equivalent because stage bits occupy the high u16 and reason bits occupy
     # the low u16, so OR and XOR produce the same RejectCodeV1 representation.

@@ -3,21 +3,28 @@
   "package": "zrm-policy",
   "toolchain": "1.87.0",
   "rustdoc_format_version": 43,
+  "projection": {
+    "drop_object_keys": [
+      "span"
+    ],
+    "encoding": "canonical-json-utf8-sort-keys-compact"
+  },
   "profiles": {
     "default": {
       "rustdoc_flags": [],
-      "sha256": "2a06081c7f4abae19665eff3b3bf063c9fd73751ac2d0674b673c25d11684d1d"
+      "sha256": "01f7c2af1a68e8b9ccb96287f747f7d234f4ce07613abc9b193ea14aae5f6d7f"
     },
     "fuzzing": {
       "rustdoc_flags": [
         "--cfg",
         "fuzzing"
       ],
-      "sha256": "0556da7d40303d7bf60379b094584dcb75bad95fc7bc0c256766f26a21be9287"
+      "sha256": "ef044e1e6928f66453ea09d4f0c17111e6c89772cdfdfeeff5b65c3b9e42ce83"
     }
   },
   "non_claims": [
-    "The hash binds pinned rustdoc JSON bytes for the complete compiler-visible package API, including hidden documented items; it is not a protocol hash or authority capability.",
+    "The hash binds a canonical span-free projection of pinned rustdoc JSON for the complete compiler-visible package API, including hidden documented items; it is not a protocol hash or authority capability.",
+    "Removing span objects prevents checkout and Cargo-home paths from changing the digest; every other rustdoc field remains bound.",
     "RUSTC_BOOTSTRAP enables pinned rustdoc JSON generation only and grants no production or release authority.",
     "Updating either digest is a Class E review action and requires inspecting the semantic API delta."
   ]

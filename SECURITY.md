@@ -56,11 +56,12 @@ Critical reports include:
 - leakage of witnesses, keys, private resource data, or sensitive diagnostics.
 
 Default diagnostic formatting must not disclose complete opaque identifiers,
-roots, commitments, nonces, or fixed-width resource-wire candidate fields.
+roots, commitments, nonces, or 32-byte resource-wire candidate arrays.
 These values use constant redaction rather than fingerprints because even a
 truncated value permits correlation. Explicit raw-byte access is
 security-sensitive protocol code and must not be copied into logs or public
-evidence.
+evidence. Numeric resource-wire scalar candidates remain visible and require
+separate context-sensitive disclosure review.
 
 ## Coordinated disclosure
 

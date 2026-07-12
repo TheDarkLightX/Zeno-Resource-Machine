@@ -149,14 +149,18 @@ misread as an authority-bearing result.
 - The architecture gate records owner-qualified function signatures,
   multiplicity, qualifiers, public types, re-exports, and public const/static
   values in authority-adjacent policy modules. A separate pinned
-  compiler-derived rustdoc JSON digest binds the complete package API under
-  default and `cfg(fuzzing)` profiles. Counterexamples cover renamed, async,
-  extern, wrong-owner, function-pointer, and value-returning fuzz escapes.
+  compiler-derived canonical span-free rustdoc JSON digest binds the complete
+  package API under default and `cfg(fuzzing)` profiles without host paths.
+  Authority-source conditional compilation is restricted to reviewed test,
+  Kani, and fuzz profiles. Counterexamples cover renamed, async, extern,
+  wrong-owner, function-pointer, `cfg(not(doc))`, nested-module, and
+  value-returning fuzz escapes.
 - The canonical codec owns private resource-ID hashing. Hash frame widths are
   checked from the actual encoded bytes and actual domain length rather than
   duplicated wire-size constants.
 - Default `Debug` formatting is constant-redacted for every opaque 32-byte type
-  and every fixed-width `ResourceWireV1` candidate field.
+  and every 32-byte array candidate in `ResourceWireV1`; numeric wire scalars
+  remain visible.
 - Frozen prior semantics and the RFC-0002 proposal remain separate executable
   Python models with an exact bounded differential corpus. CBC-046 records the
   positive, bounded, mode-canonical dimension obligation.
@@ -245,8 +249,8 @@ The first integrated full run generated 419 mutants and reported 26 misses,
 all in `cost/fuzz_assertions.rs`, because that file compiles only under
 `cfg(fuzzing)` while cargo-mutants runs ordinary cargo tests. The bridge returns
 no authority-shaped value. It is now narrowly excluded by module name, with
-exact API allowlisting, deterministic corpus replay, and sustained cargo-fuzz
-as separate evidence. Mutation coverage for that fuzz-only bridge is an
+exact API allowlisting, deterministic corpus replay, and changed-target PR-smoke
+cargo-fuzz as separate evidence. Mutation coverage for that fuzz-only bridge is an
 explicit non-claim.
 
 The final configured full-workspace run used cargo-mutants 26.0.0 and tested
@@ -269,11 +273,13 @@ the local-gate receipt.
   diagnostic-maximum, and resource-dimension tests were replayed separately on
   the final working tree. Miri does not prove all executions or dependency
   soundness.
-- Fuzz: the assertion-only cost campaign completed 10,345,988 executions in 46
+- Fuzz PR smoke: the assertion-only cost campaign completed 10,345,988 executions in 46
   seconds; the resource-dimension campaign completed 15,581,739 executions in
   46 seconds, both without a crash, timeout, or assertion failure. Their
   non-deterministic discovered corpus files were reviewed, removed, and are now
-  rejected by the exact corpus-membership gate.
+  rejected by the exact corpus-membership gate. These runs satisfy the 30-to-60
+  second PR-smoke band and do not satisfy or claim the 15-minute sustained
+  nightly duration.
 
 ## Canonical hashes and vectors changed
 
@@ -305,13 +311,13 @@ No production input limit or asymptotic bound changes.
 | `cargo test --workspace --all-targets --locked` | PASS, 111 tests | local working-tree replay |
 | `cargo test --workspace --doc --locked` | PASS, 5 compile-fail doctests | local working-tree replay |
 | strict workspace Clippy and rustfmt | PASS, zero denied warnings | local working-tree replay |
-| `python3 -m unittest discover -s tools/tests -v` | PASS, 85 tests | tooling regressions |
+| `python3 -m unittest discover -s tools/tests -v` | PASS, 92 tests | tooling regressions |
 | reference-model discovery | PASS, 45 tests | frozen and proposed oracles |
 | architecture, complexity, code-quality | PASS; exact allowlist; zero advisories; `excellent-candidate` | generated local reports |
 | configured branch coverage | PASS; workspace 99.14%/100%, policy 99.86%/100%, kernel 100%/100% | `target/llvm-cov-branch.json` |
 | independent vector replay | PASS, 6 binary artifacts and 4 digests | independent Python replay |
 | deterministic corpus replay | PASS, exact named membership | `fuzz/generate_corpus.py --check` |
-| changed semantic fuzz campaigns | PASS, 25,927,727 combined executions | local libFuzzer output |
+| changed-target fuzz PR smoke | PASS, 25,927,727 combined executions in two 46-second campaigns | local libFuzzer output; sustained nightly fuzz remains pending |
 | targeted final Miri replay | PASS, codec 20 tests plus 5 policy tests | pinned nightly Miri |
 | full configured mutation | PASS; cargo-mutants 26.0.0; 393 tested, 291 caught, 102 unviable, 0 missed, 0 timed out | `target/security-remediation-mutants` and final receipt |
 | `cargo kani --workspace --quiet` | PASS; 18 harnesses; 0 reachable failures | Kani 0.60.0 output and final receipt |

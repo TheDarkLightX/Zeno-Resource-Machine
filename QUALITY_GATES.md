@@ -157,13 +157,16 @@ Authority-adjacent public API quarantine additionally requires both:
 
 - an owner-, signature-, multiplicity-, qualifier-, type-, re-export-, and
   public-value-aware source inventory with counterexample tests; and
-- pinned compiler-derived rustdoc JSON snapshots for default and exceptional
-  feature/configuration profiles.
+- pinned compiler-derived, canonical span-free rustdoc JSON projections for
+  default and exceptional feature/configuration profiles.
 
 The compiler snapshot uses the pinned Rust toolchain and records the complete
-compiler-visible package API. A digest update is a reviewed Class E action, not
-an automatic golden-file refresh. Source inventory remains defense in depth and
-does not substitute for the compiler-derived gate.
+compiler-visible package API without binding host-specific source paths.
+Authority-adjacent sources permit only the reviewed test, Kani, and fuzz
+conditional profiles, preventing `cfg(doc)` from hiding default-build APIs. A
+digest update is a reviewed Class E action, not an automatic golden-file
+refresh. Source inventory remains defense in depth and does not substitute for
+the compiler-derived gate.
 
 ---
 

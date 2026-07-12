@@ -21,7 +21,7 @@ where the desired property is absence of a callable public operation.
 | `ZRM04-RAW-TYPED-HASH` | Reintroduce the former public raw-byte-to-`ResourceId` function | compile-fail doctest plus API review | compile-fail evidence using the former symbol; raw identifier construction remains an explicit non-claim |
 | `ZRM04-VECTOR-DRIFT` | Change resource hash domain, frame, or canonical bytes | absent/present exact vectors and independent replay | generated Rust mutants and exact vector replay constrain the framing |
 | `ZRM05-OPAQUE-FULL-DEBUG` | Print complete opaque bytes | opaque formatting tests | generated Rust mutants and value-independent redaction assertions constrain formatting |
-| `ZRM05-WIRE-FIXED-DEBUG` | Print any fixed-width `ResourceWireV1` field through raw or nested `Debug` | wire and intrinsic non-leak tests | generated Rust mutants plus two-value and byte-substring assertions constrain formatting |
+| `ZRM05-WIRE-BYTES-DEBUG` | Print any 32-byte `ResourceWireV1` array field through raw or nested `Debug` | exhaustive wire-array and intrinsic nonce non-leak tests | generated Rust mutants plus fourteen-field value-independence, redaction-count, and byte-substring assertions constrain formatting; numeric scalars intentionally remain visible |
 
 ## Automated campaigns
 
@@ -54,9 +54,10 @@ The first full integration run generated 419 mutants and reported 291 caught,
 `crates/zrm-policy/src/cost/fuzz_assertions.rs`, which is compiled only under
 `cfg(fuzzing)` while cargo-mutants runs ordinary cargo tests. The module returns
 no quote, cost, decision, or capability. `.cargo/mutants.toml` now excludes that
-exact module, with the exact API allowlist, deterministic corpus replay, and
-sustained cargo-fuzz campaigns providing separate evidence. Mutation coverage
-for the fuzz-only bridge remains a non-claim.
+exact path-anchored module, with the exact API allowlist, deterministic corpus
+replay, and changed-target PR-smoke cargo-fuzz campaigns providing separate
+evidence. Sustained nightly fuzz and mutation coverage for the fuzz-only bridge
+remain non-claims.
 
 The final configured run used cargo-mutants 26.0.0:
 
@@ -76,10 +77,13 @@ The final source binding and output location are also recorded in
 
 ## Non-claims
 
-- A compile-fail test for one former symbol does not prove that no differently
-  named future API could recreate the same authority mistake. The exact
-  owner/signature source inventory, pinned compiler-derived default/fuzz API
-  digests, review contract, and Class E process provide additional layers.
+- The codec compile-fail test proves only that the former raw resource-ID hash
+  symbol is absent. Codec and crypto do not yet have a renamed-API inventory,
+  so code review and the Class E contract remain the defenses against a future
+  differently named raw typed-ID helper.
+- For `zrm-policy`, the exact owner/signature source inventory, restricted
+  conditional profiles, canonical compiler-derived default/fuzz API digests,
+  review contract, and Class E process provide layered renamed-API defenses.
 - Internal counterexamples prove why an API is quarantined. They do not prove
   rows-root membership or exact verifier-policy binding.
 - Mutation success establishes test sensitivity to sampled changes. It is not

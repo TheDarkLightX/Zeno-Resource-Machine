@@ -1790,7 +1790,7 @@
         "evidence/security-remediation-local-gates-2026-07-12.json"
       ],
       "next_action": "extend constant redaction and disclosure review to future proof artifacts, witnesses, private state, log sinks, errors, and evidence bundles; add zeroization where private profiles introduce secrets",
-      "non_claim": "default opaque values and ResourceWireV1 fixed-width candidates are redacted, with nonce-value-independent nested intrinsic formatting; no logging framework, private witness type, zeroization policy, log-sink audit, or complete private diagnostic envelope exists",
+      "non_claim": "default opaque values and every ResourceWireV1 32-byte array candidate are redacted, with nonce-value-independent nested intrinsic formatting; numeric wire scalars remain visible, and no logging framework, private witness type, zeroization policy, log-sink audit, or complete private diagnostic envelope exists",
       "normative_refs": [
         "SPECIFICATION.md#264-sensitive-diagnostics",
         "SPECIFICATION.md#42-defensive-rust-rules"

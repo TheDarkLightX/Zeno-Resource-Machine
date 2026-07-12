@@ -2936,8 +2936,9 @@ Core crates MUST:
 - avoid secret-bearing `Debug` implementations;
 - make default `Debug` output for opaque identifiers, roots, commitments, and
   nonces constant and redacted; raw canonical-wire diagnostic formatting MUST
-  redact every fixed-width candidate field; diagnostic fingerprints MUST NOT
-  include those bytes;
+  redact every 32-byte identifier, root, commitment, and nonce candidate;
+  numeric scalar candidates MAY remain visible, and diagnostic fingerprints
+  MUST NOT include the redacted bytes;
 - zeroize secrets in future private profiles;
 - include `rust-version` and a pinned `rust-toolchain.toml`.
 

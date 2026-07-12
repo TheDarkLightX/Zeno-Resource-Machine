@@ -13,7 +13,7 @@ This RFC removes public operations that can turn caller-selected verifier rows,
 policy identifiers, or arbitrary same-length bytes into authority-shaped typed
 results before ZRM has an authenticated policy and verifier registry. It also
 defines the immediate version-one zero-quantity rule and constant-redacted
-diagnostic formatting for opaque and fixed-width wire values. Canonical
+diagnostic formatting for opaque and 32-byte wire values. Canonical
 resource bytes and expected resource identifiers remain unchanged.
 
 ## Motivation
@@ -26,8 +26,8 @@ any byte string having one of two valid lengths, even though its name implies
 canonicality. The policy-bound resource check accepts zero quantity for four of
 five accounting modes, while the version-one policy schema has no field that
 can explicitly authorize marker resources. Default `Debug` output also reveals
-complete opaque identifiers, roots, commitments, resource nonces, and
-fixed-width resource-wire candidates.
+complete opaque identifiers, roots, commitments, resource nonces, and 32-byte
+resource-wire candidate arrays.
 
 These are unsafe boundaries to carry into final resource admission, verifier
 dispatch, persistence, or commit work.
@@ -40,7 +40,7 @@ dispatch, persistence, or commit work.
   row or an admission-like success from candidate policy identity.
 - Make the canonical codec the sole supported public typed resource-ID path.
 - Prevent default diagnostic formatting from disclosing opaque identifiers,
-  roots, commitments, nonces, or fixed-width resource-wire candidates.
+  roots, commitments, nonces, or 32-byte resource-wire candidate arrays.
 - Preserve exact resource-wire bytes, hashes, vectors, and nullifier semantics.
 
 ## Non-goals
@@ -65,7 +65,7 @@ dispatch, persistence, or commit work.
 - A public crypto helper hashes any 595-byte or 603-byte slice into a typed
   `ResourceId`.
 - `Debug` prints all 32 bytes of opaque values, including `ResourceNonce`, and
-  raw resource-wire formatting prints every fixed-width candidate field.
+  raw resource-wire formatting prints every 32-byte candidate array.
 
 ## Proposed semantics
 
@@ -117,9 +117,12 @@ sink taking raw bytes and returning `()`. It constructs all candidate rows,
 models, policies, requests, and quotes internally, performs no I/O or authority
 transition, and exposes no quote, cost, policy decision, or capability. The
 architecture gate exact-allowlists this exceptional surface and its unit-return
-signature. A pinned compiler-derived rustdoc JSON snapshot independently binds
-the complete `zrm-policy` public API under both default and `cfg(fuzzing)`
-profiles. Digest updates require Class E review.
+signature. A pinned compiler-derived, canonical span-free rustdoc JSON
+projection independently binds the complete `zrm-policy` public API under both
+default and `cfg(fuzzing)` profiles without binding checkout or Cargo-home
+paths. Authority-source conditional compilation is limited to the reviewed
+`test`, `kani`, and `fuzzing` profiles so `cfg(doc)` cannot hide a default-build
+API from rustdoc. Digest updates require Class E review.
 
 The future governed interface must have this shape:
 
@@ -151,8 +154,9 @@ granting resource authority.
 
 Every opaque 32-byte identifier, root, commitment, and nonce uses
 type-labeled, constant-redacted `Debug` output. Raw `ResourceWireV1` formatting
-redacts every fixed-width candidate field, including the nonce. Nested resource
-values inherit that redaction. Explicit byte accessors remain available for
+redacts every 32-byte candidate array, including the nonce. Nested resource
+values inherit that redaction. Numeric quantity, epoch, optional expiry, and
+flag candidates remain visible. Explicit byte accessors remain available for
 narrowly scoped protocol code.
 
 ## Typed interfaces
@@ -176,8 +180,8 @@ ResourceIdDerivationError::Hash(HashConstructionError)
 The codec-owned replacement exposes
 `ResourceIdDerivationError::{Encode, HashFrameLengthOverflow, AllZeroDigest}`.
 This is a pre-alpha exhaustive-enum source break. Default `Debug` text for all
-opaque 32-byte types and `ResourceWireV1` fixed-width fields also changes from
-complete bytes to constant redaction.
+opaque 32-byte types and `ResourceWireV1` 32-byte array fields also changes
+from complete bytes to constant redaction.
 
 Added fail-closed policy errors:
 
@@ -230,7 +234,7 @@ Rejection remains side-effect free.
 
 ## Privacy and disclosure
 
-Opaque and fixed-width resource-wire candidate diagnostics are redacted.
+Opaque and 32-byte resource-wire candidate diagnostics are redacted.
 Scalar quantity, epoch, optional expiry, and flag candidates remain visible.
 This RFC does not establish transaction privacy, unlinkability, witness
 secrecy, zeroization, or log-sink security.
@@ -254,7 +258,7 @@ unchanged.
 | Caller substitutes a cheap cost row | Public quote path quarantined | Governed model is unimplemented | External compile-fail plus internal counterexample |
 | Copied policy ID substitutes verifier contents | Public candidate admission path quarantined | Registry and exact field binding are unimplemented | External compile-fail plus field-substitution tests |
 | Malformed same-length bytes receive typed ID through public helper | Raw helper private to codec | Callers can compute inert bytes independently | API-surface test and exact vectors |
-| Opaque or wire candidate leaks through `Debug` | Constant opaque redaction and manual wire formatting for every fixed-width field | Explicit byte access remains sensitive; scalar candidates remain visible | Direct, wire, and nested non-leak tests |
+| Opaque or wire candidate leaks through `Debug` | Constant opaque redaction and manual wire formatting for every 32-byte array field | Explicit byte access remains sensitive; scalar candidates remain visible | Direct, wire, and nested non-leak tests |
 | Automation encodes the wrong semantic oracle | Counterexample review and independent approvals | Reviewer availability and host enforcement | Worklog, host settings evidence required |
 
 ## Alternatives considered

@@ -412,16 +412,42 @@ fn strict_decoder_rejects_malformed_same_length_bytes() -> Result<(), TestError>
 }
 
 #[test]
-fn resource_wire_debug_redacts_all_fixed_width_candidates_and_nonce() {
+fn resource_wire_debug_redacts_every_32_byte_candidate_and_exposes_scalars() {
     let first = fixture(None);
     let mut second = first.clone();
-    second.nonce = [0xa5; 32];
+    replace_32_byte_candidates(&mut second, 0xa5);
 
     let first_debug = std::format!("{first:?}");
     let second_debug = std::format!("{second:?}");
     assert_eq!(first_debug, second_debug);
+    assert_eq!(first_debug.matches("[REDACTED]").count(), 14);
     assert!(first_debug.contains("nonce: [REDACTED]"));
     assert!(first_debug.contains("machine_id: [REDACTED]"));
     assert!(!first_debug.contains("15, 15, 15"));
     assert!(!second_debug.contains("165, 165, 165"));
+    assert_wire_scalars_visible(&first, &first_debug);
+}
+
+fn replace_32_byte_candidates(resource: &mut ResourceWireV1, byte: u8) {
+    resource.machine_id = [byte; 32];
+    resource.domain_id = [byte; 32];
+    resource.application_id = [byte; 32];
+    resource.resource_kind_id = [byte; 32];
+    resource.resource_logic_id = [byte; 32];
+    resource.logic_profile_id = [byte; 32];
+    resource.resource_kind_policy_id = [byte; 32];
+    resource.unit_id = [byte; 32];
+    resource.label_root = [byte; 32];
+    resource.value_root = [byte; 32];
+    resource.controller_root = [byte; 32];
+    resource.policy_root = [byte; 32];
+    resource.provenance_root = [byte; 32];
+    resource.nonce = [byte; 32];
+}
+
+fn assert_wire_scalars_visible(resource: &ResourceWireV1, diagnostic: &str) {
+    assert!(diagnostic.contains(&std::format!("quantity_atoms: {}", resource.quantity_atoms)));
+    assert!(diagnostic.contains(&std::format!("created_epoch: {}", resource.created_epoch)));
+    assert!(diagnostic.contains("expiry_epoch: None"));
+    assert!(diagnostic.contains("flags: 0"));
 }
