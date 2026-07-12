@@ -1,0 +1,149 @@
+{
+  "schema": "zrm/evidence-index/v1",
+  "record_id": "wp5-integrated-2026-07-12",
+  "recorded_at": "2026-07-12",
+  "source": {
+    "revision": "47fb1e536e1e8f4ffc753d607d4b65e1b9bf287a",
+    "tree": "d6371e71bc9021dc066b4b2c81fe561963c1e6b0",
+    "base_revision": "eaff2edbeb5e6826d9aca7d027078f4b2487160c",
+    "branch": "agent/wp5-bounded-artifact-v2",
+    "dirty": false,
+    "replay_location": "clean integrated branch; repository hygiene replayed from git archive",
+    "hosted_ci_revision": null,
+    "hosted_ci_run_id": null
+  },
+  "environment_policy": {
+    "path": "evidence/wp5-environment-policy-2026-07-12.json",
+    "root": "sha256:68344fafd9cb9be0b9f6621c43238850ce65abf3f62c0f6eedc71d9d86eb2432"
+  },
+  "change_class": "C",
+  "source_sha256": {
+    "Cargo.lock": "d005599af4c34e7017a1b30988b8187c5cee7adf1ae571a2059de1bce9557f29",
+    "crates/zrm-verifier-api/src/artifact.rs": "ec882e4a25af5938eb9bcf9f20b5fca3edc5677f879015ae1156d75267c307b9",
+    "crates/zrm-verifier-api/src/lib.rs": "4c38162dc219837b68db714dfc8787e530ec6174ecaf58a62218dd41b5b59a53",
+    "crates/zrm-verifier-api/tests/artifact.rs": "6f89df3ffe8156af2b90155b5d42e8ff62538971ca6892c5ce46b271acadcf64"
+  },
+  "review_state": {
+    "independent_agent_reviews_complete": true,
+    "human_class_c_review_complete": false,
+    "promotion_allowed": false
+  },
+  "record_count": 23,
+  "records": [
+    {
+      "path": "evidence/wp5-gates/01-rust-tests.json",
+      "sha256": "26c9e1e60330b19260579da04de2abd3060260ea57af98de581cd206e22c5304"
+    },
+    {
+      "path": "evidence/wp5-gates/02-doc-tests.json",
+      "sha256": "1cd3d5a58c56ad7d0bab6e593af44cfcfc5a32bb8e9d094f407752f6e1daa4c5"
+    },
+    {
+      "path": "evidence/wp5-gates/03-rustfmt.json",
+      "sha256": "089821625d578996eb0b6265b5088dd77dbc811bbb4f05b48ce7af9dc8e2fcbb"
+    },
+    {
+      "path": "evidence/wp5-gates/04-cargo-check.json",
+      "sha256": "8fedf44198b159bb8b16d291e0fe1ada513efde6e2379f8e18adb2585bb9c1a6"
+    },
+    {
+      "path": "evidence/wp5-gates/05-clippy.json",
+      "sha256": "b0234ec4f0abab49f88c504db6779a73ee6a1ce62881a863df16e8a89ddf94ec"
+    },
+    {
+      "path": "evidence/wp5-gates/06-rustdoc.json",
+      "sha256": "e78f9399572294ef6865f7852392c6f4dc51fda9fd4910c226a29ca37a79df8f"
+    },
+    {
+      "path": "evidence/wp5-gates/07-coverage.json",
+      "sha256": "c5e6795de4902eebcc68dab6ca4e552b9e8aa3ddd4605fd3c04153de08841cc8"
+    },
+    {
+      "path": "evidence/wp5-gates/08-generated-mutation.json",
+      "sha256": "d6ab0a976718643f1a79f549af37c6af9d8830f5e394c20ad18eaf24b3a3c445"
+    },
+    {
+      "path": "evidence/wp5-gates/09-manual-mutants.json",
+      "sha256": "328074f6388934283ccf888da4018884d16fcc2f4ea2ba0e947661992c373aa9"
+    },
+    {
+      "path": "evidence/wp5-gates/10-miri.json",
+      "sha256": "4973c9c43718ad2ce2d7f289b99306adfbc45a889f44db95a78dd99412984899"
+    },
+    {
+      "path": "evidence/wp5-gates/11-architecture.json",
+      "sha256": "7754e200e89e2218db0d088b36c52057d9b043c5f12d0b79f7b595e20adcee6f"
+    },
+    {
+      "path": "evidence/wp5-gates/12-complexity.json",
+      "sha256": "925137e2787e7fc2d4d359e986d899b94929d747f47b6626b447c98e790bb7c6"
+    },
+    {
+      "path": "evidence/wp5-gates/13-code-quality.json",
+      "sha256": "3684409f3916f2d14f52ead2399fdf802fc9935b1eef5f1b7fc18078490b8a99"
+    },
+    {
+      "path": "evidence/wp5-gates/14-python-tests.json",
+      "sha256": "abce222a92349ba1a42703f470959eadc0575b23621e59311c34387be952920b"
+    },
+    {
+      "path": "evidence/wp5-gates/15-conformance.json",
+      "sha256": "ce40a2298e13f9f0d2347df5837a47bf7413200812b1b64c54332bc1899d7f22"
+    },
+    {
+      "path": "evidence/wp5-gates/16-package-manifest.json",
+      "sha256": "bba3367443e330ef6cd2f7b7b5b608965c3abac139c0f4fd032bdf856d130f8a"
+    },
+    {
+      "path": "evidence/wp5-gates/17-repository-hygiene.json",
+      "sha256": "3f95febb8987582dd0f88e9de74270986cd0f53496b48a2bbbc707b291511f87"
+    },
+    {
+      "path": "evidence/wp5-gates/18-cargo-audit.json",
+      "sha256": "0e86db8b692bb3482001c20659f580c89697fdf181ffad3df5ca8545ff39211c"
+    },
+    {
+      "path": "evidence/wp5-gates/19-cargo-deny-root.json",
+      "sha256": "0537fdea32b95767d99b1a63a5a7b0cff4913992e53e865dfca33d76ed9e85aa"
+    },
+    {
+      "path": "evidence/wp5-gates/20-cargo-deny-fuzz.json",
+      "sha256": "2ea05bfb0f14502d7ca24b90e989207ffe8fcad91c092e030916cf8b856552a4"
+    },
+    {
+      "path": "evidence/wp5-gates/21-bom.json",
+      "sha256": "1f77ae69fed78d46162408faa19439e3a160271f4f7194ec126258893fa30f6f"
+    },
+    {
+      "path": "evidence/wp5-gates/22-vector-replay.json",
+      "sha256": "7434550b3f8e4dc5ee5f9e9f7b84eb69c42aeb561dfeb6a1e436d2cc561537f6"
+    },
+    {
+      "path": "evidence/wp5-gates/23-corpus-replay.json",
+      "sha256": "9db964ee4c5ae1f9daae071b3dad3abf439c0b061c19eb539a194fd055116389"
+    }
+  ],
+  "implemented_scope": [
+    "owned bounded copy of one untrusted artifact under a caller-selected limit capped by the protocol ceiling",
+    "deterministic precedence for invalid limit, oversize input, and reservation refusal",
+    "private reservation seam exercising exact constructor error mapping",
+    "ordinary Debug suppression and fixed artifact-free error diagnostics",
+    "exact inward dependency edge from zrm-verifier-api to zrm-policy"
+  ],
+  "remaining_gaps": [
+    "human Class C behavior and evidence review",
+    "hosted CI on the reconciled revision",
+    "authenticated machine and verifier policy limits",
+    "aggregate artifact and transition budgets",
+    "WP5-specific Kani harness and fuzz target",
+    "real allocator OOM, fragmentation, overhead, and abort behavior",
+    "proof format, cryptographic verification, fact construction, dispatch, state, and commit authority"
+  ],
+  "non_claims": [
+    "this index does not authorize merge or production promotion",
+    "the selected per-artifact limit remains caller supplied and unauthenticated",
+    "98.57 percent line coverage is reported exactly; no 100 percent line claim is made",
+    "capacity-overflow and injected-refusal tests do not simulate operating-system OOM",
+    "no verifier fact, semantic transition, state mutation, or production authority follows"
+  ]
+}

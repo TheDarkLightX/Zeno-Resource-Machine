@@ -1,0 +1,39 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "47fb1e536e1e8f4ffc753d607d4b65e1b9bf287a",
+  "source_tree": "d6371e71bc9021dc066b4b2c81fe561963c1e6b0",
+  "dirty": false,
+  "gate_id": "WP5-integrated-python-tests",
+  "tool": {
+    "name": "python3",
+    "version": "3.12.3",
+    "executable_sha256": "1643dacd9feaedc58f3cc581e4d22577dfe25c09b10282936186ccf0f2e61118"
+  },
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "discover",
+    "-s",
+    "tools/tests",
+    "-p",
+    "test_*.py"
+  ],
+  "environment_policy_root": "sha256:68344fafd9cb9be0b9f6621c43238850ce65abf3f62c0f6eedc71d9d86eb2432",
+  "started_at": null,
+  "duration_ms": null,
+  "status": "pass",
+  "scope": [
+    "repository Python policy tools"
+  ],
+  "result_root": "sha256:c2ca8e789b539d7bc95b4c3bc7ee0315ea290ee07d9767822b0e3406dff36118",
+  "result_summary": "75 tool-policy tests passed",
+  "captured_output_sha256": "c2ca8e789b539d7bc95b4c3bc7ee0315ea290ee07d9767822b0e3406dff36118",
+  "assumptions": [
+    "the replay started from the clean source revision and restored every manual mutant"
+  ],
+  "exclusions": [],
+  "non_claims": [
+    "tool tests do not validate Rust semantics"
+  ]
+}

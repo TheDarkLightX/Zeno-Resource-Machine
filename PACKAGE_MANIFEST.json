@@ -3,8 +3,8 @@
   "package": "Zeno Resource Machine high-assurance specification package",
   "version": "0.1.0-draft.2",
   "date": "2026-07-12",
-  "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a through WP3c resource stages, a derived semantic-contract review suite, and two unapproved Class E semantic-closure RFCs; no release or production claim",
-  "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model and WP3a through WP3c resource-stage candidates; semantic contracts, RFC drafts, model-obligation summaries, and independent-review packets are design or process oracles, not implementation conformance evidence",
+  "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a through WP3c resource stages, an unreviewed WP5 bounded-artifact candidate, a derived semantic-contract review suite, and two unapproved Class E semantic-closure RFCs; no release or production claim",
+  "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model, WP3a through WP3c resource-stage candidates, and WP5 bounded-artifact candidate; WP5 establishes bounded byte ownership only and grants no parsing, verification, admission, commit, release, or production authority; semantic contracts, RFC drafts, model-obligation summaries, and independent-review packets are design or process oracles, not implementation conformance evidence",
   "manifest_scope": "specification-package payload, including normative sources and derived semantic-review controls; code, tests, worklogs, and evidence records are outside this inventory",
   "digest_algorithm": "SHA-256",
   "path_order": "UTF-8 bytewise lexicographic",
@@ -24,8 +24,8 @@
     },
     {
       "path": "CONFORMANCE_MATRIX.json",
-      "bytes": 76880,
-      "sha256": "847ee844eee749039fbd4c6150e0819670ee406dceb7c48b3d6148fb52d47437"
+      "bytes": 79652,
+      "sha256": "837b8c2e1f95208b7f98588e73524bdcd5924e5977abaf2922279090f37a3d95"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -49,8 +49,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 23158,
-      "sha256": "8f754874749b42b4e2abd235c2e4be6f61db92cd38d6bd06d3b0d410241ec5d7"
+      "bytes": 23737,
+      "sha256": "d1c7bcd392014511b6eaeb4bb26c0faded3f1be9c06590fa3b11ce0808cffcb8"
     },
     {
       "path": "REVIEW_CHECKLIST.md",

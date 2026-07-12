@@ -202,6 +202,24 @@ class ArchitecturePolicyTests(unittest.TestCase):
         }
         self.assertEqual(dependency_failures(package), [])
 
+    def test_exact_verifier_api_dependency_is_accepted(self) -> None:
+        """The inert verifier input boundary depends inward on policy only."""
+
+        package = {
+            "name": "zrm-verifier-api",
+            "dependencies": [{"name": "zrm-policy"}],
+        }
+        self.assertEqual(dependency_failures(package), [])
+
+    def test_verifier_api_cannot_add_backend_dependencies_silently(self) -> None:
+        """Network and proof backends require a separate reviewed adapter edge."""
+
+        package = {
+            "name": "zrm-verifier-api",
+            "dependencies": [{"name": "reqwest"}, {"name": "zrm-policy"}],
+        }
+        self.assertEqual(len(dependency_failures(package)), 1)
+
 
 if __name__ == "__main__":
     unittest.main()

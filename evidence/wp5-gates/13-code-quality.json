@@ -1,0 +1,33 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "47fb1e536e1e8f4ffc753d607d4b65e1b9bf287a",
+  "source_tree": "d6371e71bc9021dc066b4b2c81fe561963c1e6b0",
+  "dirty": false,
+  "gate_id": "WP5-integrated-code-quality",
+  "tool": {
+    "name": "python3",
+    "version": "3.12.3",
+    "executable_sha256": "1643dacd9feaedc58f3cc581e4d22577dfe25c09b10282936186ccf0f2e61118"
+  },
+  "command": [
+    "python3",
+    "tools/check_code_quality.py"
+  ],
+  "environment_policy_root": "sha256:68344fafd9cb9be0b9f6621c43238850ce65abf3f62c0f6eedc71d9d86eb2432",
+  "started_at": null,
+  "duration_ms": null,
+  "status": "pass",
+  "scope": [
+    "workspace structural quality"
+  ],
+  "result_root": "sha256:dbe99587b98459850ca40537846270ec69bff14e40bbd1a50429b1906de34129",
+  "result_summary": "excellent-candidate; 16 rules; 5 decisions; 0 advisories",
+  "captured_output_sha256": "dbe99587b98459850ca40537846270ec69bff14e40bbd1a50429b1906de34129",
+  "assumptions": [
+    "the replay started from the clean source revision and restored every manual mutant"
+  ],
+  "exclusions": [],
+  "non_claims": [
+    "excellent-candidate is not security approval"
+  ]
+}
