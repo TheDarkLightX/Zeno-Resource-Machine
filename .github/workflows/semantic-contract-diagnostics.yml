@@ -46,6 +46,20 @@ jobs:
           run_check architecture python3 tools/check_architecture.py
           run_check complexity python3 tools/check_complexity.py --report target/complexity-report.json
           run_check code-quality python3 tools/check_code_quality.py --report target/code-quality-report.json
+          python3 - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          root = Path('.')
+          manifest = json.loads((root / 'PACKAGE_MANIFEST.json').read_text(encoding='utf-8'))
+          for entry in manifest['files']:
+              payload = (root / entry['path']).read_bytes()
+              actual_bytes = len(payload)
+              actual_hash = hashlib.sha256(payload).hexdigest()
+              if entry['bytes'] != actual_bytes or entry['sha256'] != actual_hash:
+                  print(f"MANIFEST_MISMATCH|{entry['path']}|{actual_bytes}|{actual_hash}")
+          PY
           run_check package-manifest python3 tools/check_package_manifest.py
           run_check tool-tests python3 -m unittest discover -s tools/tests -v
           exit "${failures}"
