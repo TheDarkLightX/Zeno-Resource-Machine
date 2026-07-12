@@ -1,0 +1,129 @@
+{
+  "schema": "zrm/esso-intent-map/v1",
+  "package_id": "zrm-semantic-closure-esso-v1",
+  "status": "draft_design_oracle",
+  "source_rfc": "rfcs/RFC-0001-policy-context-fact-and-commit-authority.md",
+  "nodes": [
+    {
+      "id": "I-POLICY-CREATION-EXACT",
+      "text": "A created resource uses exactly the currently selected creation policy for its kind.",
+      "contracts": ["ZRM-SC-002", "ZRM-SC-003"],
+      "model": "zrm_policy_lifecycle_v1",
+      "invariants": ["CreationUsesExactCurrentPolicy"],
+      "mutants": ["creation_under_wrong_policy"]
+    },
+    {
+      "id": "I-POLICY-PREDECESSOR-NARROW",
+      "text": "A predecessor policy is an explicit compatibility grant for an existing resource role; it is not creation or general authority.",
+      "contracts": ["ZRM-SC-002", "ZRM-SC-009"],
+      "model": "zrm_policy_lifecycle_v1",
+      "invariants": ["PredecessorDispositionIsExplicit", "UseRequiresCurrentOrAcceptedPredecessor"],
+      "mutants": []
+    },
+    {
+      "id": "I-POLICY-HARD-REVOCATION",
+      "text": "Hard revocation removes normal policy authority immediately at the new authenticated snapshot, even if a live resource becomes stranded.",
+      "contracts": ["ZRM-SC-002", "ZRM-SC-006", "ZRM-SC-012"],
+      "model": "zrm_policy_lifecycle_v1",
+      "invariants": ["CurrentPolicyNotRevoked", "PredecessorDispositionIsExplicit", "UseRequiresCurrentOrAcceptedPredecessor"],
+      "mutants": []
+    },
+    {
+      "id": "I-CONTEXT-SNAPSHOT-EXACT",
+      "text": "A plan can newly commit only under the exact state, policy, epoch, and ordering snapshot under which it was prepared.",
+      "contracts": ["ZRM-SC-003", "ZRM-SC-005", "ZRM-SC-010", "ZRM-SC-011"],
+      "model": "zrm_plan_freshness_v1",
+      "invariants": ["FreshCommitOnly", "RejectedCommitIsNoOp"],
+      "mutants": ["stale_plan_commits"]
+    },
+    {
+      "id": "I-ADMISSION-EXACT-DRAFT",
+      "text": "Required admission binds the exact journal draft and is unavailable to LocalKernel mode.",
+      "contracts": ["ZRM-SC-006", "ZRM-SC-010", "ZRM-SC-011"],
+      "model": "zrm_plan_freshness_v1",
+      "invariants": ["AdmissionVerificationBindsJournal", "AdmissionOnlyForRequiredMode"],
+      "mutants": []
+    },
+    {
+      "id": "I-EXACT-ONCE-COMPLETE",
+      "text": "Resource consumption, nullifier insertion, replay recording, the value effect, and accepted journal become visible together exactly once.",
+      "contracts": ["ZRM-SC-005", "ZRM-SC-010", "ZRM-SC-011"],
+      "model": "zrm_exact_once_v1",
+      "invariants": ["ReplayAndNullifierMoveTogether", "JournalAndReplayMoveTogether", "EffectCountMatchesReplay", "SpentStateHasOneCompleteEffect"],
+      "mutants": ["retry_duplicates_effect"]
+    },
+    {
+      "id": "I-RETRY-IDEMPOTENT",
+      "text": "Retry after an already durable exact transition returns the committed result without applying the effect again.",
+      "contracts": ["ZRM-SC-005", "ZRM-SC-011"],
+      "model": "zrm_exact_once_v1",
+      "invariants": ["RejectionsDoNotDuplicateEffects", "SpentStateHasOneCompleteEffect"],
+      "mutants": ["retry_duplicates_effect"]
+    },
+    {
+      "id": "I-FACT-PRODUCTION-ONLY",
+      "text": "Only a governed Production verifier policy can mint an authority-bearing fact on a production path.",
+      "contracts": ["ZRM-SC-006"],
+      "model": "zrm_verifier_fact_freshness_v1",
+      "invariants": ["VerifiedFactsAreProductionOnly"],
+      "mutants": ["development_fact_grants_authority"]
+    },
+    {
+      "id": "I-FACT-BINDING-EXACT",
+      "text": "A fact grants authority only for its exact policy snapshot, verifier release, epoch, lifecycle class, and statement.",
+      "contracts": ["ZRM-SC-006", "ZRM-SC-008"],
+      "model": "zrm_verifier_fact_freshness_v1",
+      "invariants": ["AuthorityRequiresExactCurrentBinding", "UsedResultMeansAuthorityGranted", "RejectResultsGrantNoAuthority"],
+      "mutants": []
+    },
+    {
+      "id": "I-FACT-LIFECYCLE-SEPARATION",
+      "text": "Logic, admission, and postcommit facts are distinct lifecycle capabilities and cannot substitute for one another.",
+      "contracts": ["ZRM-SC-006", "ZRM-SC-011"],
+      "model": "zrm_verifier_fact_freshness_v1",
+      "invariants": ["AuthorityRequiresExactCurrentBinding"],
+      "mutants": []
+    },
+    {
+      "id": "I-COMMIT-ATOMIC-DURABLE",
+      "text": "Durable visibility is the complete pre-state or complete post-state; no partial authority effect is visible.",
+      "contracts": ["ZRM-SC-010", "ZRM-SC-011"],
+      "model": "zrm_atomic_commit_recovery_v1",
+      "invariants": ["DurableWritesAreAtomic", "PreStateHasNoDurableEffects", "PostStateHasAllDurableEffects"],
+      "mutants": ["partial_durable_commit"]
+    },
+    {
+      "id": "I-CRASH-PRE-OR-POST",
+      "text": "Recovery at every modeled crash boundary yields the complete pre-state or complete post-state, and acknowledgement occurs only after durability.",
+      "contracts": ["ZRM-SC-011"],
+      "model": "zrm_atomic_commit_recovery_v1",
+      "invariants": ["RecoveredPreIsCompletePreState", "RecoveredPostIsCompletePostState", "AcknowledgementRequiresDurablePostState"],
+      "mutants": ["partial_durable_commit"]
+    }
+  ],
+  "edges": [
+    {"from": "I-POLICY-CREATION-EXACT", "to": "I-CONTEXT-SNAPSHOT-EXACT", "kind": "requires"},
+    {"from": "I-POLICY-HARD-REVOCATION", "to": "I-FACT-BINDING-EXACT", "kind": "requires"},
+    {"from": "I-CONTEXT-SNAPSHOT-EXACT", "to": "I-COMMIT-ATOMIC-DURABLE", "kind": "requires"},
+    {"from": "I-ADMISSION-EXACT-DRAFT", "to": "I-COMMIT-ATOMIC-DURABLE", "kind": "requires"},
+    {"from": "I-EXACT-ONCE-COMPLETE", "to": "I-RETRY-IDEMPOTENT", "kind": "requires"},
+    {"from": "I-FACT-PRODUCTION-ONLY", "to": "I-FACT-BINDING-EXACT", "kind": "requires"},
+    {"from": "I-FACT-LIFECYCLE-SEPARATION", "to": "I-ADMISSION-EXACT-DRAFT", "kind": "requires"},
+    {"from": "I-COMMIT-ATOMIC-DURABLE", "to": "I-CRASH-PRE-OR-POST", "kind": "requires"}
+  ],
+  "coverage_rule": "Every leaf intent must map to at least one semantic contract and at least one model invariant or an explicit unmodeled obligation.",
+  "unmodeled_intents": [
+    {
+      "id": "I-OUTBOX-AT-LEAST-ONCE",
+      "reason": "External receiver behavior is outside the local ZRM finite machine; the RFC preserves an explicit at-least-once non-claim."
+    },
+    {
+      "id": "I-HARD-REVOCATION-RECOVERY",
+      "reason": "Recovery and migration authority are intentionally deferred to a separate RFC rather than silently inferred."
+    },
+    {
+      "id": "I-RECURSIVE-ASSOCIATIVITY",
+      "reason": "Parameterized semantic journal composition belongs to a separate ZRPF/ZRM composition model and theorem package."
+    }
+  ]
+}
