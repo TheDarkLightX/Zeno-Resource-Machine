@@ -1,0 +1,19 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-clippy",
+  "tool": {"name": "clippy-driver", "version": "rustc 1.87.0 component", "executable_sha256": "b2d89ade8ddf0f09b8f1ba2e15e760fa0ef79832190cb9b0cd5bf5606b756967"},
+  "command": ["cargo", "+1.87.0", "clippy", "--workspace", "--all-targets", "--all-features", "--locked", "--", "-D", "warnings"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:31:27-04:00",
+  "duration_ms": 4890,
+  "status": "pass",
+  "scope": ["all Rust workspace targets and features"],
+  "result_root": "sha256:af7015d21f4104234a73e741c63a1c657aec73686f9bd8fcd91c0a3869b32ea5",
+  "result_summary": "0 warnings under -D warnings",
+  "captured_output_sha256": "af7015d21f4104234a73e741c63a1c657aec73686f9bd8fcd91c0a3869b32ea5",
+  "assumptions": ["the pinned component defines the lint set"],
+  "exclusions": ["semantic correctness"],
+  "non_claims": ["lint cleanliness is not a security proof"]
+}

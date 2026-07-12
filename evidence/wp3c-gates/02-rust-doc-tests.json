@@ -1,0 +1,19 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-rust-doc-tests",
+  "tool": {"name": "cargo", "version": "1.87.0 (99624be96 2025-05-06)", "executable_sha256": "a9fb5ef0f95be70b324f3e88a4621a566320e2eb00635dc37f8a98e0a9fb7c9a"},
+  "command": ["cargo", "+1.87.0", "test", "--workspace", "--doc", "--locked"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:49:00-04:00",
+  "duration_ms": 380,
+  "status": "pass",
+  "scope": ["public API examples", "private-field construction rejection"],
+  "result_root": "sha256:c22ca60d01ec80c555cc739858f68c3cf78c7231f2072dd6d4c73ffebb906d0a",
+  "result_summary": "2 compile-fail doctests passed; 0 failed",
+  "captured_output_sha256": "c22ca60d01ec80c555cc739858f68c3cf78c7231f2072dd6d4c73ffebb906d0a",
+  "assumptions": ["compile-fail examples are compiled as external crate consumers"],
+  "exclusions": ["runtime semantic coverage"],
+  "non_claims": ["privacy of fields alone does not authenticate the partition"]
+}

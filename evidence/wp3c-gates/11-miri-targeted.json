@@ -1,0 +1,23 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-miri-targeted",
+  "tool": {"name": "miri", "version": "0.1.0 (8c392966a0 2025-03-01)", "executable_sha256": "c4960f538aca66c76f63000af13e3190f59e911fe56fab4c8ccd4d227aaafc37"},
+  "command": ["cargo", "+nightly-2025-03-02", "miri", "test", "-p", "zrm-kernel", "--lib", "--locked"],
+  "additional_commands": [
+    ["cargo", "+nightly-2025-03-02", "miri", "test", "-p", "zrm-kernel", "--test", "role_bound_intrinsic", "--locked"],
+    ["cargo", "+nightly-2025-03-02", "miri", "test", "-p", "zrm-kernel", "--test", "role_bound_intrinsic_atlas", "--locked"]
+  ],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:36:05-04:00",
+  "duration_ms": 79000,
+  "status": "pass",
+  "scope": ["6 zrm-kernel library tests", "5 WP3c integration tests", "256-assignment WP3c atlas"],
+  "result_root": "sha256:cbf1a05b923aabfdf5d4d519777272289b5fa9ad5891c1330d902d59f9f6986b",
+  "result_summary": "12 WP3c-relevant tests passed; 0 failed",
+  "captured_output_sha256": "cbf1a05b923aabfdf5d4d519777272289b5fa9ad5891c1330d902d59f9f6986b",
+  "assumptions": ["the exercised executions cover the committed targeted tests"],
+  "exclusions": ["unexecuted paths", "full current-workspace Miri replay"],
+  "non_claims": ["Miri is exercised-execution evidence, not a proof of soundness"]
+}

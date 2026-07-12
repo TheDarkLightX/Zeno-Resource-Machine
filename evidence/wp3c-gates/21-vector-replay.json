@@ -1,0 +1,20 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-independent-vector-replay",
+  "tool": {"name": "python3", "version": "3.12.3", "executable_sha256": "1643dacd9feaedc58f3cc581e4d22577dfe25c09b10282936186ccf0f2e61118"},
+  "command": ["python3", "vectors/independent_python/replay_resource_wire_v1.py", "--check"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:49:15-04:00",
+  "duration_ms": 20,
+  "status": "pass",
+  "scope": ["ResourceWireV1 binary vectors and protocol digests"],
+  "result_root": "sha256:9199a4ed12589d624d0d45a81ee12a85e796ddb9688533b2d52d7051ce548b62",
+  "result_summary": "6 binary artifacts and 4 protocol digests matched",
+  "captured_output_sha256": "9199a4ed12589d624d0d45a81ee12a85e796ddb9688533b2d52d7051ce548b62",
+  "script_sha256": "914dadfd9b1a08570be5b4142e0d082adafd60f567207c6d18514f064583d483",
+  "assumptions": ["the independent implementation does not call Rust code"],
+  "exclusions": ["policy-dependent resource validity", "hash injectivity"],
+  "non_claims": ["vector agreement does not prove SHA-256 or final resource authority"]
+}

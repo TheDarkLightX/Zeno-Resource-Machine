@@ -15,6 +15,7 @@ POLICY_MAX_SEED = ROOT / "fuzz/corpus/policy_cost_v1/maxima"
 POLICY_SMALL_SUCCESS_SEED = ROOT / "fuzz/corpus/policy_cost_v1/small-success"
 RESOURCE_ROLES_CORPUS = ROOT / "fuzz/corpus/resource_roles_v1"
 INTRINSIC_RESOURCE_CORPUS = ROOT / "fuzz/corpus/intrinsic_resource_v1"
+ROLE_BOUND_INTRINSIC_CORPUS = ROOT / "fuzz/corpus/role_bound_intrinsic_v1"
 MAX_RESOURCE_BYTES = 16_384
 
 
@@ -102,6 +103,36 @@ def intrinsic_resource_seeds() -> dict[str, bytes]:
     return seeds
 
 
+def role_bound_intrinsic_seeds() -> dict[str, bytes]:
+    """Return structured placement, permutation, and stale-body seeds."""
+
+    def seed(
+        placement: int,
+        permutation: int,
+        stale: int,
+        field: int,
+        marker: int,
+        quantity: int,
+    ) -> bytes:
+        return bytes([placement, permutation, stale, field, marker]) + quantity.to_bytes(
+            16, "big"
+        )
+
+    return {
+        "absent": seed(0, 0, 0, 0, 17, 0),
+        "consumed": seed(1, 0, 0, 0, 18, 1),
+        "referenced": seed(2, 1, 0, 0, 19, 2),
+        "created-permuted": seed(3, 2, 0, 0, 20, 3),
+        "stale-consumed-identity": seed(1, 0, 1, 0, 21, 4),
+        "stale-referenced-quantity": seed(2, 1, 1, 8, 22, 5),
+        "stale-created-nonce": seed(3, 2, 1, 14, 23, 6),
+        "stale-created-expiry": seed(3, 0, 1, 16, 24, 7),
+        "stale-nonce-noop-regression": seed(
+            1, 0, 1, 82, 114, 1_522_216_824_375_083_008
+        ),
+    }
+
+
 def check_seed(path: Path, expected: bytes, label: str) -> bool:
     """Report whether one deterministic corpus entry is present and exact."""
 
@@ -142,6 +173,7 @@ def main() -> int:
     )
     role_seeds = resource_role_seeds()
     intrinsic_seeds = intrinsic_resource_seeds()
+    role_bound_seeds = role_bound_intrinsic_seeds()
     if arguments.check:
         if not check_seed(OVERSIZE_SEED, expected, "oversize-boundary"):
             return 1
@@ -165,9 +197,19 @@ def main() -> int:
             INTRINSIC_RESOURCE_CORPUS, set(intrinsic_seeds), "intrinsic-resource"
         ):
             return 1
+        for name, binding_seed in role_bound_seeds.items():
+            if not check_seed(ROLE_BOUND_INTRINSIC_CORPUS / name, binding_seed, name):
+                return 1
+        if not check_seed_names(
+            ROLE_BOUND_INTRINSIC_CORPUS,
+            set(role_bound_seeds),
+            "role-bound-intrinsic",
+        ):
+            return 1
         print(
             "fuzz corpus check passed: resource boundary, three policy-cost seeds, "
-            "ten resource-role seeds, and eighteen intrinsic-resource seeds"
+            "ten resource-role seeds, eighteen intrinsic-resource seeds, and "
+            "nine role-bound-intrinsic seeds"
         )
         return 0
     OVERSIZE_SEED.parent.mkdir(parents=True, exist_ok=True)
@@ -182,9 +224,13 @@ def main() -> int:
     INTRINSIC_RESOURCE_CORPUS.mkdir(parents=True, exist_ok=True)
     for name, intrinsic_seed in intrinsic_seeds.items():
         (INTRINSIC_RESOURCE_CORPUS / name).write_bytes(intrinsic_seed)
+    ROLE_BOUND_INTRINSIC_CORPUS.mkdir(parents=True, exist_ok=True)
+    for name, binding_seed in role_bound_seeds.items():
+        (ROLE_BOUND_INTRINSIC_CORPUS / name).write_bytes(binding_seed)
     print(
         "generated resource boundary, three policy-cost seeds, "
-        "ten resource-role seeds, and eighteen intrinsic-resource seeds"
+        "ten resource-role seeds, eighteen intrinsic-resource seeds, and "
+        "nine role-bound-intrinsic seeds"
     )
     return 0
 

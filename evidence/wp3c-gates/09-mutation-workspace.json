@@ -1,0 +1,19 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-mutation-workspace",
+  "tool": {"name": "cargo-mutants", "version": "26.0.0", "executable_sha256": "0c01b08444b65d20be9a0dbe9786ae1c4844898de8872b457426397a24f0a771"},
+  "command": ["cargo", "+1.87.0", "mutants", "--workspace", "--timeout", "10", "--build-timeout", "60", "--jobs", "2", "--output", "target/wp3c-mutants-workspace-evidence"],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:32:18-04:00",
+  "duration_ms": 120000,
+  "status": "pass",
+  "scope": ["all mutable production functions in the Rust workspace under configured exclusions"],
+  "result_root": "sha256:23cfbb2f197118f3cc0941597f5771a453a1091d323c435cb47eb51bd0a86c32",
+  "result_summary": "389 tested; 283 caught; 106 compiler-unviable; 0 missed; 0 timed out",
+  "captured_output_sha256": "1cc25c4408c5bf739fa53515ce0f88cafabaad3151efe823a97a2b62f0881e72",
+  "assumptions": ["the unmutated baseline passed", "configured exclusions match .cargo/mutants.toml"],
+  "exclusions": ["Kani harnesses and mechanically equivalent configured mutations"],
+  "non_claims": ["zero missed generated mutants is not a proof of complete fault detection"]
+}

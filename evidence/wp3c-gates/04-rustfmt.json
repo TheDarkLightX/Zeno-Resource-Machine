@@ -1,0 +1,20 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "ab346b0d3f8a659f70af7a0ab9cc25d218e4fd64",
+  "dirty": false,
+  "gate_id": "WP3c-rustfmt",
+  "tool": {"name": "rustfmt", "version": "rustc 1.87.0 component", "executable_sha256": "b8e11187e8168463319a014135362f5a2e211ac7acea085468e6b781c1c507a1"},
+  "command": ["cargo", "+1.87.0", "fmt", "--all", "--", "--check"],
+  "additional_commands": [["cargo", "+nightly-2025-03-02", "fmt", "--all", "--manifest-path", "fuzz/Cargo.toml", "--", "--check"]],
+  "environment_policy_root": "sha256:0e51986ace15ac5ed231d530dad6e11401da402f42b0a4bf69e0255316e23d75",
+  "started_at": "2026-07-12T00:31:26-04:00",
+  "duration_ms": 215,
+  "status": "pass",
+  "scope": ["root Rust workspace", "isolated fuzz workspace"],
+  "result_root": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "result_summary": "both formatting checks emitted no differences",
+  "captured_output_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "assumptions": ["empty output with exit zero denotes no formatting delta"],
+  "exclusions": ["code behavior"],
+  "non_claims": ["formatting does not establish readability or correctness"]
+}
