@@ -94,7 +94,7 @@ reviewed WP5 endpoint:
   365ea983a066ac71d802d0c9e14eb29fa8fd05fc
 ```
 
-## Local results
+## Local results at the integration revision
 
 - package manifest: 41 payload files matched;
 - conformance: 45 obligations, live anchors, valid states, acyclic;
@@ -111,6 +111,26 @@ reviewed WP5 endpoint:
 
 The machine-readable receipt is
 [`evidence/wp5-main-integration-2026-07-12.json`](../evidence/wp5-main-integration-2026-07-12.json).
+
+## Absolute-path evidence remediation
+
+The final privacy audit found four generic absolute temporary paths in the two
+WP5 gate commands and their worklog replay. The gates were rerun from exact
+source revision `47fb1e536e1e8f4ffc753d607d4b65e1b9bf287a` with ignored,
+repository-relative outputs:
+
+```text
+target/wp5-integrated-coverage.json
+target/wp5-mutants-integrated
+```
+
+Coverage remained 69/70 lines and 4/4 branches. Generated mutation remained 19
+mutants: 12 caught, 7 compiler-unviable, 0 missed, and 0 timed out. The two gate
+records and their evidence-index hashes were regenerated. Repository hygiene
+now rejects the absolute temporary-directory publication marker, and a
+regression test preserves that rule. Runtime tests that need an absolute-path
+counterexample construct it without embedding the forbidden marker in tracked
+source. The complete tooling suite then passed 77 tests.
 
 ## Remaining gaps and non-claims
 
