@@ -8,7 +8,7 @@ use zrm_policy::PolicyLimitsV1;
 pub enum ArtifactErrorV1 {
     /// The caller selected a limit above the protocol ceiling.
     LimitExceedsProtocolCeiling,
-    /// The artifact length exceeds the selected policy limit.
+    /// The artifact length exceeds the selected explicit limit.
     ArtifactTooLarge,
     /// The bounded copy allocation was refused.
     AllocationLimitExceeded,
