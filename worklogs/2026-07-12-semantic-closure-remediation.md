@@ -1,7 +1,8 @@
 # Work log: semantic-closure remediation
 
 **Change class:** E
-**Status:** authoring and bounded assurance complete; requires independent review
+**Status:** authoring complete; private bounded-run results are an unverified
+author attestation and require independent replay and review
 **Author:** Dana Edwards
 **Drafting assistance:** GPT-5.6
 
@@ -44,7 +45,8 @@ SemanticEffectsV1
   -> AtomicCommitBundleV1
 
 RetryDescriptorV1
-CommitOutcomeV1 = NewlyCommitted | AlreadyCommitted | OutcomeUnknown
+CommitSuccessV1 = NewlyCommitted | AlreadyCommitted
+CommitAttemptFailureV1 = RejectedConfirmedNoWrite | OutcomeUnknown
 
 SerializedGlobalPositionV1 = pre_state_version
 ```
@@ -123,14 +125,14 @@ Before publication:
 - later Loom, crash injection, Kani, differential Rust, and parameterized proof
   obligations remain required before implementation promotion.
 
-## Authoring-track assurance results
+## Authoring-track bounded-run attestation
 
 The internal bounded suite now contains eight positive models covering policy
 creation/suspension, context and plan freshness, exact-once effects, verifier
 fact freshness, atomic recovery, replay linearization, unknown-outcome
 resolution, and recursive semantic composition.
 
-Recorded results:
+The authoring track reports the following private-run results:
 
 ```text
 positive models validated                    8 / 8
@@ -146,10 +148,11 @@ Every mutant was accepted only when the checker produced a concrete
 `InvNotInductive` witness. Parser failure, unsupported input, timeout, unknown,
 generic error, or backend disagreement did not count as semantic evidence.
 
-Detailed model sources, tool metadata, hashes, and replay identifiers remain in
-the private assurance workspace and are intentionally absent from this public
-package. These results are corroborative authoring evidence, not independent
-review or an implementation-refinement proof.
+Detailed model sources, commands, tool metadata, hashes, environment receipts,
+and replay identifiers remain outside this public package. The repository
+therefore cannot authenticate or replay these metrics. They are an unverified
+author attestation, not repository evidence, independent review, a passed public
+quality gate, or an implementation-refinement proof.
 
 ## Dependencies and resources
 

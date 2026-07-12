@@ -1,6 +1,8 @@
 {
   "schema": "zrm/semantic-intent-map/v1",
   "package_id": "zrm-semantic-closure-v1",
+  "author": "Dana Edwards",
+  "drafting_assistance": "GPT-5.6",
   "status": "draft_design_oracle",
   "source_rfcs": [
     "rfcs/RFC-0001-policy-context-fact-and-commit-authority.md",

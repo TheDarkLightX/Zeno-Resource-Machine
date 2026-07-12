@@ -149,8 +149,8 @@
     },
     {
       "path": "formal/state-machine/semantic_closure_v1/intent_map.json",
-      "bytes": 9111,
-      "sha256": "fdf9b0f2e807da81c5f7e667cd5a82e4488ed559bb6b29801a5eb63900eb825d"
+      "bytes": 9175,
+      "sha256": "b1f7783362c3deaef09fc342a6b14325ace75ea479984a9714e305e32f94f982"
     },
     {
       "path": "formal/state-machine/semantic_closure_v1/recursive_abstraction_and_refinement_obligations.md",
@@ -184,13 +184,13 @@
     },
     {
       "path": "rfcs/RFC-0001-policy-context-fact-and-commit-authority.md",
-      "bytes": 38760,
-      "sha256": "eeaea49c8b54cc784cb8cd9883c78d4be7385269724ccc4f140f4f21e6c9d58a"
+      "bytes": 38774,
+      "sha256": "f9b690722180f8ffaf4c3a27f937b8181545dc446828799d98df07025f371431"
     },
     {
       "path": "rfcs/RFC-0002-recursive-semantic-journal-composition.md",
-      "bytes": 28165,
-      "sha256": "b3289e21b3c7849cd0c52c353e852c9cb66c236a3a43fd9c0a8ee8a7ebfc9435"
+      "bytes": 28166,
+      "sha256": "f4f84396d864ef43dbc20f4ca9d08bec9ca1b4375a955d5b110a7ee062896274"
     },
     {
       "path": "templates/ADR_TEMPLATE.md",

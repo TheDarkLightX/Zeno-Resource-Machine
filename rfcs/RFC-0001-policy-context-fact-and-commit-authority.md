@@ -1,7 +1,9 @@
 # RFC-0001: Policy, Context, Fact Freshness, and Commit Authority
 
 **Status:** Draft
-**Authors:** Dana Edwards; drafting assistance by GPT-5.6
+**Author:** Dana Edwards
+
+**Drafting assistance:** GPT-5.6
 **Reviewers:** Independent semantic reviewer TBD; authority-boundary reviewer TBD
 **Created:** 2026-07-12
 **Target version:** ZRM 0.2 draft
@@ -13,7 +15,7 @@ This RFC closes the semantic gap between a structurally valid resource
 transition and an authority-bearing durable commit. It defines:
 
 - enabled, suspended, predecessor, and hard-revoked resource-policy behavior;
-- the exact snapshot carried by `TrustedValidationContext`;
+- the exact snapshot carried by `TrustedValidationContextV1`;
 - the lifetime and substitution rules for sealed verifier facts;
 - the fields and effects bound by a private `CommitPlan`;
 - policy-selected admission over the exact `JournalDraft`;
@@ -249,11 +251,11 @@ context.
 
 ### 4. Policy snapshot
 
-A governed `PolicySnapshotV1` is resolved from
-`TrustedValidationContext.expected_policy_root`. It supplies:
+A `GovernedPolicySnapshotV1` is resolved from
+`TrustedValidationContextV1.expected_policy_root`. It supplies:
 
 ```text
-PolicySnapshotV1 {
+GovernedPolicySnapshotV1 {
   machine_policy
   resource_kind_policy_dispositions
   creation_selection_by_kind
@@ -659,7 +661,7 @@ pub enum CreationSelectionV1 {
 pub fn validate_resource_for_role(
     resource: IntrinsicResourceV1,
     role: ResourceRoleV1,
-    context: &TrustedValidationContext,
+    context: &TrustedValidationContextV1,
     snapshot: &GovernedPolicySnapshotV1,
 ) -> Result<PolicyValidResourceV1, ResourcePolicyReject>;
 

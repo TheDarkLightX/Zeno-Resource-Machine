@@ -1,7 +1,9 @@
 # RFC-0002: Recursive Semantic Journal Composition
 
 **Status:** Draft
-**Authors:** Dana Edwards; drafting assistance by GPT-5.6
+**Author:** Dana Edwards
+
+**Drafting assistance:** GPT-5.6
 **Reviewers:** Independent semantic reviewer TBD; recursive-proof reviewer TBD
 **Created:** 2026-07-12
 **Target version:** ZRM 0.2 draft
