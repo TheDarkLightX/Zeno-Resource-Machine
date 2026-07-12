@@ -45,6 +45,19 @@ class ExactCorpusMembershipTests(unittest.TestCase):
             with contextlib.redirect_stderr(io.StringIO()):
                 self.assertFalse(check_seed_names(corpus, {"first"}, "test"))
 
+    def test_corpus_root_symlink_is_rejected(self) -> None:
+        """The reviewed corpus directory itself cannot be a symlink."""
+
+        with tempfile.TemporaryDirectory() as directory:
+            parent = Path(directory)
+            corpus = parent / "actual"
+            corpus.mkdir()
+            (corpus / "first").write_bytes(b"one")
+            linked = parent / "linked"
+            linked.symlink_to(corpus, target_is_directory=True)
+            with contextlib.redirect_stderr(io.StringIO()):
+                self.assertFalse(check_seed_names(linked, {"first"}, "test"))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -151,7 +151,7 @@ def check_seed(path: Path, expected: bytes, label: str) -> bool:
 def check_seed_names(directory: Path, expected_names: set[str], label: str) -> bool:
     """Reject missing, nested, linked, non-regular, or extra corpus entries."""
 
-    if not directory.is_dir():
+    if directory.is_symlink() or not directory.is_dir():
         print(f"fuzz corpus check failed: {label} corpus is missing", file=sys.stderr)
         return False
     actual_names: set[str] = set()
