@@ -310,8 +310,10 @@ threading, or unbounded input traversal.
   blockers: the sustained-fuzz timeout, a missing revision-bound evidence and
   mutation receipt, and a missing scoped agent-review receipt. This follow-up
   raises the fuzz timeout to 90 minutes and adds the canonical gate, mutation,
-  and agent-review receipts. A final patch-bound review attestation will bind
-  the containing remediation commit. Hosted CI remains pending.
+  and agent-review receipts. The independent remediation closure review passed
+  with zero blockers. Its attestation binds revision
+  `6a906de7868264f4e9864c30eb0f007a01445592`, including the corrected mutation
+  provenance and workflow budgets. Hosted CI remains pending.
 
 The nightly Miri timeout is 30 minutes so the complete intrinsic and role
 atlases can run on slower hosted workers without weakening the tests. The

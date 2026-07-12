@@ -1,0 +1,85 @@
+{
+  "schema": "zrm/review-attestation/v1",
+  "record_id": "wp3b-remediation-attestation-2026-07-11",
+  "recorded_at": "2026-07-11",
+  "reviewed_source": {
+    "revision": "6a906de7868264f4e9864c30eb0f007a01445592",
+    "tree": "530ad0d86ddd995faca1ab47d51d377d5ac3bc6e",
+    "parent_revision": "268697b144f1f1306ef47b802d6af0e09c8cabdb",
+    "implementation_revision": "73a8612e00c8b9583a1d1d5ef3f3e6a853b09808"
+  },
+  "reviewer": {
+    "kind": "independent AI repository closure reviewer",
+    "access": "read-only",
+    "scope_limit": "assurance delta only"
+  },
+  "result": "pass",
+  "blocker_count": 0,
+  "review_summary_root": "sha256:6e5cbc9aa9f6b671122eccfc3e7f36449d28d70b2093cc36a448bd4692f4e619",
+  "review_summary": "PASS; 0 blockers; 27 canonical records valid; index, environment, mutation, workflow, CBC-039, and privacy bindings match revision 6a906de7868264f4e9864c30eb0f007a01445592",
+  "checks": [
+    {
+      "name": "revision binding",
+      "result": "pass",
+      "evidence": "revision, tree, and parent matched the requested immutable source"
+    },
+    {
+      "name": "canonical gate records",
+      "result": "pass",
+      "evidence": "27 of 27 records contain every QUALITY_GATES section 23 field, valid types and hashes, unique gate IDs, status pass, and dirty false"
+    },
+    {
+      "name": "index and environment binding",
+      "result": "pass",
+      "evidence": "record count, path set, all 27 record hashes, environment-policy hash, record environment roots, source revision and tree, and six policy-input hashes matched"
+    },
+    {
+      "name": "mutation provenance",
+      "result": "pass",
+      "evidence": "the mutation map matched records 07 through 09 for source, tree, tool version and hash, environment root, durations, output hashes, and exact command argv"
+    },
+    {
+      "name": "nightly fuzz budget",
+      "result": "pass",
+      "evidence": "90 minutes minus four serial 900-second campaigns leaves 30 minutes for setup and replay; stable 1.87.0, pinned nightly, and cargo-fuzz 0.13.1 installation are explicit"
+    },
+    {
+      "name": "nightly Miri budget",
+      "result": "pass",
+      "evidence": "1800000 ms minus the measured 1334827 ms clean replay leaves 465173 ms headroom"
+    },
+    {
+      "name": "review and promotion wording",
+      "result": "pass",
+      "evidence": "CBC-039 remains implemented_partial; agent review is complete, human Class C review is false, and promotion is false"
+    },
+    {
+      "name": "publication privacy",
+      "result": "pass",
+      "evidence": "35 assurance-delta files contained zero prohibited identifiers, local paths, credentials, or hidden-tool references"
+    }
+  ],
+  "prior_review_disposition": [
+    {
+      "reviewed_revision": "268697b144f1f1306ef47b802d6af0e09c8cabdb",
+      "captured_output_sha256": "c0256d603f57db3cb7c15db36c1209b681b0968a3cf66459ca7ad76e76e2d49f",
+      "duration_ms": 516820,
+      "finding": "mutation-map output-directory argv did not match canonical records 07 through 09",
+      "disposition": "resolved by revision 6a906de7868264f4e9864c30eb0f007a01445592 and independently rechecked"
+    },
+    {
+      "reviewed_revision": "6a906de7868264f4e9864c30eb0f007a01445592",
+      "captured_output_sha256": "2ee817660b48a7d9694a26db92dac1b8489b439e7041efcd14e6045d235b4e27",
+      "duration_ms": 33567,
+      "result": "no_evidence",
+      "reason": "the external helper returned a usage-limit message and no review conclusion"
+    }
+  ],
+  "limits": [
+    "the closure audit validated committed receipts and bindings; it did not rerun heavyweight assurance campaigns",
+    "human Class C behavior and evidence review remains required",
+    "hosted CI and scheduled nightly replay remain pending",
+    "this attestation is not a production, funds-safety, or release claim"
+  ],
+  "promotion_allowed": false
+}

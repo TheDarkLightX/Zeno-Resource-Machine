@@ -1560,7 +1560,8 @@
         "evidence/wp2-local-gates-2026-07-11.json",
         "worklogs/2026-07-11-wp3-intrinsic-resource.md",
         "evidence/wp3b-agent-reviews-2026-07-11.json",
-        "evidence/wp3b-local-gates-2026-07-11.json"
+        "evidence/wp3b-local-gates-2026-07-11.json",
+        "evidence/wp3b-remediation-attestation-2026-07-11.json"
       ],
       "next_action": "obtain final human behavior and assurance-evidence review of each candidate slice after clean hosted gates; retain completed scoped reviews as separate records",
       "non_claim": "WP1 has scoped human approval; WP3b independent agent reviews are complete and receipt-bound, while WP2 and WP3 still lack required human Class C review and remain untrusted contribution material that cannot authorize self-promotion",
