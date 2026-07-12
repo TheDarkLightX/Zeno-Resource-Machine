@@ -32,7 +32,7 @@
     {"path": "evidence/wp3c-gates/05-rustdoc.json", "sha256": "8ab73656356d8c160df3cbce888e6132b72a593686a42fa10808c2b51788b7b5"},
     {"path": "evidence/wp3c-gates/06-coverage.json", "sha256": "11be86dfcdd47959d8a582c4f4a664d7ba4bbba07998e3519466dff4e8005125"},
     {"path": "evidence/wp3c-gates/07-mutation-role-bound.json", "sha256": "8e4b4a012bf4ddd4d0dcd2f0171f6984973fde4fa500310396ac9d87372d8b0d"},
-    {"path": "evidence/wp3c-gates/08-manual-critical-mutants.json", "sha256": "cca00d328f570c48b5b0ea9dd638af6ee389f1da8e1c11709a3b8dbf0cfa145a"},
+    {"path": "evidence/wp3c-gates/08-manual-critical-mutants.json", "sha256": "e76150352a89ff91e4f92f205e7916f6291d429f9c2c372ffadaedbd896d8060"},
     {"path": "evidence/wp3c-gates/09-mutation-workspace.json", "sha256": "e530651a31ca8caf6f261c26dfe9697b547ccc2a92ae6dbe9426e1e0d18b4db8"},
     {"path": "evidence/wp3c-gates/10-kani.json", "sha256": "1d8abc4057739013ffd169e99316355f51fcb352d3d4c192167bff4f6bc2a3f5"},
     {"path": "evidence/wp3c-gates/11-miri-targeted.json", "sha256": "6d17745548785eb6f2b3a3d87ae24ff1978fe0bd97981c754b60f252708c943d"},
@@ -66,7 +66,7 @@
     "complete one-body-per-partition-position coverage",
     "authenticated policy, membership, logic, transition, state, commit, and journal authority",
     "Class E decision for zero-quantity marker semantics and resource-policy authority",
-    "ESSO state-machine assurance for later replay, stale-plan, atomicity, crash, and concurrency stages"
+    "finite-state model-checking assurance for later replay, stale-plan, atomicity, crash, and concurrency stages"
   ],
   "non_claims": [
     "this index does not authorize merge or production promotion",

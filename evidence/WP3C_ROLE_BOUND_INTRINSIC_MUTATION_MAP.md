@@ -55,8 +55,8 @@ through the test-build phase, reached tests, and was killed:
 | Patch | Patch SHA-256 | Test result |
 | --- | --- | --- |
 | `evidence/wp3c-mutants/wrong-present-id.diff.txt` | `d5d76a15b88477366e693aa3630b37749fb660f373631f0601b15ac60b0913b9` | exit 101; four focused tests failed |
-| `evidence/wp3c-mutants/absent-fallback.diff.txt` | `90b6a6a595a492ecce4bc5e247c314c01cb3b9afa826f7d5eb024a7b659f4073` | exit 101; absence and stale-body tests failed |
-| `evidence/wp3c-mutants/corrupt-ordinal.diff.txt` | `86de81caf63ddd2c733fd6e61d2ff2e66b124e39f060eeee3461c236309524d4` | exit 101; exact and ceiling ordinal tests failed |
+| `evidence/wp3c-mutants/absent-fallback.diff.txt` | `0aee3f2308eb9aa23b4a7b6672c2af73b9731e4e4f423bb19dbe5e6289436a87` | exit 101; absence and stale-body tests failed |
+| `evidence/wp3c-mutants/corrupt-ordinal.diff.txt` | `7202162941f6cbd14b1c5106b4d21ae98ebdbe4167740a0c3e41ef2d8a292f77` | exit 101; exact and ceiling ordinal tests failed |
 
 The worktree returned to the exact source tree after every mutant and the
 unmutated focused tests passed afterward. The full workspace campaign tested

@@ -2,7 +2,7 @@ diff --git a/crates/zrm-kernel/src/role_bound_resource.rs b/crates/zrm-kernel/sr
 index 77636a1..007d11a 100644
 --- a/crates/zrm-kernel/src/role_bound_resource.rs
 +++ b/crates/zrm-kernel/src/role_bound_resource.rs
-@@ -132,6 +132,24 @@ fn bind_position(
+@@ -132,5 +132,23 @@ fn bind_position(
  ) -> Result<ResourceRolePositionV1, IntrinsicRoleBindingErrorV1> {
      roles
          .position_of(resource_id)
@@ -26,4 +26,3 @@ index 77636a1..007d11a 100644
 +        })
          .ok_or(IntrinsicRoleBindingErrorV1::ResourceAbsentFromRoles)
  }
- 
