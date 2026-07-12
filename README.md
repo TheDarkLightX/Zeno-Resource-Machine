@@ -1,5 +1,9 @@
 # Zeno Resource Machine (ZRM)
 
+**Author:** Dana Edwards
+
+**Drafting assistance:** GPT-5.6
+
 **A proof-system-neutral semantic kernel for exact-once, proof-carrying resource transitions.**
 
 > **Status: incubation / pre-alpha.** The protocol, schemas, APIs, and security model are not stable. No production-readiness, privacy, consensus, token-value, physical-resource, or safety-critical claim is made.

@@ -3,14 +3,14 @@
   "package": "Zeno Resource Machine high-assurance specification package",
   "version": "0.1.0-draft.2",
   "date": "2026-07-12",
-  "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a structural roles, WP3b intrinsic resources, and WP3c body-to-role binding; no release or production claim",
-  "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model and WP3a through WP3c resource-stage candidates",
-  "manifest_scope": "normative specification-package payload only; code, tests, worklogs, and evidence records are outside this inventory",
+  "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a through WP3c resource stages, and a draft derived semantic-contract review suite; no release or production claim",
+  "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model and WP3a through WP3c resource-stage candidates; semantic contracts and independent-review templates are process oracles, not implementation conformance evidence",
+  "manifest_scope": "specification-package payload, including normative sources and derived semantic-review controls; code, tests, worklogs, and evidence records are outside this inventory",
   "digest_algorithm": "SHA-256",
   "path_order": "UTF-8 bytewise lexicographic",
   "license": "MIT; LICENSE is a hashed payload",
-  "file_count": 14,
-  "total_file_count_including_manifest": 15,
+  "file_count": 30,
+  "total_file_count_including_manifest": 31,
   "manifest_self_excluded_from_payload_hashes": true,
   "archive_digest": {
     "embedded": false,
@@ -49,13 +49,13 @@
     },
     {
       "path": "README.md",
-      "bytes": 22117,
-      "sha256": "871cb3adc9b36099999d6cda7b160a17c0eefe3c613a124ab1b39773ba51693f"
+      "bytes": 22177,
+      "sha256": "82e9785ab990513cf81603efb18c89ea0a90974c8e958ba365ed0f2336bf2f3e"
     },
     {
       "path": "REVIEW_CHECKLIST.md",
-      "bytes": 4605,
-      "sha256": "ab9d6ce7c4f694f15027514fec4b98cebfc32244b4aa25cf40eeff691df96efb"
+      "bytes": 6696,
+      "sha256": "9005443f09a060a1826c0f32215e36367858dc993fdd98f4ee54044d77966ddc"
     },
     {
       "path": "SECURITY.md",
@@ -63,9 +63,79 @@
       "sha256": "8f159386a9434d18474230001c18affe785474d1797b5d06dec35c7d800b3106"
     },
     {
+      "path": "SEMANTIC_CONTRACTS.md",
+      "bytes": 8946,
+      "sha256": "b28ca16303f7d9101e57c649ccb2562d23605441046ed45ce7d531e78e6625fc"
+    },
+    {
       "path": "SPECIFICATION.md",
       "bytes": 124213,
       "sha256": "4e71b57817149561e0485850665f188246e6d62ace83b19fe20b7bf1bc049df1"
+    },
+    {
+      "path": "contracts/ZRM-SC-001.md",
+      "bytes": 4702,
+      "sha256": "fc28f4369a06cd20671fe5e4b9401bf078ef2f96144046de62649cc0db7e3710"
+    },
+    {
+      "path": "contracts/ZRM-SC-002.md",
+      "bytes": 4948,
+      "sha256": "7167a1761abda0bc9b460ab53126fe5854f9e5081ea2c26d1d65793e7c7cdda9"
+    },
+    {
+      "path": "contracts/ZRM-SC-003.md",
+      "bytes": 4432,
+      "sha256": "b0bb49e33cdf1950b8cad8d1e035a36d46154e2edce20d085a2f5f1aa4755945"
+    },
+    {
+      "path": "contracts/ZRM-SC-004.md",
+      "bytes": 4394,
+      "sha256": "a0aa9d2427f48d1c477fcda8a5fc393502f4e15c41ca1fd960aded067962d27b"
+    },
+    {
+      "path": "contracts/ZRM-SC-005.md",
+      "bytes": 3668,
+      "sha256": "5268c2992fc9f90be365ce37d404cf34e9c35493b6c1dd7fa53ce1fdd2aae626"
+    },
+    {
+      "path": "contracts/ZRM-SC-006.md",
+      "bytes": 5113,
+      "sha256": "52dc5707bf0eda8e21b66b54211eb61f975e93d786909eb42bb690eed5a2912d"
+    },
+    {
+      "path": "contracts/ZRM-SC-007.md",
+      "bytes": 4537,
+      "sha256": "05e449bebb6390ed9926c0a18f60af691be45ffb149f2b4e34332476b69c824a"
+    },
+    {
+      "path": "contracts/ZRM-SC-008.md",
+      "bytes": 4166,
+      "sha256": "c05e2d7d88b522fb0b8461733abb9c12aac2c7e90011b4cc68295b107950ae9e"
+    },
+    {
+      "path": "contracts/ZRM-SC-009.md",
+      "bytes": 3969,
+      "sha256": "37fe3965299303f8a12516852b804cd5c33feb6d4f75891416bb5ee8e647298b"
+    },
+    {
+      "path": "contracts/ZRM-SC-010.md",
+      "bytes": 4435,
+      "sha256": "9a1440788e762e8a3913ea3db97bfee623ada4091f26c8882e99e8013f283fd9"
+    },
+    {
+      "path": "contracts/ZRM-SC-011.md",
+      "bytes": 4729,
+      "sha256": "56329c0087465d924e6c5c0a637c4c70f33285f3fb3db89295a06b1b535ea42c"
+    },
+    {
+      "path": "contracts/ZRM-SC-012.md",
+      "bytes": 4655,
+      "sha256": "3874501009dfdf773a7b58d5489039f92b06c26d395afc234e2bd5c705f1cdb9"
+    },
+    {
+      "path": "contracts/ZRM-SC-013.md",
+      "bytes": 6833,
+      "sha256": "b451d6233c97b02ec54e4a7d68b70cf26026bb39764f30b476e1637593355938"
     },
     {
       "path": "templates/ADR_TEMPLATE.md",
@@ -79,13 +149,23 @@
     },
     {
       "path": "templates/PR_TEMPLATE.md",
-      "bytes": 1777,
-      "sha256": "7d1b0d8863c114ddbca846a80aa860ed61abc5202d379123d885342a2332cd1d"
+      "bytes": 3489,
+      "sha256": "26f532a6e64d7438a79b20aef5919c5e0bea7fb8f768c03e1419e8f8679adf0f"
     },
     {
       "path": "templates/RFC_TEMPLATE.md",
       "bytes": 2625,
       "sha256": "276dfce2fdea4c3a04eb3c867c49153e8c1fde74baa3b719f793f850362dc6bc"
+    },
+    {
+      "path": "templates/SEMANTIC_CONTRACT_TEMPLATE.md",
+      "bytes": 4606,
+      "sha256": "2f1ecc68a00bb227a09269b7eb2494f37bdad3ea20701c6302eb55389b263601"
+    },
+    {
+      "path": "templates/SEMANTIC_REVIEW_PACKET_TEMPLATE.md",
+      "bytes": 5944,
+      "sha256": "2fd164f6140724c24a61134448de2d2dcea91e0773449b85a29edcd9087fa546"
     }
   ],
   "non_claims": [
@@ -94,6 +174,7 @@
     "no final policy-valid ResourceV1; zero-quantity marker permission is not expressible by the current policy schema",
     "no canonical policy bytes, policy hashes, authenticated policy activation, or trusted validation context",
     "no complete policy migration or rollback design",
+    "semantic contracts are derived review oracles and do not constitute implementation, verification, audit, or production evidence",
     "no security audit",
     "no production authority",
     "no privacy or physical-resource truth claim"
