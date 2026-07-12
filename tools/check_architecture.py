@@ -5,11 +5,17 @@ from __future__ import annotations
 import hashlib
 import json
 import os
+import posixpath
 import re
 import subprocess
 import sys
 from collections import Counter
-from pathlib import Path
+from pathlib import Path, PurePosixPath
+
+try:
+    from .rust_complexity import ComplexityError, strip_rust_comments, strip_rust_non_code
+except ImportError:  # pragma: no cover - direct script execution
+    from rust_complexity import ComplexityError, strip_rust_comments, strip_rust_non_code
 
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -61,6 +67,14 @@ ALLOWED_AUTHORITY_CFG_EXPRESSIONS = {
     "fuzzing",
     "any(test,kani)",
     "any(test,kani,fuzzing)",
+}
+ALLOWED_POLICY_PATH_ATTRIBUTES = {
+    "crates/zrm-policy/src/cost.rs": {
+        "cost/tests.rs",
+        "cost/fuzz_assertions.rs",
+        "cost/kani_harnesses.rs",
+    },
+    "crates/zrm-policy/src/verifier.rs": {"verifier/tests.rs"},
 }
 
 PUBLIC_FUNCTION_ALLOWLIST = {
@@ -318,16 +332,20 @@ def authority_cfg_failures(path: str, source: str) -> list[str]:
     """Reject build-profile escapes that compiler rustdoc cannot inventory."""
 
     failures: list[str] = []
-    cfg_pattern = re.compile(r"#\s*\[\s*cfg\s*\(([^\]]*)\)\s*\]", re.DOTALL)
-    for expression in cfg_pattern.findall(source):
+    try:
+        structural_source = strip_rust_non_code(source)
+    except ComplexityError as error:
+        return [f"{path} cannot be lexed for conditional compilation: {error}"]
+    cfg_pattern = re.compile(r"#\s*!?\s*\[\s*cfg\s*\(([^\]]*)\)\s*\]", re.DOTALL)
+    for expression in cfg_pattern.findall(structural_source):
         normalized = re.sub(r"\s+", "", expression)
         if normalized not in ALLOWED_AUTHORITY_CFG_EXPRESSIONS:
             failures.append(
                 f"{path} uses unreviewed conditional-compilation profile {normalized}"
             )
-    if re.search(r"#\s*\[\s*cfg_attr\s*\(", source) is not None:
+    if re.search(r"#\s*!?\s*\[\s*cfg_attr\s*\(", structural_source) is not None:
         failures.append(f"{path} uses unreviewed cfg_attr conditional compilation")
-    if re.search(r"\binclude\s*!\s*\(", source) is not None:
+    if re.search(r"\binclude\s*!\s*\(", structural_source) is not None:
         failures.append(f"{path} uses unreviewed source inclusion")
     return failures
 
@@ -464,11 +482,16 @@ def authority_api_failures(root: Path) -> list[str]:
     """Read policy sources and enforce the fail-closed public API quarantine."""
 
     sources = {path: (root / path).read_text(encoding="utf-8") for path in AUTHORITY_SOURCE_PATHS}
-    policy_sources = {
-        path.relative_to(root).as_posix(): path.read_text(encoding="utf-8")
-        for path in sorted((root / "crates/zrm-policy/src").rglob("*.rs"))
-    }
+    policy_sources: dict[str, str] = {}
+    filesystem_failures: list[str] = []
+    for path in sorted((root / "crates/zrm-policy/src").rglob("*.rs")):
+        relative = path.relative_to(root).as_posix()
+        if path.is_symlink() or not path.is_file():
+            filesystem_failures.append(f"{relative} is not a regular policy source")
+            continue
+        policy_sources[relative] = path.read_text(encoding="utf-8")
     failures = public_authority_api_failures(sources)
+    failures.extend(filesystem_failures)
     failures.extend(policy_source_cfg_failures(policy_sources))
     return failures
 
@@ -479,6 +502,46 @@ def policy_source_cfg_failures(sources: dict[str, str]) -> list[str]:
     failures: list[str] = []
     for path, source in sources.items():
         failures.extend(authority_cfg_failures(path, source))
+        failures.extend(policy_path_attribute_failures(path, source, sources))
+    return failures
+
+
+def policy_path_attribute_failures(
+    path: str,
+    source: str,
+    sources: dict[str, str],
+) -> list[str]:
+    """Require exact in-tree targets for every policy `path` attribute."""
+
+    try:
+        structural_source = strip_rust_non_code(source)
+    except ComplexityError as error:
+        return [f"{path} cannot be lexed for path attributes: {error}"]
+    pattern = re.compile(r"#\s*!?\s*\[\s*path\b[^\]]*\]", re.DOTALL)
+    targets: list[str] = []
+    for match in pattern.finditer(structural_source):
+        attribute = source[match.start() : match.end()]
+        try:
+            attribute = strip_rust_comments(attribute)
+        except ComplexityError as error:
+            return [f"{path} has an invalid path attribute: {error}"]
+        parsed = re.fullmatch(
+            r'#\s*!?\s*\[\s*path\s*=\s*"([^"\r\n]+)"\s*\]',
+            attribute,
+            re.DOTALL,
+        )
+        if parsed is None:
+            return [f"{path} has an unreviewable path attribute"]
+        targets.append(parsed.group(1))
+
+    expected = Counter(ALLOWED_POLICY_PATH_ATTRIBUTES.get(path, set()))
+    actual = Counter(targets)
+    failures = exact_surface_failures(path, "path attributes", actual, expected)
+    source_directory = PurePosixPath(path).parent
+    for target in targets:
+        normalized = posixpath.normpath(str(source_directory / target))
+        if not normalized.startswith("crates/zrm-policy/src/") or normalized not in sources:
+            failures.append(f"{path} path target {target!r} is outside the scanned policy source set")
     return failures
 
 

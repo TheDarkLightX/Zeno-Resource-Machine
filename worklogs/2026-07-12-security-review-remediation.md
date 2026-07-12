@@ -153,8 +153,10 @@ misread as an authority-bearing result.
   package API under default and `cfg(fuzzing)` profiles without host paths.
   Conditional compilation across every policy source is restricted to reviewed
   test, Kani, and fuzz profiles. Counterexamples cover renamed, async, extern,
-  wrong-owner, function-pointer, `cfg(not(doc))`, nested-module, and
-  value-returning fuzz escapes.
+  wrong-owner, function-pointer, outer/inner/comment-obfuscated `cfg(not(doc))`,
+  `cfg_attr`, nested-module, unreviewed `path`-module, and value-returning fuzz
+  escapes. Reviewed `path` attributes resolve only to regular files within the
+  complete scanned policy source tree.
 - The canonical codec owns private resource-ID hashing. Hash frame widths are
   checked from the actual encoded bytes and actual domain length rather than
   duplicated wire-size constants.
@@ -311,7 +313,7 @@ No production input limit or asymptotic bound changes.
 | `cargo test --workspace --all-targets --locked` | PASS, 111 tests | local working-tree replay |
 | `cargo test --workspace --doc --locked` | PASS, 5 compile-fail doctests | local working-tree replay |
 | strict workspace Clippy and rustfmt | PASS, zero denied warnings | local working-tree replay |
-| `python3 -m unittest discover -s tools/tests -v` | PASS, 93 tests | tooling regressions |
+| `python3 -m unittest discover -s tools/tests -v` | PASS, 95 tests | tooling regressions |
 | reference-model discovery | PASS, 45 tests | frozen and proposed oracles |
 | architecture, complexity, code-quality | PASS; exact allowlist; zero advisories; `excellent-candidate` | generated local reports |
 | configured branch coverage | PASS; workspace 99.14%/100%, policy 99.86%/100%, kernel 100%/100% | `target/llvm-cov-branch.json` |

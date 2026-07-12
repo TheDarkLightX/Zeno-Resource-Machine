@@ -122,7 +122,10 @@ projection independently binds the complete `zrm-policy` public API under both
 default and `cfg(fuzzing)` profiles without binding checkout or Cargo-home
 paths. Conditional compilation across every `zrm-policy` source is limited to
 the reviewed `test`, `kani`, and `fuzzing` profiles so `cfg(doc)` cannot hide a
-default-build API from rustdoc. Digest updates require Class E review.
+default-build API from rustdoc. This scan handles outer and inner attributes and
+Rust comments. Policy `path` attributes are exact-allowlisted and must resolve
+to regular files inside the complete scanned policy source tree. Digest updates
+require Class E review.
 
 The future governed interface must have this shape:
 

@@ -324,6 +324,36 @@ impl VerifierCostRowV1 {
         failures = policy_source_cfg_failures(sources)
         self.assertTrue(any("conditional-compilation" in failure for failure in failures))
 
+    def test_inner_and_comment_obfuscated_doc_cfg_are_rejected(self) -> None:
+        """Rust lexical variants cannot hide default-build public methods."""
+
+        for source in (
+            "mod escape { #![cfg(not(doc))] impl ResourceKindPolicyV1 { "
+            "pub fn calculate_candidate_cost(&self) -> u64 { 0 } } }",
+            "#[cfg/*comment*/(not(doc))] impl ResourceKindPolicyV1 { "
+            "pub fn calculate_candidate_cost(&self) -> u64 { 0 } }",
+            "mod escape { #![cfg_attr(doc, cfg(any()))] "
+            "impl ResourceKindPolicyV1 { "
+            "pub fn calculate_candidate_cost(&self) -> u64 { 0 } } }",
+        ):
+            with self.subTest(source=source):
+                failures = policy_source_cfg_failures(
+                    {"crates/zrm-policy/src/resource_kind.rs": source}
+                )
+                self.assertTrue(any("conditional" in failure for failure in failures))
+
+    def test_unreviewed_policy_path_attribute_is_rejected(self) -> None:
+        """A module cannot escape the complete in-tree policy-source scan."""
+
+        sources = {
+            "crates/zrm-policy/src/resource_kind.rs": (
+                '#[path = "../../hidden.inc"] mod hidden;'
+            )
+        }
+        failures = policy_source_cfg_failures(sources)
+        self.assertTrue(any("path attributes" in failure for failure in failures))
+        self.assertTrue(any("outside the scanned" in failure for failure in failures))
+
     def test_public_function_pointer_constant_is_rejected(self) -> None:
         """A callable associated constant is part of the exact value inventory."""
 
