@@ -400,6 +400,23 @@ impl VerifierCostRowV1 {
         )
         self.assertTrue(any("shadow a reviewed macro" in failure for failure in aliased))
 
+        protected_root_aliases = (
+            "use zrm_types as std; std::format!();",
+            "use zrm_types as kani; kani::cover!();",
+            "use zrm_types::{self as std}; std::format!();",
+            "use zrm_types as r#std; std::format!();",
+            "use zrm_types::std; std::format!();",
+            "use zrm_types::{std}; std::format!();",
+        )
+        for source in protected_root_aliases:
+            with self.subTest(source=source):
+                failures = policy_source_cfg_failures(
+                    {"crates/zrm-policy/src/resource_kind.rs": source}
+                )
+                self.assertTrue(
+                    any("reviewed macro root" in failure for failure in failures)
+                )
+
     def test_linked_policy_source_root_rejects_before_source_reads(self) -> None:
         """The policy source root and repository ancestors must be regular."""
 

@@ -569,11 +569,20 @@ def policy_macro_invocation_failures(path: str, source: str) -> list[str]:
     ]
 
     protected_names = "assert|assert_eq|matches|write|format|cover"
+    protected_roots = "std|core|kani"
     for statement in re.findall(r"\b(?:pub\s+)?use\b[^;]*;", structural_source):
         if re.search(r"::\s*\*\s*;", statement):
             failures.append(f"{path} uses an unreviewed glob import")
         if re.search(rf"\b(?:as\s+)?(?:{protected_names})\b", statement):
             failures.append(f"{path} can shadow a reviewed macro name")
+        if re.search(rf"\bas\s+(?:r#)?(?:{protected_roots})\b", statement):
+            failures.append(f"{path} can alias a reviewed macro root")
+        if re.search(
+            rf"::\s*(?:r#)?(?:{protected_roots})\s*;", statement
+        ) or re.search(
+            rf"[{{,]\s*(?:r#)?(?:{protected_roots})\s*[,}}]", statement
+        ):
+            failures.append(f"{path} can import a reviewed macro root")
     if re.search(r"#\s*!?\s*\[\s*(?:r#)?macro_use\b", structural_source):
         failures.append(f"{path} uses unreviewed macro_use import")
     extern_crates = Counter(
