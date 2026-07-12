@@ -6,10 +6,13 @@ use zrm_types::{
     TrustedComputingBaseRoot, VerifierCostModelId, VerifierId, VerifierPolicyId,
 };
 
+#[cfg(any(test, kani, fuzzing))]
+use crate::CandidateVerifierCostQuoteRequestV1;
+#[cfg(any(test, kani))]
+use crate::{AdmissionPolicyV1, VerifierCompatibilityErrorV1};
 use crate::{
-    AdmissionPolicyV1, MachinePolicyV1, POLICY_SCHEMA_VERSION_V1, PolicyObjectV1,
-    PolicyValidationErrorV1, ValidityWindowV1, VerifierCompatibilityErrorV1,
-    VerifierCostQuoteRequestV1,
+    MachinePolicyV1, POLICY_SCHEMA_VERSION_V1, PolicyObjectV1, PolicyValidationErrorV1,
+    ValidityWindowV1,
 };
 
 /// Closed verifier proof-mode classification.
@@ -77,6 +80,20 @@ pub struct VerifierPolicyCandidateV1 {
 /// This type validates schema and interval shape only. It does not establish
 /// registry membership, release identity, revocation status, proof validity,
 /// or any verified-fact capability.
+/// Candidate-shape checks are deliberately unavailable through the default
+/// public API until governed verifier-policy identity and membership exist:
+///
+/// ```compile_fail
+/// use zrm_policy::MachinePolicyV1;
+///
+/// let _quarantined = MachinePolicyV1::check_untrusted_admission_candidate_shape;
+/// ```
+///
+/// ```compile_fail
+/// use zrm_policy::MachinePolicyV1;
+///
+/// let _quarantined = MachinePolicyV1::check_untrusted_verifier_candidate_shape;
+/// ```
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
 pub struct VerifierPolicyV1 {
     candidate: VerifierPolicyCandidateV1,
@@ -154,20 +171,28 @@ impl VerifierPolicyV1 {
     ///
     /// This does not compute a charge or invoke a verifier.
     #[must_use]
-    pub const fn cost_quote_request(
+    #[cfg(any(test, kani, fuzzing))]
+    pub(crate) const fn candidate_cost_quote_request(
         &self,
         artifact_len: u64,
         canonical_statement_len: u64,
-    ) -> VerifierCostQuoteRequestV1 {
-        VerifierCostQuoteRequestV1::from_policy(self, artifact_len, canonical_statement_len)
+    ) -> CandidateVerifierCostQuoteRequestV1 {
+        CandidateVerifierCostQuoteRequestV1::from_policy(
+            self,
+            artifact_len,
+            canonical_statement_len,
+        )
     }
 
     /// Creates the conservative admission-reservation request using maxima.
     ///
     /// The returned request remains inert and carries no admission authority.
     #[must_use]
-    pub const fn admission_reservation_quote_request(&self) -> VerifierCostQuoteRequestV1 {
-        self.cost_quote_request(
+    #[cfg(any(test, kani, fuzzing))]
+    pub(crate) const fn candidate_admission_reservation_request(
+        &self,
+    ) -> CandidateVerifierCostQuoteRequestV1 {
+        self.candidate_cost_quote_request(
             self.candidate.max_artifact_bytes,
             self.candidate.max_public_input_bytes,
         )
@@ -219,7 +244,8 @@ impl MachinePolicyV1 {
     /// # Errors
     ///
     /// Returns the first [`VerifierCompatibilityErrorV1`] in the order above.
-    pub fn validate_verifier_candidate_compatibility(
+    #[cfg(any(test, kani))]
+    pub(crate) fn check_untrusted_verifier_candidate_shape(
         &self,
         verifier: &VerifierPolicyV1,
         epoch_candidate: u64,
@@ -262,7 +288,8 @@ impl MachinePolicyV1 {
     ///
     /// Returns an admission-mode or policy-ID error first, followed by the
     /// generic structural compatibility errors.
-    pub fn validate_admission_verifier_candidate(
+    #[cfg(any(test, kani))]
+    pub(crate) fn check_untrusted_admission_candidate_shape(
         &self,
         verifier: &VerifierPolicyV1,
         epoch_candidate: u64,
@@ -278,6 +305,10 @@ impl MachinePolicyV1 {
             }
             AdmissionPolicyV1::RequiredVerifier(_) => {}
         }
-        self.validate_verifier_candidate_compatibility(verifier, epoch_candidate)
+        self.check_untrusted_verifier_candidate_shape(verifier, epoch_candidate)
     }
 }
+
+#[cfg(test)]
+#[path = "verifier/tests.rs"]
+mod tests;

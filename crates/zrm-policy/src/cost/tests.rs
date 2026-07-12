@@ -1,6 +1,7 @@
 use super::{
-    VERIFIER_COST_MODEL_SCHEMA_V1, VerifierCostErrorV1, VerifierCostModelCandidateV1,
-    VerifierCostModelV1, VerifierCostQuoteRequestV1, VerifierCostRowCandidateV1, VerifierCostRowV1,
+    CandidateVerifierCostQuoteRequestV1, VERIFIER_COST_MODEL_SCHEMA_V1, VerifierCostErrorV1,
+    VerifierCostModelCandidateV1, VerifierCostModelV1, VerifierCostRowCandidateV1,
+    VerifierCostRowV1,
 };
 use zrm_types::{BackendFamilyId, VerifierCostRowsRoot, ZeroValueError};
 
@@ -55,13 +56,13 @@ fn request(
     expected_backend_family_id: BackendFamilyId,
     lengths: [u64; 3],
     max_verifier_cost_units: u64,
-) -> VerifierCostQuoteRequestV1 {
+) -> CandidateVerifierCostQuoteRequestV1 {
     let [
         artifact_len,
         canonical_statement_len,
         reserved_output_byte_maximum,
     ] = lengths;
-    VerifierCostQuoteRequestV1::from_test_parts(
+    CandidateVerifierCostQuoteRequestV1::from_test_parts(
         expected_backend_family_id,
         [artifact_len, canonical_statement_len],
         [
@@ -110,15 +111,34 @@ fn charge_includes_each_of_the_four_terms() -> Result<(), TestError> {
     let charge_request = request(backend, [4, 5, 6], u64::MAX);
     for (row, expected) in cases {
         assert_eq!(
-            model.compute_quote(&row, &charge_request)?.units(),
+            model
+                .compute_untrusted_candidate_quote(&row, &charge_request)?
+                .units(),
             expected
         );
     }
     let all_terms = row(backend, [7, 3, 3, 3]);
     assert_eq!(
-        model.compute_quote(&all_terms, &charge_request)?.units(),
+        model
+            .compute_untrusted_candidate_quote(&all_terms, &charge_request)?
+            .units(),
         52
     );
+    Ok(())
+}
+
+#[test]
+fn inert_helper_exposes_the_caller_selected_zero_row_counterexample() -> Result<(), TestError> {
+    let backend = backend(1)?;
+    let unbound_zero_row = row(backend, [0; 4]);
+    let quote = model(u64::MAX)?.compute_untrusted_candidate_quote(
+        &unbound_zero_row,
+        &request(backend, [8, 13, 21], u64::MAX),
+    )?;
+
+    // This counterexample is retained only to prove why the arithmetic helper
+    // must remain quarantined until rows-root membership is implemented.
+    assert_eq!(quote.units(), 0);
     Ok(())
 }
 
@@ -139,13 +159,13 @@ fn backend_mismatch_precedes_byte_bounds_and_arithmetic() -> Result<(), TestErro
     let row_backend = backend(1)?;
     let expected_backend = backend(2)?;
     let row = row(row_backend, [u64::MAX; 4]);
-    let charge_request = VerifierCostQuoteRequestV1::from_test_parts(
+    let charge_request = CandidateVerifierCostQuoteRequestV1::from_test_parts(
         expected_backend,
         [u64::MAX, u64::MAX],
         [0, 0, u64::MAX, u64::MAX],
     );
     assert_eq!(
-        model(u64::MAX)?.compute_quote(&row, &charge_request),
+        model(u64::MAX)?.compute_untrusted_candidate_quote(&row, &charge_request),
         Err(VerifierCostErrorV1::BackendFamilyMismatch)
     );
     Ok(())
@@ -155,13 +175,13 @@ fn backend_mismatch_precedes_byte_bounds_and_arithmetic() -> Result<(), TestErro
 fn artifact_bound_precedes_statement_bound_and_arithmetic() -> Result<(), TestError> {
     let backend = backend(1)?;
     let row = row(backend, [u64::MAX; 4]);
-    let charge_request = VerifierCostQuoteRequestV1::from_test_parts(
+    let charge_request = CandidateVerifierCostQuoteRequestV1::from_test_parts(
         backend,
         [11, 11],
         [10, 10, u64::MAX, u64::MAX],
     );
     assert_eq!(
-        model(u64::MAX)?.compute_quote(&row, &charge_request),
+        model(u64::MAX)?.compute_untrusted_candidate_quote(&row, &charge_request),
         Err(VerifierCostErrorV1::ArtifactBytesExceeded)
     );
     Ok(())
@@ -171,13 +191,13 @@ fn artifact_bound_precedes_statement_bound_and_arithmetic() -> Result<(), TestEr
 fn public_input_bound_precedes_arithmetic() -> Result<(), TestError> {
     let backend = backend(1)?;
     let row = row(backend, [u64::MAX; 4]);
-    let charge_request = VerifierCostQuoteRequestV1::from_test_parts(
+    let charge_request = CandidateVerifierCostQuoteRequestV1::from_test_parts(
         backend,
         [10, 11],
         [10, 10, u64::MAX, u64::MAX],
     );
     assert_eq!(
-        model(u64::MAX)?.compute_quote(&row, &charge_request),
+        model(u64::MAX)?.compute_untrusted_candidate_quote(&row, &charge_request),
         Err(VerifierCostErrorV1::PublicInputBytesExceeded)
     );
     Ok(())
@@ -188,8 +208,13 @@ fn exact_byte_and_charge_limits_are_accepted() -> Result<(), TestError> {
     let backend = backend(1)?;
     let row = row(backend, [4, 1, 1, 1]);
     let charge_request =
-        VerifierCostQuoteRequestV1::from_test_parts(backend, [2, 3], [2, 3, 1, 10]);
-    assert_eq!(model(10)?.compute_quote(&row, &charge_request)?.units(), 10);
+        CandidateVerifierCostQuoteRequestV1::from_test_parts(backend, [2, 3], [2, 3, 1, 10]);
+    assert_eq!(
+        model(10)?
+            .compute_untrusted_candidate_quote(&row, &charge_request)?
+            .units(),
+        10
+    );
     Ok(())
 }
 
@@ -199,7 +224,19 @@ fn checked_sum_rejects_u128_overflow() -> Result<(), TestError> {
     let row = row(backend, [u64::MAX; 4]);
     let charge_request = request(backend, [u64::MAX; 3], u64::MAX);
     assert_eq!(
-        model(u64::MAX)?.compute_quote(&row, &charge_request),
+        model(u64::MAX)?.compute_untrusted_candidate_quote(&row, &charge_request),
+        Err(VerifierCostErrorV1::ArithmeticOverflow)
+    );
+    Ok(())
+}
+
+#[test]
+fn final_reserved_output_addition_rejects_u128_overflow() -> Result<(), TestError> {
+    let backend = backend(1)?;
+    let row = row(backend, [0, u64::MAX, 0, 3]);
+    let charge_request = request(backend, [u64::MAX, 0, u64::MAX], u64::MAX);
+    assert_eq!(
+        model(u64::MAX)?.compute_untrusted_candidate_quote(&row, &charge_request),
         Err(VerifierCostErrorV1::ArithmeticOverflow)
     );
     Ok(())
@@ -211,7 +248,7 @@ fn charge_must_fit_u64() -> Result<(), TestError> {
     let row = row(backend, [1, 1, 0, 0]);
     let charge_request = request(backend, [u64::MAX, 0, 0], u64::MAX);
     assert_eq!(
-        model(u64::MAX)?.compute_quote(&row, &charge_request),
+        model(u64::MAX)?.compute_untrusted_candidate_quote(&row, &charge_request),
         Err(VerifierCostErrorV1::ChargeDoesNotFitU64)
     );
     Ok(())
@@ -223,7 +260,7 @@ fn model_charge_cap_is_enforced_before_verifier_cap() -> Result<(), TestError> {
     let row = row(backend, [10, 0, 0, 0]);
     let charge_request = request(backend, [0, 0, 0], 8);
     assert_eq!(
-        model(9)?.compute_quote(&row, &charge_request),
+        model(9)?.compute_untrusted_candidate_quote(&row, &charge_request),
         Err(VerifierCostErrorV1::ModelChargeLimitExceeded)
     );
     Ok(())
@@ -235,7 +272,7 @@ fn verifier_policy_charge_cap_is_enforced() -> Result<(), TestError> {
     let row = row(backend, [10, 0, 0, 0]);
     let charge_request = request(backend, [0, 0, 0], 9);
     assert_eq!(
-        model(10)?.compute_quote(&row, &charge_request),
+        model(10)?.compute_untrusted_candidate_quote(&row, &charge_request),
         Err(VerifierCostErrorV1::VerifierChargeLimitExceeded)
     );
     Ok(())
@@ -247,16 +284,16 @@ fn charge_is_monotone_in_every_billed_length() -> Result<(), TestError> {
     let row = row(backend, [7, 3, 5, 11]);
     let model = model(u64::MAX)?;
     let baseline = model
-        .compute_quote(&row, &request(backend, [4, 5, 6], u64::MAX))?
+        .compute_untrusted_candidate_quote(&row, &request(backend, [4, 5, 6], u64::MAX))?
         .units();
     let artifact_increased = model
-        .compute_quote(&row, &request(backend, [5, 5, 6], u64::MAX))?
+        .compute_untrusted_candidate_quote(&row, &request(backend, [5, 5, 6], u64::MAX))?
         .units();
     let statement_increased = model
-        .compute_quote(&row, &request(backend, [4, 6, 6], u64::MAX))?
+        .compute_untrusted_candidate_quote(&row, &request(backend, [4, 6, 6], u64::MAX))?
         .units();
     let output_increased = model
-        .compute_quote(&row, &request(backend, [4, 5, 7], u64::MAX))?
+        .compute_untrusted_candidate_quote(&row, &request(backend, [4, 5, 7], u64::MAX))?
         .units();
     assert!(artifact_increased >= baseline);
     assert!(statement_increased >= baseline);
@@ -273,16 +310,20 @@ fn reservation_dominates_every_sampled_bounded_actual_charge() -> Result<(), Tes
     let statement_max = 80;
     let output_max = 40;
     let reservation_request = request(backend, [artifact_max, statement_max, output_max], u64::MAX);
-    let reservation = model.compute_quote(&row, &reservation_request)?.units();
+    let reservation = model
+        .compute_untrusted_candidate_quote(&row, &reservation_request)?
+        .units();
 
     for artifact_len in [0, 1, artifact_max] {
         for canonical_statement_len in [0, 1, statement_max] {
-            let actual_request = VerifierCostQuoteRequestV1::from_test_parts(
+            let actual_request = CandidateVerifierCostQuoteRequestV1::from_test_parts(
                 backend,
                 [artifact_len, canonical_statement_len],
                 [artifact_max, statement_max, output_max, u64::MAX],
             );
-            let actual = model.compute_quote(&row, &actual_request)?.units();
+            let actual = model
+                .compute_untrusted_candidate_quote(&row, &actual_request)?
+                .units();
             assert!(actual <= reservation);
         }
     }

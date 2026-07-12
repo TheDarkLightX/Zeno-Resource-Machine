@@ -4,6 +4,7 @@ use libfuzzer_sys::fuzz_target;
 use zrm_policy::{
     ProofModeV1, VerifierCostErrorV1, VerifierCostModelCandidateV1, VerifierCostModelV1,
     VerifierCostRowCandidateV1, VerifierCostRowV1, VerifierPolicyCandidateV1, VerifierPolicyV1,
+    fuzz_candidate_quote_units, fuzz_candidate_reservation_units,
 };
 use zrm_types::{BackendFamilyId, VerifierCostRowsRoot};
 
@@ -125,9 +126,18 @@ fuzz_target!(|data: &[u8]| {
     };
 
     // Keep raw lengths for explicit bound-reject coverage and precedence.
-    let raw_request = policy.cost_quote_request(artifact_candidate, statement_candidate);
-    let first = model.compute_quote(&row, &raw_request);
-    let second = model.compute_quote(&row, &raw_request);
+    let first = fuzz_candidate_quote_units(
+        &model,
+        &row,
+        &policy,
+        [artifact_candidate, statement_candidate],
+    );
+    let second = fuzz_candidate_quote_units(
+        &model,
+        &row,
+        &policy,
+        [artifact_candidate, statement_candidate],
+    );
     assert_eq!(first, second);
     if artifact_candidate > artifact_max {
         assert_eq!(first, Err(VerifierCostErrorV1::ArtifactBytesExceeded));
@@ -136,16 +146,19 @@ fuzz_target!(|data: &[u8]| {
     }
 
     // Compare a bounded actual quote with the policy-maximal reservation quote.
-    let bounded_request = policy.cost_quote_request(
-        artifact_candidate.min(artifact_max),
-        statement_candidate.min(statement_max),
+    let bounded = fuzz_candidate_quote_units(
+        &model,
+        &row,
+        &policy,
+        [
+            artifact_candidate.min(artifact_max),
+            statement_candidate.min(statement_max),
+        ],
     );
-    let reservation_request = policy.admission_reservation_quote_request();
-    let bounded = model.compute_quote(&row, &bounded_request);
-    let reservation = model.compute_quote(&row, &reservation_request);
+    let reservation = fuzz_candidate_reservation_units(&model, &row, &policy);
     if let (Ok(actual), Ok(reserved)) = (bounded, reservation) {
-        assert!(actual.units() <= reserved.units());
-        assert!(actual.units() <= model_cap);
-        assert!(actual.units() <= verifier_cap);
+        assert!(actual <= reserved);
+        assert!(actual <= model_cap);
+        assert!(actual <= verifier_cap);
     }
 });

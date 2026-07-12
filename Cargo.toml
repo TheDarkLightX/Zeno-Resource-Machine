@@ -28,7 +28,7 @@ zrm-types = { version = "0.1.0", path = "crates/zrm-types" }
 missing_docs = "deny"
 unsafe_code = "forbid"
 unused_must_use = "deny"
-unexpected_cfgs = { level = "warn", check-cfg = ["cfg(kani)"] }
+unexpected_cfgs = { level = "warn", check-cfg = ["cfg(fuzzing)", "cfg(kani)"] }
 
 [workspace.lints.clippy]
 all = { level = "deny", priority = -1 }

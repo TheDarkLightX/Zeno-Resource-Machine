@@ -1,6 +1,7 @@
 use super::{
-    VERIFIER_COST_MODEL_SCHEMA_V1, VerifierCostModelCandidateV1, VerifierCostModelV1,
-    VerifierCostQuoteRequestV1, VerifierCostRowCandidateV1, VerifierCostRowV1,
+    CandidateVerifierCostQuoteRequestV1, VERIFIER_COST_MODEL_SCHEMA_V1,
+    VerifierCostModelCandidateV1, VerifierCostModelV1, VerifierCostRowCandidateV1,
+    VerifierCostRowV1,
 };
 use zrm_types::{BackendFamilyId, VerifierCostRowsRoot};
 
@@ -33,8 +34,8 @@ fn request(
     backend_family_id: BackendFamilyId,
     lengths: [u64; 2],
     policy_bounds: [u64; 4],
-) -> VerifierCostQuoteRequestV1 {
-    VerifierCostQuoteRequestV1::from_test_parts(backend_family_id, lengths, policy_bounds)
+) -> CandidateVerifierCostQuoteRequestV1 {
+    CandidateVerifierCostQuoteRequestV1::from_test_parts(backend_family_id, lengths, policy_bounds)
 }
 
 #[kani::proof]
@@ -46,7 +47,7 @@ fn successful_charge_obeys_both_caps() {
     let row = standard_row(backend);
     let artifact_len = u64::from(kani::any::<u8>());
     let statement_len = u64::from(kani::any::<u8>());
-    let quote = model.compute_quote(
+    let quote = model.compute_untrusted_candidate_quote(
         &row,
         &request(
             backend,
@@ -84,7 +85,7 @@ fn reservation_dominates_bounded_actual_charge() {
         u64::MAX,
     ];
     let reservation = model
-        .compute_quote(
+        .compute_untrusted_candidate_quote(
             &row,
             &request(
                 backend,
@@ -94,7 +95,7 @@ fn reservation_dominates_bounded_actual_charge() {
         )
         .expect("bounded reservation fixture has no failing quote path");
     let actual = model
-        .compute_quote(
+        .compute_untrusted_candidate_quote(
             &row,
             &request(
                 backend,

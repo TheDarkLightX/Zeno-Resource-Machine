@@ -186,9 +186,10 @@ impl fmt::Display for ResourceDimensionErrorV1 {
     }
 }
 
-/// Failure while checking structural compatibility of machine and verifier policies.
+/// Internal failure while checking untrusted machine/verifier candidate shape.
+#[cfg(any(test, kani))]
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
-pub enum VerifierCompatibilityErrorV1 {
+pub(crate) enum VerifierCompatibilityErrorV1 {
     /// Local-kernel admission forbids an admission verifier candidate.
     AdmissionVerifierForbidden,
     /// A required admission verifier carries a different policy identifier.
@@ -209,6 +210,7 @@ pub enum VerifierCompatibilityErrorV1 {
     VerifierCostLimitExceedsMachine,
 }
 
+#[cfg(any(test, kani))]
 impl fmt::Display for VerifierCompatibilityErrorV1 {
     fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
         formatter.write_str(match self {

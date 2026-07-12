@@ -21,12 +21,9 @@ mod window;
 pub use context::{ValidationContextCandidateV1, ValidationContextV1};
 pub use cost::{
     VerifierCostErrorV1, VerifierCostModelCandidateV1, VerifierCostModelV1,
-    VerifierCostQuoteRequestV1, VerifierCostQuoteV1, VerifierCostRowCandidateV1, VerifierCostRowV1,
+    VerifierCostRowCandidateV1, VerifierCostRowV1,
 };
-pub use error::{
-    LimitFieldV1, PolicyObjectV1, PolicyValidationErrorV1, ResourceDimensionErrorV1,
-    VerifierCompatibilityErrorV1,
-};
+pub use error::{LimitFieldV1, PolicyObjectV1, PolicyValidationErrorV1, ResourceDimensionErrorV1};
 pub use limits::{PolicyLimitsCandidateV1, PolicyLimitsV1};
 pub use machine::{AdmissionModeV1, AdmissionPolicyV1, MachinePolicyCandidateV1, MachinePolicyV1};
 pub use resource_kind::{
@@ -35,6 +32,15 @@ pub use resource_kind::{
 };
 pub use verifier::{ProofModeV1, VerifierPolicyCandidateV1, VerifierPolicyV1};
 pub use window::ValidityWindowV1;
+
+#[cfg(any(test, kani, fuzzing))]
+pub(crate) use cost::CandidateVerifierCostQuoteRequestV1;
+#[cfg(any(test, kani))]
+pub(crate) use error::VerifierCompatibilityErrorV1;
+
+#[cfg(fuzzing)]
+#[doc(hidden)]
+pub use cost::{fuzz_candidate_quote_units, fuzz_candidate_reservation_units};
 
 /// Supported logical policy schema version.
 pub const POLICY_SCHEMA_VERSION_V1: u16 = 1;

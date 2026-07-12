@@ -5,7 +5,7 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
-from tools.check_architecture import dependency_failures
+from tools.check_architecture import dependency_failures, public_authority_api_failures
 from tools.check_conformance import (
     ConformanceError,
     github_anchor,
@@ -184,6 +184,37 @@ class ArchitecturePolicyTests(unittest.TestCase):
             "dependencies": [{"name": "sha2"}, {"name": "zrm-types"}],
         }
         self.assertEqual(dependency_failures(package), [])
+
+    def test_crate_private_candidate_helpers_are_accepted(self) -> None:
+        """Internal arithmetic and shape helpers remain available for assurance."""
+
+        sources = {
+            "cost.rs": "pub(crate) fn compute_untrusted_candidate_quote() {}",
+            "error.rs": "pub(crate) enum VerifierCompatibilityErrorV1 {}",
+            "lib.rs": "pub(crate) use cost::CandidateVerifierCostQuoteV1;",
+            "verifier.rs": "pub(crate) fn check_untrusted_admission_candidate_shape() {}",
+        }
+        self.assertEqual(public_authority_api_failures(sources), [])
+
+    def test_public_candidate_authority_methods_are_rejected(self) -> None:
+        """Default public APIs cannot quote or return admission-like success."""
+
+        sources = {
+            "cost.rs": "pub fn compute_quote() {}",
+            "verifier.rs": "pub fn validate_admission_verifier_candidate() {}",
+        }
+        failures = public_authority_api_failures(sources)
+        self.assertEqual(len(failures), 2)
+
+    def test_public_quote_types_and_reexports_are_rejected(self) -> None:
+        """Opaque candidate quote values cannot escape through the crate root."""
+
+        sources = {
+            "cost.rs": "pub struct VerifierCostQuoteV1;",
+            "lib.rs": "pub use cost::VerifierCostQuoteRequestV1;",
+        }
+        failures = public_authority_api_failures(sources)
+        self.assertEqual(len(failures), 2)
 
 
 if __name__ == "__main__":
