@@ -1,0 +1,453 @@
+{
+  "schema": "zrm/proposed-reference-counterexample-set/v1",
+  "proposal": "RFC-0002",
+  "normative_status": "non-normative unless RFC-0002 is accepted through governed review",
+  "oracle": "resource_kind_policy_v1_rfc0002_proposed",
+  "scope": "Proposed ResourceKindPolicyV1 construction and local resource unit/quantity decisions",
+  "source_basis": [
+    "Maintainer-supplied RFC-0002 semantic amendment",
+    "Frozen prior-specification oracle at commit 5ea0c1b104b40e93f3896edf0d4e095d0a9de1c7",
+    "Repository fail-closed, honest-claims, checked-arithmetic, and differential-reference requirements"
+  ],
+  "assumptions": [
+    "RFC-0002 is proposed input to this model and has not been accepted by this artifact.",
+    "V1 has no zero-marker permission and every policy-bound resource quantity is positive.",
+    "LifecycleNonFungible policy construction requires quantity_max exactly 1.",
+    "Non-lifecycle quantity_max 0 remains a constructible empty policy candidate.",
+    "Host width checks are representation-boundary guards outside the supplied relative semantic precedence."
+  ],
+  "remaining_ambiguities": [
+    {
+      "id": "RKP-RFC0002-AMB-001",
+      "statement": "The proposal does not provide migration or predecessor-policy treatment for lifecycle maxima other than 1.",
+      "required_resolution": "RFC-0002 acceptance must state whether and how existing policy identities remain readable, consumable, or migratable."
+    },
+    {
+      "id": "RKP-RFC0002-AMB-002",
+      "statement": "The supplied reason precedence has no stable protocol reject-code assignment.",
+      "required_resolution": "Freeze codes and full boundary-versus-semantic precedence before claiming cross-language reject parity."
+    },
+    {
+      "id": "RKP-RFC0002-AMB-003",
+      "statement": "EvidenceOnly remains unable to express zero marker permission or prove a nonfungible application interpretation.",
+      "required_resolution": "Keep quantities positive in v1 and define any marker or evidence-semantics extension in a versioned future schema."
+    },
+    {
+      "id": "RKP-RFC0002-AMB-004",
+      "statement": "The proposal does not decide whether changing draft-v1 construction in place is compatible with future canonical bytes.",
+      "required_resolution": "RFC-0002 must select an in-place draft clarification or a schema/version transition before a policy codec is frozen."
+    }
+  ],
+  "findings": [
+    {
+      "id": "RKP-RFC0002-CE-001",
+      "title": "Lifecycle maximum zero is removed from policy construction",
+      "boundary": "Proposed ResourceKindPolicyV1 construction",
+      "attacker_capabilities": [
+        "Submit an inert lifecycle policy candidate with a chosen maximum"
+      ],
+      "preconditions": [
+        "Schema and validity window are valid",
+        "Accounting mode is LifecycleNonFungible",
+        "quantity_max is 0"
+      ],
+      "invariant": "Under the proposal, every constructed LifecycleNonFungible policy has quantity_max exactly 1.",
+      "minimal_counterexample": {
+        "operation": "decide_rfc0002_policy_construction",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "LifecycleNonFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 0,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        }
+      },
+      "baseline_result": {
+        "decision": "accept",
+        "reason": "policy_shape_accepted"
+      },
+      "expected_result": {
+        "decision": "reject",
+        "reason": "lifecycle_policy_maximum_must_equal_one"
+      },
+      "formal_or_property_obligation": "Proposed lifecycle policy acceptance implies quantity_max == 1.",
+      "residual_risk": "This is a compatibility-breaking acceptance-set removal if prior lifecycle policy candidates have durable identity."
+    },
+    {
+      "id": "RKP-RFC0002-CE-002",
+      "title": "Lifecycle maximum above one is removed from policy construction",
+      "boundary": "Proposed ResourceKindPolicyV1 construction",
+      "attacker_capabilities": [
+        "Submit an inert lifecycle policy candidate with an otherwise valid maximum"
+      ],
+      "preconditions": [
+        "Schema and validity window are valid",
+        "Accounting mode is LifecycleNonFungible",
+        "quantity_max is 2"
+      ],
+      "invariant": "Under the proposal, lifecycle construction rejects every maximum other than 1.",
+      "minimal_counterexample": {
+        "operation": "decide_rfc0002_policy_construction",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "LifecycleNonFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 2,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        }
+      },
+      "baseline_result": {
+        "decision": "accept",
+        "reason": "policy_shape_accepted"
+      },
+      "expected_result": {
+        "decision": "reject",
+        "reason": "lifecycle_policy_maximum_must_equal_one"
+      },
+      "formal_or_property_obligation": "For every typed u128 m, proposed lifecycle construction accepts exactly when m == 1, subject to earlier schema and validity acceptance.",
+      "residual_risk": "Migration and predecessor-policy handling remain undefined until RFC-0002 decides them."
+    },
+    {
+      "id": "RKP-RFC0002-CE-003",
+      "title": "Unsupported schema precedes validity and lifecycle maximum",
+      "boundary": "Proposed constructor semantic reason selection",
+      "attacker_capabilities": [
+        "Submit a candidate with multiple observable defects"
+      ],
+      "preconditions": [
+        "schema_version is 2",
+        "validity_start_epoch is 2 and validity_end_epoch is 1",
+        "LifecycleNonFungible quantity_max is 2"
+      ],
+      "invariant": "Constructor semantic precedence begins with supported schema.",
+      "minimal_counterexample": {
+        "operation": "decide_rfc0002_policy_construction",
+        "policy": {
+          "schema_version": 2,
+          "accounting_mode": "LifecycleNonFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 2,
+          "validity_start_epoch": 2,
+          "validity_end_epoch": 1
+        }
+      },
+      "baseline_result": {
+        "decision": "reject",
+        "reason": "unsupported_schema"
+      },
+      "expected_result": {
+        "decision": "reject",
+        "reason": "unsupported_schema"
+      },
+      "formal_or_property_obligation": "Any unsupported schema reports unsupported_schema regardless of later validity or lifecycle-maximum defects.",
+      "residual_risk": "Stable protocol codes remain unassigned."
+    },
+    {
+      "id": "RKP-RFC0002-CE-004",
+      "title": "Invalid validity window precedes lifecycle maximum",
+      "boundary": "Proposed constructor semantic reason selection",
+      "attacker_capabilities": [
+        "Submit a supported-schema candidate with multiple semantic defects"
+      ],
+      "preconditions": [
+        "schema_version is 1",
+        "validity_start_epoch is 2 and validity_end_epoch is 1",
+        "LifecycleNonFungible quantity_max is 2"
+      ],
+      "invariant": "After schema acceptance, validity-window failure precedes lifecycle-maximum failure.",
+      "minimal_counterexample": {
+        "operation": "decide_rfc0002_policy_construction",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "LifecycleNonFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 2,
+          "validity_start_epoch": 2,
+          "validity_end_epoch": 1
+        }
+      },
+      "baseline_result": {
+        "decision": "reject",
+        "reason": "invalid_validity_window"
+      },
+      "expected_result": {
+        "decision": "reject",
+        "reason": "invalid_validity_window"
+      },
+      "formal_or_property_obligation": "For supported typed candidates, an invalid validity window reports before lifecycle maximum inequality.",
+      "residual_risk": "Width-failure placement still requires a complete stable-code specification."
+    },
+    {
+      "id": "RKP-RFC0002-CE-005",
+      "title": "Non-lifecycle maximum zero remains constructible",
+      "boundary": "Proposed non-lifecycle policy construction",
+      "attacker_capabilities": [
+        "Submit an inert non-lifecycle policy candidate with maximum zero"
+      ],
+      "preconditions": [
+        "Schema and validity window are valid",
+        "Accounting mode is ConservedFungible",
+        "quantity_max is 0"
+      ],
+      "invariant": "RFC-0002 changes lifecycle construction only; non-lifecycle maximum zero remains an empty candidate.",
+      "minimal_counterexample": {
+        "operation": "decide_rfc0002_policy_construction",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "ConservedFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 0,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        }
+      },
+      "baseline_result": {
+        "decision": "accept",
+        "reason": "policy_shape_accepted"
+      },
+      "expected_result": {
+        "decision": "accept",
+        "reason": "policy_shape_accepted",
+        "non_claim": "an admitted resource may not exist"
+      },
+      "formal_or_property_obligation": "For every non-lifecycle mode, maximum zero remains constructible and admits no positive quantity.",
+      "residual_risk": "Authenticated activation and operational disablement meaning are outside this oracle."
+    },
+    {
+      "id": "RKP-RFC0002-CE-006",
+      "title": "Unit mismatch precedes lifecycle and zero failures",
+      "boundary": "Proposed resource semantic reason selection",
+      "attacker_capabilities": [
+        "Choose both a mismatched unit and an invalid lifecycle quantity"
+      ],
+      "preconditions": [
+        "The proposed lifecycle policy constructs with unit unit-u and maximum 1",
+        "The resource uses unit-v and quantity 0"
+      ],
+      "invariant": "Resource reason precedence begins with exact UnitId equality.",
+      "minimal_counterexample": {
+        "operation": "decide_rfc0002_resource_quantity",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "LifecycleNonFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 1,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        },
+        "resource": {
+          "unit_id": "unit-v",
+          "quantity_atoms": 0
+        }
+      },
+      "baseline_result": {
+        "decision": "reject",
+        "reason": "unit_mismatch"
+      },
+      "expected_result": {
+        "decision": "reject",
+        "reason": "unit_mismatch"
+      },
+      "formal_or_property_obligation": "A unit mismatch reports before lifecycle exact-one, zero, or maximum for a constructed typed policy.",
+      "residual_risk": "Conversions still require separately authorized transformation semantics."
+    },
+    {
+      "id": "RKP-RFC0002-CE-007",
+      "title": "Lifecycle exact-one precedes general zero",
+      "boundary": "Proposed lifecycle resource semantic reason selection",
+      "attacker_capabilities": [
+        "Submit zero quantity under a constructed lifecycle policy"
+      ],
+      "preconditions": [
+        "Policy and resource units match",
+        "Lifecycle policy maximum is 1",
+        "Resource quantity is 0"
+      ],
+      "invariant": "After unit equality, lifecycle exact-one reports before the general positive-quantity rule.",
+      "minimal_counterexample": {
+        "operation": "decide_rfc0002_resource_quantity",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "LifecycleNonFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 1,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        },
+        "resource": {
+          "unit_id": "unit-u",
+          "quantity_atoms": 0
+        }
+      },
+      "baseline_result": {
+        "decision": "reject",
+        "reason": "zero_quantity_requires_explicit_marker_permission"
+      },
+      "expected_result": {
+        "decision": "reject",
+        "reason": "lifecycle_quantity_must_equal_one"
+      },
+      "formal_or_property_obligation": "For a constructed lifecycle policy and matching unit, every quantity other than 1 reports lifecycle_quantity_must_equal_one.",
+      "residual_risk": "This is a reason-only change for quantity zero; stable code assignment remains pending."
+    },
+    {
+      "id": "RKP-RFC0002-CE-008",
+      "title": "Lifecycle exact-one precedes general maximum",
+      "boundary": "Proposed lifecycle resource semantic reason selection",
+      "attacker_capabilities": [
+        "Submit an over-maximum quantity under a constructed lifecycle policy"
+      ],
+      "preconditions": [
+        "Policy and resource units match",
+        "Lifecycle policy maximum is 1",
+        "Resource quantity is 2"
+      ],
+      "invariant": "After unit equality, lifecycle exact-one reports before the general maximum.",
+      "minimal_counterexample": {
+        "operation": "decide_rfc0002_resource_quantity",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "LifecycleNonFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 1,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        },
+        "resource": {
+          "unit_id": "unit-u",
+          "quantity_atoms": 2
+        }
+      },
+      "baseline_result": {
+        "decision": "reject",
+        "reason": "quantity_exceeds_maximum"
+      },
+      "expected_result": {
+        "decision": "reject",
+        "reason": "lifecycle_quantity_must_equal_one"
+      },
+      "formal_or_property_obligation": "For a constructed lifecycle policy and matching unit, maximum failure never masks exact-one failure.",
+      "residual_risk": "This is a reason-only change for quantity 2; stable code assignment remains pending."
+    },
+    {
+      "id": "RKP-RFC0002-CE-009",
+      "title": "EvidenceOnly still has no zero-marker permission",
+      "boundary": "Proposed EvidenceOnly resource quantity validation",
+      "attacker_capabilities": [
+        "Select EvidenceOnly and submit a zero-quantity resource"
+      ],
+      "preconditions": [
+        "EvidenceOnly policy maximum is 1",
+        "Policy and resource units match",
+        "Resource quantity is 0"
+      ],
+      "invariant": "Every v1 policy-bound resource quantity is positive because no marker permission exists.",
+      "minimal_counterexample": {
+        "operation": "decide_rfc0002_resource_quantity",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "EvidenceOnly",
+          "unit_id": "unit-u",
+          "quantity_max": 1,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        },
+        "resource": {
+          "unit_id": "unit-u",
+          "quantity_atoms": 0
+        }
+      },
+      "baseline_result": {
+        "decision": "reject",
+        "reason": "zero_quantity_requires_explicit_marker_permission"
+      },
+      "expected_result": {
+        "decision": "reject",
+        "reason": "zero_quantity_requires_explicit_marker_permission"
+      },
+      "formal_or_property_obligation": "For every proposed-constructible policy, resource acceptance implies quantity_atoms > 0.",
+      "residual_risk": "Positive EvidenceOnly quantity still cannot prove nonmonetary or nonfungible application meaning."
+    },
+    {
+      "id": "RKP-RFC0002-CE-010",
+      "title": "The resource acceptance delta follows lifecycle policy narrowing",
+      "boundary": "Differential composition of policy construction and resource validation",
+      "attacker_capabilities": [
+        "Submit a baseline-valid lifecycle policy candidate and resource"
+      ],
+      "preconditions": [
+        "Lifecycle policy maximum is 2",
+        "Policy and resource units match",
+        "Resource quantity is 1"
+      ],
+      "invariant": "RFC-0002 removes resource states whose lifecycle policy no longer constructs and adds no new accepted state.",
+      "minimal_counterexample": {
+        "operation": "decide_rfc0002_resource_quantity",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "LifecycleNonFungible",
+          "unit_id": "unit-u",
+          "quantity_max": 2,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        },
+        "resource": {
+          "unit_id": "unit-u",
+          "quantity_atoms": 1
+        }
+      },
+      "baseline_result": {
+        "decision": "accept",
+        "reason": "resource_quantity_accepted"
+      },
+      "expected_result": {
+        "decision": "reject",
+        "reason": "lifecycle_policy_maximum_must_equal_one"
+      },
+      "formal_or_property_obligation": "Across the bounded differential domain, the only removed resource acceptances are lifecycle maximum greater than 1 with quantity 1; no acceptance is added.",
+      "residual_risk": "The unbounded equivalence still requires proof or a reviewed refinement argument after RFC acceptance."
+    },
+    {
+      "id": "RKP-RFC0002-CE-011",
+      "title": "The non-lifecycle u128 maximum remains accepted exactly",
+      "boundary": "Proposed non-lifecycle quantity-width boundary",
+      "attacker_capabilities": [
+        "Submit the largest representable policy and resource quantity"
+      ],
+      "preconditions": [
+        "Transformable policy maximum is 2^128 - 1",
+        "Policy and resource units match",
+        "Resource quantity is 2^128 - 1"
+      ],
+      "invariant": "RFC-0002 introduces no narrowing or non-lifecycle maximum regression.",
+      "minimal_counterexample": {
+        "operation": "decide_rfc0002_resource_quantity",
+        "policy": {
+          "schema_version": 1,
+          "accounting_mode": "Transformable",
+          "unit_id": "unit-u",
+          "quantity_max": 340282366920938463463374607431768211455,
+          "validity_start_epoch": 0,
+          "validity_end_epoch": 18446744073709551615
+        },
+        "resource": {
+          "unit_id": "unit-u",
+          "quantity_atoms": 340282366920938463463374607431768211455
+        }
+      },
+      "baseline_result": {
+        "decision": "accept",
+        "reason": "resource_quantity_accepted"
+      },
+      "expected_result": {
+        "decision": "accept",
+        "reason": "resource_quantity_accepted",
+        "non_claim": "transformation coverage remains unestablished"
+      },
+      "formal_or_property_obligation": "Every non-lifecycle structural decision at u128::MAX matches the frozen baseline.",
+      "residual_risk": "Transition-level sums still require checked arithmetic and may overflow."
+    }
+  ]
+}
