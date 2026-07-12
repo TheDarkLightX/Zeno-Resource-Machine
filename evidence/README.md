@@ -14,3 +14,8 @@ tests, generated and manual mutation results, Miri, coverage, and explicit
 gaps. It remains local Class C candidate evidence. It grants no authenticated
 policy limit, verifier fact, dispatch, state, commit, merge, release, or
 production authority.
+
+`wp5-main-integration-2026-07-12.json` records the later merge onto the
+semantic-closure default-branch history. It proves ancestry and unchanged WP5
+source hashes and records combined-tree gates; it does not promote the prior
+coverage, mutation, or Miri results beyond their exact source revision.
