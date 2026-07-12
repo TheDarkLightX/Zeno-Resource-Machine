@@ -2,7 +2,10 @@
   "schema": "zrm/esso-intent-map/v1",
   "package_id": "zrm-semantic-closure-esso-v1",
   "status": "draft_design_oracle",
-  "source_rfc": "rfcs/RFC-0001-policy-context-fact-and-commit-authority.md",
+  "source_rfcs": [
+    "rfcs/RFC-0001-policy-context-fact-and-commit-authority.md",
+    "rfcs/RFC-0002-recursive-semantic-journal-composition.md"
+  ],
   "nodes": [
     {
       "id": "I-POLICY-CREATION-EXACT",
@@ -99,6 +102,22 @@
       "model": "zrm_atomic_commit_recovery_v1",
       "invariants": ["RecoveredPreIsCompletePreState", "RecoveredPostIsCompletePostState", "AcknowledgementRequiresDurablePostState"],
       "mutants": ["partial_durable_commit"]
+    },
+    {
+      "id": "I-RECURSIVE-ASSOCIATIVITY",
+      "text": "For one ordered, state-contiguous, descendant-disjoint journal sequence, every valid left- or right-associated fold derives the same semantic segment summary, while reordering remains non-equivalent.",
+      "contracts": ["ZRM-SC-006", "ZRM-SC-011"],
+      "rfc": "RFC-0002",
+      "model": "zrpf_semantic_composition_v1",
+      "invariants": [
+        "LoadedLeavesAreComposable",
+        "LeftABCorrect",
+        "LeftFinalCorrect",
+        "RightBCCorrect",
+        "RightFinalCorrect",
+        "SemanticCompositionAssociative"
+      ],
+      "mutants": ["recursive_fold_omits_middle_leaf"]
     }
   ],
   "edges": [
@@ -109,21 +128,23 @@
     {"from": "I-EXACT-ONCE-COMPLETE", "to": "I-RETRY-IDEMPOTENT", "kind": "requires"},
     {"from": "I-FACT-PRODUCTION-ONLY", "to": "I-FACT-BINDING-EXACT", "kind": "requires"},
     {"from": "I-FACT-LIFECYCLE-SEPARATION", "to": "I-ADMISSION-EXACT-DRAFT", "kind": "requires"},
-    {"from": "I-COMMIT-ATOMIC-DURABLE", "to": "I-CRASH-PRE-OR-POST", "kind": "requires"}
+    {"from": "I-COMMIT-ATOMIC-DURABLE", "to": "I-CRASH-PRE-OR-POST", "kind": "requires"},
+    {"from": "I-COMMIT-ATOMIC-DURABLE", "to": "I-RECURSIVE-ASSOCIATIVITY", "kind": "requires"},
+    {"from": "I-FACT-LIFECYCLE-SEPARATION", "to": "I-RECURSIVE-ASSOCIATIVITY", "kind": "requires"}
   ],
   "coverage_rule": "Every leaf intent must map to at least one semantic contract and at least one model invariant or an explicit unmodeled obligation.",
   "unmodeled_intents": [
     {
       "id": "I-OUTBOX-AT-LEAST-ONCE",
-      "reason": "External receiver behavior is outside the local ZRM finite machine; the RFC preserves an explicit at-least-once non-claim."
+      "reason": "External receiver behavior is outside the local ZRM finite machine; RFC-0001 preserves an explicit at-least-once non-claim."
     },
     {
       "id": "I-HARD-REVOCATION-RECOVERY",
       "reason": "Recovery and migration authority are intentionally deferred to a separate RFC rather than silently inferred."
     },
     {
-      "id": "I-RECURSIVE-ASSOCIATIVITY",
-      "reason": "Parameterized semantic journal composition belongs to a separate ZRPF/ZRM composition model and theorem package."
+      "id": "I-RECURSIVE-MESSAGES-CARRY-DA",
+      "reason": "RFC-0002 specifies message, carry, and DA obligations, but the first ESSO composition model covers only state continuity, counts, effects, descendant disjointness, and associative folding."
     }
   ]
 }
