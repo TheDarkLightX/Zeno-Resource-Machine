@@ -116,7 +116,8 @@
         "evidence/WP1_MUTATION_MAP.md",
         "evidence/wp1-local-gates-2026-07-10.json",
         "evidence/wp1-class-c-review-2026-07-11.json",
-        "worklogs/2026-07-11-wp3-intrinsic-resource.md"
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "retain exact draft-v1 vector compatibility and the reviewed syntactic-versus-semantic authority boundary in every later work package",
       "non_claim": "the frozen ResourceWireV1 and ResourceId binding now feed a policy-independent intrinsic resource stage; this does not create final policy-valid ResourceV1, authenticated policy, state membership, accepted transition, or commit authority",
@@ -166,7 +167,8 @@
         "evidence/wp1-local-gates-2026-07-10.json",
         "evidence/wp1-class-c-review-2026-07-11.json",
         "evidence/wp2-local-gates-2026-07-11.json",
-        "worklogs/2026-07-11-wp3-intrinsic-resource.md"
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "make IntrinsicResourceV1 obligatory for later resource-policy, role, transition, and state validation while preserving opaque construction and exact domain framing",
       "non_claim": "opaque primitives and WP3b intrinsic resource fields enforce local nonzero invariants only; caller-provided values remain unauthenticated and no final resource, policy, state, or transition authority follows",
@@ -668,7 +670,8 @@
         "worklogs/2026-07-11-wp2-policy-model.md",
         "evidence/wp2-local-gates-2026-07-11.json",
         "worklogs/2026-07-11-wp0-complexity-report.md",
-        "worklogs/2026-07-11-wp3-intrinsic-resource.md"
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "extend checked arithmetic and Kani evidence to complete dispatch-plan summation and WP6 accounting and transformation paths",
       "non_claim": "the evidence covers WP1 widths, exact WP3b u128 quantity and u64 epoch preservation, plus isolated WP2 policy ceilings and per-row verifier cost; no final quantity validity, complete dispatch plan, accounting arithmetic, or transformation engine exists",
@@ -1188,7 +1191,8 @@
         "worklogs/2026-07-10-wp0-wp1.md",
         "worklogs/2026-07-11-wp2-policy-model.md",
         "evidence/wp2-local-gates-2026-07-11.json",
-        "worklogs/2026-07-11-wp3-intrinsic-resource.md"
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "retain exact review of the five-crate graph and extend the allowlist only when a separately scoped core or adapter boundary is introduced",
       "non_claim": "the checker covers the current types, crypto, codec, policy, and kernel crates only; it does not validate future verifier, adapter, store, or runtime wiring",
@@ -1305,7 +1309,8 @@
         "evidence/wp2-local-gates-2026-07-11.json",
         "worklogs/2026-07-11-wp0-complexity-report.md",
         "worklogs/2026-07-11-wp0-code-quality-report.md",
-        "worklogs/2026-07-11-wp3-intrinsic-resource.md"
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "retain the excellent tier with zero quality findings or exception debt, replay the behavior-and-evidence packet in hosted CI, and add a reviewed compiler-AST lane before claiming cyclomatic or cognitive-complexity coverage",
       "non_claim": "the automated reports cover five lexical complexity metrics, sixteen structural quality rules, and completeness of five required design decisions; they do not expand macros, classify semantic criticality, compute cyclomatic or cognitive complexity, detect every diff-aware smell, or prove universal design-pattern optimality",
@@ -1354,7 +1359,9 @@
         "evidence/WP1_MUTATION_MAP.md",
         "evidence/WP2_POLICY_MUTATION_MAP.md",
         "evidence/wp2-local-gates-2026-07-11.json",
-        "worklogs/2026-07-11-wp3-intrinsic-resource.md"
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/WP3B_INTRINSIC_RESOURCE_MUTATION_MAP.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "retain zero missed critical mutants as resource, transition, accounting, state, registry, and commit guards are added",
       "non_claim": "the recorded mutation campaigns cover WP1, pre-RFC WP2, WP3a, and the policy-independent WP3b constructor; no complete transition kernel, authority registry, state, persistence, or commit guard exists",
@@ -1412,7 +1419,8 @@
         "worklogs/2026-07-10-wp0-wp1.md",
         "worklogs/2026-07-11-wp2-policy-model.md",
         "evidence/wp2-local-gates-2026-07-11.json",
-        "worklogs/2026-07-11-wp3-intrinsic-resource.md"
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "accumulate sustained fuzz duration, add canonical policy decoders only after the Class E ABI RFC, commit minimized failures, and add later proof-envelope grammars",
       "non_claim": "the campaigns cover the ResourceWireV1 decoder, isolated WP2 cost arithmetic, and the WP3b intrinsic constructor grammar; they grant no SHA-256 proof, canonical policy, proof-envelope, registry, final resource, or complete semantic-kernel assurance",
@@ -1550,10 +1558,12 @@
         "evidence/wp1-class-c-review-2026-07-11.json",
         "worklogs/2026-07-11-wp2-policy-model.md",
         "evidence/wp2-local-gates-2026-07-11.json",
-        "worklogs/2026-07-11-wp3-intrinsic-resource.md"
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-agent-reviews-2026-07-11.json",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "obtain final human behavior and assurance-evidence review of each candidate slice after clean hosted gates; retain completed scoped reviews as separate records",
-      "non_claim": "WP1 has scoped human approval; later WP2 and WP3 candidate evidence remains unreviewed contribution material and cannot authorize self-promotion",
+      "non_claim": "WP1 has scoped human approval; WP3b independent agent reviews are complete and receipt-bound, while WP2 and WP3 still lack required human Class C review and remain untrusted contribution material that cannot authorize self-promotion",
       "normative_refs": [
         "SPECIFICATION.md#45-generated-code-policy",
         "SPECIFICATION.md#46-agent-implementation-contract"
@@ -1777,7 +1787,8 @@
         "worklogs/2026-07-11-wp2-policy-model.md",
         "evidence/wp2-local-gates-2026-07-11.json",
         "worklogs/2026-07-11-wp0-complexity-report.md",
-        "worklogs/2026-07-11-wp3-intrinsic-resource.md"
+        "worklogs/2026-07-11-wp3-intrinsic-resource.md",
+        "evidence/wp3b-local-gates-2026-07-11.json"
       ],
       "next_action": "freeze policy and cost-model authority bytes, implement sorted unique cost-row coverage and the complete pre-dispatch cost plan, then add backend worst-case and end-to-end load evidence in WP5 and WP9",
       "non_claim": "WP1 byte bounds, bounded WP3b field validation and 603-byte commitment construction, plus WP2 machine ceilings and isolated local per-row cost quotes are implemented; no authenticated cost model, governed charge, complete dispatch plan, backend work bound, storage runtime, rate limit, or end-to-end DoS claim exists",

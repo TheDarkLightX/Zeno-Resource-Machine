@@ -1,0 +1,23 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "73a8612e00c8b9583a1d1d5ef3f3e6a853b09808",
+  "dirty": false,
+  "gate_id": "WP3b-rust-doc-tests",
+  "tool": {
+    "name": "cargo",
+    "version": "1.87.0 (99624be96 2025-05-06)",
+    "executable_sha256": "a9fb5ef0f95be70b324f3e88a4621a566320e2eb00635dc37f8a98e0a9fb7c9a"
+  },
+  "command": ["cargo", "+1.87.0", "test", "--workspace", "--doc", "--locked"],
+  "environment_policy_root": "sha256:8276e3c5f61fa9d37849c0245070362895669a67298996553df3c07f81eee8cf",
+  "started_at": "2026-07-11T20:34:37-04:00",
+  "duration_ms": 332,
+  "status": "pass",
+  "scope": ["workspace doctests", "IntrinsicResourceV1 caller-forgery compile failure"],
+  "result_root": "sha256:ad2a9f119532e3d8f32b6afa22df0d3a88d4636d9146ca8afd364c122e9d48f3",
+  "result_summary": "1 compile-fail doctest passed; 0 failed",
+  "captured_output_sha256": "bb7b9a229fab19721937a65e4eb88e444c7a2d31a16e4a9cdd5ed8bb73a42591",
+  "assumptions": ["compiler rejection is evidence for the current private-field API"],
+  "exclusions": ["diagnostic text is not frozen"],
+  "non_claims": ["this is not a proof against every future visibility regression"]
+}

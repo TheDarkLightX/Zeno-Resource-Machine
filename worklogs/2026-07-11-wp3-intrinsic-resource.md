@@ -276,11 +276,12 @@ threading, or unbounded input traversal.
   cover properties were reached. SHA-256 and allocation behavior remain
   outside the new bounded predicates.
 - Miri on the pinned nightly: all 97 workspace tests and the compile-fail
-  doctest passed with zero failures. The 65,536-case intrinsic atlas completed
-  in 655.61 seconds, and the inherited resource-role ceiling atlas completed
-  in 161.20 seconds.
+  doctest passed with zero failures. The clean command completed in 1,334.827
+  wall-clock seconds. Miri reported 655.61 seconds for the 65,536-case
+  intrinsic atlas and 161.20 seconds for the inherited resource-role ceiling
+  atlas.
 - Fuzzing: the exact 18-seed replay completed 19 runs at `cov=296`, `ft=333`.
-  A separate 10-second campaign completed 1,308,129 executions at `cov=306`,
+  A separate clean 10-second campaign completed 1,265,014 executions at `cov=306`,
   `ft=353`, with no crash, assertion failure, hang, or timeout. The committed
   corpus remained exactly the generated 18 named fixtures.
 - Quality controls: complexity reported 33 Rust files, 273 functions, zero
@@ -291,6 +292,11 @@ threading, or unbounded input traversal.
   hygiene, corpus replay, independent vectors, and all 73 Python policy-tool
   tests passed. The conformance matrix retains 45 obligations and no
   production promotion.
+- Replayability: 27 separate clean-source gate records include the required
+  source revision, dirty state, exact tool identity and executable hash,
+  tokenized command, environment-policy root, measured duration, result root,
+  assumptions, exclusions, and non-claims. Their path and file hashes are
+  bound by `evidence/wp3b-local-gates-2026-07-11.json`.
 - Supply chain: both locked dependency closures passed `cargo-audit` and all
   cargo-deny advisory, ban, license, and source checks. The deterministic
   inventories contain 23 source components, 65 dependency edges, and one
@@ -299,11 +305,18 @@ threading, or unbounded input traversal.
   found no semantic, authority-boundary, body-to-ID substitution, or
   code-quality blocker. A publication scan found no prohibited private
   context, credentials, local paths, hidden-tool references, or unintended
-  generated outputs in the intended change. The isolated post-commit peer
-  replay and hosted CI remain pending.
+  generated outputs in the intended change. An isolated post-commit diff
+  review found no semantic defect and identified three assurance-publication
+  blockers: the sustained-fuzz timeout, a missing revision-bound evidence and
+  mutation receipt, and a missing scoped agent-review receipt. This follow-up
+  raises the fuzz timeout to 90 minutes and adds the canonical gate, mutation,
+  and agent-review receipts. A final patch-bound review attestation will bind
+  the containing remediation commit. Hosted CI remains pending.
 
 The nightly Miri timeout is 30 minutes so the complete intrinsic and role
-atlases can run on slower hosted workers without weakening the tests.
+atlases can run on slower hosted workers without weakening the tests. The
+nightly fuzz timeout is 90 minutes so four serial 900-second campaigns retain
+setup and corpus-replay headroom.
 
 ### Remaining assurance and semantic gaps
 
