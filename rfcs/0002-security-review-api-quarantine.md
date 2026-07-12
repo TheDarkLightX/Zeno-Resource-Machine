@@ -120,9 +120,9 @@ architecture gate exact-allowlists this exceptional surface and its unit-return
 signature. A pinned compiler-derived, canonical span-free rustdoc JSON
 projection independently binds the complete `zrm-policy` public API under both
 default and `cfg(fuzzing)` profiles without binding checkout or Cargo-home
-paths. Authority-source conditional compilation is limited to the reviewed
-`test`, `kani`, and `fuzzing` profiles so `cfg(doc)` cannot hide a default-build
-API from rustdoc. Digest updates require Class E review.
+paths. Conditional compilation across every `zrm-policy` source is limited to
+the reviewed `test`, `kani`, and `fuzzing` profiles so `cfg(doc)` cannot hide a
+default-build API from rustdoc. Digest updates require Class E review.
 
 The future governed interface must have this shape:
 

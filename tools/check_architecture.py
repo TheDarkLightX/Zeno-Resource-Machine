@@ -464,7 +464,22 @@ def authority_api_failures(root: Path) -> list[str]:
     """Read policy sources and enforce the fail-closed public API quarantine."""
 
     sources = {path: (root / path).read_text(encoding="utf-8") for path in AUTHORITY_SOURCE_PATHS}
-    return public_authority_api_failures(sources)
+    policy_sources = {
+        path.relative_to(root).as_posix(): path.read_text(encoding="utf-8")
+        for path in sorted((root / "crates/zrm-policy/src").rglob("*.rs"))
+    }
+    failures = public_authority_api_failures(sources)
+    failures.extend(policy_source_cfg_failures(policy_sources))
+    return failures
+
+
+def policy_source_cfg_failures(sources: dict[str, str]) -> list[str]:
+    """Enforce reviewed build profiles across every policy source module."""
+
+    failures: list[str] = []
+    for path, source in sources.items():
+        failures.extend(authority_cfg_failures(path, source))
+    return failures
 
 
 def compiler_public_api_failures(root: Path) -> list[str]:

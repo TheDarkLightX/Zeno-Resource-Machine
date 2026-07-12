@@ -10,6 +10,7 @@ from pathlib import Path
 from tools.check_architecture import (
     compiler_api_projection_digest,
     dependency_failures,
+    policy_source_cfg_failures,
     public_authority_api_failures,
 )
 from tools.check_conformance import (
@@ -310,6 +311,18 @@ impl VerifierCostRowV1 {
         failures = public_authority_api_failures(sources)
         self.assertTrue(any("conditional-compilation" in failure for failure in failures))
         self.assertTrue(any("public modules" in failure for failure in failures))
+
+    def test_doc_hidden_api_in_any_policy_module_is_rejected(self) -> None:
+        """An unlisted policy module cannot hide a default-build public method."""
+
+        sources = {
+            "crates/zrm-policy/src/resource_kind.rs": (
+                "#[cfg(not(doc))] impl ResourceKindPolicyV1 { "
+                "pub fn calculate_candidate_cost(&self) -> u64 { 0 } }"
+            )
+        }
+        failures = policy_source_cfg_failures(sources)
+        self.assertTrue(any("conditional-compilation" in failure for failure in failures))
 
     def test_public_function_pointer_constant_is_rejected(self) -> None:
         """A callable associated constant is part of the exact value inventory."""

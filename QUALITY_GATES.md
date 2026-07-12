@@ -162,8 +162,8 @@ Authority-adjacent public API quarantine additionally requires both:
 
 The compiler snapshot uses the pinned Rust toolchain and records the complete
 compiler-visible package API without binding host-specific source paths.
-Authority-adjacent sources permit only the reviewed test, Kani, and fuzz
-conditional profiles, preventing `cfg(doc)` from hiding default-build APIs. A
+Every policy source permits only the reviewed test, Kani, and fuzz conditional
+profiles, preventing `cfg(doc)` from hiding default-build APIs. A
 digest update is a reviewed Class E action, not an automatic golden-file
 refresh. Source inventory remains defense in depth and does not substitute for
 the compiler-derived gate.
