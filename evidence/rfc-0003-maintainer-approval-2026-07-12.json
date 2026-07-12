@@ -1,0 +1,62 @@
+{
+  "schema": "zrm/rfc-maintainer-approval/v1",
+  "record_id": "rfc-0003-maintainer-approval-2026-07-12",
+  "recorded_at": "2026-07-12",
+  "rfc": {
+    "id": "RFC-0003",
+    "path": "rfcs/RFC-0003-security-review-api-quarantine.md",
+    "change_class": "E"
+  },
+  "reviewed_change": {
+    "pull_request": 9,
+    "reviewed_head_revision": "d77e7a77e8439b3c10774f6b557bac5beaa212e8",
+    "merge_revision": "1a06f59e25b042080fbfb33924d7606c8a4c2074",
+    "merged_at": "2026-07-12T20:25:05Z"
+  },
+  "maintainer_decision": {
+    "reviewer": "Dana Edwards",
+    "reviewer_role": "repository maintainer, semantic owner, and assurance-evidence reviewer",
+    "decision": "approve",
+    "decision_recording": "explicit maintainer decision summarized without committing a private chat transcript",
+    "github_formal_review_object_present": false,
+    "independent_github_review_claimed": false,
+    "approved_semantics": [
+      "every v1 policy-bound resource quantity must be positive",
+      "LifecycleNonFungible policy candidates must have quantity_max exactly one",
+      "the RFC-0003 deterministic rejection precedence is normative",
+      "the reviewed pre-authority API quarantine, typed resource-ID boundary, and diagnostic redaction remain required"
+    ]
+  },
+  "technical_review_evidence": [
+    "evidence/security-remediation-agent-reviews-2026-07-12.json",
+    "evidence/security-remediation-local-gates-2026-07-12.json",
+    "evidence/security-remediation-main-integration-2026-07-12.json",
+    "evidence/SECURITY_REMEDIATION_MUTATION_MAP.md"
+  ],
+  "hosted_evidence": {
+    "pull_request_run_id": 29207462519,
+    "push_run_id": 29207461293,
+    "quality": "pass",
+    "assurance": "pass",
+    "fuzz_smoke": "pass",
+    "supply_chain": "pass",
+    "dependency_review": "pass"
+  },
+  "promotion": {
+    "rfc_status": "accepted",
+    "cbc_046_status": "implemented_partial",
+    "public_implementation_claim_expanded": false,
+    "production_ready": false
+  },
+  "remaining_obligations": [
+    "apply the accepted predicate only after authenticated active-policy resolution in final ResourceV1 construction",
+    "define any zero-quantity marker permission through a future versioned RFC",
+    "implement canonical policy bytes, activation, registry authority, state, and commit separately"
+  ],
+  "non_claims": [
+    "approval does not create canonical policy bytes or authenticated policy activation",
+    "approval does not create a governed verifier registry or verified fact",
+    "approval does not establish final ResourceV1, state, persistence, or atomic commit",
+    "approval does not establish release or production authority"
+  ]
+}

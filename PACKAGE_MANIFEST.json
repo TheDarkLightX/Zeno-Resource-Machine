@@ -1,10 +1,10 @@
 {
   "schema": "zrm/specification-package-manifest/v1",
   "package": "Zeno Resource Machine high-assurance specification package",
-  "version": "0.1.0-draft.3",
+  "version": "0.1.0-draft.4",
   "date": "2026-07-12",
-  "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a through WP3c resource stages, an unreviewed WP5 bounded-artifact candidate, an unreviewed security-remediation candidate, a derived semantic-contract review suite, and three unapproved Class E RFCs; no release or production claim",
-  "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model, WP3a through WP3c resource-stage, WP5 bounded-artifact, and security-remediation candidates; WP5 establishes bounded byte ownership only, and the security remediation narrows pre-authority APIs and resource dimensions without creating policy, verification, admission, commit, release, or production authority; semantic contracts, RFC drafts, model-obligation summaries, and independent-review packets are design or process oracles, not implementation conformance evidence",
+  "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a through WP3c resource stages, an unreviewed WP5 bounded-artifact candidate, a reviewed but unpromoted security-remediation candidate governed by accepted RFC-0003, a derived semantic-contract review suite, and two unapproved Class E semantic-closure RFCs; no release or production claim",
+  "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model, WP3a through WP3c resource-stage, and WP5 bounded-artifact candidates; the security-remediation candidate has maintainer-approved RFC-0003 semantics but remains unpromoted and pre-alpha; WP5 establishes bounded byte ownership only, and the security remediation narrows pre-authority APIs and resource dimensions without creating policy, verification, admission, commit, release, or production authority; semantic contracts, RFC drafts, model-obligation summaries, and independent-review packets are design or process oracles, not implementation conformance evidence",
   "manifest_scope": "specification-package payload, including normative sources and derived semantic-review controls; code, tests, worklogs, and evidence records are outside this inventory",
   "digest_algorithm": "SHA-256",
   "path_order": "UTF-8 bytewise lexicographic",
@@ -24,8 +24,8 @@
     },
     {
       "path": "CONFORMANCE_MATRIX.json",
-      "bytes": 87359,
-      "sha256": "09b36b4f1ae31957262cc2b3f9b8b48a8040482a69d81bb40809577da6704450"
+      "bytes": 87721,
+      "sha256": "103e79fcbcf3985fd6343fc57465c3831d8e7f8a8c947595ca25f4e6c2db537d"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -49,8 +49,8 @@
     },
     {
       "path": "README.md",
-      "bytes": 24891,
-      "sha256": "637325b51829b2eb726cb5b08372c559e8da98587f4922c3432d54aef5f17b8f"
+      "bytes": 24896,
+      "sha256": "32a5289138a99505eb9498bcb2855c1cdb9afb7987780894ed60703adcbda749"
     },
     {
       "path": "REVIEW_CHECKLIST.md",
@@ -69,8 +69,8 @@
     },
     {
       "path": "SPECIFICATION.md",
-      "bytes": 126482,
-      "sha256": "a10b41d9d2a3e0060154665ebb6af9fcff67aa7fa16d39e395e645cf95584e0a"
+      "bytes": 126582,
+      "sha256": "3e72e10e2ced2b81c5b82a9b7f06aaddc65d435da03175a27096b83c59d5dd3d"
     },
     {
       "path": "contracts/ZRM-SC-001.md",
@@ -144,8 +144,8 @@
     },
     {
       "path": "docs/SECURITY_REVIEW_REMEDIATION_2026_07.md",
-      "bytes": 6345,
-      "sha256": "54d1e49f2826197dee2a3f41408d17ec4ed7e02ee8c2c6028de37182f95ce8ae"
+      "bytes": 6523,
+      "sha256": "222b5d5b1f8467f09228a34a080efe748dc10c873a296abf680e166b403c4606"
     },
     {
       "path": "formal/state-machine/semantic_closure_v1/README.md",
@@ -209,8 +209,8 @@
     },
     {
       "path": "rfcs/README.md",
-      "bytes": 1532,
-      "sha256": "819dd3780c5452cda6b0ef809d70b2779cc873dfa3d24bf5b7908192e706dc3f"
+      "bytes": 1629,
+      "sha256": "5cba9f08a17e465424dca941ef09a2c1ff85a96eff4a3e5ae1f4c6b0f5f7e7a1"
     },
     {
       "path": "rfcs/RFC-0001-policy-context-fact-and-commit-authority.md",
@@ -224,8 +224,8 @@
     },
     {
       "path": "rfcs/RFC-0003-security-review-api-quarantine.md",
-      "bytes": 16440,
-      "sha256": "d02b473636ade9b81b71df7a44c394a5a957236815394623638b08f2b28318a1"
+      "bytes": 17107,
+      "sha256": "6c31ebf3ada75ba598a9e59f97ca6697432ba816b098a1e9b58ce8dae3e97271"
     },
     {
       "path": "templates/ADR_TEMPLATE.md",
@@ -265,7 +265,7 @@
     "no canonical policy bytes, policy hashes, authenticated policy activation, or trusted validation context",
     "no complete policy migration or rollback design",
     "semantic contracts are derived review oracles and do not constitute implementation, verification, audit, or production evidence",
-    "RFC-0001, RFC-0002, and RFC-0003 are unapproved Class E drafts and create no policy, verifier, commit, release, or production authority",
+    "RFC-0001 and RFC-0002 remain unapproved Class E drafts; accepted RFC-0003 creates no policy, verifier, commit, release, or production authority",
     "internal bounded-model evidence is corroborative, finite, assumption-bound, and not publicly replayable from this package",
     "no security audit",
     "no production authority",
