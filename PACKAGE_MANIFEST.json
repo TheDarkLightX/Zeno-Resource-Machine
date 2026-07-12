@@ -1,10 +1,10 @@
 {
   "schema": "zrm/specification-package-manifest/v1",
   "package": "Zeno Resource Machine high-assurance specification package",
-  "version": "0.1.0-draft.2",
-  "date": "2026-07-11",
-  "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a structural resource roles, and WP3b intrinsic resource construction; no release or production claim",
-  "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model, WP3a structural-role, and WP3b intrinsic-resource candidates",
+  "version": "0.1.0-draft.3",
+  "date": "2026-07-12",
+  "status": "reviewed scoped ZRM-L0 implementation plus unreviewed security-remediation, WP0 assurance, pre-RFC WP2 policy, WP3a role, and WP3b intrinsic-resource candidates; no authority, release, or production claim",
+  "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate security remediation and WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model, WP3a structural-role, and WP3b intrinsic-resource candidates",
   "manifest_scope": "normative specification-package payload only; code, tests, worklogs, and evidence records are outside this inventory",
   "digest_algorithm": "SHA-256",
   "path_order": "UTF-8 bytewise lexicographic",
@@ -19,23 +19,23 @@
   "files": [
     {
       "path": "AGENTS.md",
-      "bytes": 21771,
-      "sha256": "c1674086ffc40f8794800959fc4e4611d3fae0240a106058f8ce9718a7bbb91a"
+      "bytes": 22498,
+      "sha256": "558f5913dc461f13d867f7dd8e5cc814740423243e477ab37d7da4981419ddc4"
     },
     {
       "path": "CONFORMANCE_MATRIX.json",
-      "bytes": 73627,
-      "sha256": "7c788198a6d8b24d3a0cd8f06c1c25495c011c3667621dc02cbe04832c78a301"
+      "bytes": 81582,
+      "sha256": "bfea3758d87ed04327a67b2d1f30485dd4cb9de77925072987b22a6b49f594c5"
     },
     {
       "path": "CONTRIBUTING.md",
-      "bytes": 6914,
-      "sha256": "f14b8a4e6ff2519501fb87df2dcbf91623ba8ed3b748da679c21539166c6cb56"
+      "bytes": 7256,
+      "sha256": "3ddf040d57040df111800ebdafe5ac2e1b3d91302006419bcb3d40b95cfaf76f"
     },
     {
       "path": "IMPLEMENTATION_PLAN.md",
-      "bytes": 19740,
-      "sha256": "50df7479499fd6045ab778a4c2e37cded543c08ad5f7183f35b233f76ec14d95"
+      "bytes": 20977,
+      "sha256": "31265aa9d7c3b82c03f6fe65a9d5ee4aeb97f66b1e8b694b6d3d342adccf4b34"
     },
     {
       "path": "LICENSE",
@@ -44,28 +44,28 @@
     },
     {
       "path": "QUALITY_GATES.md",
-      "bytes": 24828,
-      "sha256": "e4bf48c1a50f3d6673c11c2171f5b1bbb0cb5b8f2ba3d5e09b0137ca66b98c57"
+      "bytes": 27667,
+      "sha256": "722059a53ebe0720e924f18a70cf7411f46d798cf15c6e217c85bdf65a75fc31"
     },
     {
       "path": "README.md",
-      "bytes": 20999,
-      "sha256": "3ef6c311ef254eb79dd881e042b1112942adbd57981c8cdf3854ccc71830e57b"
+      "bytes": 22047,
+      "sha256": "6d5ef7ea41184f8d5631917a9d6d323ff7aca1a35a9989e30be907978f61fc21"
     },
     {
       "path": "REVIEW_CHECKLIST.md",
-      "bytes": 4605,
-      "sha256": "ab9d6ce7c4f694f15027514fec4b98cebfc32244b4aa25cf40eeff691df96efb"
+      "bytes": 5054,
+      "sha256": "1f8be142237e30e1440a77c5d0f0e9d3833f23509cd964ea09881d5e619973a7"
     },
     {
       "path": "SECURITY.md",
-      "bytes": 4804,
-      "sha256": "8f159386a9434d18474230001c18affe785474d1797b5d06dec35c7d800b3106"
+      "bytes": 5293,
+      "sha256": "e52081d0f20a188fe3243460452c33b6eac090280e39883585573c465a545aee"
     },
     {
       "path": "SPECIFICATION.md",
-      "bytes": 124213,
-      "sha256": "4e71b57817149561e0485850665f188246e6d62ace83b19fe20b7bf1bc049df1"
+      "bytes": 126424,
+      "sha256": "75f94984baf872a22482e39d24118f6d3a203b6642853fe1fcf35c46efe33887"
     },
     {
       "path": "templates/ADR_TEMPLATE.md",
@@ -74,13 +74,13 @@
     },
     {
       "path": "templates/AGENT_WORKLOG_TEMPLATE.md",
-      "bytes": 1697,
-      "sha256": "4a6954d3912819c50ff529c9cdaa3522f79b314bc7506c80a4915a6511062f05"
+      "bytes": 2194,
+      "sha256": "2e2cea8340de80fc54352e719e5c29d5b739155f5f267e1f48d915b1b358b267"
     },
     {
       "path": "templates/PR_TEMPLATE.md",
-      "bytes": 1777,
-      "sha256": "7d1b0d8863c114ddbca846a80aa860ed61abc5202d379123d885342a2332cd1d"
+      "bytes": 2376,
+      "sha256": "6044c8f6dc6865f79e8d7729ea42ba948871f755bbbf20d9a4915c4c7ba12a98"
     },
     {
       "path": "templates/RFC_TEMPLATE.md",

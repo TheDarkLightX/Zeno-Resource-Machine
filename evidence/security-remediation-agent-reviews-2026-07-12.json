@@ -1,0 +1,104 @@
+{
+  "schema": "zrm/review-record/v1",
+  "record_id": "security-remediation-agent-reviews-2026-07-12",
+  "recorded_at": "2026-07-12",
+  "change_class": "E",
+  "reviewed_source": {
+    "revision": "c6f03816e0d4d3dc496a8d39d6821ed38d7e6187",
+    "tree": "6419c39e49bec71f1b9a7e1fbb467e99d5be333a",
+    "base_revision": "794e8255ca6d63d3068c90ade3c47a24075648b9",
+    "branch": "agent/security-review-remediation"
+  },
+  "scope": [
+    "ZRM-01 zero-quantity and lifecycle-policy semantics",
+    "ZRM-02 caller-selected verifier-cost row quarantine",
+    "ZRM-03 copied policy-ID and verifier-candidate compatibility quarantine",
+    "ZRM-04 raw same-length resource-wire hashing boundary",
+    "ZRM-05 opaque and resource-wire diagnostic disclosure",
+    "ZRM-06 semantic-review and assurance evidence",
+    "compiler-derived API projection, source inventory, Cargo namespace, and deterministic corpus gates"
+  ],
+  "reviews": [
+    {
+      "role": "isolated specification and assurance reviewer",
+      "result": "advisory_pass_zero_blockers",
+      "reviewed_revision": "c6f03816e0d4d3dc496a8d39d6821ed38d7e6187",
+      "findings": [
+        "111 Rust tests, 5 compile-fail doctests, 99 tooling tests, and 45 reference-model tests passed in a clean immutable archive",
+        "Cargo dependency renames, Unicode aliases, linked policy roots, conditional-compilation obfuscation, source inclusion, macro aliases, and corpus substitutions rejected",
+        "default and fuzzing compiler-derived public-API projections matched their pinned span-free digests",
+        "fuzz evidence is accurately labeled PR smoke and sustained nightly fuzz remains pending",
+        "no high-confidence blocker remained in the reviewed assurance surface"
+      ]
+    },
+    {
+      "role": "isolated adversarial authority-boundary reviewer",
+      "result": "advisory_pass_zero_blockers",
+      "reviewed_revision": "c6f03816e0d4d3dc496a8d39d6821ed38d7e6187",
+      "findings": [
+        "Cargo dependency rename and protected macro-root substitution attempts rejected",
+        "leaf, root, braced, raw, Unicode, glob, extern, module-shadow, path, include, local-macro, cfg, and cfg_attr escape attempts rejected",
+        "all tracked policy Rust sources and all allowlisted path targets were covered by the source inventory",
+        "two distinct archive paths produced identical span-free public-API projection digests and a public-API mutation changed the digest",
+        "the sole fuzz-profile addition remained a raw-byte, unit-returning assertion sink with no quote, capability, or authority result",
+        "no high-confidence blocker remained in the requested adversarial scope"
+      ]
+    }
+  ],
+  "finding_disposition": [
+    {
+      "finding": "zero quantity accepted without explicit policy permission",
+      "status": "resolved_in_implementation_pending_human_semantic_approval",
+      "evidence": "all-mode decision tables, separate frozen and proposed reference oracles, fuzzing, Kani, mutation, and RFC-0002"
+    },
+    {
+      "finding": "caller-selected verifier-cost row can produce a quote",
+      "status": "public_misuse_path_quarantined",
+      "evidence": "default external compile-fail checks, compiler-derived API projection, and internal row-substitution counterexample"
+    },
+    {
+      "finding": "copied verifier policy ID can substitute different policy contents",
+      "status": "public_misuse_path_quarantined",
+      "evidence": "default external compile-fail checks, compiler-derived API projection, and internal field-substitution counterexamples"
+    },
+    {
+      "finding": "raw same-length bytes can receive a typed ResourceId from a public helper",
+      "status": "resolved_by_private_codec_boundary",
+      "evidence": "public API checks, typed codec derivation, malformed-length tests, and unchanged independent vectors"
+    },
+    {
+      "finding": "opaque and resource-wire diagnostics disclose full 32-byte values",
+      "status": "resolved_for_default_debug_formatting",
+      "evidence": "direct, raw-wire, and nested redaction tests; scalar visibility remains an explicit non-claim"
+    },
+    {
+      "finding": "automated coverage can encode an incomplete semantic oracle",
+      "status": "partially_resolved_with_isolated_oracles_and_review",
+      "evidence": "separate frozen/proposed models, counterexample tables, semantic declaration, authority map, and this advisory review receipt"
+    }
+  ],
+  "human_decisions_required": [
+    "approve or reject RFC-0002's exact lifecycle amendment: lifecycle policy candidates require quantity_max exactly one, lifecycle resources require quantity one, non-lifecycle quantity_max zero remains a constructible empty candidate, and the documented error precedence is normative",
+    "confirm that no canonical or durable external policy identity, persisted or activated policy record, accepted transition, or other migration predecessor exists; otherwise require a new schema version and migration rules",
+    "approve the bundled pre-alpha Class E source changes: quarantined quote, admission, and raw-hash APIs; exhaustive policy and codec error changes; and diagnostic-format changes with numeric scalars still visible",
+    "obtain approval from two distinct non-author human reviewers, one owning semantic/specification counterexamples and one owning the authority boundary",
+    "retain CBC-046 as implemented_partial after approval because active-policy resolution, final-resource integration, marker-version design, and CBC-024 parity remain open"
+  ],
+  "review_state": {
+    "isolated_agent_reviews_complete": true,
+    "semantic_blockers_open_from_agent_review": 0,
+    "assurance_blockers_open_from_agent_review": 0,
+    "human_class_e_review_complete": false,
+    "rfc_0002_approved": false,
+    "promotion_allowed": false
+  },
+  "maintainability_debt": [
+    "tools/check_architecture.py has 813 physical lines and exceeds the 700-line review trigger; no behavioral counterexample survived, but later decomposition should preserve the pinned projection and rejection tests"
+  ],
+  "non_claims": [
+    "these context-isolated agent reviews are advisory technical evidence and are not independent human approval",
+    "the reviews do not approve RFC-0002, authorize merge, or establish release or production readiness",
+    "the reviews are not a formal proof, external audit, or proof that all vulnerability classes are absent",
+    "unimplemented governed policy, verifier, transition, state, persistence, and commit boundaries remain outside the reviewed implementation"
+  ]
+}

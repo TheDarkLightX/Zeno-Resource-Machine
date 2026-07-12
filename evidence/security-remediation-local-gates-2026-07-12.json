@@ -1,0 +1,167 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "record_id": "security-remediation-local-gates-2026-07-12",
+  "recorded_at": "2026-07-12",
+  "gate_id": "security-review-remediation-local-assurance-replay",
+  "status": "pass-with-tracked-gaps",
+  "source": {
+    "revision": "c6f03816e0d4d3dc496a8d39d6821ed38d7e6187",
+    "tree": "6419c39e49bec71f1b9a7e1fbb467e99d5be333a",
+    "base_revision": "794e8255ca6d63d3068c90ade3c47a24075648b9",
+    "branch": "agent/security-review-remediation",
+    "dirty_tree": false,
+    "replay_location": "local worktree plus two clean immutable git archives",
+    "hosted_ci_revision": null,
+    "hosted_ci_run_id": null
+  },
+  "change_class": "E",
+  "review_state": {
+    "isolated_agent_reviews_complete": true,
+    "review_receipt": "evidence/security-remediation-agent-reviews-2026-07-12.json",
+    "human_class_e_review_complete": false,
+    "rfc_0002_approved": false,
+    "promotion_allowed": false
+  },
+  "implemented_scope": [
+    "zero quantity rejection in every version-one policy-bound resource-dimension path",
+    "lifecycle-non-fungible policy candidates require quantity_max exactly one",
+    "caller-selected verifier-cost quotes and candidate-admission successes quarantined from the default public API",
+    "raw resource-wire hashing private to the typed canonical codec boundary",
+    "constant-redacted Debug output for opaque and resource-wire 32-byte values",
+    "compiler-derived default and fuzz-profile public-API projections with fail-closed source and Cargo namespace controls",
+    "bounded deterministic fuzz-corpus loading without symlink or membership substitution"
+  ],
+  "results": [
+    {
+      "tool": "cargo",
+      "command": "cargo +1.87.0 test --workspace --all-targets --all-features --locked",
+      "result": "pass; 111 tests; 0 failures"
+    },
+    {
+      "tool": "cargo doctest",
+      "command": "cargo +1.87.0 test --workspace --doc --locked",
+      "result": "pass; 5 compile-fail doctests; 0 failures"
+    },
+    {
+      "tool": "cargo-clippy, rustfmt, and rustdoc",
+      "command": "strict workspace Clippy, formatting, and documentation gates",
+      "result": "pass; 0 denied warnings; formatting and documentation passed"
+    },
+    {
+      "tool": "repository tooling regressions",
+      "command": "python3 -m unittest discover -s tools/tests -v",
+      "result": "pass; 99 tests; 0 failures"
+    },
+    {
+      "tool": "independent semantic reference models",
+      "command": "python3 -m unittest discover -s reference_models/tests -v",
+      "result": "pass; 45 tests; frozen prior oracle and proposed RFC-0002 oracle remained distinct"
+    },
+    {
+      "tool": "compiler-derived API and architecture gates",
+      "command": "python3 tools/check_architecture.py",
+      "result": "pass in the implementation checkout and two distinct clean archive paths; default and fuzzing projections matched pinned digests"
+    },
+    {
+      "tool": "cargo-llvm-cov 0.8.5",
+      "command": "configured workspace branch-coverage replay",
+      "result": "pass; workspace lines 99.14% and branches 100.00%; zrm-policy lines 99.86% and branches 100.00%; zrm-kernel lines 100.00% and branches 100.00%; zrm-codec lines 98.71% and branches 100.00%"
+    },
+    {
+      "tool": "cargo-mutants 26.0.0",
+      "command": "cargo +1.87.0 mutants --workspace --timeout 10 --build-timeout 60 --jobs 2 --output target/security-remediation-mutants-c6f0381",
+      "result": "pass; 393 tested; 291 caught; 102 unviable; 0 missed; 0 timed out"
+    },
+    {
+      "tool": "Kani 0.60.0",
+      "command": "cargo kani --workspace --quiet",
+      "result": "pass; 18 harnesses; 0 reachable failures"
+    },
+    {
+      "tool": "Miri nightly-2025-03-02",
+      "command": "targeted final codec and policy test replay",
+      "result": "pass; 20 codec tests and 20 policy tests; 0 failures"
+    },
+    {
+      "tool": "cargo-fuzz 0.13.1 PR smoke",
+      "command": "46-second assertion-only verifier-cost and resource-dimension campaigns",
+      "result": "pass; 10,345,988 cost executions and 15,581,739 dimension executions; no crash, timeout, or assertion failure"
+    },
+    {
+      "tool": "independent vector replay",
+      "command": "python3 vectors/independent_python/replay_resource_wire_v1.py --check",
+      "result": "pass; 6 binary artifacts and 4 protocol digests unchanged"
+    },
+    {
+      "tool": "deterministic corpus replay",
+      "command": "python3 fuzz/generate_corpus.py --check",
+      "result": "pass; exact root and entry membership, bounds, and content matched"
+    },
+    {
+      "tool": "complexity and code-quality gates",
+      "command": "python3 tools/check_complexity.py; python3 tools/check_code_quality.py",
+      "result": "pass; 36 Rust files; 317 functions; no preferred-limit warning; excellent-candidate; 16 rules; 5 design decisions; 0 findings; 0 advisories"
+    },
+    {
+      "tool": "cargo-audit and cargo-deny",
+      "command": "locked root and fuzz advisory, license, source, and duplicate checks",
+      "result": "pass; 1,160-advisory database; 14 root and 23 fuzz locked dependencies; deny checks green"
+    },
+    {
+      "tool": "deterministic SBOM and CBOM",
+      "command": "python3 tools/generate_bom.py",
+      "result": "pass; 23 components; 65 dependency edges; 1 cryptography component"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "target/llvm-cov-branch-security-final.json",
+      "sha256": "a92dd024f515db3d447107360dabc6a330cd714af7b64e776c2773ce11d240a6"
+    },
+    {
+      "path": "target/security-remediation-mutants-c6f0381/mutants.out/outcomes.json",
+      "sha256": "614960171f98d21448d34a237cfa9af904805ff9a80e2b36d9ad0d738f0536f0"
+    },
+    {
+      "path": "target/security-remediation-sbom-final.json",
+      "sha256": "39e72072f0319f703c26763ddc66491e1dda240c979902d6b2e78a970fc0b97e"
+    },
+    {
+      "path": "target/security-remediation-cbom-final.json",
+      "sha256": "7f6017d2f2b0bf571b68e556349b24770557de31ed127007f74995448f2c3f26"
+    },
+    {
+      "name": "zrm-policy default span-free public-API projection",
+      "sha256": "01f7c2af1a68e8b9ccb96287f747f7d234f4ce07613abc9b193ea14aae5f6d7f"
+    },
+    {
+      "name": "zrm-policy fuzzing span-free public-API projection",
+      "sha256": "ef044e1e6928f66453ea09d4f0c17111e6c89772cdfdfeeff5b65c3b9e42ce83"
+    }
+  ],
+  "assumptions_and_limits": [
+    "the 46-second fuzz executions are PR-smoke evidence; the required sustained nightly campaigns remain pending",
+    "Miri establishes evidence only for the exercised executions",
+    "Kani is bounded by its harnesses and emitted documented target-feature and dependency future-compatibility warnings",
+    "102 mutation candidates were unviable because they did not compile; zero viable mutants survived",
+    "the compiler-derived projection is pinned to Rust 1.87 rustdoc JSON format version 43",
+    "the Rust quality collector does not establish the maintainability of tools/check_architecture.py, whose 813 physical lines exceed the 700-line review trigger",
+    "local results do not establish hosted branch-protection or independent reproducible-build behavior"
+  ],
+  "remaining_gaps": [
+    "explicit human approval of RFC-0002 and its lifecycle acceptance-set amendment",
+    "confirmation that no durable external policy identity, activated record, accepted transition, or migration predecessor exists",
+    "two distinct non-author human Class E approvals, including semantic-counterexample and authority-boundary review",
+    "hosted CI and sustained nightly fuzz replay at the evidence publication revision",
+    "authenticated active-policy resolution, canonical governed cost model, verifier registry, dispatch, and revocation",
+    "final ResourceV1, transition accounting, state, persistence, exact-once atomic commit, and canonical journal",
+    "formal composition evidence, independent reproducible build, and external security audit before production"
+  ],
+  "non_claims": [
+    "this record does not approve RFC-0002, authorize merge, or permit production promotion",
+    "isolated agent review does not replace independent human Class E review",
+    "the evidence does not prove unbounded correctness or total absence of vulnerabilities",
+    "no authenticated policy, governed verifier, funds-safety, state-transition, commit, release, or production-readiness claim is made",
+    "CBC-046 remains implemented_partial"
+  ]
+}

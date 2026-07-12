@@ -274,10 +274,10 @@ the local-gate receipt.
   `u128` maxima and quantities; it checks the explicit predicate and exact
   lifecycle-constructor relation. Full final-tree replay is recorded in the
   local-gate receipt.
-- Miri: a full exploratory workspace run passed; the final hash-framing,
-  diagnostic-maximum, and resource-dimension tests were replayed separately on
-  the final working tree. Miri does not prove all executions or dependency
-  soundness.
+- Miri: a full exploratory workspace run passed; the final codec unit and
+  integration tests, policy model, diagnostic maxima, and resource-dimension
+  atlas were replayed separately on the final Rust tree. Miri does not prove
+  all executions or dependency soundness.
 - Fuzz PR smoke: the assertion-only cost campaign completed 10,345,988 executions in 46
   seconds; the resource-dimension campaign completed 15,581,739 executions in
   46 seconds, both without a crash, timeout, or assertion failure. Their
@@ -313,20 +313,20 @@ No production input limit or asymptotic bound changes.
 
 | Command | Result | Evidence/artifact |
 | --- | --- | --- |
-| `cargo test --workspace --all-targets --locked` | PASS, 111 tests | local working-tree replay |
+| `cargo test --workspace --all-targets --all-features --locked` | PASS, 111 tests | local working-tree replay |
 | `cargo test --workspace --doc --locked` | PASS, 5 compile-fail doctests | local working-tree replay |
 | strict workspace Clippy and rustfmt | PASS, zero denied warnings | local working-tree replay |
 | `python3 -m unittest discover -s tools/tests -v` | PASS, 99 tests | tooling regressions |
 | reference-model discovery | PASS, 45 tests | frozen and proposed oracles |
 | architecture, complexity, code-quality | PASS; exact allowlist; zero advisories; `excellent-candidate` | generated local reports |
-| configured branch coverage | PASS; workspace 99.14%/100%, policy 99.86%/100%, kernel 100%/100% | `target/llvm-cov-branch.json` |
+| configured branch coverage | PASS; workspace 99.14%/100%, policy 99.86%/100%, kernel 100%/100%, codec 98.71%/100% | `target/llvm-cov-branch-security-final.json` |
 | independent vector replay | PASS, 6 binary artifacts and 4 digests | independent Python replay |
 | deterministic corpus replay | PASS, exact named membership | `fuzz/generate_corpus.py --check` |
 | changed-target fuzz PR smoke | PASS, 25,927,727 combined executions in two 46-second campaigns | local libFuzzer output; sustained nightly fuzz remains pending |
-| targeted final Miri replay | PASS, codec 20 tests plus 5 policy tests | pinned nightly Miri |
+| targeted final Miri replay | PASS, codec 20 tests plus 20 policy tests | pinned nightly Miri |
 | full configured mutation | PASS; cargo-mutants 26.0.0; 393 tested, 291 caught, 102 unviable, 0 missed, 0 timed out | `target/security-remediation-mutants` and final receipt |
 | `cargo kani --workspace --quiet` | PASS; 18 harnesses; 0 reachable failures | Kani 0.60.0 output and final receipt |
-| advisory/dependency/BOM gates | PASS; 1,159-advisory database; 14 root and 23 fuzz locked dependencies; deny checks green; 23 components, 65 edges, 1 cryptography component | audit, deny, SBOM, CBOM output and final receipt |
+| advisory/dependency/BOM gates | PASS; 1,160-advisory database; 14 root and 23 fuzz locked dependencies; deny checks green; 23 components, 65 edges, 1 cryptography component | audit, deny, SBOM, CBOM output and final receipt |
 
 ## Self-review
 

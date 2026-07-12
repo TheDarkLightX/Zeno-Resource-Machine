@@ -62,7 +62,7 @@ remain non-claims.
 The final configured run used cargo-mutants 26.0.0:
 
 ```text
-cargo +1.87.0 mutants --workspace --timeout 10 --build-timeout 60 --jobs 2 --output target/security-remediation-mutants
+cargo +1.87.0 mutants --workspace --timeout 10 --build-timeout 60 --jobs 2 --output target/security-remediation-mutants-c6f0381
 393 mutants tested
 291 caught
 102 unviable
@@ -70,8 +70,10 @@ cargo +1.87.0 mutants --workspace --timeout 10 --build-timeout 60 --jobs 2 --out
 0 timed out
 ```
 
-The SHA-256 digest of `mutants.out/outcomes.json` was
-`e8bac63d5209ca03b9f8f303484dcb762bc2eaf10a1fae8557b9534cd915f13b`.
+The final immutable implementation run used output directory
+`target/security-remediation-mutants-c6f0381`. The SHA-256 digest of
+`mutants.out/outcomes.json` was
+`614960171f98d21448d34a237cfa9af904805ff9a80e2b36d9ad0d738f0536f0`.
 The final source binding and output location are also recorded in
 `evidence/security-remediation-local-gates-2026-07-12.json`.
 
