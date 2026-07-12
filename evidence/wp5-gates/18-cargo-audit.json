@@ -1,0 +1,36 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "47fb1e536e1e8f4ffc753d607d4b65e1b9bf287a",
+  "source_tree": "d6371e71bc9021dc066b4b2c81fe561963c1e6b0",
+  "dirty": false,
+  "gate_id": "WP5-integrated-cargo-audit",
+  "tool": {
+    "name": "cargo-audit",
+    "version": "0.22.1",
+    "executable_sha256": "9899e591c3abee79bd54e88c3b03d27bcf8dd073fb1690af9cd3089be1267a67"
+  },
+  "command": [
+    "cargo",
+    "+1.87.0",
+    "audit"
+  ],
+  "environment_policy_root": "sha256:68344fafd9cb9be0b9f6621c43238850ce65abf3f62c0f6eedc71d9d86eb2432",
+  "started_at": null,
+  "duration_ms": null,
+  "status": "pass",
+  "scope": [
+    "root Cargo.lock"
+  ],
+  "result_root": "sha256:f830d0d7dac7d085304f07a4d149c6dc182956680798aabb230c8540e3ca210b",
+  "result_summary": "15 locked dependencies scanned; no advisory failure",
+  "captured_output_sha256": "f830d0d7dac7d085304f07a4d149c6dc182956680798aabb230c8540e3ca210b",
+  "assumptions": [
+    "the replay started from the clean source revision and restored every manual mutant"
+  ],
+  "exclusions": [
+    "advisory database and network state are external inputs"
+  ],
+  "non_claims": [
+    "audit does not prove dependency correctness"
+  ]
+}

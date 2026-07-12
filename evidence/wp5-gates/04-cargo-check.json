@@ -1,0 +1,38 @@
+{
+  "schema": "zrm/evidence-record/v1",
+  "source_revision": "47fb1e536e1e8f4ffc753d607d4b65e1b9bf287a",
+  "source_tree": "d6371e71bc9021dc066b4b2c81fe561963c1e6b0",
+  "dirty": false,
+  "gate_id": "WP5-integrated-cargo-check",
+  "tool": {
+    "name": "cargo",
+    "version": "1.87.0 (99624be96 2025-05-06)",
+    "executable_sha256": "a9fb5ef0f95be70b324f3e88a4621a566320e2eb00635dc37f8a98e0a9fb7c9a"
+  },
+  "command": [
+    "cargo",
+    "+1.87.0",
+    "check",
+    "--workspace",
+    "--all-targets",
+    "--all-features",
+    "--locked"
+  ],
+  "environment_policy_root": "sha256:68344fafd9cb9be0b9f6621c43238850ce65abf3f62c0f6eedc71d9d86eb2432",
+  "started_at": null,
+  "duration_ms": null,
+  "status": "pass",
+  "scope": [
+    "workspace all targets and features"
+  ],
+  "result_root": "sha256:0e4b0029bbc12632f5f369e53931ba45a2821cd7d474cbbdec25b0ef000a51e9",
+  "result_summary": "workspace check passed",
+  "captured_output_sha256": "0e4b0029bbc12632f5f369e53931ba45a2821cd7d474cbbdec25b0ef000a51e9",
+  "assumptions": [
+    "the replay started from the clean source revision and restored every manual mutant"
+  ],
+  "exclusions": [],
+  "non_claims": [
+    "successful type checking does not prove runtime semantics"
+  ]
+}
