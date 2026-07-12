@@ -66,7 +66,10 @@ fn try_new_with_reservation(
     // On a target narrower than `u32`, an unrepresentable selected bound is
     // larger than every possible slice, so `usize::MAX` preserves the
     // comparison without a platform-dependent rejection branch.
-    let selected_max_bytes = usize::try_from(selected_max_bytes).unwrap_or(usize::MAX);
+    let selected_max_bytes = match usize::try_from(selected_max_bytes) {
+        Ok(limit) => limit,
+        Err(_) => usize::MAX,
+    };
     if bytes.len() > selected_max_bytes {
         return Err(ArtifactErrorV1::ArtifactTooLarge);
     }
