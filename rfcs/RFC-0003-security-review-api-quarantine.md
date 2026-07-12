@@ -1,8 +1,9 @@
 # RFC-0003: Pre-authority API quarantine and boundary hardening
 
-**Status:** Review
-**Authors:** ZRM maintainers, implementation prepared for review
-**Reviewers:** Two independent reviewers required, including one authority-boundary reviewer
+**Status:** Accepted
+**Author:** Dana Edwards
+**Drafting assistance:** GPT-5.6
+**Review:** Two independent technical reviews completed; maintainer semantic approval recorded on 2026-07-12
 **Created:** 2026-07-12
 **Target version:** pre-alpha v0.1 candidate surface
 **Change class:** E
@@ -347,7 +348,18 @@ integration remains frozen.
 
 ## Decision
 
-Pending two independent reviews and explicit human approval of the in-place
-pre-alpha v1 semantic disposition. Implementation may be evaluated on a draft
-branch, but no authority integration or release promotion may rely on it until
-the RFC is accepted.
+**Accepted on 2026-07-12.** Dana Edwards explicitly approved the in-place
+pre-alpha v1 semantic disposition after reviewing PR #9 and its behavior and
+assurance evidence. The accepted semantic changes are:
+
+- every v1 policy-bound resource quantity must be positive;
+- `LifecycleNonFungible` policy candidates must have `quantity_max == 1`;
+- the deterministic rejection precedence specified above is normative;
+- the pre-authority API quarantine, typed resource-ID boundary, and diagnostic
+  redaction remain required hardening around the accepted predicate.
+
+Acceptance authorizes this pre-alpha semantic narrowing and its reviewed local
+implementation. It does not create canonical policy bytes, authenticated
+policy activation, a governed verifier registry, final `ResourceV1`, verified
+facts, state, commit, release, or production authority. A future marker-resource
+profile requires a new versioned RFC.

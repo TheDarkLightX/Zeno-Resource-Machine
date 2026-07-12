@@ -21,12 +21,15 @@
       "evidence/wp1-local-gates-2026-07-10.json",
       "evidence/wp1-class-c-review-2026-07-11.json"
     ],
+    "reviewed_unpromoted_scope": [
+      "rfc_0003_pre_authority_api_quarantine_and_positive_resource_dimensions",
+      "security_review_zero_quantity_and_api_quarantine_candidate",
+      "security_review_resource_id_and_diagnostic_hardening_candidate"
+    ],
     "unreviewed_candidate_scope": [
       "pre_rfc_wp2_in_memory_policy_model",
       "wp2_specialized_opaque_root_candidates",
       "wp2_policy_limits_unit_checks_and_internal_verifier_cost_arithmetic",
-      "security_review_zero_quantity_and_api_quarantine_candidate",
-      "security_review_resource_id_and_diagnostic_hardening_candidate",
       "wp0_multi_axis_code_quality_controls",
       "wp0_source_sbom_and_cryptography_cbom_controls",
       "wp3a_canonical_resource_role_partition",
@@ -1671,12 +1674,13 @@
         "worklogs/2026-07-12-security-review-remediation.md",
         "evidence/security-remediation-agent-reviews-2026-07-12.json",
         "evidence/security-remediation-local-gates-2026-07-12.json",
+        "evidence/rfc-0003-maintainer-approval-2026-07-12.json",
         "worklogs/2026-07-11-wp3-role-bound-intrinsic.md",
         "evidence/wp3c-agent-reviews-2026-07-12.json",
         "evidence/wp3c-local-gates-2026-07-12.json"
       ],
-      "next_action": "obtain final human behavior and assurance-evidence review of each candidate slice after clean hosted gates, retain isolated oracle and adversarial artifacts, and prove live distinct-reviewer branch controls before authority or release promotion",
-      "non_claim": "WP1 has scoped human approval; receipt-bound agent oracle and adversarial reviews strengthen technical evidence but do not replace required human approval or an external production audit, and static CODEOWNERS do not prove live host enforcement",
+      "next_action": "retain the completed RFC-0003 maintainer review, obtain final human behavior and assurance-evidence review for the remaining candidate slices after clean hosted gates, retain isolated oracle and adversarial artifacts, and prove live distinct-reviewer branch controls before authority or release promotion",
+      "non_claim": "WP1 has scoped human approval and RFC-0003 has explicit maintainer semantic approval; these approvals do not promote the other candidate slices or replace an external production audit, and static CODEOWNERS do not prove live host enforcement",
       "normative_refs": [
         "SPECIFICATION.md#45-generated-code-policy",
         "SPECIFICATION.md#46-agent-implementation-contract"
@@ -1987,10 +1991,11 @@
         "reference_models/resource_kind_policy_v1_rfc0003_proposed_counterexamples.json",
         "rfcs/RFC-0003-security-review-api-quarantine.md",
         "evidence/SECURITY_REMEDIATION_MUTATION_MAP.md",
-        "worklogs/2026-07-12-security-review-remediation.md"
+        "worklogs/2026-07-12-security-review-remediation.md",
+        "evidence/rfc-0003-maintainer-approval-2026-07-12.json"
       ],
-      "next_action": "obtain human RFC approval for the in-place pre-alpha lifecycle-maximum amendment, apply the predicate only after authenticated active-policy resolution in final ResourceV1 construction, and define any marker permission in a future version",
-      "non_claim": "the implemented predicate consumes an inert policy candidate and candidate dimensions only; no canonical policy bytes, active-policy authentication, final ResourceV1 capability, accounting proof, marker permission, accepted transition, or commit exists",
+      "next_action": "apply the accepted predicate only after authenticated active-policy resolution in final ResourceV1 construction, retain the RFC-0003 error precedence, and define any marker permission in a future version",
+      "non_claim": "RFC-0003 approval fixes the pre-authority predicate but grants no runtime authority; the implemented predicate still consumes an inert policy candidate and candidate dimensions only, with no canonical policy bytes, active-policy authentication, final ResourceV1 capability, accounting proof, marker permission, accepted transition, or commit",
       "normative_refs": [
         "SPECIFICATION.md#14-resource-kind-policy",
         "rfcs/RFC-0003-security-review-api-quarantine.md#resource-dimensions"

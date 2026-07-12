@@ -45,3 +45,9 @@ the original security receipts byte-for-byte, records the branch-local
 RFC-0002 to integrated RFC-0003 identity correction, binds every renamed oracle
 artifact, and reports the combined-tree replay. It does not approve RFC-0003 or
 promote the security remediation.
+
+`rfc-0003-maintainer-approval-2026-07-12.json` records Dana Edwards's explicit
+semantic approval after review and merge of PR #9. It accepts the positive v1
+quantity and lifecycle-maximum-one rules while retaining CBC-046 as partial and
+preserving every policy, verifier, state, commit, release, and production
+non-claim.
