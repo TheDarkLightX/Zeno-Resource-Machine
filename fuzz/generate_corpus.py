@@ -15,6 +15,9 @@ POLICY_MAX_SEED = ROOT / "fuzz/corpus/policy_cost_v1/maxima"
 POLICY_SMALL_SUCCESS_SEED = ROOT / "fuzz/corpus/policy_cost_v1/small-success"
 RESOURCE_ROLES_CORPUS = ROOT / "fuzz/corpus/resource_roles_v1"
 INTRINSIC_RESOURCE_CORPUS = ROOT / "fuzz/corpus/intrinsic_resource_v1"
+POLICY_RESOURCE_DIMENSIONS_CORPUS = (
+    ROOT / "fuzz/corpus/policy_resource_dimensions_v1"
+)
 MAX_RESOURCE_BYTES = 16_384
 
 
@@ -102,6 +105,38 @@ def intrinsic_resource_seeds() -> dict[str, bytes]:
     return seeds
 
 
+def policy_resource_dimension_seed(
+    mode: int, unit_mismatch: bool, quantity: int, quantity_maximum: int
+) -> bytes:
+    """Encode one structured resource-dimension policy seed."""
+
+    return bytes((mode, int(unit_mismatch))) + quantity.to_bytes(
+        16, "big"
+    ) + quantity_maximum.to_bytes(16, "big")
+
+
+def policy_resource_dimension_seeds() -> dict[str, bytes]:
+    """Return mode, precedence, lifecycle, zero, and u128 boundary seeds."""
+
+    return {
+        "zero-conserved": policy_resource_dimension_seed(0, False, 0, 1),
+        "zero-mintable": policy_resource_dimension_seed(1, False, 0, 1),
+        "zero-lifecycle": policy_resource_dimension_seed(2, False, 0, 1),
+        "zero-transformable": policy_resource_dimension_seed(3, False, 0, 1),
+        "zero-evidence": policy_resource_dimension_seed(4, False, 0, 1),
+        "wrong-unit-precedes-lifecycle": policy_resource_dimension_seed(
+            2, True, 0, 1
+        ),
+        "lifecycle-maximum-zero": policy_resource_dimension_seed(2, False, 1, 0),
+        "lifecycle-maximum-one": policy_resource_dimension_seed(2, False, 1, 1),
+        "lifecycle-maximum-two": policy_resource_dimension_seed(2, False, 1, 2),
+        "quantity-above-maximum": policy_resource_dimension_seed(0, False, 2, 1),
+        "full-width-maximum": policy_resource_dimension_seed(
+            4, False, (1 << 128) - 1, (1 << 128) - 1
+        ),
+    }
+
+
 def check_seed(path: Path, expected: bytes, label: str) -> bool:
     """Report whether one deterministic corpus entry is present and exact."""
 
@@ -142,6 +177,7 @@ def main() -> int:
     )
     role_seeds = resource_role_seeds()
     intrinsic_seeds = intrinsic_resource_seeds()
+    policy_dimension_seeds = policy_resource_dimension_seeds()
     if arguments.check:
         if not check_seed(OVERSIZE_SEED, expected, "oversize-boundary"):
             return 1
@@ -165,9 +201,23 @@ def main() -> int:
             INTRINSIC_RESOURCE_CORPUS, set(intrinsic_seeds), "intrinsic-resource"
         ):
             return 1
+        for name, policy_dimension_seed in policy_dimension_seeds.items():
+            if not check_seed(
+                POLICY_RESOURCE_DIMENSIONS_CORPUS / name,
+                policy_dimension_seed,
+                name,
+            ):
+                return 1
+        if not check_seed_names(
+            POLICY_RESOURCE_DIMENSIONS_CORPUS,
+            set(policy_dimension_seeds),
+            "policy-resource-dimensions",
+        ):
+            return 1
         print(
             "fuzz corpus check passed: resource boundary, three policy-cost seeds, "
-            "ten resource-role seeds, and eighteen intrinsic-resource seeds"
+            "ten resource-role seeds, eighteen intrinsic-resource seeds, and "
+            "eleven policy-resource-dimension seeds"
         )
         return 0
     OVERSIZE_SEED.parent.mkdir(parents=True, exist_ok=True)
@@ -182,9 +232,13 @@ def main() -> int:
     INTRINSIC_RESOURCE_CORPUS.mkdir(parents=True, exist_ok=True)
     for name, intrinsic_seed in intrinsic_seeds.items():
         (INTRINSIC_RESOURCE_CORPUS / name).write_bytes(intrinsic_seed)
+    POLICY_RESOURCE_DIMENSIONS_CORPUS.mkdir(parents=True, exist_ok=True)
+    for name, policy_dimension_seed in policy_dimension_seeds.items():
+        (POLICY_RESOURCE_DIMENSIONS_CORPUS / name).write_bytes(policy_dimension_seed)
     print(
         "generated resource boundary, three policy-cost seeds, "
-        "ten resource-role seeds, and eighteen intrinsic-resource seeds"
+        "ten resource-role seeds, eighteen intrinsic-resource seeds, and "
+        "eleven policy-resource-dimension seeds"
     )
     return 0
 

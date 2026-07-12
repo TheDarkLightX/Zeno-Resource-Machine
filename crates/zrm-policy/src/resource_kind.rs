@@ -1,5 +1,8 @@
 //! Version-one resource-kind policy and dimension checks.
 
+#[cfg(kani)]
+mod kani_harnesses;
+
 use zrm_types::{
     AllowedLogicProfileSetRoot, AllowedLogicSetRoot, AllowedTransformationSetRoot, ApplicationId,
     BurnAuthorityRoot, ControllerPolicyRoot, DomainId, MachineId, MintAuthorityRoot, PolicyId,
@@ -115,9 +118,10 @@ impl ResourceKindPolicyV1 {
     /// Checks one resource's exact unit and quantity constraints.
     ///
     /// Unit mismatch is selected first. Lifecycle non-fungibles then require
-    /// exactly one atom before the general quantity maximum is checked. No
-    /// conversion, rounding, floating point, or arithmetic across different
-    /// units occurs.
+    /// exactly one atom. Every other zero quantity rejects because this schema
+    /// has no explicit marker-resource permission. The general quantity
+    /// maximum is checked last. No conversion, rounding, floating point, or
+    /// arithmetic across different units occurs.
     ///
     /// # Errors
     ///
@@ -136,6 +140,9 @@ impl ResourceKindPolicyV1 {
             return Err(ResourceDimensionErrorV1::LifecycleQuantityMustBeOne {
                 actual: quantity.get(),
             });
+        }
+        if quantity.get() == 0 {
+            return Err(ResourceDimensionErrorV1::ZeroQuantityForbidden);
         }
         if quantity > self.candidate.quantity_max {
             return Err(ResourceDimensionErrorV1::QuantityExceedsMaximum {
@@ -158,7 +165,7 @@ impl ResourceKindPolicyV1 {
 impl TryFrom<ResourceKindPolicyCandidateV1> for ResourceKindPolicyV1 {
     type Error = PolicyValidationErrorV1;
 
-    /// Validates schema and inclusive validity.
+    /// Validates schema, inclusive validity, and accounting-mode invariants.
     ///
     /// # Errors
     ///
@@ -175,6 +182,13 @@ impl TryFrom<ResourceKindPolicyCandidateV1> for ResourceKindPolicyV1 {
             candidate.validity_start_epoch,
             candidate.validity_end_epoch,
         )?;
+        if candidate.accounting_mode == AccountingModeV1::LifecycleNonFungible
+            && candidate.quantity_max.get() != 1
+        {
+            return Err(PolicyValidationErrorV1::LifecycleQuantityMaximumMustBeOne {
+                actual: candidate.quantity_max.get(),
+            });
+        }
         Ok(Self {
             candidate,
             validity,

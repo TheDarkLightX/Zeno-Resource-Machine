@@ -74,6 +74,11 @@ pub enum PolicyValidationErrorV1 {
         /// Inclusive end epoch.
         end: u64,
     },
+    /// A lifecycle non-fungible policy declared a maximum other than one.
+    LifecycleQuantityMaximumMustBeOne {
+        /// Rejected maximum quantity.
+        actual: u128,
+    },
     /// A v1 machine policy selected a suite other than the schema-fixed suite.
     UnsupportedResourceCryptoSuite,
     /// One configured machine limit exceeds its compile-time ceiling.
@@ -110,6 +115,10 @@ impl fmt::Display for PolicyValidationErrorV1 {
                     "invalid {object:?} validity window: {start}..={end}"
                 )
             }
+            Self::LifecycleQuantityMaximumMustBeOne { actual } => write!(
+                formatter,
+                "lifecycle quantity maximum must be one, got {actual}"
+            ),
             Self::UnsupportedResourceCryptoSuite => {
                 formatter.write_str("unsupported ResourceWireV1 cryptographic suite")
             }
@@ -145,6 +154,8 @@ pub enum ResourceDimensionErrorV1 {
         /// Rejected quantity.
         actual: u128,
     },
+    /// The current policy schema does not permit zero-quantity resources.
+    ZeroQuantityForbidden,
     /// The resource quantity exceeds the policy maximum.
     QuantityExceedsMaximum {
         /// Rejected quantity.
@@ -162,6 +173,9 @@ impl fmt::Display for ResourceDimensionErrorV1 {
                 formatter,
                 "lifecycle non-fungible resource quantity must be one, got {actual}"
             ),
+            Self::ZeroQuantityForbidden => {
+                formatter.write_str("zero resource quantity is forbidden by policy")
+            }
             Self::QuantityExceedsMaximum { actual, maximum } => {
                 write!(
                     formatter,

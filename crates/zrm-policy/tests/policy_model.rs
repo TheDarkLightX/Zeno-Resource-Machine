@@ -529,7 +529,7 @@ fn assert_lifecycle_non_fungible_dimensions(
 ) -> PolicyModelTestResult {
     let mut lifecycle = *candidate;
     lifecycle.accounting_mode = AccountingModeV1::LifecycleNonFungible;
-    lifecycle.quantity_max = QuantityAtoms::new(2);
+    lifecycle.quantity_max = QuantityAtoms::new(1);
     let lifecycle_policy = ResourceKindPolicyV1::try_from(lifecycle)?;
     assert_eq!(
         lifecycle_policy.validate_dimensions(lifecycle.unit_id, QuantityAtoms::new(0)),
@@ -551,6 +551,61 @@ fn resource_kind_policy_enforces_unit_quantity_and_lifecycle_bounds() -> PolicyM
     let candidate = resource_kind_candidate()?;
     assert_conserved_fungible_dimensions(&candidate)?;
     assert_lifecycle_non_fungible_dimensions(&candidate)
+}
+
+#[test]
+fn lifecycle_policy_requires_quantity_maximum_exactly_one() -> Result<(), ZeroValueError> {
+    for invalid_maximum in [0, 2, u128::MAX] {
+        let mut candidate = resource_kind_candidate()?;
+        candidate.accounting_mode = AccountingModeV1::LifecycleNonFungible;
+        candidate.quantity_max = QuantityAtoms::new(invalid_maximum);
+        assert_eq!(
+            ResourceKindPolicyV1::try_from(candidate),
+            Err(PolicyValidationErrorV1::LifecycleQuantityMaximumMustBeOne {
+                actual: invalid_maximum,
+            })
+        );
+    }
+
+    let mut candidate = resource_kind_candidate()?;
+    candidate.accounting_mode = AccountingModeV1::LifecycleNonFungible;
+    candidate.quantity_max = QuantityAtoms::new(1);
+    assert!(ResourceKindPolicyV1::try_from(candidate).is_ok());
+    Ok(())
+}
+
+#[test]
+fn resource_kind_policy_reject_precedence_is_schema_then_window_then_lifecycle_maximum()
+-> Result<(), ZeroValueError> {
+    let mut candidate = resource_kind_candidate()?;
+    candidate.accounting_mode = AccountingModeV1::LifecycleNonFungible;
+    candidate.quantity_max = QuantityAtoms::new(0);
+    candidate.schema_version = 2;
+    candidate.validity_start_epoch = 21;
+    assert_eq!(
+        ResourceKindPolicyV1::try_from(candidate),
+        Err(PolicyValidationErrorV1::UnsupportedSchemaVersion {
+            object: PolicyObjectV1::ResourceKindPolicy,
+            actual: 2,
+        })
+    );
+
+    candidate.schema_version = 1;
+    assert_eq!(
+        ResourceKindPolicyV1::try_from(candidate),
+        Err(PolicyValidationErrorV1::InvalidValidityWindow {
+            object: PolicyObjectV1::ResourceKindPolicy,
+            start: 21,
+            end: 20,
+        })
+    );
+
+    candidate.validity_start_epoch = 20;
+    assert_eq!(
+        ResourceKindPolicyV1::try_from(candidate),
+        Err(PolicyValidationErrorV1::LifecycleQuantityMaximumMustBeOne { actual: 0 })
+    );
+    Ok(())
 }
 
 #[test]
@@ -700,6 +755,10 @@ fn assert_policy_validation_diagnostics() {
             PolicyValidationErrorV1::MissingAdmissionVerifierPolicy,
             "RequiredVerifier requires an admission verifier policy",
         ),
+        (
+            PolicyValidationErrorV1::LifecycleQuantityMaximumMustBeOne { actual: 2 },
+            "lifecycle quantity maximum must be one, got 2",
+        ),
     ];
     for (error, expected) in policy_errors {
         assert_stable_bounded_diagnostic(error, expected);
@@ -715,6 +774,10 @@ fn assert_resource_dimension_diagnostics() {
         (
             ResourceDimensionErrorV1::LifecycleQuantityMustBeOne { actual: 0 },
             "lifecycle non-fungible resource quantity must be one, got 0",
+        ),
+        (
+            ResourceDimensionErrorV1::ZeroQuantityForbidden,
+            "zero resource quantity is forbidden by policy",
         ),
         (
             ResourceDimensionErrorV1::QuantityExceedsMaximum {
