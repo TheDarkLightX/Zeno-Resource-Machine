@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - agent/semantic-contracts-v1
+  pull_request:
 
 permissions:
   contents: read
