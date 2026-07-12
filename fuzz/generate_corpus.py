@@ -14,6 +14,7 @@ POLICY_SEQUENCE_SEED = ROOT / "fuzz/corpus/policy_cost_v1/sequence"
 POLICY_MAX_SEED = ROOT / "fuzz/corpus/policy_cost_v1/maxima"
 POLICY_SMALL_SUCCESS_SEED = ROOT / "fuzz/corpus/policy_cost_v1/small-success"
 RESOURCE_ROLES_CORPUS = ROOT / "fuzz/corpus/resource_roles_v1"
+INTRINSIC_RESOURCE_CORPUS = ROOT / "fuzz/corpus/intrinsic_resource_v1"
 MAX_RESOURCE_BYTES = 16_384
 
 
@@ -72,6 +73,35 @@ def resource_role_seeds() -> dict[str, bytes]:
     }
 
 
+def intrinsic_resource_seeds() -> dict[str, bytes]:
+    """Return parity-encoded seeds for every intrinsic defect and precedence."""
+
+    names = [
+        "zero-machine",
+        "zero-domain",
+        "zero-application",
+        "zero-resource-kind",
+        "zero-resource-logic",
+        "zero-logic-profile",
+        "zero-resource-kind-policy",
+        "zero-unit",
+        "zero-label",
+        "zero-value",
+        "zero-controller",
+        "zero-policy-root",
+        "zero-provenance",
+        "zero-nonce",
+        "expiry-before-creation",
+        "unknown-flags",
+    ]
+    seeds = {"valid-zero-quantity": b"0" * 16, "all-defects": b"1" * 16}
+    for index, name in enumerate(names):
+        bits = bytearray(b"0" * 16)
+        bits[index] = ord("1")
+        seeds[name] = bytes(bits)
+    return seeds
+
+
 def check_seed(path: Path, expected: bytes, label: str) -> bool:
     """Report whether one deterministic corpus entry is present and exact."""
 
@@ -81,17 +111,17 @@ def check_seed(path: Path, expected: bytes, label: str) -> bool:
     return False
 
 
-def check_seed_names(directory: Path, expected_names: set[str]) -> bool:
+def check_seed_names(directory: Path, expected_names: set[str], label: str) -> bool:
     """Reject unreviewed campaign discoveries in a deterministic corpus."""
 
     if not directory.is_dir():
-        print("fuzz corpus check failed: resource-role corpus is missing", file=sys.stderr)
+        print(f"fuzz corpus check failed: {label} corpus is missing", file=sys.stderr)
         return False
     actual_names = {path.name for path in directory.iterdir() if path.is_file()}
     if actual_names == expected_names:
         return True
     print(
-        "fuzz corpus check failed: resource-role corpus contains missing or extra files",
+        f"fuzz corpus check failed: {label} corpus contains missing or extra files",
         file=sys.stderr,
     )
     return False
@@ -111,6 +141,7 @@ def main() -> int:
         for value in (7, 3, 5, 11, 100, 80, 40, 10_000, 10_000, 4, 5)
     )
     role_seeds = resource_role_seeds()
+    intrinsic_seeds = intrinsic_resource_seeds()
     if arguments.check:
         if not check_seed(OVERSIZE_SEED, expected, "oversize-boundary"):
             return 1
@@ -125,11 +156,18 @@ def main() -> int:
         for name, role_seed in role_seeds.items():
             if not check_seed(RESOURCE_ROLES_CORPUS / name, role_seed, name):
                 return 1
-        if not check_seed_names(RESOURCE_ROLES_CORPUS, set(role_seeds)):
+        if not check_seed_names(RESOURCE_ROLES_CORPUS, set(role_seeds), "resource-role"):
+            return 1
+        for name, intrinsic_seed in intrinsic_seeds.items():
+            if not check_seed(INTRINSIC_RESOURCE_CORPUS / name, intrinsic_seed, name):
+                return 1
+        if not check_seed_names(
+            INTRINSIC_RESOURCE_CORPUS, set(intrinsic_seeds), "intrinsic-resource"
+        ):
             return 1
         print(
             "fuzz corpus check passed: resource boundary, three policy-cost seeds, "
-            "and ten resource-role seeds"
+            "ten resource-role seeds, and eighteen intrinsic-resource seeds"
         )
         return 0
     OVERSIZE_SEED.parent.mkdir(parents=True, exist_ok=True)
@@ -141,9 +179,12 @@ def main() -> int:
     RESOURCE_ROLES_CORPUS.mkdir(parents=True, exist_ok=True)
     for name, role_seed in role_seeds.items():
         (RESOURCE_ROLES_CORPUS / name).write_bytes(role_seed)
+    INTRINSIC_RESOURCE_CORPUS.mkdir(parents=True, exist_ok=True)
+    for name, intrinsic_seed in intrinsic_seeds.items():
+        (INTRINSIC_RESOURCE_CORPUS / name).write_bytes(intrinsic_seed)
     print(
         "generated resource boundary, three policy-cost seeds, "
-        "and ten resource-role seeds"
+        "ten resource-role seeds, and eighteen intrinsic-resource seeds"
     )
     return 0
 

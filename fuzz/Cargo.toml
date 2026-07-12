@@ -36,5 +36,12 @@ test = false
 doc = false
 bench = false
 
+[[bin]]
+name = "intrinsic_resource_v1"
+path = "fuzz_targets/intrinsic_resource_v1.rs"
+test = false
+doc = false
+bench = false
+
 [workspace]
 members = ["."]

@@ -122,6 +122,8 @@ jobs:
           cargo +nightly-2025-03-02 fuzz run policy_cost_v1 -- -seed=1 -max_total_time=45 -max_len=88 -timeout=5
           cargo +nightly-2025-03-02 fuzz run resource_roles_v1 -- -seed=1 -runs=10 -max_len=24684 -timeout=5
           cargo +nightly-2025-03-02 fuzz run resource_roles_v1 -- -seed=1 -max_total_time=45 -max_len=24684 -timeout=5
+          cargo +nightly-2025-03-02 fuzz run intrinsic_resource_v1 -- -seed=1 -runs=18 -max_len=32 -timeout=5
+          cargo +nightly-2025-03-02 fuzz run intrinsic_resource_v1 -- -seed=1 -max_total_time=45 -max_len=32 -timeout=5
 
   assurance:
     runs-on: ubuntu-24.04
