@@ -545,6 +545,8 @@ def policy_source_cfg_failures(sources: dict[str, str]) -> list[str]:
 
     failures: list[str] = []
     for path, source in sources.items():
+        if not source.isascii():
+            failures.append(f"{path} contains non-ASCII policy source")
         failures.extend(authority_cfg_failures(path, source))
         failures.extend(policy_path_attribute_failures(path, source, sources))
         failures.extend(policy_macro_invocation_failures(path, source))

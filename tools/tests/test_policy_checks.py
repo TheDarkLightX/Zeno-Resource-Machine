@@ -417,6 +417,15 @@ impl VerifierCostRowV1 {
                     any("reviewed macro root" in failure for failure in failures)
                 )
 
+        unicode_alias = policy_source_cfg_failures(
+            {
+                "crates/zrm-policy/src/resource_kind.rs": (
+                    "use zrm_types as \u00e9; \u00e9::assert!(cfg(not(doc)));"
+                )
+            }
+        )
+        self.assertTrue(any("non-ASCII" in failure for failure in unicode_alias))
+
     def test_linked_policy_source_root_rejects_before_source_reads(self) -> None:
         """The policy source root and repository ancestors must be regular."""
 

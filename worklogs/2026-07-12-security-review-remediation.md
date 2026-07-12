@@ -158,7 +158,8 @@ misread as an authority-bearing result.
   and value-returning fuzz escapes. Reviewed `path` attributes resolve only to
   regular files within the complete scanned policy source tree; linked source
   roots/directories, unreviewed source inclusion, dependency macro invocations,
-  macro imports/aliases, glob imports, and protected-root shadowing fail closed.
+  macro imports/aliases, glob imports, protected-root shadowing, and non-ASCII
+  policy source fail closed.
 - The canonical codec owns private resource-ID hashing. Hash frame widths are
   checked from the actual encoded bytes and actual domain length rather than
   duplicated wire-size constants.
