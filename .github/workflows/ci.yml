@@ -43,6 +43,7 @@ jobs:
         run: |
           python3 tools/check_repository_hygiene.py
           python3 tools/check_conformance.py
+          python3 tools/check_delegation_plan.py
           python3 tools/check_architecture.py
           python3 tools/check_complexity.py --report target/complexity-report.json
           python3 tools/check_code_quality.py --report target/code-quality-report.json
