@@ -1,0 +1,122 @@
+{
+  "schema": "zrm/morph-reformulations/v1",
+  "run_id": "zrm-frontier-v2-2026-07-14",
+  "tool": {
+    "research_kernel_revision": "d9cdfceaa396dd56acfacbd042b89ce633dbc173",
+    "full_morph_revision_inspected": "a26a9f5ddabfa2d5be8e12f8c3546836ace92520",
+    "execution_level": "research-kernel-template-only",
+    "warning": "rk_morph emits deterministic text templates; it is not execution of the Morph proof-search runtime."
+  },
+  "target": "A proof-neutral ZRM semantic plane preserves exact accounting, ordered manifests, context-indexed continuity, deterministic serial refinement, explicit privacy leakage, and the semantic-proof versus durable-commit authority cut across replaceable evidence backends.",
+  "kernel_candidates": [
+    {
+      "mode": "equivalent_statement",
+      "statement": "State an explicit equivalence between recursive acceptance and sequential manifest folding under one validation context, with durable commit excluded from both sides.",
+      "semantic_preservation_test": "Enumerate bounded valid and invalid traces and compare both predicates exactly."
+    },
+    {
+      "mode": "counterexample_search",
+      "statement": "Search for the shortest ordered manifest whose recursive grouping changes definedness, summary, predecessor continuity, or rejection reason.",
+      "semantic_preservation_test": "Require the smallest counterexample and replay it under every binary tree shape."
+    },
+    {
+      "mode": "invariant_form",
+      "statement": "Every recursive node preserves the exact ordered leaf manifest, validation-context identity, total summary carrier, disjointness obligations, and predecessor-to-successor state relation.",
+      "semantic_preservation_test": "Seed omission, duplication, reordering, context substitution, intermediate identity, and overlap mutants."
+    },
+    {
+      "mode": "formal_spec",
+      "statement": "Define assumptions, public inputs, private witnesses, guarantees, reject cases, and non-authority boundaries before selecting a proof system.",
+      "semantic_preservation_test": "Map every field to one theorem obligation and one executable substitution test."
+    },
+    {
+      "mode": "attack_surface",
+      "statement": "Enumerate adversarial proof trees, manifests, contexts, catalogs, policy roots, state roots, effect commitments, and commit-evidence substitutions.",
+      "semantic_preservation_test": "One field change must either change the statement or be rejected; no verifier callback may mint commit authority."
+    }
+  ],
+  "architecture_reformulations": [
+    {
+      "id": "MORPH-ZRM-001",
+      "from": "binary summaries are the semantic object",
+      "to": "the ordered manifest is the semantic object; binary nodes are caches that prove equality to its fold",
+      "expected_gain": "Tree independence becomes a refinement theorem rather than an assumption about every binary composer.",
+      "risk": "A full manifest may be too large as public data; commit to it and prove exact private opening or incremental binding."
+    },
+    {
+      "id": "MORPH-ZRM-002",
+      "from": "one canonical container abstraction",
+      "to": "CanonicalSet for within-transition coverage and OrderedTrace for postcommit history",
+      "expected_gain": "The type system blocks accidental sorting of noncommutative history.",
+      "risk": "Adapters must make every conversion explicit and prove whether it preserves or intentionally discards order."
+    },
+    {
+      "id": "MORPH-ZRM-003",
+      "from": "untyped external acceleration data",
+      "to": "a governed, versioned acceleration-input profile authenticated by the statement or replaced by verified recomputation",
+      "expected_gain": "Optimizations remain explicit, substitutable, and composable with the ZRM validation context.",
+      "risk": "Profile governance and witness-update costs may erase the speedup; benchmark against verified recomputation."
+    },
+    {
+      "id": "MORPH-ZRM-004",
+      "from": "claim promotion from tool status and replay strings",
+      "to": "promotion from content-addressed receipts verified by an allowlisted checker",
+      "expected_gain": "Evidence becomes reconstructible and toolchain-bound.",
+      "risk": "Receipt schemas can become another authority surface; version and minimize them."
+    },
+    {
+      "id": "MORPH-ZRM-005",
+      "from": "semantic proof includes commit conclusion",
+      "to": "semantic receipt, private atomic commit plan, and postcommit commit-authority evidence are separate phases",
+      "expected_gain": "Preserves fail-closed authority under crash, retry, and concurrent execution.",
+      "risk": "More interfaces require exact context and statement binding across phases."
+    },
+    {
+      "id": "MORPH-ZRM-006",
+      "from": "bounded signed net is recursively added",
+      "to": "monotone debit and credit limbs are recursively merged; signed net is a boundary projection",
+      "expected_gain": "Checked definedness no longer depends on proof-tree parenthesization and cancelling rows retain coverage.",
+      "risk": "Limb bounds can be stricter than a net bound and require explicit dimension-level sizing."
+    },
+    {
+      "id": "MORPH-ZRM-007",
+      "from": "all recursive children share one immutable context forever",
+      "to": "ordinary steps preserve context and a separately governed indexed bridge changes it",
+      "expected_gain": "Long proof chains can cross policy and verifier upgrades without fact reinterpretation.",
+      "risk": "Bridge semantics become a high-assurance authority surface and must be rare, explicit, and replay-safe."
+    },
+    {
+      "id": "MORPH-ZRM-008",
+      "from": "parallelism is certified by disjoint nullifiers or writes",
+      "to": "speculation refines a canonical serial order through sealed exact point and range observations",
+      "expected_gain": "Write skew, policy dependencies, range phantoms, and worker-timing nondeterminism become testable failures.",
+      "risk": "Exact read instrumentation and reexecution can reduce throughput; retain a governed I-confluent fast path only with stronger proof."
+    },
+    {
+      "id": "MORPH-ZRM-009",
+      "from": "proof bytes identify economic work",
+      "to": "semantic segment hash identifies economic and replay meaning; proof-node identity separately binds backend, release, and topology",
+      "expected_gain": "Alternative encodings and topologies cannot redeem one semantic segment twice.",
+      "risk": "The projection must be exact and proof-system malleability still needs a cryptographic review."
+    },
+    {
+      "id": "MORPH-ZRM-010",
+      "from": "a mutable scalar status summarizes research confidence",
+      "to": "immutable evidence and promotion receipts derive four-valued truth plus an orthogonal assurance vector at a checkpoint and policy version",
+      "expected_gain": "Negative evidence compounds, disagreement remains visible, and signed or reproducible false claims are not mislabeled proved.",
+      "risk": "Typed policy and exact scope comparison add complexity; begin with deterministic bytes and a small verifier."
+    }
+  ],
+  "strict_replay_requirements": [
+    "Pin the Morph commit, dependency environment, domain constructor, runtime constructor, tactics, strategy, bounds, and seeds.",
+    "Require a verifier-owned trusted constructor registry for custom ZRM domains.",
+    "Require verification_level replay, not shape or artifact validation.",
+    "Bind any Lean certificate to an allowlisted module, declaration, statement hash, source root, and toolchain root.",
+    "Reject sorryAx and undeclared axioms by inspecting declaration dependencies."
+  ],
+  "non_claims": [
+    "These are search reformulations, not accepted architecture decisions.",
+    "The full Morph runtime did not run in this environment.",
+    "A Lean source file that merely elaborates is not automatically a protocol-bound certificate."
+  ]
+}

@@ -1,0 +1,70 @@
+{
+  "context_bridge": {
+    "post_context": "ctx-b",
+    "pre_context": "ctx-a",
+    "same_context_only_mutant_accepts": false,
+    "trace": [
+      "resource-a",
+      "governance-a-b",
+      "resource-b"
+    ],
+    "typed_path_accepts": true
+  },
+  "footprint_exploration": {
+    "fact_complete_certified_pairs": 54,
+    "fact_complete_false_safe_schedule_checks": 0,
+    "first_write_only_counterexample": {
+      "initial": {
+        "x": 1,
+        "y": 0,
+        "z": 0
+      },
+      "left": "set-x-0",
+      "left_then_right": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "right": "copy-x-y",
+      "right_then_left": {
+        "x": 0,
+        "y": 1,
+        "z": 0
+      }
+    },
+    "named_counterexample": {
+      "fact_complete_certifies": false,
+      "initial": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "left": "copy-x-y",
+      "right": "set-x-1",
+      "schedules_agree": false,
+      "write_only_certifies": true
+    },
+    "ordered_program_pairs": 132,
+    "programs": 12,
+    "schedule_checks": 1056,
+    "states": 8,
+    "write_only_certified_pairs": 96,
+    "write_only_false_safe_schedule_checks": 168
+  },
+  "identity": {
+    "external_admission_accepts": false,
+    "internal_total_carrier_accepts": true
+  },
+  "non_claims": [
+    "finite key/value programs are not a proof about arbitrary ZRM transition code",
+    "declared footprints are trusted model objects until an instrumented fact resolver proves exact coverage",
+    "context bridge authority is abstract and does not define governance protocol bytes",
+    "hash roots are model-only domain-separated SHA-256 values"
+  ],
+  "ordered_manifest": {
+    "distinct_ordered_roots": 6,
+    "distinct_sorted_mutant_roots": 1,
+    "permutations": 6
+  },
+  "schema": "zrm/composition-frontier-exploration/v2"
+}
