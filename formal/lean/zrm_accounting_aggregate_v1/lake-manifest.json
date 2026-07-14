@@ -1,0 +1,13 @@
+{"version": "1.2.0",
+ "packagesDir": ".lake/packages",
+ "packages":
+ [{"type": "path",
+   "scope": "",
+   "name": "arm_zrm_frontier_v2",
+   "manifestFile": "lake-manifest.json",
+   "inherited": false,
+   "dir": "../arm_zrm_frontier_v2",
+   "configFile": "lakefile.toml"}],
+ "name": "zrm_accounting_aggregate_v1",
+ "lakeDir": ".lake",
+ "fixedToolchain": false}

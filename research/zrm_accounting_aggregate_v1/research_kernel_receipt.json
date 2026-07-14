@@ -1,0 +1,130 @@
+{
+  "schema": "zrm/accounting-aggregate-research-kernel-receipt/v1",
+  "run_id": "zrm_accounting_aggregate_v1_20260714",
+  "kernel_revision": "d9cdfceaa396dd56acfacbd042b89ce633dbc173",
+  "base_revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+  "transport": "MCP stdio ClientSession with RK_MODE=safe",
+  "executed_on": "2026-07-14",
+  "first_pass": {
+    "purpose": "Generate, connect, reformulate, and attack candidate accounting carriers before implementation.",
+    "mcp_calls": 78,
+    "tool_counts": {
+      "rk_atom_add": 38,
+      "rk_evidence_attach": 12,
+      "rk_frontier": 1,
+      "rk_morph": 4,
+      "rk_refute": 20,
+      "rk_report": 1,
+      "rk_retrieve": 1,
+      "rk_start": 1
+    },
+    "atoms": 82,
+    "edges": 65,
+    "evidence_records": 12,
+    "actual_counterexamples": 4,
+    "morph_candidates": 24,
+    "frontier_items": 25,
+    "status_counts_at_report": {
+      "CANDIDATE": 24,
+      "REFUTED": 8,
+      "SUPPORTED": 12,
+      "UNDER_TEST": 16,
+      "UNKNOWN": 22
+    },
+    "type_counts": {
+      "COUNTEREXAMPLE": 4,
+      "HYPOTHESIS": 20,
+      "OBSERVATION": 12,
+      "QUESTION": 6,
+      "REFORMULATION": 24,
+      "RISK": 16
+    },
+    "edge_type_counts": {
+      "DEPENDS_ON": 45,
+      "REFUTES": 4,
+      "TESTS": 16
+    },
+    "report_event_count_before_report_event": 169,
+    "event_log_count_after_report": 170,
+    "refuted_claim_ids": [
+      "c_signed_checked",
+      "c_two_field_lossless",
+      "c_u128_enough",
+      "c_net_is_coverage"
+    ]
+  },
+  "evidence_pass": {
+    "purpose": "Attach bounded Python and Lean replay observations, search local contradiction memory, and invoke the fail-closed promotion gate.",
+    "mcp_calls": 30,
+    "tool_counts": {
+      "rk_evidence_attach": 18,
+      "rk_frontier": 1,
+      "rk_promote": 9,
+      "rk_report": 1,
+      "rk_retrieve": 1
+    },
+    "all_promotion_gates_passed": true,
+    "promoted_claim_ids": [
+      "c_four_limb",
+      "c_subtraction_free_invariant",
+      "c_u256_exact",
+      "c_total_monoid",
+      "c_bound_invariant",
+      "c_typed_dimension",
+      "c_duplicate_rule",
+      "c_zero_net_retained",
+      "c_invariant_confluence"
+    ],
+    "deliberately_unpromoted_claim_ids": [
+      "c_leaf_witness",
+      "c_provenance_split",
+      "c_identity_boundary",
+      "c_commitment_boundary",
+      "c_versioning",
+      "c_privacy_profile",
+      "c_overflow_sentinel_alt"
+    ],
+    "status_counts_at_report": {
+      "CANDIDATE": 24,
+      "REFUTED": 8,
+      "SUPPORTED": 21,
+      "UNDER_TEST": 16,
+      "UNKNOWN": 13
+    },
+    "atoms": 82,
+    "edges": 65,
+    "evidence_records": 30,
+    "promotions": 9,
+    "frontier_items": 25,
+    "report_event_count_before_report_event": 198,
+    "event_log_count_after_report": 199,
+    "promotion_scope": "SUPPORTED is bounded to the recorded research models and local gate; it is not RFC approval or implementation conformance."
+  },
+  "compounding": {
+    "prior_packet": "research/zrm_frontier_v2",
+    "prior_seed": "ZRM-H02 monotone debit and credit limbs",
+    "method": "The prior claim and counterexample were manually seeded because this pinned kernel revision has no run-import API.",
+    "next_frontier": [
+      "Rust fixed-U256 and byte refinement",
+      "proof-circuit range and carry refinement",
+      "accepted-journal opening and exact ordered coverage implementation",
+      "data-availability retention drill",
+      "gross-flow disclosure budget",
+      "governed cross-profile bridge"
+    ]
+  },
+  "limitations": [
+    "Research Kernel SUPPORTED means only that its local fail-closed gate passed; protocol authority remains external.",
+    "The kernel has no run-import API at the pinned revision, so prior-run compounding was a manual revision-bound seed.",
+    "Morph outputs are search candidates and were not promoted as validated equivalences.",
+    "Artifact text records replay observations but is not a signed build attestation or independent proof check.",
+    "The SQLite database and JSONL event log are observational research state and are not committed as ZRM authority.",
+    "Sparse byte encoding and ordered provenance coverage remain outside the Lean proof package.",
+    "ESSO was specified but not executed, and no ESSO claim entered a promotion gate."
+  ],
+  "non_claims": [
+    "The receipt does not approve RFC-0004 or change SPECIFICATION.md.",
+    "The receipt does not establish Rust, circuit, cryptographic, data-availability, privacy, commit, or production correctness.",
+    "A future change to assumptions, bounds, schema, domains, or profiles requires fresh evidence and promotion."
+  ]
+}

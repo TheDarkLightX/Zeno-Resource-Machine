@@ -1,7 +1,7 @@
 {
   "schema": "zrm/cbc-conformance-matrix/v1",
   "version": 1,
-  "updated_at": "2026-07-12",
+  "updated_at": "2026-07-14",
   "status": "scoped_wp0_wp1_implementation",
   "obligation_family": {
     "abbreviation": "CBC",

@@ -1,0 +1,212 @@
+{
+  "schema": "zrm/accounting-aggregate-source-ledger/v1",
+  "run_id": "zrm_accounting_aggregate_v1_20260714",
+  "base_revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+  "retrieved_on": "2026-07-14",
+  "sources": [
+    {
+      "id": "AAS-ZRM-SPEC",
+      "kind": "repository-specification",
+      "title": "ZRM specification: accounting model and accepted-journal authority",
+      "uri": "https://github.com/TheDarkLightX/Zeno-Resource-Machine/blob/efcaa2ba80944fc455ef9c326cd878821d23022b/SPECIFICATION.md",
+      "revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+      "primary": true,
+      "supports": ["leaf four-column schema", "typed units", "conservation", "accepted-journal authority"]
+    },
+    {
+      "id": "AAS-ZRM-RFC0001",
+      "kind": "repository-rfc",
+      "title": "RFC-0001 policy, context, fact, and commit authority",
+      "uri": "https://github.com/TheDarkLightX/Zeno-Resource-Machine/blob/efcaa2ba80944fc455ef9c326cd878821d23022b/rfcs/RFC-0001-policy-context-fact-and-commit-authority.md",
+      "revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+      "primary": true,
+      "supports": ["authority boundary", "postcommit accepted-journal distinction"]
+    },
+    {
+      "id": "AAS-ZRM-RFC0002",
+      "kind": "repository-rfc",
+      "title": "RFC-0002 recursive semantic journal composition",
+      "uri": "https://github.com/TheDarkLightX/Zeno-Resource-Machine/blob/efcaa2ba80944fc455ef9c326cd878821d23022b/rfcs/RFC-0002-recursive-semantic-journal-composition.md",
+      "revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+      "primary": true,
+      "supports": ["u32 leaf count", "ordered semantic segments", "accounting follow-up requirement"]
+    },
+    {
+      "id": "AAS-ZRM-CONTRACT",
+      "kind": "repository-contract",
+      "title": "ZRM semantic accounting contract",
+      "uri": "https://github.com/TheDarkLightX/Zeno-Resource-Machine/blob/efcaa2ba80944fc455ef9c326cd878821d23022b/contracts/ZRM-SC-009.md",
+      "revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+      "primary": true,
+      "supports": ["accounting invariants", "typed accounting dimensions"]
+    },
+    {
+      "id": "AAS-ZRM-LEAN-H02",
+      "kind": "repository-formalization",
+      "title": "Prior ZRM signed-accounting associativity frontier",
+      "uri": "https://github.com/TheDarkLightX/Zeno-Resource-Machine/tree/efcaa2ba80944fc455ef9c326cd878821d23022b/formal/lean/arm_zrm_frontier_v2",
+      "revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+      "primary": true,
+      "supports": ["bounded signed definedness counterexample", "monotone carrier candidate"]
+    },
+    {
+      "id": "AAS-ARM-SPEC",
+      "kind": "specification",
+      "title": "Anoma Resource Machine v1.0.0",
+      "uri": "https://specs.anoma.net/v1.0.0/arch/system/state/resource_machine/index.html",
+      "revision": "v1.0.0",
+      "primary": true,
+      "supports": ["resource balance as completeness", "immutable-resource lineage"]
+    },
+    {
+      "id": "AAS-ARM-RESOURCE",
+      "kind": "specification",
+      "title": "Anoma resource data structure",
+      "uri": "https://specs.anoma.net/v1.0.0/arch/system/state/resource_machine/data_structures/resource/index.html",
+      "revision": "v1.0.0",
+      "primary": true,
+      "supports": ["quantity", "resource-kind fungibility domain"]
+    },
+    {
+      "id": "AAS-ARM-TRANSACTION",
+      "kind": "specification",
+      "title": "Anoma transaction and homomorphic delta",
+      "uri": "https://specs.anoma.net/v1.0.0/arch/system/state/resource_machine/data_structures/transaction/transaction.html",
+      "revision": "v1.0.0",
+      "primary": true,
+      "supports": ["additive delta", "transaction balance"]
+    },
+    {
+      "id": "AAS-ARM-DELTA-PROOF",
+      "kind": "specification",
+      "title": "Anoma transaction delta proof",
+      "uri": "https://specs.anoma.net/v1.0.0/arch/system/state/resource_machine/data_structures/transaction/delta_proof.html",
+      "revision": "v1.0.0",
+      "primary": true,
+      "supports": ["homomorphic balance authentication"]
+    },
+    {
+      "id": "AAS-ARM-CODE",
+      "kind": "pinned-source",
+      "title": "ARM RISC Zero implementation",
+      "uri": "https://github.com/anoma/arm-risc0/tree/1b552f17b1c94943e6f81d08e2986befc26e99e9",
+      "revision": "1b552f17b1c94943e6f81d08e2986befc26e99e9",
+      "primary": true,
+      "supports": ["u128 resource quantity", "compliance delta addition", "receipt composition boundary"]
+    },
+    {
+      "id": "AAS-RISC0-COMPOSITION",
+      "kind": "official-documentation",
+      "title": "RISC Zero proof composition",
+      "uri": "https://dev.risczero.com/api/zkvm/composition",
+      "revision": "v3.0-retrieved-2026-07-14",
+      "primary": true,
+      "supports": ["assumption-based proof composition", "proof versus application-semantics boundary"]
+    },
+    {
+      "id": "AAS-PCD-ACCUMULATION",
+      "kind": "paper",
+      "title": "Proof-Carrying Data from Accumulation Schemes",
+      "uri": "https://eprint.iacr.org/2020/499",
+      "revision": "2020/499",
+      "primary": true,
+      "supports": ["recursive proof accumulation machinery"]
+    },
+    {
+      "id": "AAS-ZEXE",
+      "kind": "paper",
+      "title": "Zexe: Enabling Decentralized Private Computation",
+      "uri": "https://eprint.iacr.org/2018/962",
+      "revision": "2018/962",
+      "primary": true,
+      "supports": ["recursive private computation", "application-defined predicates"]
+    },
+    {
+      "id": "AAS-DOUBLE-ENTRY",
+      "kind": "paper",
+      "title": "On Double-Entry Bookkeeping: The Mathematical Treatment",
+      "uri": "https://arxiv.org/abs/1407.1898",
+      "revision": "arXiv-1407.1898",
+      "primary": true,
+      "supports": ["unsigned debit-credit pairs", "group of differences", "multidimensional bookkeeping"]
+    },
+    {
+      "id": "AAS-THIRD-HOMOMORPHISM",
+      "kind": "paper",
+      "title": "The Third Homomorphism Theorem",
+      "uri": "https://doi.org/10.1017/S0956796800001908",
+      "revision": "Journal-of-Functional-Programming-1996",
+      "primary": true,
+      "supports": ["divide-and-conquer folds", "homomorphic summary lineage"]
+    },
+    {
+      "id": "AAS-CRDT",
+      "kind": "paper",
+      "title": "Conflict-free Replicated Data Types",
+      "uri": "https://arxiv.org/abs/0710.1784",
+      "revision": "arXiv-0710.1784",
+      "primary": true,
+      "supports": ["commutative replicated-state analogy only"]
+    },
+    {
+      "id": "AAS-ICONFLUENCE",
+      "kind": "paper",
+      "title": "Coordination Avoidance in Database Systems",
+      "uri": "https://arxiv.org/abs/1402.2237",
+      "revision": "arXiv-1402.2237-PVLDB",
+      "primary": true,
+      "supports": ["invariant-confluence framework", "composition-versus-global-invariant distinction"]
+    },
+    {
+      "id": "AAS-ZCASH-PROTOCOL",
+      "kind": "protocol-specification",
+      "title": "Zcash Protocol Specification",
+      "uri": "https://zips.z.cash/protocol/protocol.pdf",
+      "revision": "v2026.7.0-33-gc55edc-2026-07-12",
+      "primary": true,
+      "supports": ["cardinality-derived aggregate value ranges", "bounded consensus balances"]
+    },
+    {
+      "id": "AAS-BULLETPROOFS",
+      "kind": "paper",
+      "title": "Bulletproofs: Short Proofs for Confidential Transactions and More",
+      "uri": "https://eprint.iacr.org/2017/1066",
+      "revision": "2017/1066",
+      "primary": true,
+      "supports": ["future private range-proof profile lineage"]
+    },
+    {
+      "id": "AAS-RESEARCH-KERNEL",
+      "kind": "pinned-tool-source",
+      "title": "Research Kernel MCP",
+      "uri": "https://github.com/TheDarkLightX/Research-Kernel-MCP/tree/d9cdfceaa396dd56acfacbd042b89ce633dbc173",
+      "revision": "d9cdfceaa396dd56acfacbd042b89ce633dbc173",
+      "primary": true,
+      "supports": ["hypothesis graph", "refutation and evidence workflow"]
+    },
+    {
+      "id": "AAS-ESSO",
+      "kind": "pinned-tool-source",
+      "title": "ESSO semantic model explorer",
+      "uri": "https://github.com/TheDarkLightX/ESSO/tree/db8a3f8a782a508ada5005a2cf177f25c58f451d",
+      "revision": "db8a3f8a782a508ada5005a2cf177f25c58f451d",
+      "primary": true,
+      "supports": ["specified future mutation campaign format"]
+    },
+    {
+      "id": "AAS-LEAN",
+      "kind": "tool-release",
+      "title": "Lean 4.32.0",
+      "uri": "https://github.com/leanprover/lean4/releases/tag/v4.32.0",
+      "revision": "v4.32.0",
+      "primary": true,
+      "supports": ["formal evidence toolchain"]
+    }
+  ],
+  "limitations": [
+    "A source entry records relevance and revision; it is not an endorsement of an inferred ZRM design.",
+    "Mutable documentation URLs remain externally mutable even when a retrieved version is recorded.",
+    "CRDT and invariant-confluence sources are analogies and frameworks, not claims that ZRM accounting is a join-semilattice or coordination-free.",
+    "Proof-system sources authenticate relations but do not define or grant ZRM accounting authority."
+  ]
+}

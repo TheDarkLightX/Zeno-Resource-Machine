@@ -1,0 +1,108 @@
+{
+  "schema": "zrm/accounting-aggregate-experiments/v1",
+  "run_id": "zrm_accounting_aggregate_v1_20260714",
+  "base_revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+  "experiments": [
+    {
+      "id": "AAE-01",
+      "title": "Executable four-column accounting oracle",
+      "status": "passed_bounded",
+      "runner": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest reference_models.tests.test_accounting_aggregate_v1 -v",
+      "result": "34 focused tests passed for typed dimensions, sparse exact covered folds, four-column conservation, strong cap-definedness, separate count bounds, mutations, and identity/no-op distinctions.",
+      "artifacts": ["reference_models/accounting_aggregate_v1.py", "reference_models/tests/test_accounting_aggregate_v1.py", "research/zrm_accounting_aggregate_v1/evidence/python-model.json"]
+    },
+    {
+      "id": "AAE-02",
+      "title": "Lean algebra, conservation, capacity, and tree invariance",
+      "status": "passed_bounded",
+      "runner": "Build and explicit leanchecker commands recorded in evidence/lean.json",
+      "result": "Lean 4.32.0 built 7 dependency jobs and 10 jobs for the accounting package with warnings fatal; explicit leanchecker replay passed for both root modules, and the package sources contain no sorry, axiom, or admit.",
+      "artifacts": ["formal/lean/zrm_accounting_aggregate_v1", "research/zrm_accounting_aggregate_v1/evidence/lean.json"]
+    },
+    {
+      "id": "AAE-03",
+      "title": "Independent canonical vector replay",
+      "status": "passed_syntactic",
+      "runner": "python3 vectors/independent_python/replay_accounting_aggregate_v1.py --check",
+      "result": "Independent fixed-width row, row-root, coverage-entry, and coverage-manifest preimages matched committed vectors; 9/9 strict-untrusted canonicality negatives rejected. This is syntactic codec, type-separation, order, and multiplicity evidence only.",
+      "artifacts": ["vectors/accounting_aggregate_v1.json", "vectors/independent_python/replay_accounting_aggregate_v1.py", "research/zrm_accounting_aggregate_v1/evidence/vectors.json"]
+    },
+    {
+      "id": "AAE-04",
+      "title": "Full reference-model regression suite",
+      "status": "passed_regression",
+      "runner": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s reference_models/tests -v",
+      "result": "All 122 reference-model tests passed after adding and red-teaming the accounting slice.",
+      "artifacts": ["research/zrm_accounting_aggregate_v1/evidence/python-model.json"]
+    },
+    {
+      "id": "AAE-05",
+      "title": "Research Kernel hypothesis and refutation run",
+      "status": "passed_observational",
+      "runner": "Pinned Research Kernel MCP stdio run described in research_kernel_receipt.json",
+      "result": "The first pass made 78 MCP calls, built 82 atoms and 65 edges, and recorded four actual counterexamples; a second evidence pass is recorded separately in the receipt.",
+      "artifacts": ["research/zrm_accounting_aggregate_v1/research_kernel_receipt.json"]
+    },
+    {
+      "id": "AAE-06",
+      "title": "Pinned ARM code and specification boundary review",
+      "status": "passed_source_review",
+      "runner": "GitHub connector reads at ARM commit 1b552f17b1c94943e6f81d08e2986befc26e99e9 plus Anoma v1.0.0 specification",
+      "result": "ARM additive delta and receipt composition inform balance authentication but do not define ZRM four-column accounting, units, coverage, or authority.",
+      "artifacts": ["research/zrm_accounting_aggregate_v1/source_ledger.json"]
+    },
+    {
+      "id": "AAE-07",
+      "title": "Research packet fail-closed validation",
+      "status": "passed_integrity",
+      "runner": "python3 tools/check_zrm_accounting_research.py",
+      "result": "Schema, references, statuses, artifact paths, evidence counts, Lean placeholder scanning, and manifest digests passed the packet checker and all 18 checker/mutation tests.",
+      "artifacts": ["tools/check_zrm_accounting_research.py", "tools/tests/test_zrm_accounting_research.py", "research/zrm_accounting_aggregate_v1/evidence/packet-check.json"]
+    },
+    {
+      "id": "AAE-08",
+      "title": "ESSO accounting aggregation mutant campaign",
+      "status": "specified_not_executed",
+      "runner": "Pinned ESSO db8a3f8a782a508ada5005a2cf177f25c58f451d; commands in esso_campaign.json",
+      "result": "Not executed because the private ESSO source was not materialized in this local checkout; no mutant-kill claim is made.",
+      "artifacts": ["research/zrm_accounting_aggregate_v1/esso_campaign.json"]
+    },
+    {
+      "id": "AAE-09",
+      "title": "Rust U256 and accepted-journal adapter refinement",
+      "status": "specified_not_implemented",
+      "runner": "Future cargo test, property, Kani, and differential harness",
+      "result": "Required before implementation promotion: fixed U256 carries, canonical decode, witness root matching, profile substitution, and Rust-to-Lean refinement.",
+      "artifacts": ["research/zrm_accounting_aggregate_v1/research_kernel_plan.json"]
+    },
+    {
+      "id": "AAE-10",
+      "title": "Accounting disclosure budget",
+      "status": "specified_not_executed",
+      "runner": "Future workload-driven privacy and leakage analysis",
+      "result": "Must quantify gross churn, mint/burn activity, dimension cardinality, and coverage correlation before a production public profile is selected.",
+      "artifacts": ["research/zrm_accounting_aggregate_v1/research_kernel_plan.json"]
+    },
+    {
+      "id": "AAE-11",
+      "title": "Circuit carry and field-wrap refinement",
+      "status": "specified_not_implemented",
+      "runner": "Future proof-backend-specific constraint test",
+      "result": "Must prove every U256 limb and carry is range constrained and that proof-field modular addition cannot wrap silently.",
+      "artifacts": ["research/zrm_accounting_aggregate_v1/research_kernel_plan.json"]
+    },
+    {
+      "id": "AAE-12",
+      "title": "Data-availability retention drill",
+      "status": "specified_not_executed",
+      "runner": "Future retained-opening retrieval and failure-injection drill",
+      "result": "Must demonstrate bounded retrieval of every committed accounting opening or fail composition without weakening historical journal validity.",
+      "artifacts": ["research/zrm_accounting_aggregate_v1/research_kernel_plan.json"]
+    }
+  ],
+  "non_claims": [
+    "Passed models and proofs establish only their recorded abstractions and do not approve RFC-0004.",
+    "Source review is not a security audit of ARM, ZRM, RISC Zero, or external papers.",
+    "Specified experiments are not executed evidence."
+  ]
+}

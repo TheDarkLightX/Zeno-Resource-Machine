@@ -1,0 +1,33 @@
+{
+  "schema": "zrm/accounting-aggregate-morph-reformulations/v1",
+  "run_id": "zrm_accounting_aggregate_v1_20260714",
+  "kernel_commit": "d9cdfceaa396dd56acfacbd042b89ce633dbc173",
+  "status": "candidate_search_only",
+  "warning": "Morph reformulations are prompts for falsification and specification work. Relation labels are unproved and no candidate is a validated equivalence.",
+  "reformulations": [
+    {"id": "atom_0bd28c6de3934882", "mode": "invariant_form", "relation": "speculative", "content": "Rewrite as a preserved invariant over transitions: Protocol cardinality bounds can eliminate accounting overflow for all admitted segments."},
+    {"id": "atom_104dcd8e86754cb9", "mode": "formal_spec", "relation": "speculative", "content": "Turn into assumptions, guarantees, reject cases, and proof obligations: Protocol cardinality bounds can eliminate accounting overflow for all admitted segments."},
+    {"id": "atom_14c353e908d840bd", "mode": "formal_spec", "relation": "speculative", "content": "Turn into assumptions, guarantees, reject cases, and proof obligations: Internal empty identity must not create external transition authority."},
+    {"id": "atom_15a832ceaf5d4035", "mode": "weaker_statement", "relation": "weaker", "content": "Find minimal assumptions under which this remains true: Internal empty identity must not create external transition authority."},
+    {"id": "atom_17b7fc59743c4e35", "mode": "formal_spec", "relation": "speculative", "content": "Turn into assumptions, guarantees, reject cases, and proof obligations: Gross accounting and cryptographic net balance are complementary, not substitutable."},
+    {"id": "atom_3c65eb2a505744eb", "mode": "stronger_statement", "relation": "stronger", "content": "Ask whether this survives after strengthening the conclusion: A recursive accounting carrier must be lossless, associative, bounded, canonical, and auditable."},
+    {"id": "atom_4074049865db4f96", "mode": "invariant_form", "relation": "speculative", "content": "Rewrite as a preserved invariant over transitions: A recursive accounting carrier must be lossless, associative, bounded, canonical, and auditable."},
+    {"id": "atom_4471626b97604ce7", "mode": "weaker_statement", "relation": "weaker", "content": "Find minimal assumptions under which this remains true: Protocol cardinality bounds can eliminate accounting overflow for all admitted segments."},
+    {"id": "atom_46eac5c417194524", "mode": "weaker_statement", "relation": "weaker", "content": "Find minimal assumptions under which this remains true: A recursive accounting carrier must be lossless, associative, bounded, canonical, and auditable."},
+    {"id": "atom_49e3379d7d394f9b", "mode": "counterexample_search", "relation": "speculative", "content": "Generate the smallest witness that falsifies: Gross accounting and cryptographic net balance are complementary, not substitutable."},
+    {"id": "atom_4c68a01ab72a4fa1", "mode": "stronger_statement", "relation": "stronger", "content": "Ask whether this survives after strengthening the conclusion: Protocol cardinality bounds can eliminate accounting overflow for all admitted segments."},
+    {"id": "atom_5f49e4c933324053", "mode": "formal_spec", "relation": "speculative", "content": "Turn into assumptions, guarantees, reject cases, and proof obligations: A recursive accounting carrier must be lossless, associative, bounded, canonical, and auditable."},
+    {"id": "atom_637a5a2478ba47f6", "mode": "counterexample_search", "relation": "speculative", "content": "Generate the smallest witness that falsifies: A recursive accounting carrier must be lossless, associative, bounded, canonical, and auditable."},
+    {"id": "atom_685541d3289e4262", "mode": "equivalent_statement", "relation": "candidate_equivalent", "content": "Restate as an explicit iff/contract: A recursive accounting carrier must be lossless, associative, bounded, canonical, and auditable."},
+    {"id": "atom_8691c70009964304", "mode": "equivalent_statement", "relation": "candidate_equivalent", "content": "Restate as an explicit iff/contract: Internal empty identity must not create external transition authority."},
+    {"id": "atom_8fc7dedd3f21433e", "mode": "weaker_statement", "relation": "weaker", "content": "Find minimal assumptions under which this remains true: Gross accounting and cryptographic net balance are complementary, not substitutable."},
+    {"id": "atom_95101441a2ee412b", "mode": "equivalent_statement", "relation": "candidate_equivalent", "content": "Restate as an explicit iff/contract: Protocol cardinality bounds can eliminate accounting overflow for all admitted segments."},
+    {"id": "atom_ad9aa49e777d4ab0", "mode": "stronger_statement", "relation": "stronger", "content": "Ask whether this survives after strengthening the conclusion: Gross accounting and cryptographic net balance are complementary, not substitutable."},
+    {"id": "atom_be35dda6200142f6", "mode": "equivalent_statement", "relation": "candidate_equivalent", "content": "Restate as an explicit iff/contract: Gross accounting and cryptographic net balance are complementary, not substitutable."},
+    {"id": "atom_c15a427e8e1a482d", "mode": "counterexample_search", "relation": "speculative", "content": "Generate the smallest witness that falsifies: Internal empty identity must not create external transition authority."},
+    {"id": "atom_c43f6deeeb7c4170", "mode": "stronger_statement", "relation": "stronger", "content": "Ask whether this survives after strengthening the conclusion: Internal empty identity must not create external transition authority."},
+    {"id": "atom_ca74d0a050794791", "mode": "invariant_form", "relation": "speculative", "content": "Rewrite as a preserved invariant over transitions: Gross accounting and cryptographic net balance are complementary, not substitutable."},
+    {"id": "atom_e6dafc442f1b4855", "mode": "counterexample_search", "relation": "speculative", "content": "Generate the smallest witness that falsifies: Protocol cardinality bounds can eliminate accounting overflow for all admitted segments."},
+    {"id": "atom_f42d694f3d3943cc", "mode": "invariant_form", "relation": "speculative", "content": "Rewrite as a preserved invariant over transitions: Internal empty identity must not create external transition authority."}
+  ]
+}

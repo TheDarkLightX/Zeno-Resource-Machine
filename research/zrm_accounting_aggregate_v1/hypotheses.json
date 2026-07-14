@@ -1,0 +1,198 @@
+{
+  "schema": "zrm/accounting-aggregate-hypotheses/v1",
+  "run_id": "zrm_accounting_aggregate_v1_20260714",
+  "base_revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+  "status_policy": {
+    "refuted": "A concrete recorded counterexample defeats the exact claim.",
+    "source_supported": "Primary sources support the stated lineage or boundary; implementation conformance is not claimed.",
+    "supported_bounded": "Formal or executable evidence supports the exact claim only under recorded assumptions and bounds.",
+    "under_test": "The claim has explicit falsifiers but decisive implementation evidence is incomplete.",
+    "alternative": "A coherent alternative retained for a future profile, not selected by RFC-0004."
+  },
+  "hypotheses": [
+    {
+      "id": "c_signed_checked",
+      "rank": 20,
+      "status": "refuted",
+      "claim": "Bounded signed checked addition is a strongly associative recursive accounting carrier.",
+      "falsifiers": ["Find one ordered leaf sequence whose binary trees differ in checked definedness."],
+      "counterexample": "At bound 127, (127+1)+(-1) is undefined while 127+(1+(-1)) is 127.",
+      "source_ids": ["AAS-ZRM-LEAN-H02"],
+      "experiment_ids": ["AAE-01", "AAE-02"]
+    },
+    {
+      "id": "c_two_field_lossless",
+      "rank": 19,
+      "status": "refuted",
+      "claim": "A two-field resource debit/credit row is a lossless refinement of current AccountingRowV1.",
+      "falsifiers": ["Find two valid leaf rows with equal resource debit/credit and different mint/burn decomposition."],
+      "counterexample": "Rows (10,10,0,0) and (10,10,7,7) share the two resource fields but differ in authority flow.",
+      "source_ids": ["AAS-ZRM-SPEC", "AAS-DOUBLE-ENTRY"],
+      "experiment_ids": ["AAE-01", "AAE-03"]
+    },
+    {
+      "id": "c_u128_enough",
+      "rank": 18,
+      "status": "refuted",
+      "claim": "U128 is sufficient for every recursively aggregated numeric column admitted by RFC-0002.",
+      "falsifiers": ["Construct a valid segment whose exact column total exceeds u128::MAX."],
+      "counterexample": "Two maximum U128 leaves total 2^129-2 while leaf_count=2 is valid.",
+      "source_ids": ["AAS-ZRM-SPEC", "AAS-ZRM-RFC0002"],
+      "experiment_ids": ["AAE-01", "AAE-03"]
+    },
+    {
+      "id": "c_net_is_coverage",
+      "rank": 17,
+      "status": "refuted",
+      "claim": "Reducing each dimension to net signed balance preserves exact descendant accounting coverage.",
+      "falsifiers": ["Find a nonempty gross row and an empty row set with the same net projection."],
+      "counterexample": "Consumed=created=5 projects to zero just like absence but covers two nonzero flows.",
+      "source_ids": ["AAS-ZRM-SPEC", "AAS-ARM-TRANSACTION"],
+      "experiment_ids": ["AAE-01", "AAE-02"]
+    },
+    {
+      "id": "c_four_limb",
+      "rank": 1,
+      "status": "supported_bounded",
+      "claim": "A lossless numeric recursive row for current ZRM uses two unsigned pairs: resource debit=consumed and credit=created; authority debit=burn and credit=mint.",
+      "falsifiers": ["Find two current leaf rows with equal four numeric limbs but different numeric accounting meaning.", "Find a sign convention that violates the leaf conservation equation."],
+      "source_ids": ["AAS-ZRM-SPEC", "AAS-DOUBLE-ENTRY"],
+      "experiment_ids": ["AAE-01", "AAE-03", "AAE-04"]
+    },
+    {
+      "id": "c_subtraction_free_invariant",
+      "rank": 2,
+      "status": "supported_bounded",
+      "claim": "Leaf and aggregate conservation can be expressed as resource_debit + authority_credit = resource_credit + authority_debit and is preserved by componentwise addition.",
+      "falsifiers": ["Find two conserving rows whose componentwise sum does not conserve.", "Mutate one limb without detection."],
+      "source_ids": ["AAS-ZRM-SPEC", "AAS-DOUBLE-ENTRY"],
+      "experiment_ids": ["AAE-01", "AAE-02"]
+    },
+    {
+      "id": "c_u256_exact",
+      "rank": 3,
+      "status": "supported_bounded",
+      "claim": "Four U256 limbs exactly contain every segment with u32 leaf_count and u128 leaf columns because each total is below 2^160 and therefore below 2^256.",
+      "falsifiers": ["Disprove the maximum-product inequality.", "Find a protocol-valid segment exceeding U256."],
+      "source_ids": ["AAS-ZRM-SPEC", "AAS-ZRM-RFC0002", "AAS-ZCASH-PROTOCOL"],
+      "experiment_ids": ["AAE-01", "AAE-02", "AAE-03"]
+    },
+    {
+      "id": "c_total_monoid",
+      "rank": 4,
+      "status": "supported_bounded",
+      "claim": "Exact componentwise addition over a canonical dimension map is the numeric part of a commutative monoid and yields the same result for every full binary tree over the same leaves.",
+      "falsifiers": ["Find a Catalan tree disagreement.", "Find a support-union or identity counterexample."],
+      "source_ids": ["AAS-THIRD-HOMOMORPHISM", "AAS-DOUBLE-ENTRY"],
+      "experiment_ids": ["AAE-01", "AAE-02"]
+    },
+    {
+      "id": "c_bound_invariant",
+      "rank": 5,
+      "status": "supported_bounded",
+      "claim": "Each summary limb must also be no greater than leaf_count times u128::MAX, detecting malformed summaries independently of the U256 representation bound.",
+      "falsifiers": ["Find a derivable valid summary that violates the capacity inequality.", "Find a forged over-cap summary accepted by the model."],
+      "source_ids": ["AAS-ZRM-SPEC", "AAS-ZRM-RFC0002", "AAS-ZCASH-PROTOCOL"],
+      "experiment_ids": ["AAE-01", "AAE-02"]
+    },
+    {
+      "id": "c_leaf_witness",
+      "rank": 6,
+      "status": "under_test",
+      "claim": "Leaf derivation needs a bounded accounting-row opening whose canonical rows recompute the accepted journal's exact row root and count before projection.",
+      "falsifiers": ["Derive all aggregate values from the journal root and count alone.", "Accept a substituted, omitted, duplicate, or reordered opening."],
+      "source_ids": ["AAS-ZRM-SPEC", "AAS-ZRM-RFC0002"],
+      "experiment_ids": ["AAE-03", "AAE-08", "AAE-09"]
+    },
+    {
+      "id": "c_provenance_split",
+      "rank": 7,
+      "status": "source_supported",
+      "claim": "Authority and transformation roots are not quantities; numeric composition is separate from exact ordered occurrence coverage and aggregate totals confer no authority.",
+      "falsifiers": ["Define and justify a meaning-preserving additive law for the two roots.", "Substitute provenance under equal totals without changing any authenticated coverage commitment."],
+      "source_ids": ["AAS-ZRM-SPEC", "AAS-ZRM-RFC0001", "AAS-PCD-ACCUMULATION"],
+      "experiment_ids": ["AAE-03", "AAE-08", "AAE-09"]
+    },
+    {
+      "id": "c_typed_dimension",
+      "rank": 8,
+      "status": "supported_bounded",
+      "claim": "The exact dimension is (resource_kind_id, unit_id); different kinds or units never merge, and conversion stays an explicit authorized leaf transformation.",
+      "falsifiers": ["Accept a cross-unit or cross-kind cancellation in the executable model.", "Show the current ZRM specification defines implicit conversion."],
+      "source_ids": ["AAS-ZRM-SPEC", "AAS-ARM-RESOURCE", "AAS-ARM-CODE"],
+      "experiment_ids": ["AAE-01", "AAE-03"]
+    },
+    {
+      "id": "c_duplicate_rule",
+      "rank": 9,
+      "status": "supported_bounded",
+      "claim": "External row openings reject unsorted and duplicate dimensions; missing dimensions act as zero only inside an authenticated pointwise merge.",
+      "falsifiers": ["Accept a duplicate or unsorted external row manifest.", "Find a valid merge where internal missing-as-zero changes coverage."],
+      "source_ids": ["AAS-ZRM-SPEC"],
+      "experiment_ids": ["AAE-01", "AAE-03"]
+    },
+    {
+      "id": "c_identity_boundary",
+      "rank": 10,
+      "status": "under_test",
+      "claim": "The bounded research models distinguish an internal empty fold, a nonempty authenticated-journal carrier with empty accounting support, a material zero-net row, and an abstract state-root no-op; refinement to production external authority types remains unproved.",
+      "falsifiers": ["Collapse the modeled predicates without losing an observable case.", "Find a production API in which the aggregate identity constructs external acceptance authority."],
+      "source_ids": ["AAS-ZRM-RFC0001", "AAS-ZRM-RFC0002"],
+      "experiment_ids": ["AAE-01", "AAE-02"]
+    },
+    {
+      "id": "c_zero_net_retained",
+      "rank": 11,
+      "status": "supported_bounded",
+      "claim": "A row with nonzero gross limbs and zero net is retained; only an explicit all-four-zero aggregate row is noncanonical.",
+      "falsifiers": ["Drop a balanced row without changing exact coverage.", "Find a canonical purpose for an explicit all-zero material row."],
+      "source_ids": ["AAS-ZRM-SPEC", "AAS-DOUBLE-ENTRY"],
+      "experiment_ids": ["AAE-01", "AAE-02", "AAE-03"]
+    },
+    {
+      "id": "c_commitment_boundary",
+      "rank": 12,
+      "status": "source_supported",
+      "claim": "ARM-style homomorphic net delta can authenticate balance but does not replace ZRM gross rows, typed units, authority facts, or exact descendant coverage.",
+      "falsifiers": ["Show ARM's delta output preserves all four ZRM columns and row-local provenance.", "Show a curve commitment alone grants ZRM authority."],
+      "source_ids": ["AAS-ARM-SPEC", "AAS-ARM-TRANSACTION", "AAS-ARM-DELTA-PROOF", "AAS-ARM-CODE", "AAS-ZRM-SPEC"],
+      "experiment_ids": ["AAE-06"]
+    },
+    {
+      "id": "c_versioning",
+      "rank": 13,
+      "status": "under_test",
+      "claim": "Aggregate schema, domains, profile, and row-opening contract need new identifiers; old accounting roots are never reinterpreted or mixed in one segment.",
+      "falsifiers": ["Mix profiles without ambiguity or semantic substitution.", "Reuse an old domain while preserving typed object separation."],
+      "source_ids": ["AAS-ZRM-SPEC", "AAS-ZRM-RFC0002"],
+      "experiment_ids": ["AAE-03", "AAE-09"]
+    },
+    {
+      "id": "c_privacy_profile",
+      "rank": 14,
+      "status": "source_supported",
+      "claim": "Gross-flow disclosure leaks churn and authority activity beyond net balance, so transparent, selective-disclosure, and proof-only semantics require distinct profile identifiers.",
+      "falsifiers": ["Show four public totals reveal no more than net.", "Use one profile ID without verifier ambiguity across public and private statements."],
+      "source_ids": ["AAS-ZEXE", "AAS-BULLETPROOFS", "AAS-ARM-SPEC"],
+      "experiment_ids": ["AAE-10"]
+    },
+    {
+      "id": "c_overflow_sentinel_alt",
+      "rank": 16,
+      "status": "alternative",
+      "claim": "For a future profile exceeding the U32-by-U128 capacity, an absorbing Overflow sentinel over nonnegative limbs totalizes addition and preserves tree-independent rejection.",
+      "falsifiers": ["Find an associativity or identity failure in the formal carrier.", "Find a case where nonnegative overflow can legitimately recover."],
+      "source_ids": ["AAS-ZRM-LEAN-H02", "AAS-THIRD-HOMOMORPHISM"],
+      "experiment_ids": ["AAE-02"]
+    },
+    {
+      "id": "c_invariant_confluence",
+      "rank": 15,
+      "status": "supported_bounded",
+      "claim": "Subtraction-free conservation is closed under componentwise addition, so valid rows of one typed dimension remain conserving under numeric merge; this claim excludes coverage, authority, state order, and commit semantics.",
+      "falsifiers": ["Find conserving numeric rows whose exact sum violates conservation.", "Show the claim accidentally establishes full ZRM coordination freedom."],
+      "source_ids": ["AAS-ICONFLUENCE", "AAS-ZRM-SPEC"],
+      "experiment_ids": ["AAE-01", "AAE-02"]
+    }
+  ]
+}
