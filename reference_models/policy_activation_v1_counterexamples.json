@@ -1,0 +1,173 @@
+{
+  "schema": "zrm/policy-activation-v1-counterexamples/v1",
+  "version": 1,
+  "status": "candidate implementation-independent reference semantics; non-authoritative",
+  "findings": [
+    {
+      "id": "ZRM-PA-001",
+      "boundary": "predecessor creation",
+      "attacker_capabilities": ["bind a newly created resource to an old activation"],
+      "preconditions": ["a1 was replaced and retained as predecessor"],
+      "invariant": "only the exact selected current activation may authorize creation",
+      "minimal_counterexample": {
+        "steps": [
+          {"op": "activate", "id": "a1", "kind": "kind-a", "content": "content-a1", "retire": null, "save": "a1"},
+          {"op": "activate", "id": "a2", "kind": "kind-a", "content": "content-a2", "retire": "accepted_predecessor"}
+        ],
+        "probe": {"type": "use", "kind": "kind-a", "activation": "a1", "use": "create"}
+      },
+      "expected_result": {"outcome": "reject", "reason": "use_predecessor_cannot_create"},
+      "formal_or_property_obligation": "predecessor_no_create",
+      "residual_risk": "resource membership and controller authority are outside this model"
+    },
+    {
+      "id": "ZRM-PA-002",
+      "boundary": "predecessor compatibility",
+      "attacker_capabilities": ["present an existing resource bound to a predecessor"],
+      "preconditions": ["a1 is an accepted predecessor"],
+      "invariant": "predecessor consumption remains lifecycle-eligible until hard revocation",
+      "minimal_counterexample": {
+        "steps": [
+          {"op": "activate", "id": "a1", "kind": "kind-a", "content": "content-a1", "retire": null, "save": "a1"},
+          {"op": "activate", "id": "a2", "kind": "kind-a", "content": "content-a2", "retire": "accepted_predecessor"}
+        ],
+        "probe": {"type": "use", "kind": "kind-a", "activation": "a1", "use": "consume"}
+      },
+      "expected_result": {"outcome": "accept", "reason": null},
+      "formal_or_property_obligation": "predecessor_existing_use",
+      "residual_risk": "acceptance is lifecycle-only and not transition authority"
+    },
+    {
+      "id": "ZRM-PA-003",
+      "boundary": "hard revocation",
+      "attacker_capabilities": ["replay a hard-revoked activation"],
+      "preconditions": ["a1 was retired as hard revoked"],
+      "invariant": "hard revocation blocks all resource roles",
+      "minimal_counterexample": {
+        "steps": [
+          {"op": "activate", "id": "a1", "kind": "kind-a", "content": "content-a1", "retire": null, "save": "a1"},
+          {"op": "suspend", "id": "s1", "kind": "kind-a", "retire": "hard_revoked"}
+        ],
+        "probe": {"type": "use", "kind": "kind-a", "activation": "a1", "use": "reference"}
+      },
+      "expected_result": {"outcome": "reject", "reason": "use_hard_revoked"},
+      "formal_or_property_obligation": "hard_revoked_no_use",
+      "residual_risk": "durable snapshot authentication is outside this model"
+    },
+    {
+      "id": "ZRM-PA-004",
+      "boundary": "atomic current revocation",
+      "attacker_capabilities": ["revoke the selected activation without changing selection"],
+      "preconditions": ["a1 is current"],
+      "invariant": "current revocation must atomically replace or suspend creation",
+      "minimal_counterexample": {
+        "steps": [
+          {"op": "activate", "id": "a1", "kind": "kind-a", "content": "content-a1", "retire": null, "save": "a1"}
+        ],
+        "probe": {"type": "command", "op": "hard_revoke", "id": "r1", "kind": "kind-a", "activation": "a1"}
+      },
+      "expected_result": {"outcome": "rejected", "reason": "current_revocation_requires_atomic_selection_change"},
+      "formal_or_property_obligation": "no_selected_revoked_intermediate",
+      "residual_risk": "the durable store must linearize the composite update"
+    },
+    {
+      "id": "ZRM-PA-005",
+      "boundary": "activation non-resurrection",
+      "attacker_capabilities": ["reuse an old capability after identical content is reinstated"],
+      "preconditions": ["a1 is hard revoked", "the same content is activated again"],
+      "invariant": "reactivation creates a fresh activation identity",
+      "minimal_counterexample": {
+        "steps": [
+          {"op": "activate", "id": "a1", "kind": "kind-a", "content": "content-a1", "retire": null, "save": "a1"},
+          {"op": "suspend", "id": "s1", "kind": "kind-a", "retire": "hard_revoked"},
+          {"op": "activate", "id": "a2", "kind": "kind-a", "content": "content-a1", "retire": null, "save": "a2"}
+        ],
+        "probe": {"type": "tokens_differ", "left": "a1", "right": "a2"}
+      },
+      "expected_result": {"outcome": "accept", "reason": null},
+      "formal_or_property_obligation": "activation_nonresurrection",
+      "residual_risk": "production identity bytes and hash assumptions remain open"
+    },
+    {
+      "id": "ZRM-PA-006",
+      "boundary": "operation equivocation",
+      "attacker_capabilities": ["reuse an operation ID for a different command"],
+      "preconditions": ["the original command applied"],
+      "invariant": "one operation ID binds one exact command digest",
+      "minimal_counterexample": {
+        "steps": [
+          {"op": "activate", "id": "a1", "kind": "kind-a", "content": "content-a1", "retire": null, "save_command": "original"}
+        ],
+        "probe": {"type": "equivocate", "command": "original"}
+      },
+      "expected_result": {"outcome": "rejected", "reason": "operation_id_reuse"},
+      "formal_or_property_obligation": "operation_id_non_equivocation",
+      "residual_risk": "durable replay storage and governance authentication remain open"
+    },
+    {
+      "id": "ZRM-PA-007",
+      "boundary": "lost acknowledgement",
+      "attacker_capabilities": ["retry an exact command after later progress"],
+      "preconditions": ["the original acknowledgement was lost"],
+      "invariant": "exact replay is classified before stale-parent checks and is a no-op",
+      "minimal_counterexample": {
+        "steps": [
+          {"op": "activate", "id": "a1", "kind": "kind-a", "content": "content-a1", "retire": null, "save_command": "original"},
+          {"op": "activate", "id": "b1", "kind": "kind-b", "content": "content-b1", "retire": null}
+        ],
+        "probe": {"type": "replay", "command": "original"}
+      },
+      "expected_result": {"outcome": "already_applied", "reason": null},
+      "formal_or_property_obligation": "replay_before_freshness",
+      "residual_risk": "returning an original durable receipt requires history storage"
+    },
+    {
+      "id": "ZRM-PA-008",
+      "boundary": "stale governance work",
+      "attacker_capabilities": ["submit a new command against an old snapshot"],
+      "preconditions": ["another operation advanced the snapshot"],
+      "invariant": "new work requires the exact current parent and version",
+      "minimal_counterexample": {
+        "steps": [
+          {"op": "activate", "id": "a1", "kind": "kind-a", "content": "content-a1", "retire": null}
+        ],
+        "probe": {"type": "stale_activate", "id": "a2", "kind": "kind-a", "content": "content-a2", "retire": "accepted_predecessor"}
+      },
+      "expected_result": {"outcome": "rejected", "reason": "stale_snapshot"},
+      "formal_or_property_obligation": "stale_parent_noop",
+      "residual_risk": "runtime CAS and ordering authority remain open"
+    },
+    {
+      "id": "ZRM-PA-009",
+      "boundary": "content identity",
+      "attacker_capabilities": ["copy one content ID onto another resource kind"],
+      "preconditions": ["shared is registered for kind-a"],
+      "invariant": "one content identity binds one immutable content object and kind",
+      "minimal_counterexample": {
+        "steps": [
+          {"op": "register", "id": "c1", "kind": "kind-a", "content": "shared"}
+        ],
+        "probe": {"type": "command", "op": "register", "id": "c2", "kind": "kind-b", "content": "shared"}
+      },
+      "expected_result": {"outcome": "rejected", "reason": "content_id_collision"},
+      "formal_or_property_obligation": "content_kind_binding",
+      "residual_risk": "the model assumes collision-resistant canonical content hashing"
+    },
+    {
+      "id": "ZRM-PA-010",
+      "boundary": "explicit retirement",
+      "attacker_capabilities": ["replace current policy without classifying it"],
+      "preconditions": ["kind-a already has a current activation"],
+      "invariant": "replacement explicitly chooses predecessor or hard revocation",
+      "minimal_counterexample": {
+        "steps": [
+          {"op": "activate", "id": "a1", "kind": "kind-a", "content": "content-a1", "retire": null}
+        ],
+        "probe": {"type": "command", "op": "activate", "id": "a2", "kind": "kind-a", "content": "content-a2", "retire": null}
+      },
+      "expected_result": {"outcome": "rejected", "reason": "retirement_required"},
+      "formal_or_property_obligation": "explicit_retirement",
+      "residual_risk": "governance may still make an unsafe but explicit choice"
+    }
+  ]
+}
