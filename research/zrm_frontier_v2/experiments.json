@@ -1,0 +1,193 @@
+{
+  "schema": "zrm/frontier-experiments/v3",
+  "run_id": "zrm-frontier-v2-2026-07-14",
+  "experiments": [
+    {
+      "id": "ZRM-E01",
+      "title": "Existing ARM/ZRM frontier exploration",
+      "status": "passed_existing_base_artifact",
+      "runner": "python-stdlib",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m reference_models.arm_zrm_frontier_explorer --pretty",
+      "artifacts": ["evidence/arm-zrm-frontier-exploration-v1.json"],
+      "result": "The existing base-revision explorer pins partial-carrier, exact-coverage, semantic-set, ordered-topology, and abstract authority-binding witnesses.",
+      "bounds": {"modulus": 7, "nonzero_triples": 216, "summary_permutations": 6},
+      "base_artifact_integrity": {
+        "path": "evidence/arm-zrm-frontier-exploration-v1.json",
+        "base_revision": "a4d2868d92807947cbad5f0d7fd828b74ae1368c",
+        "git_blob_sha1": "81b4020b37449b7a04db7690282f48d9f55c8638",
+        "sha256": "ca5ab93f98832002e7ba678e98114085075dec9f41653f864a309402fd619a9f"
+      }
+    },
+    {
+      "id": "ZRM-E02",
+      "title": "Complete reference-model test suite",
+      "status": "passed",
+      "runner": "python-unittest",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s reference_models/tests -v",
+      "artifacts": ["reference_models/tests/test_zrm_composition_frontier_v2.py", "reference_models/tests/test_deterministic_authenticated_batch_v1.py"],
+      "result": "Eighty-eight tests passed after adding nineteen composition-frontier tests and twenty-four deterministic authenticated-batch tests."
+    },
+    {
+      "id": "ZRM-E03",
+      "title": "Lean total carrier, exact coverage, transcript separation, and strong accounting associativity",
+      "status": "passed",
+      "runner": "lean-4.32.0",
+      "command": "cd formal/lean/arm_zrm_frontier_v2 && lake build",
+      "artifacts": ["formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier/TotalCarrier.lean", "formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier/ExactCoverage.lean", "formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier/TranscriptSeparation.lean", "formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier/AccountingStrongAssociativity.lean"],
+      "result": "Seven Lake jobs completed. A source scan found no sorry, admit, or axiom declaration in the package.",
+      "toolchain": {"release": "v4.32.0", "commit": "8c9756bf44da6f8c4e9b3ac40779ab939732a31d"}
+    },
+    {
+      "id": "ZRM-E04",
+      "title": "Three compounding Research Kernel MCP runs",
+      "status": "passed_index_only",
+      "runner": "research-kernel-mcp-stdio",
+      "artifacts": ["research/zrm_frontier_v2/knowledge_graph.json", "research/zrm_frontier_v2/research_kernel_report.md", "research/zrm_frontier_v2/evidence/research-kernel-runs-v1.json"],
+      "result": "Seed run: 22 atoms, 13 edges, 6 refutation plans, 2 evidence attachments, and 5 reformulations. Privacy run: 12 hypotheses, 18 reformulations, 12 refutation plans, 39 edges, and 4 evidence records. Compound run: 10 hypotheses, 21 edges, 10 refutation records including one actual counterexample, 3 evidence records, and 6 reformulations, after retrieving 40 prior atoms.",
+      "toolchain": {"research_kernel_revision": "d9cdfceaa396dd56acfacbd042b89ce633dbc173", "mcp_python_package": "1.28.1"},
+      "limitations": ["The kernel event stream is not reconstructive.", "Reads append events.", "Reports omit some evidence classes.", "Caller-controlled status can bypass promotion.", "The packet therefore treats kernel output as discovery provenance, not authority."]
+    },
+    {
+      "id": "ZRM-E15",
+      "title": "Composition algebra and context-bridge frontier",
+      "status": "passed_bounded",
+      "runner": "python-stdlib",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m reference_models.zrm_composition_frontier_v2_explorer --pretty",
+      "artifacts": ["reference_models/zrm_composition_frontier_v2.py", "reference_models/zrm_composition_frontier_v2_explorer.py", "research/zrm_frontier_v2/evidence/composition-frontier-v2.json"],
+      "result": "Across 12 programs, 8 states, 132 ordered program pairs, and 1,056 schedule checks, write-only certification produced 168 false-safe checks while fact-complete certification produced zero in the bounded domain. Six ordered permutations produced six roots; the sorting mutant produced one. A governed context bridge composed and the same-context-only mutant rejected it."
+    },
+    {
+      "id": "ZRM-E16",
+      "title": "Bounded signed accounting versus monotone limbs",
+      "status": "passed_formal",
+      "runner": "lean-4.32.0",
+      "command": "cd formal/lean/arm_zrm_frontier_v2 && lake build",
+      "artifacts": ["formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier/AccountingStrongAssociativity.lean", "research/zrm_frontier_v2/evidence/lean-frontier-v2.json"],
+      "result": "At signed bound 127, the left grouping is undefined while the right grouping returns 127. The replacement natural debit/credit merge is associative and its checked Option fold has identical value and definedness under both three-leaf groupings."
+    },
+    {
+      "id": "ZRM-E17",
+      "title": "Deterministic authenticated batch serial refinement",
+      "status": "passed_bounded",
+      "runner": "python-stdlib",
+      "command": "PYTHONDONTWRITEBYTECODE=1 python3 -m reference_models.deterministic_authenticated_batch_explorer --pretty",
+      "artifacts": ["reference_models/deterministic_authenticated_batch_v1.py", "reference_models/deterministic_authenticated_batch_explorer.py", "research/zrm_frontier_v2/evidence/deterministic-authenticated-batch-v1.json"],
+      "result": "Sixteen executions over eight valid states and two worker schedules had zero serial-refinement mismatches and zero schedule-variant states; eight stale results reexecuted. Four of four program-read substitutions rejected. Two omitted-dependency mutants collided under a program-only root, while complete decision roots distinguished both. Exact runtime types reject the Python boolean/integer equality trap, and the semantic root binds the exact ordered transaction manifest. Empty batches, invalid prestates, and unknown program tags rejected. The nullifier-only mutant violated the invariant in four of eight states and accepted both range phantoms."
+    },
+    {
+      "id": "ZRM-E18",
+      "title": "External ESSO ZRM semantic model observation",
+      "status": "observed_external_nonreplayable",
+      "runner": "ESSO-canonical-IR-plus-Z3",
+      "command": "PYTHONPATH=. uv run --no-project --with pyyaml --with z3-solver python examples/zrm/check_zrm_semantic_models.py",
+      "artifacts": ["research/zrm_frontier_v2/evidence/esso-zrm-semantic-check-v2.json"],
+      "result": "An external run observed eight models as inductive and fourteen seeded mutants as InvNotInductive. The repository cannot replay or independently authenticate that run, so it is context only and cannot satisfy a PR or promotion gate.",
+      "evidence_class": "observational_external_execution",
+      "toolchain": {"esso_revision": "db8a3f8a782a508ada5005a2cf177f25c58f451d", "solver": "z3-solver (version not captured)", "source_distribution": "not vendored in this repository", "replayable_from_repository": false}
+    },
+    {
+      "id": "ZRM-E19",
+      "title": "Evidence authority type-state campaign",
+      "status": "specified",
+      "runner": "future-lean-esso",
+      "result": "Pending model of ConditionalReceipt, ResolvedReceipt, DeferredAccumulator, DecidedProof, and VerifiedPostcommitAggregationFact.",
+      "promotion_gate": "Every constructor path from unresolved or deferred evidence to authority must be absent or rejected."
+    },
+    {
+      "id": "ZRM-E20",
+      "title": "Private envelope leakage and revocation campaign",
+      "status": "specified",
+      "runner": "future-risc0-prototype",
+      "result": "Pending field, size, timing, root, error, revocation, and cost-bucket differential."
+    },
+    {
+      "id": "ZRM-E21",
+      "title": "Typed registry forest substitution campaign",
+      "status": "specified",
+      "runner": "future-reference-model-and-esso",
+      "result": "Pending exhaustive cross-role leaf, root, version, and bridge substitutions."
+    },
+    {
+      "id": "ZRM-E22",
+      "title": "Semantic versus proof identity campaign",
+      "status": "specified",
+      "runner": "future-proof-adapter",
+      "result": "Pending alternative encoding, topology, release, and replay-key substitutions plus proof-system malleability review."
+    },
+    {
+      "id": "ZRM-E23",
+      "title": "Authenticated-state backend differential",
+      "status": "specified",
+      "runner": "future-reference-model",
+      "result": "Pending sorted-map and authenticated-tree adapters over one logical point/range/update oracle."
+    },
+    {
+      "id": "ZRM-E24",
+      "title": "Sibling state-history commitment campaign",
+      "status": "specified",
+      "runner": "future-esso-and-lean",
+      "result": "Pending cycle, fork, prefix, rollback, anchor, and atomic sibling-update mutants."
+    },
+    {
+      "id": "ZRM-E25",
+      "title": "Phase-indexed commitment DAG campaign",
+      "status": "specified",
+      "runner": "future-esso-and-lean",
+      "result": "Pending back-edge, unbound-field, double-bind, phase-substitution, and retry-cycle mutants."
+    },
+    {
+      "id": "ZRM-E26",
+      "title": "Proof-carrying four-valued promotion campaign",
+      "status": "specified",
+      "runner": "future-research-kernel-spike",
+      "result": "Pending receipt substitution, self-support SCC, contested evidence, assurance-vector, deterministic replay, and exact descendant invalidation tests."
+    },
+    {
+      "id": "ZRM-E27",
+      "title": "Reconstructive EventV2 and reducer campaign",
+      "status": "specified",
+      "runner": "future-research-kernel-spike",
+      "result": "Pending 10,000 generated histories, mutation rejection, crash injection at every transaction boundary, and independent Rust/Python encoding differential."
+    },
+    {
+      "id": "ZRM-E28",
+      "title": "Private policy receipt composition campaign",
+      "status": "specified",
+      "runner": "future-reference-model",
+      "result": "Pending action, subject, snapshot, epoch, revocation, scope, nontransferability, and context-bridge substitutions."
+    },
+    {
+      "id": "ZRM-E29",
+      "title": "HyperNova versus ProtoStar non-uniform circuit benchmark",
+      "status": "specified",
+      "runner": "future-proof-backend-prototypes",
+      "result": "Pending selected-step constraint cost, proof-state growth by circuit-kind count, lookup-heavy policy cost, final-decider cost, registry swap, and context mismatch tests."
+    },
+    {
+      "id": "ZRM-E30",
+      "title": "Interval PCD and multi-folding campaign",
+      "status": "specified",
+      "runner": "future-proof-backend-prototype",
+      "result": "Pending every Catalan tree, interval gap, overlap, duplication, reversal, arity substitution, degenerate challenge, and binary semantic refinement test."
+    },
+    {
+      "id": "ZRM-E31",
+      "title": "Governed invariant-confluence fast-path campaign",
+      "status": "specified",
+      "runner": "future-reference-model-and-esso",
+      "result": "Pending profile-scoped invariant-closure, complete-effect, externally observable result, deterministic fallback, and ordered-journal separation mutants."
+    }
+  ],
+  "tool_availability": {
+    "research_kernel_mcp": "executed through pinned local stdio server",
+    "lean": "executed with pinned Lean 4.32.0",
+    "esso": "an external pinned-revision canonical-IR and Z3 run was observed; required receipt fields and solver version were not captured, private source is not vendored, and the record is non-gating",
+    "morph": "pinned source was inspected and Research Kernel reformulation templates ran; full strict Morph replay did not run",
+    "risc_zero": "source and official composition behavior were inspected; no new guest was built"
+  },
+  "non_claims": [
+    "A specified experiment is not evidence that its hypothesis holds.",
+    "A bounded or abstract pass is not an end-to-end protocol, cryptographic, storage, or Rust-refinement proof.",
+    "Commands are replay recipes only when all referenced source, dependencies, fixtures, and toolchains are available and digest-bound."
+  ]
+}
