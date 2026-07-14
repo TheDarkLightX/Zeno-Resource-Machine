@@ -1,0 +1,38 @@
+{
+  "schema": "zrm/accounting-aggregate-lean-evidence/v1",
+  "base_revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+  "executed_on": "2026-07-14",
+  "toolchain": {
+    "lean_version": "4.32.0",
+    "release_commit": "8c9756b28d64dab099da31a4c09229a9e6a2ef35",
+    "package": "formal/lean/zrm_accounting_aggregate_v1"
+  },
+  "replay": {
+    "portable_command": "cd formal/lean/zrm_accounting_aggregate_v1 && lake build --wfail && lake env leanchecker --verbose ZrmAccountingAggregateV1",
+    "dependency_command": "cd formal/lean/arm_zrm_frontier_v2 && lake build --wfail && lake env leanchecker --verbose ArmZrmFrontier",
+    "sandbox_observation": "The managed sandbox needed an ephemeral preload shim only for proc-based executable discovery; the shim is not part of the proof package or replay contract."
+  },
+  "results": {
+    "dependency_lake_jobs": 7,
+    "lake_jobs": 10,
+    "build_passed": true,
+    "kernel_checks_passed": 2,
+    "kernel_checked_modules": ["ArmZrmFrontier", "ZrmAccountingAggregateV1"],
+    "warnings": 0,
+    "source_scan_sorry_axiom_admit_hits": 0
+  },
+  "proved_scope": [
+    "checked list and binary-tree exactness including definedness",
+    "multiset exact-coverage tree invariance for the commutative numeric fold",
+    "absorbing finite-or-overflow carrier algebra",
+    "four-column subtraction-free conservation through folds and trees",
+    "nonzero material two-field projection collision",
+    "u32 times u128 maximum is below 2^160 and 2^256",
+    "abstract empty accounting support and internal fold identity distinctions"
+  ],
+  "nonclaims": [
+    "Lean CoversExactly is a multiset-permutation relation, not RFC-0004 ordered coverage-manifest concatenation.",
+    "The package does not prove sparse finite-map bytes, accepted-journal opening/root authentication, Rust U256, circuit carries, or external transition authority.",
+    "The theorem package is research evidence and does not approve RFC-0004."
+  ]
+}

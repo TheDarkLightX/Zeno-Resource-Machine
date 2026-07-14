@@ -1,0 +1,10 @@
+name = "zrm_accounting_aggregate_v1"
+version = "0.1.0"
+defaultTargets = ["ZrmAccountingAggregateV1"]
+
+[[require]]
+name = "arm_zrm_frontier_v2"
+path = "../arm_zrm_frontier_v2"
+
+[[lean_lib]]
+name = "ZrmAccountingAggregateV1"

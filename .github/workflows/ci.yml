@@ -27,6 +27,56 @@ jobs:
       - name: Review dependency changes
         uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294
 
+  formal:
+    name: Formal / ${{ matrix.package.name }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        package:
+          - name: arm-frontier-v2
+            directory: formal/lean/arm_zrm_frontier_v2
+            module: ArmZrmFrontier
+          - name: accounting-aggregate-v1
+            directory: formal/lean/zrm_accounting_aggregate_v1
+            module: ZrmAccountingAggregateV1
+    steps:
+      - name: Check out source
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0
+        with:
+          persist-credentials: false
+
+      - name: Build Lean package
+        uses: leanprover/lean-action@38fbc41a8c28c4cbaec22d7f7de508ec2e7c0dd9 # v1.5.0
+        with:
+          auto-config: false
+          build: true
+          build-args: --wfail
+          lake-package-directory: ${{ matrix.package.directory }}
+          lint: false
+          test: false
+          use-github-cache: false
+          use-mathlib-cache: false
+
+      - name: Verify exact Lean release
+        shell: bash
+        working-directory: ${{ matrix.package.directory }}
+        run: |
+          set -euo pipefail
+          version="$(lean --version)"
+          printf '%s\n' "$version"
+          if [[ "$version" != *"version 4.32.0"* ||
+                "$version" != *"commit 8c9756b28d64dab099da31a4c09229a9e6a2ef35"* ||
+                "$version" != *"Release"* ]]; then
+            echo "::error::unexpected Lean toolchain identity"
+            exit 1
+          fi
+
+      - name: Kernel-check compiled environment
+        working-directory: ${{ matrix.package.directory }}
+        run: lake env leanchecker --verbose ${{ matrix.package.module }}
+
   quality:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
@@ -48,6 +98,7 @@ jobs:
           python3 tools/check_complexity.py --report target/complexity-report.json
           python3 tools/check_code_quality.py --report target/code-quality-report.json
           python3 tools/check_package_manifest.py
+          python3 tools/check_zrm_accounting_research.py
           python3 -m unittest discover -s tools/tests -v
           PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s reference_models/tests -v
 
@@ -70,7 +121,9 @@ jobs:
           cargo +1.87.0 doc --workspace --no-deps --locked
 
       - name: Independent vector replay
-        run: python3 vectors/independent_python/replay_resource_wire_v1.py --check
+        run: |
+          python3 vectors/independent_python/replay_resource_wire_v1.py --check
+          python3 vectors/independent_python/replay_accounting_aggregate_v1.py --check
 
   supply-chain:
     runs-on: ubuntu-24.04
