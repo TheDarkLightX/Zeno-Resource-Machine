@@ -1,0 +1,35 @@
+{
+  "basis_attack": {
+    "honest_cases": 175,
+    "honest_unbalanced_known_binding_keys": 0,
+    "known_cross_kind_conversion_cases": 28,
+    "malicious_cases": 175,
+    "malicious_unbalanced_known_binding_keys": 168
+  },
+  "non_claims": [
+    "formal symbols are not elliptic-curve points",
+    "bounded enumeration is not an unbounded proof",
+    "cryptographic hash, signature, proof-system, and discrete-log assumptions are external",
+    "no protocol bytes, authority capability, or production implementation is created"
+  ],
+  "partial_composition": {
+    "both_defined_value_mismatches": 0,
+    "first_counterexample": [
+      1,
+      1,
+      6,
+      1,
+      null
+    ],
+    "modulus": 7,
+    "nonzero_triples": 216,
+    "parenthesization_domain_mismatches": 60
+  },
+  "schema": "zrm/arm-zrm-frontier-exploration/v1",
+  "summary_composition": {
+    "balanced_delta_rows": [],
+    "distinct_ordered_proof_topology_roots": 12,
+    "distinct_semantic_roots": 1,
+    "permutations": 6
+  }
+}
