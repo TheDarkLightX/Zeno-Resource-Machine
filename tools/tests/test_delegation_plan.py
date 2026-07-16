@@ -24,7 +24,7 @@ class DelegationPlanTests(unittest.TestCase):
     def setUp(self) -> None:
         self.temporary_directory = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary_directory.name)
-        matrix = {"obligations": [{"id": f"ZRM-CBC-{number:03d}"} for number in range(1, 47)]}
+        matrix = {"obligations": [{"id": f"ZRM-CBC-{number:03d}"} for number in range(1, 56)]}
         (self.root / "CONFORMANCE_MATRIX.json").write_text(json.dumps(matrix), encoding="utf-8")
         contracts = self.root / "contracts"
         contracts.mkdir()

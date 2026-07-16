@@ -1,7 +1,7 @@
 {
   "schema": "zrm/cbc-conformance-matrix/v1",
   "version": 1,
-  "updated_at": "2026-07-14",
+  "updated_at": "2026-07-15",
   "status": "scoped_wp0_wp1_implementation",
   "obligation_family": {
     "abbreviation": "CBC",
@@ -36,7 +36,8 @@
       "wp3b_intrinsic_resource_construction",
       "wp3c_intrinsic_body_role_and_ordinal_binding",
       "wp5_bounded_artifact_input_slice",
-      "draft_class_e_semantic_closure_rfc_package"
+      "draft_class_e_semantic_closure_rfc_package",
+      "draft_rfc_0004_recursive_accounting_aggregate_research_profile"
     ],
     "non_claims": [
       "no_complete_semantic_kernel",
@@ -53,6 +54,10 @@
       "no_reproducible_release",
       "no_security_audit",
       "no_approved_semantic_closure_rfc",
+      "no_approved_accounting_aggregation_profile",
+      "no_frozen_accounting_aggregate_abi",
+      "no_authenticated_accounting_opening",
+      "no_recursive_accounting_verified_fact",
       "no_production_authority"
     ]
   },
@@ -2008,6 +2013,408 @@
       "blocking_dependencies": [
         "ZRM-CBC-002",
         "ZRM-CBC-024"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-047",
+      "title": "Scoped four-column reference carrier preserves balance, support, and capacity",
+      "severity": "critical",
+      "status": "verified_scoped",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a signed net or resource-only projection erases gross flow or authority support, or an aggregate quantity exceeds the proved carrier capacity",
+      "construction_rule": "Within the non-normative natural-number reference carrier, derive consumed, created, authorized-burn, and authorized-mint totals per exact dimension and prove balance, zero-support reflection, resource-only noninjectivity, and U32-by-U128 capacity below U256",
+      "required_evidence": [
+        "executable four-column reference model and negative projection cases",
+        "Lean balance, support, noninjectivity, and capacity theorems",
+        "assumption and axiom-dependency audit"
+      ],
+      "implementation_refs": [
+        "reference_models/accounting_aggregate_v1.py"
+      ],
+      "test_refs": [
+        "reference_models/tests/test_accounting_aggregate_v1.py"
+      ],
+      "formal_refs": [
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/FourColumnConservation.lean",
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/AccountingFoldTree.lean",
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/CapacityBound.lean"
+      ],
+      "evidence_refs": [
+        "research/zrm_accounting_aggregate_v1/evidence/python-model.json",
+        "research/zrm_accounting_aggregate_v1/evidence/lean.json",
+        "research/zrm_accounting_aggregate_v1/manifest.json"
+      ],
+      "next_action": "define the canonical finite-map and accepted-leaf refinement, then prove the selected Rust U256 and circuit representations implement this scoped carrier without field wrap or dropped support",
+      "non_claim": "The verified scope is pure natural-number and reference-model arithmetic under U32 leaf-count and U128 per-leaf premises; it establishes no canonical bytes, authenticated opening, Rust or circuit refinement, governed profile, recursive proof, RFC approval, or authority",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#2-aggregate-row",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#5-leaf-projection",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#9-capacity-theorem-and-invariant",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#10-aggregate-balance"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP6",
+        "WP8"
+      ],
+      "blocking_dependencies": []
+    },
+    {
+      "id": "ZRM-CBC-048",
+      "title": "Scoped numeric aggregation result and definedness are proof-tree independent",
+      "severity": "critical",
+      "status": "verified_scoped",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "different binary groupings of the same bounded numeric leaves change whether aggregation succeeds or change its four-column result",
+      "construction_rule": "Within the non-normative numeric carrier, require componentwise monotone merge and prove every nonempty binary tree succeeds exactly when the complete totals fit and then returns the same result",
+      "required_evidence": [
+        "exhaustive small-tree grouping comparison and deterministic bounded exploration",
+        "Lean arbitrary-tree definedness and total-overflow-carrier theorems",
+        "counterexample retaining the rejected bounded-signed carrier"
+      ],
+      "implementation_refs": [
+        "reference_models/accounting_aggregate_v1.py",
+        "reference_models/accounting_aggregate_v1_explorer.py"
+      ],
+      "test_refs": [
+        "reference_models/tests/test_accounting_aggregate_v1.py"
+      ],
+      "formal_refs": [
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/AccountingFoldTree.lean",
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/TotalOverflowCarrier.lean"
+      ],
+      "evidence_refs": [
+        "research/zrm_accounting_aggregate_v1/evidence/python-model.json",
+        "research/zrm_accounting_aggregate_v1/evidence/lean.json",
+        "research/zrm_accounting_aggregate_v1/manifest.json"
+      ],
+      "next_action": "link the scoped numeric theorem to canonical sparse maps, exact ordered provenance, the governed profile, Rust and guest implementations, and existing CBC-027 semantic-root identity",
+      "non_claim": "The verified scope is the numeric fold and checked definedness model only; it does not prove canonical map ordering or bytes, retained-opening binding, ordered cryptographic coverage, SemanticSegmentHash equality, Rust or circuit refinement, or full protocol proof-tree independence",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#8-parent-composition",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#11-strong-associativity-and-definedness"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP8",
+        "WP12"
+      ],
+      "blocking_dependencies": []
+    },
+    {
+      "id": "ZRM-CBC-049",
+      "title": "RFC-0004 aggregate, profile, and coverage encodings are exact and domain separated",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "ambiguous, cross-domain, cross-profile, reordered, duplicate, truncated, or trailing bytes identify an accounting aggregate or provenance object",
+      "construction_rule": "Use manual versioned big-endian encoders and schema-fixed domains for profile, aggregate row, row list, coverage entry, coverage manifest, and retained opening; reject noncanonical forms and require independent complete vectors before approval",
+      "required_evidence": [
+        "profile bytes and ID plus canonical empty-root vectors",
+        "row, row-list, coverage-entry, coverage-manifest, and retained-opening vectors",
+        "every-field and cross-domain mutation atlas",
+        "two independent implementation replays"
+      ],
+      "implementation_refs": [
+        "vectors/independent_python/replay_accounting_aggregate_v1.py"
+      ],
+      "test_refs": [
+        "vectors/independent_python/replay_accounting_aggregate_v1.py",
+        "tools/tests/test_zrm_accounting_research.py"
+      ],
+      "formal_refs": [],
+      "evidence_refs": [
+        "vectors/accounting_aggregate_v1.json",
+        "research/zrm_accounting_aggregate_v1/evidence/vectors.json",
+        "research/zrm_accounting_aggregate_v1/manifest.json"
+      ],
+      "next_action": "add profile and empty-root vectors, freeze an existing AccountingRowV1 opening and retained wrapper, complete all-field and cross-domain mutants, and obtain independent cross-language agreement before any ABI claim",
+      "non_claim": "Current proposed vectors cover aggregate row and row-list hashing, coverage entry and manifest hashing, selected capacity cases, order and multiplicity mutants, and U32 framing only; profile bytes and ID, empty roots, retained opening bytes, frozen leaf-row bytes, every-field mutation, cross-language ABI agreement, and approval remain absent",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#canonical-encoding-and-hashing",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#required-vectors-before-approval"
+      ],
+      "target_level": "ZRM-L0",
+      "work_packages": [
+        "WP1",
+        "WP7"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-002",
+        "ZRM-CBC-016",
+        "ZRM-CBC-019",
+        "ZRM-CBC-024",
+        "ZRM-CBC-026"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-050",
+      "title": "Retained openings bind exact authenticated accepted-journal accounting rows",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a prover supplies fabricated, unavailable, truncated, reordered, or mismatched leaf rows while claiming they came from an accepted journal",
+      "construction_rule": "Before leaf projection, bound and strictly decode the retained opening, authenticate the exact AcceptedJournal hash, row bytes, row count, row hashes, and AccountingRowsRoot, and fail closed when any opening is unavailable or inconsistent",
+      "required_evidence": [
+        "frozen AccountingRowV1 opening and root/count vectors",
+        "authenticated AcceptedJournal adapter tests",
+        "malicious count, length, truncation, order, duplicate, and allocation-refusal fuzzing",
+        "unavailable-opening and missing-retention negatives"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "freeze the accepted-journal accounting-row ABI, implement a bounded retained-opening parser and authenticated journal binding, define governed retention, and add negative replay and fuzz evidence",
+      "non_claim": "No frozen AccountingRowV1 canonical opening, authenticated AcceptedJournal adapter, root and count replay, retained-byte parser, proving-time availability guarantee, retention policy, or data-availability result exists",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#4-retained-accepted-journal-opening",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#retained-opening-wrapper",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#data-availability-and-retention"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP6",
+        "WP7",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-012",
+        "ZRM-CBC-017",
+        "ZRM-CBC-019",
+        "ZRM-CBC-025",
+        "ZRM-CBC-045"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-051",
+      "title": "Ordered coverage preserves every authenticated leaf and dimension occurrence",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "aggregation omits, duplicates, permutes, relabels, or collapses a leaf accounting occurrence, authority root, transformation root, row-hash role, or dimension",
+      "construction_rule": "Derive one typed coverage entry for every opened leaf-row occurrence, preserve multiplicity in exact leaf-position and dimension order, concatenate manifests exactly at parents, and keep aggregate totals incapable of granting authority",
+      "required_evidence": [
+        "missing, extra, permuted, duplicate, relabeled, and wrong-digest-role negatives",
+        "two-leaf ordered concatenation vectors",
+        "accepted-journal opening to coverage refinement",
+        "authority and transformation multiplicity tests"
+      ],
+      "implementation_refs": [
+        "reference_models/accounting_aggregate_v1.py",
+        "vectors/independent_python/replay_accounting_aggregate_v1.py"
+      ],
+      "test_refs": [
+        "reference_models/tests/test_accounting_aggregate_v1.py",
+        "vectors/independent_python/replay_accounting_aggregate_v1.py"
+      ],
+      "formal_refs": [
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/AccountingFoldTree.lean"
+      ],
+      "evidence_refs": [
+        "vectors/accounting_aggregate_v1.json",
+        "research/zrm_accounting_aggregate_v1/evidence/python-model.json",
+        "research/zrm_accounting_aggregate_v1/evidence/vectors.json",
+        "research/zrm_accounting_aggregate_v1/evidence/lean.json",
+        "research/zrm_accounting_aggregate_v1/manifest.json"
+      ],
+      "next_action": "bind coverage derivation to the retained accepted-journal opening, replace abstract provenance fixtures with frozen leaf bytes, and prove exact ordered cryptographic refinement and availability behavior",
+      "non_claim": "The model uses abstract provenance identifiers, the candidate vector uses an opaque existing-leaf AccountingRowHash fixture, and Lean CoversExactly is a multiset relation for numeric aggregation; none proves accepted-journal binding, actual leaf bytes, ordered cryptographic coverage refinement, availability, or authority",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#6-coverage-entry-and-ordered-manifest",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#coverage-entry-bytes",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#coverage-manifest-root"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP6",
+        "WP7",
+        "WP8",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-012",
+        "ZRM-CBC-017",
+        "ZRM-CBC-025",
+        "ZRM-CBC-050"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-052",
+      "title": "Governed accounting profile and semantic summary reject substitution and mixed versions",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "an aggregate is replayed under a different profile, limit set, journal schema, semantic context, proof program, or predecessor interpretation",
+      "construction_rule": "Select one governed AccountingAggregationProfileId and bind its exact roots, counts, retained-byte total, accepted-journal schema, semantic context, and compatibility rules into the versioned semantic summary and proof statement",
+      "required_evidence": [
+        "approved profile bytes, identity, and exact deployable limits",
+        "SemanticSegmentHash and proof-statement vectors",
+        "profile, schema, context, program, key, and release substitution negatives",
+        "migration, historical replay, rollback, and predecessor matrix"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "obtain RFC approval and exact limits, freeze the semantic-summary schema and profile ID, identify any predecessor use, then implement policy selection plus migration and substitution tests",
+      "non_claim": "No approved limits, canonical profile-ID vector, governed profile selector, SemanticSegmentHash schema, proof-statement binding, migration or replay matrix, predecessor audit, or cross-profile substitution test exists",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#3-governed-aggregation-profile",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#rfc-0002-refinement",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#compatibility-and-migration"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP2",
+        "WP7",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-010",
+        "ZRM-CBC-017",
+        "ZRM-CBC-026",
+        "ZRM-CBC-027",
+        "ZRM-CBC-049",
+        "ZRM-CBC-050",
+        "ZRM-CBC-051"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-053",
+      "title": "Accounting quantity, count, byte, and work bounds fail closed across trees",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "bounded_blast_radius",
+      "disaster_state": "crafted dimensions, counts, retained bytes, carries, field limbs, or merge trees cause overflow, allocation abuse, proof-field wrap, excessive work, or inconsistent reject precedence",
+      "construction_rule": "Apply governed quantity, dimension, coverage, retained-byte, leaf, frame, and verifier-cost limits before expensive work; use checked monotone arithmetic and stable reject precedence at leaves and parents",
+      "required_evidence": [
+        "executed ESSO mutant campaign for overflow, row dropping, swaps, bounds, and coverage omission",
+        "Rust U256, carry, range, Kani, property, differential, and fuzz evidence",
+        "retained-opening allocation-refusal tests",
+        "worst-case memory, cycle, proof-size, and storage benchmarks"
+      ],
+      "implementation_refs": [
+        "reference_models/accounting_aggregate_v1.py"
+      ],
+      "test_refs": [
+        "reference_models/tests/test_accounting_aggregate_v1.py"
+      ],
+      "formal_refs": [
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/CapacityBound.lean",
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/TotalOverflowCarrier.lean",
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/AccountingFoldTree.lean"
+      ],
+      "evidence_refs": [
+        "research/zrm_accounting_aggregate_v1/evidence/python-model.json",
+        "research/zrm_accounting_aggregate_v1/evidence/lean.json",
+        "research/zrm_accounting_aggregate_v1/manifest.json"
+      ],
+      "next_action": "execute and record the ESSO plan, choose deployable limits from benchmarks, implement bounded retained parsing and Rust U256 arithmetic, constrain circuit limbs and carries, and add deterministic reject and resource evidence",
+      "non_claim": "Scoped evidence covers natural-number quantity capacity, selected model count caps, and U32 digest-list framing; the ESSO campaign is explicitly unexecuted, and no retained-byte parser, allocation refusal, deployable limits, runtime reject implementation, benchmark, Rust U256 refinement, circuit constraint, or proof-cost bound exists",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#9-capacity-theorem-and-invariant",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#reject-taxonomy-and-precedence",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#resource-denial-of-service-and-circuit-analysis"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP6",
+        "WP8",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-016",
+        "ZRM-CBC-019",
+        "ZRM-CBC-024",
+        "ZRM-CBC-045",
+        "ZRM-CBC-052"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-054",
+      "title": "Only an exactly bound recursive verifier constructs the sealed accounting fact",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "host-proposed totals, roots, booleans, proofs, or callback results create admission, state, commit, mint, burn, transformation, or aggregation authority",
+      "construction_rule": "Dispatch through a governed sealed recursive backend, verify exact program, key, release, profile, semantic summary, children, accepted journals, and authenticated output, then construct a sealed postcommit aggregation fact that cannot authorize precommit admission or commit",
+      "required_evidence": [
+        "sealed fact forgery and phase-substitution tests",
+        "wrong program, key, release, profile, summary, child, journal, and output negatives",
+        "recursive guest and reference differential tests",
+        "independent proof-system and authority-boundary review"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "freeze the governed statement and verified-fact API, implement the recursive verifier adapter and guest, bind every exact identity and output, and independently review the postcommit-only authority boundary",
+      "non_claim": "No sealed accounting aggregation fact, verifier adapter, exact program or key identity, recursive guest, circuit proof, admission-separation test, accepted-journal binding, commit integration, or independent proof-system review exists",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#authority-and-trust-boundary",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#formal-obligations",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#typed-interfaces"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP5",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-009",
+        "ZRM-CBC-010",
+        "ZRM-CBC-017",
+        "ZRM-CBC-027",
+        "ZRM-CBC-050",
+        "ZRM-CBC-051",
+        "ZRM-CBC-052"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-055",
+      "title": "Net projection is a governed boundary result and never a recursive carrier or no-op claim",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a signed net re-enters recursive aggregation, an untrusted Boolean claims balance, or zero net is treated as semantic no-op or authority",
+      "construction_rule": "Compute net only after successful four-column aggregation by canonical compare-and-subtract for a governed selected dimension set, return a typed sealed boundary fact, and prohibit its use as recursive state, admission authority, or no-op evidence",
+      "required_evidence": [
+        "canonical signed-magnitude net vectors",
+        "selected-dimension-set root and governed predicate tests",
+        "net-as-carrier, host-Boolean, authority, and no-op rejection tests",
+        "runtime and guest refinement evidence"
+      ],
+      "implementation_refs": [
+        "reference_models/accounting_aggregate_v1.py"
+      ],
+      "test_refs": [
+        "reference_models/tests/test_accounting_aggregate_v1.py"
+      ],
+      "formal_refs": [
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/AccountingFoldTree.lean"
+      ],
+      "evidence_refs": [
+        "research/zrm_accounting_aggregate_v1/evidence/python-model.json",
+        "research/zrm_accounting_aggregate_v1/evidence/lean.json",
+        "research/zrm_accounting_aggregate_v1/manifest.json"
+      ],
+      "next_action": "freeze the signed-magnitude and selected-set encodings, define the governed boundary predicate and sealed fact, then add runtime, guest, authority-substitution, and semantic-no-op negatives",
+      "non_claim": "Only mathematical net projection and no-op separation are modeled; no canonical signed-magnitude codec, selected-dimension-set root, governed typed predicate, sealed boundary fact, runtime or guest binding, or authority exists",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#12-net-projection-and-boundary-predicates"
+      ],
+      "target_level": "ZRM-L2",
+      "work_packages": [
+        "WP5",
+        "WP6",
+        "WP8",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-009",
+        "ZRM-CBC-017",
+        "ZRM-CBC-054"
       ]
     }
   ]

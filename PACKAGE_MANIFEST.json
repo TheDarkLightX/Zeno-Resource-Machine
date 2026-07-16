@@ -2,7 +2,7 @@
   "schema": "zrm/specification-package-manifest/v1",
   "package": "Zeno Resource Machine high-assurance specification package",
   "version": "0.1.0-draft.5",
-  "date": "2026-07-14",
+  "date": "2026-07-15",
   "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a through WP3c resource stages, an unreviewed WP5 bounded-artifact candidate, a reviewed but unpromoted security-remediation candidate governed by accepted RFC-0003, a derived semantic-contract review suite, and three unapproved Class E semantic-closure RFCs; no release or production claim",
   "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model, WP3a through WP3c resource-stage, and WP5 bounded-artifact candidates; the security-remediation candidate has maintainer-approved RFC-0003 semantics but remains unpromoted and pre-alpha; WP5 establishes bounded byte ownership only, and the security remediation narrows pre-authority APIs and resource dimensions without creating policy, verification, admission, commit, release, or production authority; semantic contracts, RFC drafts, model-obligation summaries, and independent-review packets are design or process oracles, not implementation conformance evidence",
   "manifest_scope": "specification-package payload, including normative sources and derived semantic-review controls; code, tests, worklogs, and evidence records are outside this inventory",
@@ -24,8 +24,8 @@
     },
     {
       "path": "CONFORMANCE_MATRIX.json",
-      "bytes": 87721,
-      "sha256": "5c2691489452a05053ba7c8ddfa18f1fbdaa480a0d4e4c99324c0c7ad3c3b103"
+      "bytes": 110740,
+      "sha256": "304fa566ec7c7b6044b27fca24e6aee60becf4b23e39de802c72117975b86955"
     },
     {
       "path": "CONTRIBUTING.md",
