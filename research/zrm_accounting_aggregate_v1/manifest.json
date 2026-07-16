@@ -7,9 +7,9 @@
       "sha256": "d5ff0ddaaa86da4f0c353f0a88ac30b0883438052bdf1a5dfc4cac3a5fa76a35"
     },
     {
-      "bytes": 11502,
+      "bytes": 11707,
       "path": "PACKAGE_MANIFEST.json",
-      "sha256": "5bb552300a2aaf0f735465151d93381f7e64067c3a62a19734756555f295a3a1"
+      "sha256": "052a7720f98e523665049309e1e4462d1eac093e5218c1f47b8f7e8b8f009c0e"
     },
     {
       "bytes": 24981,
@@ -202,9 +202,9 @@
       "sha256": "19f16112853049b31be5069ecff70d2724c68b1873a0c1b3c3a45bd294f1e4d1"
     },
     {
-      "bytes": 2051,
+      "bytes": 2458,
       "path": "rfcs/README.md",
-      "sha256": "a17c0860f0cd559c7ff193fc937a18f55bce689f7a76f593906b6740521b3b3e"
+      "sha256": "3df4cb96d4f5686587f298fdb8bf5207880266aa2553d773a77d30cd75af232a"
     },
     {
       "bytes": 62971,

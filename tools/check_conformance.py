@@ -231,9 +231,9 @@ def validate_matrix(data: dict[str, Any]) -> None:
     require(data.get("version") == 1, "unexpected matrix version")
     obligations = data.get("obligations")
     require(isinstance(obligations, list), "obligations must be a list")
-    expected_ids = [f"ZRM-CBC-{number:03d}" for number in range(1, 56)]
+    expected_ids = [f"ZRM-CBC-{number:03d}" for number in range(1, 63)]
     actual_ids = [obligation.get("id") for obligation in obligations]
-    require(actual_ids == expected_ids, "CBC identifiers must be unique and sequential from 001 through 055")
+    require(actual_ids == expected_ids, "CBC identifiers must be unique and sequential from 001 through 062")
 
     anchors: dict[Path, set[str]] = {}
     for obligation in obligations:
@@ -278,7 +278,7 @@ def main() -> int:
     except (ConformanceError, json.JSONDecodeError, OSError) as error:
         print(f"conformance check failed: {error}", file=sys.stderr)
         return 1
-    print("conformance check passed: 55 obligations, live anchors, valid promotion states, acyclic dependencies")
+    print("conformance check passed: 62 obligations, live anchors, valid promotion states, acyclic dependencies")
     return 0
 
 

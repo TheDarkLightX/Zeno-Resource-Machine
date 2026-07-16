@@ -279,6 +279,79 @@ Construction order is fixed: build and hash logic, transformation, authority, an
 
 ---
 
+## Pre-WP4/WP6 Class E design gate — paired transient resources
+
+RFC-0005 defines a proposed V2 transition profile for a first-class resource
+that is born and retired in one atomic transition. It is a design gate, not a
+new V1 work package and not an authority implementation.
+
+The proposed first-profile decisions are:
+
+```text
+placements: Consumed, Referenced, Created, Transient
+logic uses: Consumed, Referenced, Created, TransientBirth, TransientDeath
+active effects: delete C, insert O
+nullifier effects: insert nullifier(C union Q)
+accounting: count Q once on each gross side
+graph: linear per identity, bounded branch/merge, acyclic, boundary-anchored
+```
+
+`ResourceWireV1`, `ResourceRoleV1`, `ResourceId`, transparent nullifier
+derivation, `MachineStateRootV1`, and `AccountingRowV1` remain unchanged. V2
+policy, claim, statement, semantic-effect, and journal meanings require new
+schemas and domains.
+
+### Entry gates for any V2 implementation
+
+Before an authority-path transient task is delegable:
+
+1. RFC-0005 is approved or superseded by an accepted semantic decision.
+2. Two named, adapter-owned executable reference fixtures, routed settlement
+   and transient receipt, expose independent producer and consumer policies,
+   compare against the safe two-commit baseline, and show why a direct
+   transformation or non-resource virtual receipt is insufficient.
+3. Exact protocol and strict-default limits are selected from envelope,
+   state-proof, verifier-cost, graph, journal, memory, and storage evidence.
+4. V2 byte tables, domains, transition-ID derivation, reject precedence, and
+   two independent cross-version vector replays are approved.
+5. Feature rollback stales all old plans and facts while a governed Q-empty
+   compatibility path keeps live persistent V2-policy outputs consumable.
+6. The successor accepted-journal and semantic-effect schemas are coordinated
+   with RFC-0001, and recursive treatment is coordinated with RFC-0002 and
+   RFC-0004.
+7. CBC-056 through CBC-062 are current and their required negative evidence is
+   planned.
+8. Two independent Class E reviewers, including an authority-boundary
+   reviewer, approve the design.
+
+### Planned slices after approval
+
+```text
+V2-1 canonical codecs, vectors, and bounded oracle
+V2-2 inert four-placement partition and weighted policy limits
+V2-3 V2 resource-kind and machine-policy construction
+V2-4 V2 logic and transformation-use claims plus sealed fact binding
+V2-5 reference-state freshness and private update planning
+V2-6 exact producer/consumer graph and gross accounting validation
+V2-7 journal, semantic effects, atomic commit, replay, and crash recovery
+V2-8 routed-settlement and transient-receipt adapters
+V2-9 formal/refinement evidence and recursive integration
+```
+
+Each slice starts with a failing negative test and keeps V1 APIs byte-exact.
+No proof guest is implemented before the deterministic reference semantics and
+accepted journal exist.
+
+### Stop condition
+
+Stop rather than implement when paired versus membership-optional semantics,
+global nullifier history, producer/consumer coverage, graph anchoring, numeric
+limits, transition identity, journal fields, rollback consumability, or V1/V2
+migration is ambiguous. A temporary lifecycle must never be described as
+private under the transparent profile.
+
+---
+
 ## WP4 — Reference state and accumulators
 
 ### Crates

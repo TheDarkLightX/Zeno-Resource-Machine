@@ -1,16 +1,16 @@
 {
   "schema": "zrm/specification-package-manifest/v1",
   "package": "Zeno Resource Machine high-assurance specification package",
-  "version": "0.1.0-draft.5",
-  "date": "2026-07-15",
-  "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a through WP3c resource stages, an unreviewed WP5 bounded-artifact candidate, a reviewed but unpromoted security-remediation candidate governed by accepted RFC-0003, a derived semantic-contract review suite, and three unapproved Class E semantic-closure RFCs; no release or production claim",
+  "version": "0.1.0-draft.6",
+  "date": "2026-07-16",
+  "status": "reviewed scoped ZRM-L0 implementation plus candidate WP0 assurance extensions, pre-RFC WP2 policy model, WP3a through WP3c resource stages, an unreviewed WP5 bounded-artifact candidate, a reviewed but unpromoted security-remediation candidate governed by accepted RFC-0003, a derived semantic-contract review suite, and four unapproved Class E RFCs; no release or production claim",
   "implementation_snapshot": "reviewed initial repository-local WP0 controls and WP1 canonical-codec slice; locally evidenced candidate WP0 quality/SBOM/CBOM controls; unreviewed WP2 policy-model, WP3a through WP3c resource-stage, and WP5 bounded-artifact candidates; the security-remediation candidate has maintainer-approved RFC-0003 semantics but remains unpromoted and pre-alpha; WP5 establishes bounded byte ownership only, and the security remediation narrows pre-authority APIs and resource dimensions without creating policy, verification, admission, commit, release, or production authority; semantic contracts, RFC drafts, model-obligation summaries, and independent-review packets are design or process oracles, not implementation conformance evidence",
   "manifest_scope": "specification-package payload, including normative sources and derived semantic-review controls; code, tests, worklogs, and evidence records are outside this inventory",
   "digest_algorithm": "SHA-256",
   "path_order": "UTF-8 bytewise lexicographic",
   "license": "MIT; LICENSE is a hashed payload",
-  "file_count": 49,
-  "total_file_count_including_manifest": 50,
+  "file_count": 50,
+  "total_file_count_including_manifest": 51,
   "manifest_self_excluded_from_payload_hashes": true,
   "archive_digest": {
     "embedded": false,
@@ -24,8 +24,8 @@
     },
     {
       "path": "CONFORMANCE_MATRIX.json",
-      "bytes": 110740,
-      "sha256": "304fa566ec7c7b6044b27fca24e6aee60becf4b23e39de802c72117975b86955"
+      "bytes": 127520,
+      "sha256": "4e82e51acef71ab26a53f6cd1eb188ef0296139e01c4ee8a24ead8e564dcadc2"
     },
     {
       "path": "CONTRIBUTING.md",
@@ -34,8 +34,8 @@
     },
     {
       "path": "IMPLEMENTATION_PLAN.md",
-      "bytes": 20977,
-      "sha256": "31265aa9d7c3b82c03f6fe65a9d5ee4aeb97f66b1e8b694b6d3d342adccf4b34"
+      "bytes": 24301,
+      "sha256": "e5c12364e381d8a451dad2b3a20ced854cc016382b7298c91f52cf6b0b857885"
     },
     {
       "path": "LICENSE",
@@ -209,8 +209,8 @@
     },
     {
       "path": "rfcs/README.md",
-      "bytes": 2051,
-      "sha256": "a17c0860f0cd559c7ff193fc937a18f55bce689f7a76f593906b6740521b3b3e"
+      "bytes": 2458,
+      "sha256": "3df4cb96d4f5686587f298fdb8bf5207880266aa2553d773a77d30cd75af232a"
     },
     {
       "path": "rfcs/RFC-0001-policy-context-fact-and-commit-authority.md",
@@ -231,6 +231,11 @@
       "path": "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md",
       "bytes": 62971,
       "sha256": "fc9ff72d11969a5e855399968c3f747a78d094ec1863d4f0538b35ebffe08f9a"
+    },
+    {
+      "path": "rfcs/RFC-0005-paired-transient-resource-lifecycle.md",
+      "bytes": 56808,
+      "sha256": "78d69d166cdfd781f256a97a9c4d22252bbb64e9437b74013b495f43d85ad4ee"
     },
     {
       "path": "templates/ADR_TEMPLATE.md",
@@ -268,9 +273,9 @@
     "ResourceWireV1 is a frozen-draft WP1 codec; IntrinsicResourceV1 and RoleBoundIntrinsicResourceV1 add no new canonical ABI, and there is no stable package-wide ABI",
     "no final policy-valid ResourceV1; zero-quantity marker permission is not expressible by the current policy schema",
     "no canonical policy bytes, policy hashes, authenticated policy activation, or trusted validation context",
-    "no complete policy migration or rollback design",
+    "no approved executable package-wide policy migration or rollback profile",
     "semantic contracts are derived review oracles and do not constitute implementation, verification, audit, or production evidence",
-    "RFC-0001, RFC-0002, and RFC-0004 remain unapproved Class E drafts; accepted RFC-0003 creates no policy, verifier, commit, release, or production authority",
+    "RFC-0001, RFC-0002, RFC-0004, and RFC-0005 remain unapproved Class E drafts; accepted RFC-0003 creates no policy, verifier, commit, release, or production authority",
     "internal bounded-model evidence is corroborative, finite, assumption-bound, and not publicly replayable from this package",
     "no security audit",
     "no production authority",
