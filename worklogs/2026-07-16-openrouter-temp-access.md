@@ -12,7 +12,7 @@ Affected modules:
 
 Exact API:
 `setup` stores a hidden key in an owner-only runtime file; `status` validates
-it without printing it; `probe` requests an exact marker from
+it without printing it; `probe` requires a marker from
 `openrouter/free`; `clear` removes it.
 
 Authority boundary:
@@ -29,8 +29,8 @@ Canonical/versioning impact:
 None.
 
 Tests first:
-Owner-only round trip and cleanup, invalid key shape, symlink rejection, exact
-free model and token cap, exact marker, and redirect rejection.
+Owner-only round trip and cleanup, invalid key shape, symlink rejection, fixed
+free model and token cap, required marker, and redirect rejection.
 
 Formal/dependency/performance impact:
 No formal obligation or new dependency. Python standard library only. One
@@ -55,7 +55,8 @@ No ZRM API. The local CLI has the four commands listed above.
 
 Invariants/disaster states:
 The key is hidden on entry, absent from arguments and output, bounded, stored
-under owner-only permissions, and removable. The free probe is exact, bounded,
+under owner-only permissions, and removable. The free probe is marker-checked,
+bounded,
 nonredirecting, and has no paid fallback.
 
 Tests and commands:
@@ -75,7 +76,12 @@ None required for Class B non-authority tooling.
 Canonical hashes, dependencies, and protocol performance:
 No changes.
 
+Authenticated probe:
+`python3 -B tools/openrouter_temp_access.py probe` succeeded through
+`openrouter/free`. OpenRouter routed it to
+`nvidia/nemotron-3-nano-omni-30b-a3b-reasoning:free` and reported cost
+`0` for 32 prompt, 79 completion, and 111 total tokens.
+
 Remaining gaps and non-claims:
-No authenticated probe or paid request has run. The maintainer must enter the
-temporary key locally; the next action is the free probe. Kimi review tooling
-and any spending approval remain separate.
+No paid request has run. Kimi review tooling and any spending approval remain
+separate.

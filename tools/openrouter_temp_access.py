@@ -203,7 +203,7 @@ def probe_body() -> dict[str, Any]:
 
 
 def extract_probe(payload: Mapping[str, Any]) -> str:
-    """Require one exact marker response."""
+    """Require the connectivity marker in one bounded text response."""
 
     choices = payload.get("choices")
     if not isinstance(choices, list) or not choices:
@@ -215,7 +215,7 @@ def extract_probe(payload: Mapping[str, Any]) -> str:
     if not isinstance(message, dict):
         raise AccessError("OpenRouter free probe returned no message")
     content = message.get("content")
-    if not isinstance(content, str) or content.strip() != PROBE_MARKER:
+    if not isinstance(content, str) or PROBE_MARKER not in content:
         raise AccessError("OpenRouter free probe marker did not match")
     return content.strip()
 

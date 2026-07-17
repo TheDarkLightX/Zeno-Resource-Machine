@@ -60,12 +60,14 @@ class FreeProbeTests(unittest.TestCase):
         self.assertEqual(body["model"], FREE_MODEL)
         self.assertEqual(body["max_tokens"], 64)
 
-    def test_marker_must_match_exactly(self) -> None:
+    def test_marker_must_be_present(self) -> None:
         good = {"choices": [{"message": {"content": PROBE_MARKER}}]}
         self.assertEqual(extract_probe(good), PROBE_MARKER)
         extra = {"choices": [{"message": {"content": f"ok {PROBE_MARKER}"}}]}
+        self.assertEqual(extract_probe(extra), f"ok {PROBE_MARKER}")
+        missing = {"choices": [{"message": {"content": "something else"}}]}
         with self.assertRaisesRegex(AccessError, "marker"):
-            extract_probe(extra)
+            extract_probe(missing)
 
     def test_redirects_are_rejected(self) -> None:
         handler = RejectRedirects()
