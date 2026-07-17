@@ -237,6 +237,17 @@ The run contains no runtime replay, formal proof, canonical V2 vector,
 independent review, or protocol approval. Morph output is template-based
 reformulation, not execution of the separate Morph discovery runtime.
 
+## Kimi K3 external review
+
+The revision-bound external Kimi K3 review is preserved in
+[`2026-07-16-rfc-0005-kimi-k3-external-review.md`](2026-07-16-rfc-0005-kimi-k3-external-review.md).
+Its verdict is **REVISE**. It found six blocking specification gaps:
+pre-dispatch graph-check ordering, three missing canonical list orders,
+V2 inherited-journal-field scope, V1/V2 policy-schema mixture, the meaning of
+graph connected components, and the hard `TransitionIdV2` approval condition.
+The review is advisory AI evidence and fills neither independent human Class E
+reviewer slot.
+
 ## Planned implementation slices
 
 1. Commit routed-settlement and transient-receipt executable need fixtures.
