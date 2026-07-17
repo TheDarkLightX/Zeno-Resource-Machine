@@ -1,0 +1,103 @@
+{
+  "schema": "zrm/esso-campaign-registry/v1",
+  "esso_revision": "db8a3f8a782a508ada5005a2cf177f25c58f451d",
+  "execution_status": "external_baseline_observed_not_repo_replayable_frontier_campaigns_specified",
+  "unknown_policy": "fail",
+  "promotion_policy": "A result must bind the ESSO executable, model, properties, bounds, seeds, backend versions, shortest counterexamples, and complete artifact digests. Unknown and error never promote a claim.",
+  "campaigns": [
+    {
+      "id": "ESSO-ZRM-001",
+      "model": "policy_activation_v1",
+      "goal": "Preserve and repair the existing policy-activation oracle rather than duplicate it.",
+      "properties": ["content, activation, and snapshot identities are distinct", "at most one current activation", "suspended implies no current activation", "exact replay is classified before freshness", "hard revocation is monotone", "rejected commands do not mutate"],
+      "mutants": ["identity conflation", "stored disposition drift", "predecessor creation", "standalone current revocation", "freshness before replay", "reject mutates log"],
+      "bounds": {"activations": 4, "commands": 6, "clients": 2}
+    },
+    {
+      "id": "ESSO-ZRM-002",
+      "model": "recursive_manifest_v1",
+      "goal": "Compare binary recursive summary composition with manifest-first derivation.",
+      "properties": ["exact ordered concatenation", "tree-topology independence", "predecessor continuity", "context equality", "total carrier closure"],
+      "mutants": ["omit leaf", "duplicate leaf", "sort trace", "accept overlap", "exclude intermediate identity", "substitute context"],
+      "bounds": {"leaves": 6, "tree_shapes": "all", "contexts": 2}
+    },
+    {
+      "id": "ESSO-ZRM-003",
+      "model": "commitment_dag_v1",
+      "goal": "Search field placement and dependency direction before fixing commitment bytes.",
+      "properties": ["semantic effects precede journal", "journal precedes replay metadata", "all atomic fields are bound exactly once", "no commitment cycle"],
+      "mutants": ["journal back-edge", "replay-to-effects back-edge", "unbound outcome", "double-bound field", "phase substitution"],
+      "bounds": {"fields": 12, "phases": 4}
+    },
+    {
+      "id": "ESSO-ZRM-004",
+      "model": "replay_linearization_v1",
+      "goal": "Model crash, retry, equivocation, and two-client races.",
+      "properties": ["one new commit per replay key", "exact retry is a read-only no-op", "conflict persists", "resolution is read-only", "accepted journal follows durable commit"],
+      "mutants": ["retry creates commit", "conflict forgets", "resolution mutates", "journal before commit", "lost acknowledgement duplicates"],
+      "bounds": {"clients": 2, "crash_points": 8, "replay_keys": 2}
+    },
+    {
+      "id": "ESSO-ZRM-005",
+      "model": "fact_complete_commutativity_v1",
+      "goal": "Separate pure-effect commutativity from serializable journal and root commits.",
+      "properties": ["declared reads are exact", "declared writes are exact", "certified pure effects commute", "journal order is deterministic", "conflicts fall back deterministically"],
+      "mutants": ["omit governed read", "nullifier-only footprint", "commute global root", "nondeterministic fallback", "stale policy dependency"],
+      "bounds": {"transitions": 3, "facts": 6, "schedules": "all"}
+    },
+    {
+      "id": "ESSO-ZRM-006",
+      "model": "authority_cut_v1",
+      "goal": "Enumerate every path from untrusted input to an authority capability.",
+      "properties": ["every path crosses bounded canonical decoding", "proof adapters resolve through governed policy", "facts use sealed constructors", "semantic validity cannot mint commit authority"],
+      "mutants": ["callback returns authority boolean", "unsealed fact", "ungoverned adapter", "proof implies commit", "candidate type crosses boundary"],
+      "bounds": {"nodes": 20, "capability_kinds": 5}
+    },
+    {
+      "id": "ESSO-ZRM-007",
+      "model": "evidence_adapter_differential_v1",
+      "goal": "Prevent container, context, and acceleration-profile substitutions at a generic evidence-adapter boundary.",
+      "properties": ["within-transition sets are exact", "journal traces preserve order", "acceleration-input profiles are statement-bound", "policy and verifier releases are bound", "proof topology is nonsemantic"],
+      "mutants": ["set/trace substitution", "acceleration-profile substitution", "verifier-release substitution", "topology-root authority", "extra logic fact"],
+      "bounds": {"actions": 4, "facts": 8, "contexts": 2}
+    },
+    {
+      "id": "ESSO-ZRM-008",
+      "model": "strong_accounting_associativity_v1",
+      "goal": "Compare bounded signed net folding with monotone debit and credit limb folding across every three-leaf tree.",
+      "properties": ["equal result and definedness across trees", "limb overflow is monotone", "zero net retains nonzero coverage", "net projection is additive"],
+      "mutants": ["signed intermediate overflow", "drop cancelling row", "bound only final net", "swap debit and credit"],
+      "bounds": {"signed_bound": 127, "limb_bound": 255, "leaves": 3, "tree_shapes": 2}
+    },
+    {
+      "id": "ESSO-ZRM-009",
+      "model": "context_indexed_path_v1",
+      "goal": "Require ordinary transitions to preserve validation context and allow upgrades only through governed bridge steps.",
+      "properties": ["endpoint equality", "ordinary context preservation", "bridge policy authorization", "pre-bridge facts are not reinterpreted"],
+      "mutants": ["ordinary context drift", "ungoverned bridge", "old fact under new context", "wrong bridge predecessor", "bridge replay"],
+      "bounds": {"contexts": 3, "steps": 5, "bridge_kinds": 2}
+    },
+    {
+      "id": "ESSO-ZRM-010",
+      "model": "deterministic_authenticated_batch_v1",
+      "goal": "Prove bounded parallel executions refine canonical serial order through exact point and range observations.",
+      "properties": ["schedule-independent public result", "sequential refinement", "exact point coverage", "complete range coverage", "deterministic reexecution"],
+      "mutants": ["nullifier-only conflict", "host-declared reads", "point-only range", "old-root proof", "completion-order journal", "reject race"],
+      "bounds": {"transactions": 3, "worker_schedules": "all", "keys": 4, "range_queries": 1}
+    },
+    {
+      "id": "ESSO-ZRM-011",
+      "model": "proof_carrying_promotion_v1",
+      "goal": "Derive immutable four-valued promotion receipts from typed evidence and a versioned policy.",
+      "properties": ["producer assertions are irrelevant", "support and refutation coexist", "self-support cycles do not bootstrap", "staleness does not rewrite history", "identical inputs yield identical receipt bytes"],
+      "mutants": ["boolean promotion", "weaker-theorem substitution", "self-support SCC", "hide refutation", "scalar assurance collapse", "overbroad descendant invalidation"],
+      "bounds": {"claims": 8, "evidence_receipts": 12, "dependency_depth": 5, "policy_versions": 2}
+    }
+  ],
+  "result_receipt_required_fields": ["schema", "campaign_id", "esso_executable_sha256", "esso_revision", "model_sha256", "property_sha256", "bounds", "seeds", "backend_names", "backend_versions", "status", "counterexample_artifacts", "artifact_digests", "non_claims"],
+  "non_claims": [
+    "A separately recorded external run observed eight current ZRM models as inductive and fourteen seeded mutants as killed; it lacks required receipt fields, is not replayable from this repository, and cannot satisfy a gate. Most frontier campaigns in this registry remain specified, not executed.",
+    "The superseded evidence in closed ZRM PR 11 is historical mutant input only and is not a current oracle.",
+    "Bounded inductiveness is not an unbounded refinement proof."
+  ]
+}

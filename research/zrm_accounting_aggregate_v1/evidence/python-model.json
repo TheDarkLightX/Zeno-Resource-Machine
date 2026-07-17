@@ -1,0 +1,40 @@
+{
+  "schema": "zrm/accounting-aggregate-python-evidence/v1",
+  "base_revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+  "executed_on": "2026-07-14",
+  "python": "CPython standard-library unittest environment",
+  "commands": [
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest reference_models.tests.test_accounting_aggregate_v1 -v",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m reference_models.accounting_aggregate_v1_explorer",
+    "PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s reference_models/tests -v"
+  ],
+  "results": {
+    "focused_tests_passed": 34,
+    "focused_tests_failed": 0,
+    "full_reference_tests_passed": 122,
+    "full_reference_tests_failed": 0,
+    "signed_checked_grouping_mismatches": 20,
+    "signed_checked_triples": 125,
+    "monotone_tree_evaluations": 32805,
+    "monotone_tree_disagreements": 0,
+    "ordered_manifest_mutants_rejected": 3,
+    "ordered_manifest_mutants_total": 3,
+    "protocol_maximum_bit_length": 160,
+    "u256_headroom_bits": 96
+  },
+  "covered": [
+    "exact four-column leaf projection",
+    "sparse support union and exact covered-leaf fold",
+    "same-dimension forged-total rejection",
+    "strict untrusted versus trusted canonicalization boundaries",
+    "all-four-zero leaf coverage-only compatibility",
+    "typed dimensions and duplicate rejection",
+    "separate u32 leaf-count and digest-list count ceilings",
+    "bounded arbitrary-tree value and definedness agreement"
+  ],
+  "nonclaims": [
+    "Finite executable exploration is not a proof for unbounded inputs.",
+    "The model does not authenticate accepted journals, hashes, authority, state, data availability, or commit.",
+    "The model does not refine a Rust or circuit implementation."
+  ]
+}

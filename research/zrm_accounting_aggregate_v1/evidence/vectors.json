@@ -1,0 +1,34 @@
+{
+  "schema": "zrm/accounting-aggregate-vector-evidence/v1",
+  "base_revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+  "executed_on": "2026-07-14",
+  "commands": [
+    "python3 vectors/independent_python/replay_accounting_aggregate_v1.py --write",
+    "python3 vectors/independent_python/replay_accounting_aggregate_v1.py --check"
+  ],
+  "results": {
+    "replay_passed": true,
+    "binary_artifacts": 16,
+    "aggregate_rows": 4,
+    "coverage_entries": 2,
+    "strict_untrusted_negatives_rejected": 9,
+    "strict_untrusted_negatives_total": 9,
+    "aggregate_row_payload_bytes": 194,
+    "coverage_entry_payload_bytes": 202,
+    "hash_frame_list_max_items": 134217727
+  },
+  "covered": [
+    "framed SHA-256 domains and preimages",
+    "four U256 fields in algebraic debit/credit order",
+    "trusted fixture construction versus strict untrusted validation",
+    "opaque existing-leaf AccountingRowHash type separation",
+    "coverage occurrence multiplicity and order",
+    "U128-to-U256 boundary fixtures",
+    "U32 hash-frame payload-length ceiling"
+  ],
+  "nonclaims": [
+    "The proposed vectors do not freeze or approve an RFC-0004 ABI.",
+    "The opaque leaf-row-hash fixture is not a canonical AccountingRowV1 encoding or semantic opening proof.",
+    "Independent replay is syntactic evidence, not cryptographic, authority, state, or commit correctness."
+  ]
+}

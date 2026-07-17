@@ -1,0 +1,468 @@
+{
+  "schema": "zrm/research-source-ledger/v1",
+  "run_id": "zrm-frontier-v2-2026-07-14",
+  "base_revision": "a4d2868d92807947cbad5f0d7fd828b74ae1368c",
+  "sources": [
+    {
+      "id": "SRC-ARM-COMMIT",
+      "kind": "source",
+      "title": "ARM RISC Zero pinned source tree",
+      "uri": "https://github.com/anoma/arm-risc0/commit/1b552f17b1c94943e6f81d08e2986befc26e99e9",
+      "revision": "1b552f17b1c94943e6f81d08e2986befc26e99e9",
+      "primary": true
+    },
+    {
+      "id": "SRC-ARM-BATCH-GUEST",
+      "kind": "source",
+      "title": "ARM batch aggregation guest",
+      "uri": "https://github.com/anoma/arm-risc0/blob/1b552f17b1c94943e6f81d08e2986befc26e99e9/arm_circuits/batch_aggregation/methods/guest/src/main.rs",
+      "revision": "1b552f17b1c94943e6f81d08e2986befc26e99e9",
+      "primary": true
+    },
+    {
+      "id": "SRC-ARM-INFORMAL-AUDIT",
+      "kind": "audit",
+      "title": "Informal Systems ARM and EVM adapter audit",
+      "uri": "https://github.com/informalsystems/audits/blob/main/Anoma/Anoma%20Q4%202025%20-%20RISC%20Zero%20RM%20%26%20EVM%20Protocol%20Adapter%20Audit%20Final%20Report_v2.pdf",
+      "revision": "report-v2",
+      "primary": true
+    },
+    {
+      "id": "SRC-ARM-NETHERMIND-AUDIT",
+      "kind": "audit",
+      "title": "Nethermind ARM and EVM adapter audit",
+      "uri": "https://github.com/anoma/arm-risc0/blob/1b552f17b1c94943e6f81d08e2986befc26e99e9/audits/2025-11-13_Nethermind_RISC_Zero_RM_%26_EVM_Protocol_Adapter.pdf",
+      "revision": "1b552f17b1c94943e6f81d08e2986befc26e99e9",
+      "primary": true
+    },
+    {
+      "id": "SRC-ANOMA-RM-SPEC",
+      "kind": "specification",
+      "title": "Anoma resource machine architecture",
+      "uri": "https://specs.anoma.net/latest/arch/system/state/resource_machine/index.html",
+      "revision": "retrieved-2026-07-14",
+      "primary": true
+    },
+    {
+      "id": "SRC-ANOMA-EVM-FLOW",
+      "kind": "specification",
+      "title": "Anoma EVM execution flow",
+      "uri": "https://specs.anoma.net/v1.0.0/arch/integrations/adapters/evm/execution_flow.html",
+      "revision": "v1.0.0",
+      "primary": true
+    },
+    {
+      "id": "SRC-RISC0-COMPOSITION",
+      "kind": "official-documentation",
+      "title": "RISC Zero proof composition",
+      "uri": "https://dev.risczero.com/api/zkvm/composition",
+      "revision": "retrieved-2026-07-14",
+      "primary": true
+    },
+    {
+      "id": "SRC-RISC0-RECURSION",
+      "kind": "official-documentation",
+      "title": "RISC Zero recursion",
+      "uri": "https://dev.risczero.com/api/recursion",
+      "revision": "retrieved-2026-07-14",
+      "primary": true
+    },
+    {
+      "id": "SRC-PCD",
+      "kind": "publication-page",
+      "title": "Proof-Carrying Data project publication page",
+      "uri": "https://projects.csail.mit.edu/pcd/",
+      "revision": "project-publication-page",
+      "primary": true
+    },
+    {
+      "id": "SRC-NOVA",
+      "kind": "paper",
+      "title": "Nova: Recursive Zero-Knowledge Arguments from Folding Schemes",
+      "uri": "https://eprint.iacr.org/2021/370",
+      "revision": "2021/370",
+      "primary": true
+    },
+    {
+      "id": "SRC-HYPERNOVA",
+      "kind": "paper",
+      "title": "HyperNova: Recursive arguments for customizable constraint systems",
+      "uri": "https://eprint.iacr.org/2023/573",
+      "revision": "2023/573",
+      "primary": true
+    },
+    {
+      "id": "SRC-PROTOSTAR",
+      "kind": "paper",
+      "title": "ProtoStar: Generic Efficient Accumulation/Folding for Special Sound Protocols",
+      "uri": "https://eprint.iacr.org/2023/620",
+      "revision": "2023/620",
+      "primary": true
+    },
+    {
+      "id": "SRC-ICONFLUENCE",
+      "kind": "paper",
+      "title": "Coordination Avoidance in Database Systems",
+      "uri": "https://www.vldb.org/pvldb/vol8/p185-bailis.pdf",
+      "revision": "PVLDB-8-3",
+      "primary": true
+    },
+    {
+      "id": "SRC-INTERACTIVE-ICONFLUENCE",
+      "kind": "paper",
+      "title": "Interactive Checks for Coordination Avoidance",
+      "uri": "https://www.vldb.org/pvldb/vol12/p14-whittaker.pdf",
+      "revision": "PVLDB-12-1",
+      "primary": true
+    },
+    {
+      "id": "SRC-BLOCK-STM",
+      "kind": "paper",
+      "title": "Block-STM: Scaling Blockchain Execution by Turning Ordering Curse to a Performance Blessing",
+      "uri": "https://arxiv.org/abs/2203.06871",
+      "revision": "arXiv-2203.06871",
+      "primary": true
+    },
+    {
+      "id": "SRC-ZEXE",
+      "kind": "paper",
+      "title": "Zexe: Enabling Decentralized Private Computation",
+      "uri": "https://eprint.iacr.org/2018/962",
+      "revision": "2018/962",
+      "primary": true
+    },
+    {
+      "id": "SRC-ZK-CREDS",
+      "kind": "paper",
+      "title": "zk-creds: Flexible Anonymous Credentials from zkSNARKs and Existing Identity Infrastructure",
+      "uri": "https://eprint.iacr.org/2022/878",
+      "revision": "2022/878",
+      "primary": true
+    },
+    {
+      "id": "SRC-JELLYFISH",
+      "kind": "paper",
+      "title": "Jellyfish Merkle Tree",
+      "uri": "https://developers.diem.com/papers/jellyfish-merkle-tree/2021-01-14.pdf",
+      "revision": "2021-01-14",
+      "primary": true
+    },
+    {
+      "id": "SRC-UTREEXO",
+      "kind": "paper",
+      "title": "Utreexo: A dynamic hash-based accumulator optimized for the Bitcoin UTXO set",
+      "uri": "https://eprint.iacr.org/2019/611",
+      "revision": "2019/611",
+      "primary": true
+    },
+    {
+      "id": "SRC-RFC6962",
+      "kind": "standard",
+      "title": "Certificate Transparency Merkle tree hashing",
+      "uri": "https://www.rfc-editor.org/rfc/rfc6962#section-2.1",
+      "revision": "RFC-6962",
+      "primary": true
+    },
+    {
+      "id": "SRC-ZRM-RFC0001",
+      "kind": "repository-specification",
+      "title": "ZRM policy, fact, and commit authority",
+      "uri": "https://github.com/TheDarkLightX/Zeno-Resource-Machine/blob/a4d2868d92807947cbad5f0d7fd828b74ae1368c/rfcs/RFC-0001-policy-context-fact-and-commit-authority.md",
+      "revision": "a4d2868d92807947cbad5f0d7fd828b74ae1368c",
+      "primary": true
+    },
+    {
+      "id": "SRC-ZRM-RFC0002",
+      "kind": "repository-specification",
+      "title": "ZRM recursive semantic journal composition",
+      "uri": "https://github.com/TheDarkLightX/Zeno-Resource-Machine/blob/a4d2868d92807947cbad5f0d7fd828b74ae1368c/rfcs/RFC-0002-recursive-semantic-journal-composition.md",
+      "revision": "a4d2868d92807947cbad5f0d7fd828b74ae1368c",
+      "primary": true
+    },
+    {
+      "id": "SRC-RK",
+      "kind": "tool-source",
+      "title": "Research Kernel MCP",
+      "uri": "https://github.com/TheDarkLightX/Research-Kernel-MCP/commit/d9cdfceaa396dd56acfacbd042b89ce633dbc173",
+      "revision": "d9cdfceaa396dd56acfacbd042b89ce633dbc173",
+      "primary": true
+    },
+    {
+      "id": "SRC-MORPH",
+      "kind": "tool-source",
+      "title": "Morph",
+      "uri": "https://github.com/TheDarkLightX/Morph/commit/a26a9f5ddabfa2d5be8e12f8c3546836ace92520",
+      "revision": "a26a9f5ddabfa2d5be8e12f8c3546836ace92520",
+      "primary": true
+    },
+    {
+      "id": "SRC-ESSO",
+      "kind": "tool-source",
+      "title": "ESSO",
+      "uri": "https://github.com/TheDarkLightX/ESSO/commit/db8a3f8a782a508ada5005a2cf177f25c58f451d",
+      "revision": "db8a3f8a782a508ada5005a2cf177f25c58f451d",
+      "primary": true
+    },
+    {
+      "id": "SRC-LEAN",
+      "kind": "tool-source",
+      "title": "Lean 4.32.0 release",
+      "uri": "https://github.com/leanprover/lean4/releases/tag/v4.32.0",
+      "revision": "8c9756bf44da6f8c4e9b3ac40779ab939732a31d",
+      "primary": true
+    },
+    {
+      "id": "SRC-VERIZEXE",
+      "kind": "paper",
+      "title": "VERIZEXE: Decentralized Private Computation with Universal Setup",
+      "uri": "https://www.usenix.org/system/files/sec23fall-prepub-277-xiong-alex.pdf",
+      "revision": "USENIX-Security-2023",
+      "primary": true
+    },
+    {
+      "id": "SRC-PCA",
+      "kind": "paper",
+      "title": "Proof-Carrying Authentication",
+      "uri": "https://www.cs.princeton.edu/~appel/papers/says.pdf",
+      "revision": "CCS-1999",
+      "primary": true
+    },
+    {
+      "id": "SRC-STATEFUL-AUTH",
+      "kind": "paper",
+      "title": "A Logic for Stateful Authorization Policies",
+      "uri": "https://people.mpi-sws.org/~dg/papers/stm10-acl-state.pdf",
+      "revision": "CSF-2010",
+      "primary": true
+    },
+    {
+      "id": "SRC-COCONUT",
+      "kind": "paper",
+      "title": "Coconut: Threshold Issuance Selective Disclosure Credentials with Applications to Distributed Ledgers",
+      "uri": "https://arxiv.org/abs/1802.07344",
+      "revision": "arXiv-1802.07344",
+      "primary": true
+    },
+    {
+      "id": "SRC-FLAFOL",
+      "kind": "paper",
+      "title": "First-Order Logic for Flow-Limited Authorization",
+      "uri": "https://arxiv.org/abs/2001.10630",
+      "revision": "arXiv-2001.10630",
+      "primary": true
+    },
+    {
+      "id": "SRC-SUPERNOVA",
+      "kind": "paper",
+      "title": "SuperNova: Proving universal machine executions without universal circuits",
+      "uri": "https://eprint.iacr.org/2022/1758",
+      "revision": "2022/1758",
+      "primary": true
+    },
+    {
+      "id": "SRC-PROTOGALAXY",
+      "kind": "paper",
+      "title": "ProtoGalaxy: Efficient ProtoStar-style folding of multiple instances",
+      "uri": "https://eprint.iacr.org/2023/1106",
+      "revision": "2023/1106-rev-2024-01-30",
+      "primary": true
+    },
+    {
+      "id": "SRC-CYCLEFOLD",
+      "kind": "paper",
+      "title": "CycleFold: Folding-scheme-based recursive arguments over a cycle of elliptic curves",
+      "uri": "https://eprint.iacr.org/2023/1192",
+      "revision": "2023/1192",
+      "primary": true
+    },
+    {
+      "id": "SRC-PCD-ACCUMULATION",
+      "kind": "paper",
+      "title": "Proof-Carrying Data from Accumulation Schemes",
+      "uri": "https://eprint.iacr.org/2020/499",
+      "revision": "2020/499-rev-2020-09-29",
+      "primary": true
+    },
+    {
+      "id": "SRC-PCD-NO-SUCCINCT",
+      "kind": "paper",
+      "title": "Proof-Carrying Data without Succinct Arguments",
+      "uri": "https://eprint.iacr.org/2020/1618",
+      "revision": "2020/1618-rev-2021-12-01",
+      "primary": true
+    },
+    {
+      "id": "SRC-PCD-MULTIFOLD",
+      "kind": "paper",
+      "title": "Proof-Carrying Data from Multi-folding Schemes",
+      "uri": "https://eprint.iacr.org/2023/1282",
+      "revision": "2023/1282-rev-2024-07-11",
+      "primary": true
+    },
+    {
+      "id": "SRC-NOVA-REVISITED",
+      "kind": "paper",
+      "title": "Revisiting the Nova Proof System on a Cycle of Curves",
+      "uri": "https://eprint.iacr.org/2023/969",
+      "revision": "2023/969",
+      "primary": true
+    },
+    {
+      "id": "SRC-PCD-SIM-EXTRACT",
+      "kind": "paper",
+      "title": "On the Simulation-Extractability of Proof-Carrying Data",
+      "uri": "https://eprint.iacr.org/2025/2037",
+      "revision": "2025/2037-rev-2026-05-27",
+      "primary": true
+    },
+    {
+      "id": "SRC-ACCUMULATION-NONHOM",
+      "kind": "paper",
+      "title": "Accumulation without Homomorphism",
+      "uri": "https://eprint.iacr.org/2024/474",
+      "revision": "2024/474-rev-2025-11-15",
+      "primary": true
+    },
+    {
+      "id": "SRC-MANGROVE",
+      "kind": "paper",
+      "title": "Mangrove: A Scalable Framework for Folding-based SNARKs",
+      "uri": "https://eprint.iacr.org/2024/416",
+      "revision": "2024/416",
+      "primary": true
+    },
+    {
+      "id": "SRC-ARK",
+      "kind": "paper",
+      "title": "Algebraic Reductions of Knowledge",
+      "uri": "https://eprint.iacr.org/2022/009",
+      "revision": "2022/009",
+      "primary": true
+    },
+    {
+      "id": "SRC-CALVIN",
+      "kind": "paper",
+      "title": "Calvin: Fast Distributed Transactions for Partitioned Database Systems",
+      "uri": "https://cs.yale.edu/homes/thomson/publications/calvin-sigmod12.pdf",
+      "revision": "SIGMOD-2012",
+      "primary": true
+    },
+    {
+      "id": "SRC-ARIA",
+      "kind": "paper",
+      "title": "Aria: A Fast and Practical Deterministic OLTP Database",
+      "uri": "https://pages.cs.wisc.edu/~yxy/pubs/aria.pdf",
+      "revision": "PVLDB-13-11",
+      "primary": true
+    },
+    {
+      "id": "SRC-SERIALIZABLE-SI",
+      "kind": "paper",
+      "title": "Serializable Isolation for Snapshot Databases",
+      "uri": "https://people.eecs.berkeley.edu/~kubitron/courses/cs262a-F13/handouts/papers/p729-cahill.pdf",
+      "revision": "SIGMOD-2008",
+      "primary": true
+    },
+    {
+      "id": "SRC-SILO",
+      "kind": "paper",
+      "title": "Speedy Transactions in Multicore In-Memory Databases",
+      "uri": "https://wzheng.github.io/silo.pdf",
+      "revision": "SOSP-2013",
+      "primary": true
+    },
+    {
+      "id": "SRC-AUTH-BTREE",
+      "kind": "paper",
+      "title": "Dynamic Authenticated Index Structures for Outsourced Databases",
+      "uri": "https://users.cs.utah.edu/~lifeifei/papers/sigmod06-btree.pdf",
+      "revision": "SIGMOD-2006",
+      "primary": true
+    },
+    {
+      "id": "SRC-TAMPER-LOG",
+      "kind": "paper",
+      "title": "Efficient Data Structures for Tamper-Evident Logging",
+      "uri": "https://static.usenix.org/event/sec09/tech/full_papers/crosby.pdf",
+      "revision": "USENIX-Security-2009",
+      "primary": true
+    },
+    {
+      "id": "SRC-GPADS",
+      "kind": "paper",
+      "title": "Authenticated Data Structures, Generically",
+      "uri": "https://www.cs.umd.edu/~mwh/papers/gpads.pdf",
+      "revision": "POPL-2014",
+      "primary": true
+    },
+    {
+      "id": "SRC-IN-TOTO",
+      "kind": "standard-source",
+      "title": "in-toto Attestation Framework Specification",
+      "uri": "https://github.com/in-toto/attestation/blob/676ab5f26a246c99dfa5ee541c1c77a9c9f1499a/spec/README.md",
+      "revision": "676ab5f26a246c99dfa5ee541c1c77a9c9f1499a",
+      "primary": true
+    },
+    {
+      "id": "SRC-DSSE",
+      "kind": "standard-source",
+      "title": "Dead Simple Signing Envelope Protocol",
+      "uri": "https://github.com/secure-systems-lab/dsse/blob/8fca562ae08478e4f8d94680040b6456697fa41a/protocol.md",
+      "revision": "8fca562ae08478e4f8d94680040b6456697fa41a",
+      "primary": true
+    },
+    {
+      "id": "SRC-SLSA",
+      "kind": "standard",
+      "title": "SLSA Build Provenance v1.2",
+      "uri": "https://slsa.dev/spec/v1.2/build-provenance",
+      "revision": "v1.2",
+      "primary": true
+    },
+    {
+      "id": "SRC-TUF",
+      "kind": "standard-source",
+      "title": "The Update Framework Specification",
+      "uri": "https://github.com/theupdateframework/specification/blob/da50e092557f7d5b94e827c99e5d796f2820dd63/tuf-spec.md",
+      "revision": "da50e092557f7d5b94e827c99e5d796f2820dd63",
+      "primary": true
+    },
+    {
+      "id": "SRC-RFC8785",
+      "kind": "standard",
+      "title": "JSON Canonicalization Scheme",
+      "uri": "https://www.rfc-editor.org/info/rfc8785",
+      "revision": "RFC-8785",
+      "primary": true
+    },
+    {
+      "id": "SRC-RFC9942",
+      "kind": "standard",
+      "title": "COSE Receipts",
+      "uri": "https://www.rfc-editor.org/info/rfc9942",
+      "revision": "RFC-9942",
+      "primary": true
+    },
+    {
+      "id": "SRC-RFC9943",
+      "kind": "standard",
+      "title": "SCITT Architecture",
+      "uri": "https://www.rfc-editor.org/info/rfc9943",
+      "revision": "RFC-9943",
+      "primary": true
+    },
+    {
+      "id": "SRC-LEAN-VALIDATION",
+      "kind": "official-documentation",
+      "title": "Lean Validating Proofs",
+      "uri": "https://lean-lang.org/doc/reference/latest/ValidatingProofs/",
+      "revision": "retrieved-2026-07-14",
+      "primary": true
+    }
+  ],
+  "non_claims": [
+    "A source reference is not by itself evidence that a hypothesis is true.",
+    "Retrieval dates do not make mutable latest-version pages revision-stable; claims that require exact text must be rechecked.",
+    "Project-specific source references support only the public architectural comparisons stated in this packet."
+  ]
+}

@@ -1,0 +1,65 @@
+{
+  "schema": "zrm/accounting-aggregate-esso-campaign/v1",
+  "status": "specified_not_executed",
+  "esso_revision": "db8a3f8a782a508ada5005a2cf177f25c58f451d",
+  "reason_not_executed": "The private ESSO repository was readable through the GitHub connector but was not materialized as an executable local checkout. No ESSO result, mutant kill, or replayability claim is made.",
+  "model": {
+    "id": "zrm_recursive_accounting_aggregate_v1",
+    "format": "esso-ir/v1",
+    "bounded_parameters": {
+      "dimensions": 3,
+      "leaves": 4,
+      "leaf_limb_bound": 7,
+      "aggregate_limb_bound": 28,
+      "binary_tree_shapes": "all ordered full binary trees"
+    },
+    "state": [
+      "ordered accepted-journal identifiers and positions",
+      "typed accounting dimensions",
+      "four nonnegative numeric limbs per dimension",
+      "leaf-local authority and transformation roots",
+      "ordered coverage occurrences",
+      "profile identifier",
+      "pre-state and post-state roots"
+    ],
+    "properties": [
+      "every tree equals the exact ordered-manifest numeric fold",
+      "every tree preserves leaf occurrence coverage exactly",
+      "conservation is closed under merge",
+      "different units and kinds never merge",
+      "nonzero zero-net rows remain material",
+      "aggregate identity cannot create external accepted-journal authority",
+      "profile substitution rejects",
+      "root/count opening substitution rejects"
+    ]
+  },
+  "mutants": [
+    {"id": "signed_checked_intermediate", "change": "replace monotone limbs with bounded signed checked net"},
+    {"id": "resource_projection_only", "change": "drop authority debit and credit columns"},
+    {"id": "u128_parent", "change": "narrow aggregate columns to U128"},
+    {"id": "drop_zero_net_row", "change": "delete a material row when credit equals debit"},
+    {"id": "merge_unit_ids", "change": "key only by resource_kind_id"},
+    {"id": "merge_kind_ids", "change": "key only by unit_id"},
+    {"id": "silent_duplicate_dedup", "change": "deduplicate external duplicate dimensions"},
+    {"id": "coverage_set_union", "change": "replace ordered occurrence concatenation with set union"},
+    {"id": "coverage_sort", "change": "sort coverage occurrences after composition"},
+    {"id": "coverage_omission", "change": "omit one leaf-row occurrence"},
+    {"id": "authority_root_substitution", "change": "replace a leaf authority root under equal totals"},
+    {"id": "transformation_root_substitution", "change": "replace a transformation root under equal totals"},
+    {"id": "witness_root_skip", "change": "project supplied rows without matching the accepted journal root"},
+    {"id": "capacity_check_skip", "change": "accept a limb above leaf_count times leaf maximum"},
+    {"id": "profile_fallback", "change": "retry an overflow under a wider caller-selected profile"},
+    {"id": "empty_identity_authority", "change": "admit an external transition from the internal empty fold"},
+    {"id": "field_modular_wrap", "change": "use proof-field modular addition without U256 carry checks"}
+  ],
+  "required_replay_receipt": [
+    "ESSO executable SHA-256",
+    "model and property SHA-256",
+    "exact CLI and backend versions",
+    "bounds and seeds",
+    "per-mutant result",
+    "counterexample artifacts",
+    "aggregate artifact digests"
+  ],
+  "promotion_rule": "This campaign remains non-evidence until every required replay-receipt field and artifact is committed and independently checked."
+}

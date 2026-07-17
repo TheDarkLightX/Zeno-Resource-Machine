@@ -1,0 +1,224 @@
+{
+  "decision_dependency_mutants": {
+    "cases": 2,
+    "complete_decision_root_collisions": 0,
+    "details": {
+      "candidate_invariant_reads": {
+        "decision_roots_collide": false,
+        "program_only_roots_collide": true
+      },
+      "nullifier_guard": {
+        "decision_roots_collide": false,
+        "program_only_roots_collide": true
+      }
+    },
+    "program_only_root_collisions": 2
+  },
+  "exact_read_footprints": {
+    "decisions": {
+      "point_missing": "reject",
+      "point_value_substituted": "reject",
+      "range_missing": "reject",
+      "range_result_substituted": "reject"
+    },
+    "rejected_tamper_cases": 4,
+    "tamper_cases": 4
+  },
+  "minimal_write_skew_witness": {
+    "canonical_order": [
+      "reserve-left",
+      "reserve-right"
+    ],
+    "certified": {
+      "final_state": {
+        "nullifiers": [
+          "nf-left"
+        ],
+        "values": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      "final_state_root": "3c509c43667d81853bdd34284b83a26a8384c67d6db4665bdf4b9801bf98f65d",
+      "initial_state_root": "246b4363c9f5bd540fd8c44f2c5df89e997388fec8cdfc472c0f299b8091de3a",
+      "ordered_manifest_root": "87ee409c22bfd848d40d0a7f421cc411068fcd1af78446465d71a1d97fc64659",
+      "outcomes": [
+        {
+          "accepted": true,
+          "decision_footprint_root": "dee9a716218e244790253125ebedfae67d4f742261f05246d0b5178f954d7c02",
+          "position": 0,
+          "post_state_root": "3c509c43667d81853bdd34284b83a26a8384c67d6db4665bdf4b9801bf98f65d",
+          "pre_state_root": "246b4363c9f5bd540fd8c44f2c5df89e997388fec8cdfc472c0f299b8091de3a",
+          "reason": "accepted",
+          "transaction_id": "reserve-left"
+        },
+        {
+          "accepted": false,
+          "decision_footprint_root": "36264c6df44f259030b133d21850d208ef933729b46cb9fdfd99b3977c22807c",
+          "position": 1,
+          "post_state_root": "3c509c43667d81853bdd34284b83a26a8384c67d6db4665bdf4b9801bf98f65d",
+          "pre_state_root": "3c509c43667d81853bdd34284b83a26a8384c67d6db4665bdf4b9801bf98f65d",
+          "reason": "minimum_reserve_would_fail",
+          "transaction_id": "reserve-right"
+        }
+      ],
+      "reexecuted_positions": [
+        1
+      ]
+    },
+    "certified_preserves_invariants": true,
+    "initial_state": {
+      "nullifiers": [],
+      "values": [
+        [
+          0,
+          1
+        ],
+        [
+          1,
+          1
+        ]
+      ]
+    },
+    "mutant_preserves_invariants": false,
+    "nullifier_only_mutant": {
+      "final_state": {
+        "nullifiers": [
+          "nf-left",
+          "nf-right"
+        ],
+        "values": [
+          [
+            0,
+            0
+          ],
+          [
+            1,
+            0
+          ]
+        ]
+      },
+      "final_state_root": "9b0d56e09652e13ddfc7e66f3a6bc25fe187ad024051e27ee69eb8a393764ef4",
+      "initial_state_root": "246b4363c9f5bd540fd8c44f2c5df89e997388fec8cdfc472c0f299b8091de3a",
+      "ordered_manifest_root": "87ee409c22bfd848d40d0a7f421cc411068fcd1af78446465d71a1d97fc64659",
+      "outcomes": [
+        {
+          "accepted": true,
+          "decision_footprint_root": "dee9a716218e244790253125ebedfae67d4f742261f05246d0b5178f954d7c02",
+          "position": 0,
+          "post_state_root": "3c509c43667d81853bdd34284b83a26a8384c67d6db4665bdf4b9801bf98f65d",
+          "pre_state_root": "246b4363c9f5bd540fd8c44f2c5df89e997388fec8cdfc472c0f299b8091de3a",
+          "reason": "accepted",
+          "transaction_id": "reserve-left"
+        },
+        {
+          "accepted": true,
+          "decision_footprint_root": "1840228c04bc27dd8bb91cd1485006af4b9b20e4a1b099c2e5f67e162443ba95",
+          "position": 1,
+          "post_state_root": "9b0d56e09652e13ddfc7e66f3a6bc25fe187ad024051e27ee69eb8a393764ef4",
+          "pre_state_root": "3c509c43667d81853bdd34284b83a26a8384c67d6db4665bdf4b9801bf98f65d",
+          "reason": "accepted",
+          "transaction_id": "reserve-right"
+        }
+      ],
+      "reexecuted_positions": []
+    },
+    "worker_schedule": [
+      "reserve-right",
+      "reserve-left"
+    ]
+  },
+  "non_claims": [
+    "bounded enumeration is not an unbounded serializability proof",
+    "model hashes are deterministic identifiers, not accumulator security proofs",
+    "the model does not implement storage, durability, proofs, or production authority",
+    "the nullifier-only path is an intentional mutant, not an admissible design",
+    "the sealed capability is one modeled enforcement design, not proof that all production program reads are instrumented"
+  ],
+  "nullifier_only_write_skew_mutant": {
+    "accepted_transactions": 8,
+    "first_violation": {
+      "initial_state": {
+        "nullifiers": [],
+        "values": [
+          [
+            0,
+            1
+          ],
+          [
+            1,
+            1
+          ]
+        ]
+      },
+      "result": {
+        "final_state": {
+          "nullifiers": [
+            "nf-left",
+            "nf-right"
+          ],
+          "values": [
+            [
+              0,
+              0
+            ],
+            [
+              1,
+              0
+            ]
+          ]
+        },
+        "final_state_root": "9b0d56e09652e13ddfc7e66f3a6bc25fe187ad024051e27ee69eb8a393764ef4",
+        "initial_state_root": "246b4363c9f5bd540fd8c44f2c5df89e997388fec8cdfc472c0f299b8091de3a",
+        "ordered_manifest_root": "87ee409c22bfd848d40d0a7f421cc411068fcd1af78446465d71a1d97fc64659",
+        "outcomes": [
+          {
+            "accepted": true,
+            "decision_footprint_root": "dee9a716218e244790253125ebedfae67d4f742261f05246d0b5178f954d7c02",
+            "position": 0,
+            "post_state_root": "3c509c43667d81853bdd34284b83a26a8384c67d6db4665bdf4b9801bf98f65d",
+            "pre_state_root": "246b4363c9f5bd540fd8c44f2c5df89e997388fec8cdfc472c0f299b8091de3a",
+            "reason": "accepted",
+            "transaction_id": "reserve-left"
+          },
+          {
+            "accepted": true,
+            "decision_footprint_root": "1840228c04bc27dd8bb91cd1485006af4b9b20e4a1b099c2e5f67e162443ba95",
+            "position": 1,
+            "post_state_root": "9b0d56e09652e13ddfc7e66f3a6bc25fe187ad024051e27ee69eb8a393764ef4",
+            "pre_state_root": "3c509c43667d81853bdd34284b83a26a8384c67d6db4665bdf4b9801bf98f65d",
+            "reason": "accepted",
+            "transaction_id": "reserve-right"
+          }
+        ],
+        "reexecuted_positions": []
+      }
+    },
+    "initial_states": 8,
+    "invariant_violations": 4
+  },
+  "range_phantom": {
+    "certified_accepted_transactions_across_schedules": 2,
+    "certified_reexecutions_across_schedules": 2,
+    "distinct_certified_semantic_roots": 1,
+    "nullifier_only_mutant_preserves_invariants": false,
+    "nullifier_only_mutant_range_entries": 2,
+    "worker_schedules": 2
+  },
+  "schema": "zrm/deterministic-authenticated-batch-exploration/v1",
+  "serial_refinement": {
+    "accepted_transactions_across_executions": 8,
+    "executions": 16,
+    "reexecutions_across_executions": 8,
+    "semantic_refinement_mismatches": 0,
+    "states_with_schedule_variant_result": 0,
+    "valid_initial_states": 8,
+    "worker_schedules_per_state": 2
+  }
+}

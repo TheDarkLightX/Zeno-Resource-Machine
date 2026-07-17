@@ -1,0 +1,65 @@
+{
+  "schema": "zrm/esso-observational-execution-record/v1",
+  "executed_at": "2026-07-14",
+  "esso_revision": "db8a3f8a782a508ada5005a2cf177f25c58f451d",
+  "checker_schema": "esso-zrm-semantic-check/v2",
+  "status": "OBSERVED_PASS_NOT_REPLAYABLE",
+  "evidence_class": "observational_external_execution",
+  "replayable_from_repository": false,
+  "promotion_eligible": false,
+  "missing_required_receipt_fields": [
+    "esso_executable_sha256",
+    "model_sha256",
+    "property_sha256",
+    "bounds",
+    "seeds",
+    "backend_versions",
+    "counterexample_artifacts",
+    "artifact_digests"
+  ],
+  "models": {
+    "atomic_commit_recovery": {"inductive": true, "ir_hash": "sha256:82474f71b933e2a019284d0465460d9eb3494d0fab326b5a77038a8b9941159f"},
+    "commit_outcome_resolution": {"inductive": true, "ir_hash": "sha256:e26ecf41a987acb0aa6afd28f3a1ff928b50e4566ce6057d300b1da96e580ca5"},
+    "exact_once": {"inductive": true, "ir_hash": "sha256:ca9fb046febbdad6116fdd3e549ecda0f30b48a07497c5de9d6fe904240d9110"},
+    "plan_freshness": {"inductive": true, "ir_hash": "sha256:89cd4371762a9c4549201670f9c0b8b78dc74e7043a4968e0b84ec2f7b509f92"},
+    "policy_creation_suspension": {"inductive": true, "ir_hash": "sha256:fba2ac0cefbb4ad0a151cdd1fd55c841959496487e2694a8fd448d844876e102"},
+    "recursive_composition": {"inductive": true, "ir_hash": "sha256:d5235d02d6ace13e513b030cf4366308206af5561df20b70f1c22a4a824051a8"},
+    "replay_linearization": {"inductive": true, "ir_hash": "sha256:8cf6fb47562517a0653ba4d5cf5fd85d25af7bb5ba84a3fcfb586802db7fc346"},
+    "verifier_fact_freshness": {"inductive": true, "ir_hash": "sha256:7f711dc6305fccf4182837327be74bb0fc91d05efb376e472a4292b45211432e"}
+  },
+  "mutants": {
+    "caller_substitutes_leaf_position": "sha256:ce2674292d8f908f292ad5c416b3bd033c2f9e42a864b2b9d31c740d39be4924",
+    "creation_under_wrong_policy": "sha256:a53b7578fb5091d3b28d98319130c002c5bcb0f78395f2dc5dc1408a4fe3711a",
+    "development_fact_grants_authority": "sha256:b1f520cc5bfa8fb71a6dd98b01a20b33b10cc2f5dec4625209126ca294be0cf0",
+    "nonempty_message_smuggled_as_empty": "sha256:c801fd36504ccc328832a0ba4b447e0f00e46d2fcaad1cf3b6446659bb748735",
+    "partial_durable_commit": "sha256:a7388c2cd051b630209395017f2c7321f62d0ade2c31ad0eb275677445b4b9f9",
+    "policy_change_reuses_machine_root": "sha256:7b56ac0a44aecb9dda5a01135a1035d972459017d994b3d9ed891839d39f8565",
+    "recursive_fold_omits_middle_leaf": "sha256:81b0b9d476ae03f5cf377eaf267ebde1cae8b53f0cabd7617222ccf720c5fcbe",
+    "replay_lookup_outside_commit_boundary": "sha256:cc16a64948f953e64f1d1de64ad6b9f9597935cee2c518a8ba7e2f596a988527",
+    "resolution_reapplies_effect": "sha256:586d12a298be7893f4f07ea976b69bd87c462ce59b91583a2c7113613647e766",
+    "retry_duplicates_effect": "sha256:c3672a46a80cfe5108e6b87dd3c19ea2d1b8bff74d7c1fbb44946fa3734d99d0",
+    "revoked_current_remains_selected": "sha256:b5ed32e034b59f6dae5dddb53b1802b996f1dd7c3cd819c56c0b72a3a7700988",
+    "stale_plan_commits": "sha256:9843b63c356a1bfe6bef1b7039db56eac2c69ec24f23ad30d4d14bfbc8128e80",
+    "suspended_creation_allowed": "sha256:0d3b59aeb10bad2dc9a16461638d4a6f5bee1efee1e91d105c0989f51f0f52ec",
+    "unknown_reported_as_rejected": "sha256:1fc0a2011fdca28c31c4ef9723e34cf74489eb4921adec21aa670038aa069067"
+  },
+  "mutant_observation_summary": {
+    "reported_code": "InvNotInductive",
+    "reported_counterexample_for_each": true,
+    "observed_killed": 14,
+    "independently_replayable": false,
+    "total": 14
+  },
+  "execution_notes": [
+    "The pinned CandidateIR schema, kernel interpreter, Z3 gate, checker, and eight YAML models were executed outside this repository.",
+    "The checker's ESSO.evolve.ir_hash import was replaced locally by the identical pinned canonical SHA-256 helper to avoid materializing unrelated private modules.",
+    "The ESSO source slice and solver environment are not vendored, so this is an observational record rather than a policy-compliant execution receipt or self-contained replay bundle.",
+    "Backend version, executable digest, exact bounds and seeds, property digests, counterexample artifacts, and complete output digests were not captured."
+  ],
+  "non_claims": [
+    "Inductiveness of these bounded finite models is not an unbounded ZRM implementation proof.",
+    "A killed seeded mutant does not establish completeness of the invariant or mutant set.",
+    "This record does not promote any protocol authority or production status.",
+    "This record cannot satisfy a PR gate or research-promotion gate."
+  ]
+}

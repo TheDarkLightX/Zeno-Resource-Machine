@@ -1,0 +1,320 @@
+{
+  "base_revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+  "files": [
+    {
+      "bytes": 8852,
+      "path": ".github/workflows/ci.yml",
+      "sha256": "d5ff0ddaaa86da4f0c353f0a88ac30b0883438052bdf1a5dfc4cac3a5fa76a35"
+    },
+    {
+      "bytes": 11707,
+      "path": "PACKAGE_MANIFEST.json",
+      "sha256": "052a7720f98e523665049309e1e4462d1eac093e5218c1f47b8f7e8b8f009c0e"
+    },
+    {
+      "bytes": 24981,
+      "path": "README.md",
+      "sha256": "0a28bb76e5cd0d3f7dfebb62526041957d0410f8e3531c0d2a8391bdf3ceffa0"
+    },
+    {
+      "bytes": 7,
+      "path": "formal/lean/arm_zrm_frontier_v2/.gitignore",
+      "sha256": "fde850d24186b6e99c8c0debd641fb3ab85198b109eb66f71a1fea02bd6ea1b3"
+    },
+    {
+      "bytes": 166,
+      "path": "formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier.lean",
+      "sha256": "1b8347f8abfb12dc212d0494a9666abb243a02ebcb91ef29c516f651426d5d77"
+    },
+    {
+      "bytes": 5232,
+      "path": "formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier/AccountingStrongAssociativity.lean",
+      "sha256": "ce060ffce99ce67d40d7a2f282870bec3db7c5edd41f5a7bb0e1165825d81311"
+    },
+    {
+      "bytes": 1495,
+      "path": "formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier/ExactCoverage.lean",
+      "sha256": "949688bf96a13a4e49cf6da840d3e477aa01da38db2595cbfed7aa89e3005f8e"
+    },
+    {
+      "bytes": 1236,
+      "path": "formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier/TotalCarrier.lean",
+      "sha256": "2f8b1596d879b357e16dc64d75017471c5187a38ab52c5cc88562be403bf127f"
+    },
+    {
+      "bytes": 1752,
+      "path": "formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier/TranscriptSeparation.lean",
+      "sha256": "8db5b513d4cedd24d4dd926c472c1fd915039f60cfd3a375f34a17cd85ec6599"
+    },
+    {
+      "bytes": 1457,
+      "path": "formal/lean/arm_zrm_frontier_v2/README.md",
+      "sha256": "e8a3e879f741e5cab6f7d32b3a75c15e30fdb02f4d303efbaf9bcdb314b2f553"
+    },
+    {
+      "bytes": 151,
+      "path": "formal/lean/arm_zrm_frontier_v2/lake-manifest.json",
+      "sha256": "e8fa867c81db580d0c2eed7f41a3a854450dd992b70834af360e0a198bfb528f"
+    },
+    {
+      "bytes": 121,
+      "path": "formal/lean/arm_zrm_frontier_v2/lakefile.toml",
+      "sha256": "64faf033762546c940eae37e1de1b7287abe0945ae380965a2961ba43e176501"
+    },
+    {
+      "bytes": 25,
+      "path": "formal/lean/arm_zrm_frontier_v2/lean-toolchain",
+      "sha256": "2773c517aa90b66ea8a2c52bddddf84393157797f8341be0df45294fff7fd32e"
+    },
+    {
+      "bytes": 7,
+      "path": "formal/lean/zrm_accounting_aggregate_v1/.gitignore",
+      "sha256": "fde850d24186b6e99c8c0debd641fb3ab85198b109eb66f71a1fea02bd6ea1b3"
+    },
+    {
+      "bytes": 4119,
+      "path": "formal/lean/zrm_accounting_aggregate_v1/README.md",
+      "sha256": "48ce7b2bae637f10ed085d28eb7afbfaaba0cc35b8547df0ff72e6b44475c2fc"
+    },
+    {
+      "bytes": 205,
+      "path": "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1.lean",
+      "sha256": "ebc8aee949f89a3dad590f21c58fbd657f41be19d26fa7c7a79cbce56d3fc8b9"
+    },
+    {
+      "bytes": 13137,
+      "path": "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/AccountingFoldTree.lean",
+      "sha256": "7ba82d56c70398822365a9a8efe33254e7012049cdf8c0f8e94fe1037ecfc9e9"
+    },
+    {
+      "bytes": 4098,
+      "path": "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/CapacityBound.lean",
+      "sha256": "c6037882ae359d04b0b7ec9338363ec73034942d74ab7ba9645d14e5230792da"
+    },
+    {
+      "bytes": 5613,
+      "path": "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/FourColumnConservation.lean",
+      "sha256": "4e7c3b49d550abba75b99b7ae710c209cf841bdd7bfac64c135a0f4fdd45dadb"
+    },
+    {
+      "bytes": 8866,
+      "path": "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/TotalOverflowCarrier.lean",
+      "sha256": "1904927cc3a31b921de4bd05574f40cd082f69e721735335cdaec08de0e3d44f"
+    },
+    {
+      "bytes": 360,
+      "path": "formal/lean/zrm_accounting_aggregate_v1/lake-manifest.json",
+      "sha256": "bdbb3aabc608bda4dc7cb87f1b1cef7c359bed806d00fc4e4720a9a3fc7b809e"
+    },
+    {
+      "bytes": 223,
+      "path": "formal/lean/zrm_accounting_aggregate_v1/lakefile.toml",
+      "sha256": "25ea6a879b3804c9f0301e1a9ce235739be14d126ef37883f8a7d9aae7f5e6fd"
+    },
+    {
+      "bytes": 25,
+      "path": "formal/lean/zrm_accounting_aggregate_v1/lean-toolchain",
+      "sha256": "2773c517aa90b66ea8a2c52bddddf84393157797f8341be0df45294fff7fd32e"
+    },
+    {
+      "bytes": 37809,
+      "path": "reference_models/accounting_aggregate_v1.py",
+      "sha256": "afecfb617879d1a35ebddbdf6685a50b81a01806f3227691a68352cfe92f6461"
+    },
+    {
+      "bytes": 12517,
+      "path": "reference_models/accounting_aggregate_v1_explorer.py",
+      "sha256": "2f68ba9ac2c5bb6a6f50a1da4574fb3e61cf99c7209cc041f22e16747efb641a"
+    },
+    {
+      "bytes": 24408,
+      "path": "reference_models/tests/test_accounting_aggregate_v1.py",
+      "sha256": "9065fd27161dfd982703d1e6554b757b99cce499724481a26528689641641f60"
+    },
+    {
+      "bytes": 3882,
+      "path": "research/zrm_accounting_aggregate_v1/README.md",
+      "sha256": "f8fb90049af0d37d46dad22369da7850c22758606682e6e7c3792d48fa9bf1bb"
+    },
+    {
+      "bytes": 6765,
+      "path": "research/zrm_accounting_aggregate_v1/breakthroughs.md",
+      "sha256": "c448b821290ef679d0dce8c55375ec91fc2ea74ce615278d84c4f783a5295b8d"
+    },
+    {
+      "bytes": 3494,
+      "path": "research/zrm_accounting_aggregate_v1/esso_campaign.json",
+      "sha256": "637e58a75ad41ab9a49934de698c3b44fc8a47455956130fe42889fcc787ade2"
+    },
+    {
+      "bytes": 1961,
+      "path": "research/zrm_accounting_aggregate_v1/evidence/lean.json",
+      "sha256": "88bb812366deeacd5a712f4655b8078aa52c66233b3f2cf477599a1b7707f07c"
+    },
+    {
+      "bytes": 910,
+      "path": "research/zrm_accounting_aggregate_v1/evidence/packet-check.json",
+      "sha256": "9ab64b982debaa8924f900d56fce534efdc274f13528f9755f32e44f22df8ed0"
+    },
+    {
+      "bytes": 1734,
+      "path": "research/zrm_accounting_aggregate_v1/evidence/python-model.json",
+      "sha256": "74bb0d7f526cab78dc8470dd44c8a00e574cf8eb0cc38c6936b2f4e3a372521f"
+    },
+    {
+      "bytes": 1380,
+      "path": "research/zrm_accounting_aggregate_v1/evidence/vectors.json",
+      "sha256": "b7d7b2fab330cf6fb6603d553f3719090444cd27c559c9bd5ae6d787bca8da5d"
+    },
+    {
+      "bytes": 6670,
+      "path": "research/zrm_accounting_aggregate_v1/experiments.json",
+      "sha256": "56a6e0d1911bc7f1d8a5ad753f04e974b836addf7c47a6ff37ab2718db7e2bb2"
+    },
+    {
+      "bytes": 11675,
+      "path": "research/zrm_accounting_aggregate_v1/hypotheses.json",
+      "sha256": "f6a8918384ef7cfbee392c2fe8f9437c7b874d8fa333f1e895c908c34599a86c"
+    },
+    {
+      "bytes": 12667,
+      "path": "research/zrm_accounting_aggregate_v1/knowledge_graph.json",
+      "sha256": "adc3202175e3d0eaedbc36ee57be8498248d9bd1506f78c669da24675a4c2991"
+    },
+    {
+      "bytes": 6322,
+      "path": "research/zrm_accounting_aggregate_v1/morph_reformulations.json",
+      "sha256": "34413a2ad876fc7eb83e21fff246fd7663af585942e1d0132a906c0da479513b"
+    },
+    {
+      "bytes": 5025,
+      "path": "research/zrm_accounting_aggregate_v1/research_kernel_plan.json",
+      "sha256": "b37c75bd7148280c0b9b6dd6185e5f7b329ad7c0478c6c54e0c1c89e5a42fa3c"
+    },
+    {
+      "bytes": 4626,
+      "path": "research/zrm_accounting_aggregate_v1/research_kernel_receipt.json",
+      "sha256": "9389e42c73bd48db75ed2b0b19fbb7d8c23a693c679931836ccc209da7ebadf3"
+    },
+    {
+      "bytes": 9006,
+      "path": "research/zrm_accounting_aggregate_v1/source_ledger.json",
+      "sha256": "19f16112853049b31be5069ecff70d2724c68b1873a0c1b3c3a45bd294f1e4d1"
+    },
+    {
+      "bytes": 2458,
+      "path": "rfcs/README.md",
+      "sha256": "3df4cb96d4f5686587f298fdb8bf5207880266aa2553d773a77d30cd75af232a"
+    },
+    {
+      "bytes": 62971,
+      "path": "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md",
+      "sha256": "fc9ff72d11969a5e855399968c3f747a78d094ec1863d4f0538b35ebffe08f9a"
+    },
+    {
+      "bytes": 30801,
+      "path": "tools/check_zrm_accounting_research.py",
+      "sha256": "85095ea7f58fb88fd30866aef2494c6ce5f467e660625cc7261428919358bc84"
+    },
+    {
+      "bytes": 7419,
+      "path": "tools/tests/test_zrm_accounting_research.py",
+      "sha256": "4c119513d09d700dcddca5c96bc84ac3e6b0fbc17c190b506950caa429196afe"
+    },
+    {
+      "bytes": 10744,
+      "path": "vectors/accounting_aggregate_v1.json",
+      "sha256": "2209f027f8b0718c565fa6169bcebeaee18569b06d22037edd42d6ab7d4186dc"
+    },
+    {
+      "bytes": 194,
+      "path": "vectors/accounting_aggregate_v1_balanced_transfer.bin",
+      "sha256": "02df2d990583403045b1a974acbe20c50828f48a3739828b5e7364d8f317b981"
+    },
+    {
+      "bytes": 231,
+      "path": "vectors/accounting_aggregate_v1_balanced_transfer_preimage.bin",
+      "sha256": "d3671604b9cf419ab6feb740102a9e727102ee9d9f24f704d186eb2bf3d1ab0b"
+    },
+    {
+      "bytes": 194,
+      "path": "vectors/accounting_aggregate_v1_burn_mixed.bin",
+      "sha256": "a6d916bdb4dc13f7d0e3cb3bf1369a9d79e2aa9b8935ea30fcd13af1e11f66cc"
+    },
+    {
+      "bytes": 231,
+      "path": "vectors/accounting_aggregate_v1_burn_mixed_preimage.bin",
+      "sha256": "15a52ee48dedc1ac35f2e28eb8df20d1229543e2d452351eb6dee978171de2a9"
+    },
+    {
+      "bytes": 202,
+      "path": "vectors/accounting_aggregate_v1_coverage_0.bin",
+      "sha256": "da2a918af68751e5f0098c3c082104f52397edfd198b75016ef524aee0c8dc0f"
+    },
+    {
+      "bytes": 240,
+      "path": "vectors/accounting_aggregate_v1_coverage_0_preimage.bin",
+      "sha256": "a21e89fa36c18b0c3b2a1473e1df7f949b7588a3485644c55742ebbda832db40"
+    },
+    {
+      "bytes": 202,
+      "path": "vectors/accounting_aggregate_v1_coverage_1.bin",
+      "sha256": "63236c65716bcf036e776243e9258bdf70e8c7a4fe95683735e31d3a167a8051"
+    },
+    {
+      "bytes": 240,
+      "path": "vectors/accounting_aggregate_v1_coverage_1_preimage.bin",
+      "sha256": "931a32560100efdb8b571397f5f6152dcefe55e94094056d1a06fbb20913bb39"
+    },
+    {
+      "bytes": 68,
+      "path": "vectors/accounting_aggregate_v1_coverage_manifest_payload.bin",
+      "sha256": "0688b8abdb0827762c82d1ed2b23c2c98c9e792654511a75901af3d55f1fd3aa"
+    },
+    {
+      "bytes": 109,
+      "path": "vectors/accounting_aggregate_v1_coverage_manifest_preimage.bin",
+      "sha256": "39e0bbb6e7638963522312aa5dc1f22a549bef9fb77f6a1771051744a3a7d501"
+    },
+    {
+      "bytes": 194,
+      "path": "vectors/accounting_aggregate_v1_mint.bin",
+      "sha256": "b1bfc63fd3fe8e6f299cbb50789ad1a728d3aa8b4511f9862948b3e3f4212271"
+    },
+    {
+      "bytes": 231,
+      "path": "vectors/accounting_aggregate_v1_mint_preimage.bin",
+      "sha256": "ce3aa3d353fabbc28e6b3c9fe98f2601a74180b948421b0885a200b0f82b8994"
+    },
+    {
+      "bytes": 100,
+      "path": "vectors/accounting_aggregate_v1_sorted_rows_payload.bin",
+      "sha256": "e0f7034fbcd054f528be5437ae77f46f32b58f53170c8bda1c152c149c3d5f33"
+    },
+    {
+      "bytes": 138,
+      "path": "vectors/accounting_aggregate_v1_sorted_rows_preimage.bin",
+      "sha256": "4716840d9c4271e49b027bbfb945eb1a3f68d1024d4a4403733a7d128d520bbf"
+    },
+    {
+      "bytes": 194,
+      "path": "vectors/accounting_aggregate_v1_two_u128_max_leaves.bin",
+      "sha256": "88ce8b55111d00d86d565d37656b631ee44def3a04c53971153967f48455958b"
+    },
+    {
+      "bytes": 231,
+      "path": "vectors/accounting_aggregate_v1_two_u128_max_leaves_preimage.bin",
+      "sha256": "e820d9289f5ca9641b7239edb59f434f64781d8884b08d227616766bdc9f12d5"
+    },
+    {
+      "bytes": 30688,
+      "path": "vectors/independent_python/replay_accounting_aggregate_v1.py",
+      "sha256": "b389f820ff25f5fee70e81a37d7de3b25ff1fe6a9403c81585beb34f58004506"
+    }
+  ],
+  "non_claims": [
+    "The manifest authenticates packet and implementation-slice bytes only; it does not approve RFC-0004 or promote a ZRM protocol claim.",
+    "Mutable external sources, Research Kernel state, and unavailable private tool repositories are outside this digest set."
+  ],
+  "schema": "zrm/accounting-aggregate-research-manifest/v1"
+}

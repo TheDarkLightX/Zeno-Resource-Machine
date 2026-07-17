@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import json
 import re
 import shutil
 import tempfile
@@ -20,6 +21,7 @@ from tools.check_architecture import (
 )
 from tools.check_conformance import (
     ConformanceError,
+    MATRIX_PATH,
     github_anchor,
     require,
     validate_promotion_boundary,
@@ -42,6 +44,183 @@ class ConformanceHelperTests(unittest.TestCase):
 
         with self.assertRaises(ConformanceError):
             require(False, "expected failure")
+
+    def test_rfc_0004_obligation_families_are_release_tracked(self) -> None:
+        """RFC-0004 gaps remain explicit in the release conformance matrix."""
+
+        base = "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md"
+        required = {
+            "ZRM-CBC-047": (f"{base}#2-aggregate-row", "verified_scoped", []),
+            "ZRM-CBC-048": (f"{base}#11-strong-associativity-and-definedness", "verified_scoped", []),
+            "ZRM-CBC-049": (
+                f"{base}#canonical-encoding-and-hashing",
+                "implemented_partial",
+                ["ZRM-CBC-002", "ZRM-CBC-016", "ZRM-CBC-019", "ZRM-CBC-024", "ZRM-CBC-026"],
+            ),
+            "ZRM-CBC-050": (
+                f"{base}#4-retained-accepted-journal-opening",
+                "specified",
+                ["ZRM-CBC-012", "ZRM-CBC-017", "ZRM-CBC-019", "ZRM-CBC-025", "ZRM-CBC-045"],
+            ),
+            "ZRM-CBC-051": (
+                f"{base}#6-coverage-entry-and-ordered-manifest",
+                "implemented_partial",
+                ["ZRM-CBC-012", "ZRM-CBC-017", "ZRM-CBC-025", "ZRM-CBC-050"],
+            ),
+            "ZRM-CBC-052": (
+                f"{base}#3-governed-aggregation-profile",
+                "specified",
+                [
+                    "ZRM-CBC-010",
+                    "ZRM-CBC-017",
+                    "ZRM-CBC-026",
+                    "ZRM-CBC-027",
+                    "ZRM-CBC-049",
+                    "ZRM-CBC-050",
+                    "ZRM-CBC-051",
+                ],
+            ),
+            "ZRM-CBC-053": (
+                f"{base}#resource-denial-of-service-and-circuit-analysis",
+                "implemented_partial",
+                ["ZRM-CBC-016", "ZRM-CBC-019", "ZRM-CBC-024", "ZRM-CBC-045", "ZRM-CBC-052"],
+            ),
+            "ZRM-CBC-054": (
+                f"{base}#formal-obligations",
+                "specified",
+                [
+                    "ZRM-CBC-009",
+                    "ZRM-CBC-010",
+                    "ZRM-CBC-017",
+                    "ZRM-CBC-027",
+                    "ZRM-CBC-050",
+                    "ZRM-CBC-051",
+                    "ZRM-CBC-052",
+                ],
+            ),
+            "ZRM-CBC-055": (
+                f"{base}#12-net-projection-and-boundary-predicates",
+                "implemented_partial",
+                ["ZRM-CBC-009", "ZRM-CBC-017", "ZRM-CBC-054"],
+            ),
+        }
+        matrix = json.loads(MATRIX_PATH.read_text(encoding="utf-8"))
+        obligations = {row["id"]: row for row in matrix["obligations"]}
+        boundary = matrix["promotion_boundary"]
+
+        self.assertEqual(boundary["current_level"], "ZRM-L0")
+        self.assertIn(
+            "draft_rfc_0004_recursive_accounting_aggregate_research_profile",
+            boundary["unreviewed_candidate_scope"],
+        )
+        required_non_claims = {
+            "no_approved_accounting_aggregation_profile",
+            "no_frozen_accounting_aggregate_abi",
+            "no_authenticated_accounting_opening",
+            "no_recursive_accounting_verified_fact",
+        }
+        self.assertTrue(required_non_claims.issubset(set(boundary["non_claims"])))
+
+        for obligation_id, (normative_ref, status, dependencies) in required.items():
+            with self.subTest(obligation_id=obligation_id):
+                row = obligations.get(obligation_id)
+                self.assertIsNotNone(row)
+                if row is None:
+                    continue
+                self.assertIn(normative_ref, row["normative_refs"])
+                self.assertEqual(row["status"], status)
+                self.assertEqual(row["blocking_dependencies"], dependencies)
+                self.assertTrue(row["non_claim"])
+
+        esso_path = MATRIX_PATH.parent / "research/zrm_accounting_aggregate_v1/esso_campaign.json"
+        esso = json.loads(esso_path.read_text(encoding="utf-8"))
+        self.assertEqual(esso["status"], "specified_not_executed")
+        self.assertNotIn(
+            "research/zrm_accounting_aggregate_v1/esso_campaign.json",
+            obligations["ZRM-CBC-053"]["evidence_refs"],
+        )
+        self.assertIn(
+            "the ESSO campaign is explicitly unexecuted",
+            obligations["ZRM-CBC-053"]["non_claim"],
+        )
+
+    def test_rfc_0005_obligation_families_are_release_tracked(self) -> None:
+        """RFC-0005 gaps remain explicit in the release conformance matrix."""
+
+        base = "rfcs/RFC-0005-paired-transient-resource-lifecycle.md"
+        required = {
+            "ZRM-CBC-056": (
+                f"{base}#canonical-encoding-and-hashing",
+                ["ZRM-CBC-002", "ZRM-CBC-003", "ZRM-CBC-019", "ZRM-CBC-024", "ZRM-CBC-026"],
+                ["WP1", "WP2", "WP3"],
+            ),
+            "ZRM-CBC-057": (
+                f"{base}#5-transformation-resource-uses",
+                ["ZRM-CBC-008", "ZRM-CBC-009", "ZRM-CBC-010", "ZRM-CBC-011", "ZRM-CBC-014", "ZRM-CBC-017", "ZRM-CBC-056"],
+                ["WP3", "WP5", "WP6"],
+            ),
+            "ZRM-CBC-058": (
+                f"{base}#3-membership-freshness-and-epoch",
+                ["ZRM-CBC-006", "ZRM-CBC-007", "ZRM-CBC-017", "ZRM-CBC-018", "ZRM-CBC-056", "ZRM-CBC-057"],
+                ["WP4", "WP6"],
+            ),
+            "ZRM-CBC-059": (
+                f"{base}#6-bounded-dependency-graph",
+                ["ZRM-CBC-014", "ZRM-CBC-016", "ZRM-CBC-033", "ZRM-CBC-045", "ZRM-CBC-057"],
+                ["WP6"],
+            ),
+            "ZRM-CBC-060": (
+                f"{base}#7-accounting-projection",
+                ["ZRM-CBC-012", "ZRM-CBC-013", "ZRM-CBC-014", "ZRM-CBC-015", "ZRM-CBC-016", "ZRM-CBC-047", "ZRM-CBC-051", "ZRM-CBC-055", "ZRM-CBC-057"],
+                ["WP6", "WP8", "WP12"],
+            ),
+            "ZRM-CBC-061": (
+                f"{base}#state-concurrency-and-atomicity",
+                ["ZRM-CBC-020", "ZRM-CBC-021", "ZRM-CBC-022", "ZRM-CBC-023", "ZRM-CBC-025", "ZRM-CBC-058", "ZRM-CBC-060"],
+                ["WP6", "WP7", "WP9"],
+            ),
+            "ZRM-CBC-062": (
+                f"{base}#compatibility-and-migration",
+                ["ZRM-CBC-010", "ZRM-CBC-026", "ZRM-CBC-027", "ZRM-CBC-029", "ZRM-CBC-043", "ZRM-CBC-052", "ZRM-CBC-054", "ZRM-CBC-056", "ZRM-CBC-061"],
+                ["WP2", "WP7", "WP9", "WP12"],
+            ),
+        }
+        matrix = json.loads(MATRIX_PATH.read_text(encoding="utf-8"))
+        obligations = {row["id"]: row for row in matrix["obligations"]}
+        boundary = matrix["promotion_boundary"]
+
+        self.assertIn(
+            "draft_rfc_0005_paired_transient_resource_lifecycle",
+            boundary["unreviewed_candidate_scope"],
+        )
+        required_non_claims = {
+            "no_approved_paired_transient_resource_profile",
+            "no_frozen_transient_v2_abi",
+            "no_transient_state_or_commit_implementation",
+            "no_transient_privacy_or_unlinkability",
+        }
+        self.assertTrue(required_non_claims.issubset(set(boundary["non_claims"])))
+
+        for obligation_id, (normative_ref, dependencies, work_packages) in required.items():
+            with self.subTest(obligation_id=obligation_id):
+                row = obligations.get(obligation_id)
+                self.assertIsNotNone(row)
+                if row is None:
+                    continue
+                self.assertIn(normative_ref, row["normative_refs"])
+                self.assertEqual(row["status"], "specified")
+                self.assertEqual(row["blocking_dependencies"], dependencies)
+                self.assertEqual(row["work_packages"], work_packages)
+                self.assertFalse(row["implementation_refs"])
+                self.assertFalse(row["test_refs"])
+                self.assertFalse(row["formal_refs"])
+                self.assertFalse(row["evidence_refs"])
+                self.assertTrue(row["non_claim"])
+
+        self.assertEqual(
+            obligations["ZRM-CBC-003"]["title"],
+            "Consumed, referenced, and created roles are disjoint",
+        )
 
     def test_reference_cannot_escape_repository(self) -> None:
         """Parent traversal cannot satisfy a matrix evidence reference."""

@@ -1,0 +1,28 @@
+{
+  "schema": "zrm/lean-frontier-evidence/v1",
+  "executed_at": "2026-07-14",
+  "package": "formal/lean/arm_zrm_frontier_v2",
+  "lean_release": "v4.32.0",
+  "lean_commit": "8c9756bf44da6f8c4e9b3ac40779ab939732a31d",
+  "lake_jobs": 7,
+  "status": "PASS",
+  "modules": [
+    "ArmZrmFrontier.TotalCarrier",
+    "ArmZrmFrontier.ExactCoverage",
+    "ArmZrmFrontier.TranscriptSeparation",
+    "ArmZrmFrontier.AccountingStrongAssociativity"
+  ],
+  "key_declarations": [
+    "signed_definedness_counterexample",
+    "Limbs.merge_assoc",
+    "checkedMerge_strong_assoc",
+    "checkedMerge_three_of_total_within",
+    "Limbs.net_merge"
+  ],
+  "source_scan": {"sorry": 0, "admit": 0, "axiom": 0},
+  "non_claims": [
+    "The package proves abstract model theorems, not Rust refinement or cryptographic security.",
+    "The source scan is not a transitive axiom audit or independent proof-term check.",
+    "A future authority-bearing Lean receipt must bind a trusted challenge, declaration type, Lake graph, axiom report, and independent checker."
+  ]
+}

@@ -1,0 +1,232 @@
+{
+  "artifacts": {
+    "accounting_aggregate_v1_balanced_transfer.bin": {
+      "bytes": 194,
+      "sha256": "02df2d990583403045b1a974acbe20c50828f48a3739828b5e7364d8f317b981"
+    },
+    "accounting_aggregate_v1_balanced_transfer_preimage.bin": {
+      "bytes": 231,
+      "sha256": "d3671604b9cf419ab6feb740102a9e727102ee9d9f24f704d186eb2bf3d1ab0b"
+    },
+    "accounting_aggregate_v1_burn_mixed.bin": {
+      "bytes": 194,
+      "sha256": "a6d916bdb4dc13f7d0e3cb3bf1369a9d79e2aa9b8935ea30fcd13af1e11f66cc"
+    },
+    "accounting_aggregate_v1_burn_mixed_preimage.bin": {
+      "bytes": 231,
+      "sha256": "15a52ee48dedc1ac35f2e28eb8df20d1229543e2d452351eb6dee978171de2a9"
+    },
+    "accounting_aggregate_v1_coverage_0.bin": {
+      "bytes": 202,
+      "sha256": "da2a918af68751e5f0098c3c082104f52397edfd198b75016ef524aee0c8dc0f"
+    },
+    "accounting_aggregate_v1_coverage_0_preimage.bin": {
+      "bytes": 240,
+      "sha256": "a21e89fa36c18b0c3b2a1473e1df7f949b7588a3485644c55742ebbda832db40"
+    },
+    "accounting_aggregate_v1_coverage_1.bin": {
+      "bytes": 202,
+      "sha256": "63236c65716bcf036e776243e9258bdf70e8c7a4fe95683735e31d3a167a8051"
+    },
+    "accounting_aggregate_v1_coverage_1_preimage.bin": {
+      "bytes": 240,
+      "sha256": "931a32560100efdb8b571397f5f6152dcefe55e94094056d1a06fbb20913bb39"
+    },
+    "accounting_aggregate_v1_coverage_manifest_payload.bin": {
+      "bytes": 68,
+      "sha256": "0688b8abdb0827762c82d1ed2b23c2c98c9e792654511a75901af3d55f1fd3aa"
+    },
+    "accounting_aggregate_v1_coverage_manifest_preimage.bin": {
+      "bytes": 109,
+      "sha256": "39e0bbb6e7638963522312aa5dc1f22a549bef9fb77f6a1771051744a3a7d501"
+    },
+    "accounting_aggregate_v1_mint.bin": {
+      "bytes": 194,
+      "sha256": "b1bfc63fd3fe8e6f299cbb50789ad1a728d3aa8b4511f9862948b3e3f4212271"
+    },
+    "accounting_aggregate_v1_mint_preimage.bin": {
+      "bytes": 231,
+      "sha256": "ce3aa3d353fabbc28e6b3c9fe98f2601a74180b948421b0885a200b0f82b8994"
+    },
+    "accounting_aggregate_v1_sorted_rows_payload.bin": {
+      "bytes": 100,
+      "sha256": "e0f7034fbcd054f528be5437ae77f46f32b58f53170c8bda1c152c149c3d5f33"
+    },
+    "accounting_aggregate_v1_sorted_rows_preimage.bin": {
+      "bytes": 138,
+      "sha256": "4716840d9c4271e49b027bbfb945eb1a3f68d1024d4a4403733a7d128d520bbf"
+    },
+    "accounting_aggregate_v1_two_u128_max_leaves.bin": {
+      "bytes": 194,
+      "sha256": "88ce8b55111d00d86d565d37656b631ee44def3a04c53971153967f48455958b"
+    },
+    "accounting_aggregate_v1_two_u128_max_leaves_preimage.bin": {
+      "bytes": 231,
+      "sha256": "e820d9289f5ca9641b7239edb59f434f64781d8884b08d227616766bdc9f12d5"
+    }
+  },
+  "coverage_manifest": {
+    "accounting_row_hash_field_type": "opaque existing leaf AccountingRowHash; not AccountingAggregateRowHashV1",
+    "balanced_transfer_aggregate_row_hash_for_type_separation": "d3671604b9cf419ab6feb740102a9e727102ee9d9f24f704d186eb2bf3d1ab0b",
+    "deduplicated_mutant_root": "56a97e9415b8bcbf4af21758d0bdd1fd36671a420b738af3134cbc6461bfddb9",
+    "deduplication_changes_root": true,
+    "entries": [
+      {
+        "accepted_journal_hash": "73aa7fd76c0c50627481c69adba98de910280f1c16b5bb650abfcf77f32ab621",
+        "accounting_row_hash": "79bf9ec2b63d4ac9688d11f103ab6e8df1f44801834f42a77b35bef77b6b9b65",
+        "authority_root": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+        "entry_hash": "a21e89fa36c18b0c3b2a1473e1df7f949b7588a3485644c55742ebbda832db40",
+        "leaf_position": 0,
+        "payload_bytes": 202,
+        "resource_kind_id": "1111111111111111111111111111111111111111111111111111111111111111",
+        "transformation_set_root": "b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1",
+        "unit_id": "2121212121212121212121212121212121212121212121212121212121212121"
+      },
+      {
+        "accepted_journal_hash": "bf9abf0a6f85998dd0b85c8e4b7dc6674c9a0b40e996960220f6de559c16317d",
+        "accounting_row_hash": "79bf9ec2b63d4ac9688d11f103ab6e8df1f44801834f42a77b35bef77b6b9b65",
+        "authority_root": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+        "entry_hash": "931a32560100efdb8b571397f5f6152dcefe55e94094056d1a06fbb20913bb39",
+        "leaf_position": 1,
+        "payload_bytes": 202,
+        "resource_kind_id": "1111111111111111111111111111111111111111111111111111111111111111",
+        "transformation_set_root": "b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1",
+        "unit_id": "2121212121212121212121212121212121212121212121212121212121212121"
+      }
+    ],
+    "entry_layout": "u16_be(1)||leaf_position_u64_be||accepted_journal_hash[32]||resource_kind_id[32]||unit_id[32]||accounting_row_hash[32]||authority_root[32]||transformation_set_root[32]",
+    "entry_payload_bytes": 202,
+    "existing_leaf_accounting_row_hash_fixture": "79bf9ec2b63d4ac9688d11f103ab6e8df1f44801834f42a77b35bef77b6b9b65",
+    "existing_leaf_accounting_row_hash_fixture_label": "zrm.existing_leaf.AccountingRowHash.fixture.v1",
+    "leaf_and_aggregate_row_hashes_are_distinct": true,
+    "repeated_existing_leaf_accounting_row_hash_occurrences": 2,
+    "reversal_changes_root": true,
+    "reversed_order_root": "d8e4473d8282bd58002fe47ed399a3ca9919438d75c6678de960d9295b73f614",
+    "root": "39e0bbb6e7638963522312aa5dc1f22a549bef9fb77f6a1771051744a3a7d501",
+    "root_payload_layout": "u32_be(count)||ordered_entry_hashes"
+  },
+  "framed_hash_list_capacity": {
+    "maximum_items": 134217727,
+    "maximum_payload_bytes": 4294967268,
+    "next_item_rejects": true,
+    "outer_payload_length_type": "u32_be",
+    "payload_formula": "4 + 32*n"
+  },
+  "generated_by": "vectors/independent_python/replay_accounting_aggregate_v1.py",
+  "hash_profile": {
+    "coverage_entry_domain": "zrm.accounting_coverage_entry.v1",
+    "coverage_manifest_domain": "zrm.accounting_coverage_manifest.v1",
+    "frame": "u16_be(domain_len)||domain||u32_be(payload_len)||payload",
+    "function": "sha256",
+    "row_domain": "zrm.accounting_aggregate_row.v1",
+    "rows_domain": "zrm.accounting_aggregate_rows.v1"
+  },
+  "non_claims": [
+    "these proposed vectors do not amend the current normative ZRM wire profile",
+    "independent replay is not a proof of cryptographic or semantic correctness",
+    "u256 aggregate columns do not widen the u128 per-leaf accounting fields",
+    "coverage hashes do not authenticate journal acceptance, authority, state, or commit",
+    "the opaque existing-leaf AccountingRowHash fixture is not a proposed leaf-row encoding",
+    "the vectors do not establish completeness of arbitrary transition read or effect coverage"
+  ],
+  "row_encoding": {
+    "layout": "u16_be(1)||resource_kind_id[32]||unit_id[32]||resource_debit_consumed_u256_be||resource_credit_created_u256_be||authority_debit_burn_u256_be||authority_credit_mint_u256_be",
+    "payload_bytes": 194
+  },
+  "rows": {
+    "balanced_transfer": {
+      "authority_net": "0",
+      "authorized_burn_atoms": "0",
+      "authorized_mint_atoms": "0",
+      "consumed_atoms": "11",
+      "created_atoms": "11",
+      "payload_bytes": 194,
+      "resource_kind_id": "1111111111111111111111111111111111111111111111111111111111111111",
+      "resource_net": "0",
+      "row_hash": "d3671604b9cf419ab6feb740102a9e727102ee9d9f24f704d186eb2bf3d1ab0b",
+      "unit_id": "2121212121212121212121212121212121212121212121212121212121212121"
+    },
+    "burn_mixed": {
+      "authority_net": "-8",
+      "authorized_burn_atoms": "10",
+      "authorized_mint_atoms": "2",
+      "consumed_atoms": "13",
+      "created_atoms": "5",
+      "payload_bytes": 194,
+      "resource_kind_id": "1313131313131313131313131313131313131313131313131313131313131313",
+      "resource_net": "-8",
+      "row_hash": "15a52ee48dedc1ac35f2e28eb8df20d1229543e2d452351eb6dee978171de2a9",
+      "unit_id": "2323232323232323232323232323232323232323232323232323232323232323"
+    },
+    "mint": {
+      "authority_net": "7",
+      "authorized_burn_atoms": "0",
+      "authorized_mint_atoms": "7",
+      "consumed_atoms": "0",
+      "created_atoms": "7",
+      "payload_bytes": 194,
+      "resource_kind_id": "1212121212121212121212121212121212121212121212121212121212121212",
+      "resource_net": "7",
+      "row_hash": "ce3aa3d353fabbc28e6b3c9fe98f2601a74180b948421b0885a200b0f82b8994",
+      "unit_id": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    "two_u128_max_leaves": {
+      "authority_net": "0",
+      "authorized_burn_atoms": "680564733841876926926749214863536422910",
+      "authorized_mint_atoms": "680564733841876926926749214863536422910",
+      "consumed_atoms": "680564733841876926926749214863536422910",
+      "created_atoms": "680564733841876926926749214863536422910",
+      "payload_bytes": 194,
+      "resource_kind_id": "1414141414141414141414141414141414141414141414141414141414141414",
+      "resource_net": "0",
+      "row_hash": "e820d9289f5ca9641b7239edb59f434f64781d8884b08d227616766bdc9f12d5",
+      "unit_id": "2424242424242424242424242424242424242424242424242424242424242424"
+    }
+  },
+  "schema": "zrm/accounting-aggregate-v1-vectors/v1",
+  "sorted_rows_root": {
+    "canonical_order": [
+      "balanced_transfer",
+      "mint",
+      "burn_mixed"
+    ],
+    "input_order": [
+      "burn_mixed",
+      "mint",
+      "balanced_transfer"
+    ],
+    "payload_bytes": 100,
+    "root": "4716840d9c4271e49b027bbfb945eb1a3f68d1024d4a4403733a7d128d520bbf",
+    "row_count": 3
+  },
+  "status": "proposed_non_authoritative",
+  "strict_untrusted_validation": {
+    "decisions": {
+      "coverage_duplicate_leaf_dimension": "reject",
+      "coverage_reversed_order": "reject",
+      "coverage_zero_authority_root": "reject",
+      "row_all_four_columns_zero": "reject",
+      "row_wrong_length": "reject",
+      "row_wrong_schema": "reject",
+      "row_zero_resource_kind_id": "reject",
+      "rows_duplicate_dimension": "reject",
+      "rows_misordered": "reject"
+    },
+    "negative_cases": 9,
+    "rejected_negative_cases": 9,
+    "strict_coverage_decoder": "decode_canonical_coverage_entry",
+    "strict_row_decoder": "decode_canonical_row",
+    "trusted_fixture_builder": "trusted_fixture_rows_payload"
+  },
+  "wide_capacity": {
+    "hash_list_ceiling_does_not_narrow_leaf_count": true,
+    "leaf_column_max": "340282366920938463463374607431768211455",
+    "segment_leaf_count_type": "u32",
+    "two_leaf_column_total": "680564733841876926926749214863536422910",
+    "two_leaf_total_exceeds_u128": true,
+    "two_leaf_total_fits_u256": true,
+    "u32_theoretical_leaf_count_times_u128_max": "1461501636990620551282746369252908412219869364225",
+    "u32_theoretical_maximum_bit_length": 160,
+    "u32_theoretical_maximum_fits_u256": true
+  }
+}

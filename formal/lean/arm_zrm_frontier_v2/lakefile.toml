@@ -1,0 +1,6 @@
+name = "arm_zrm_frontier_v2"
+version = "0.1.0"
+defaultTargets = ["ArmZrmFrontier"]
+
+[[lean_lib]]
+name = "ArmZrmFrontier"

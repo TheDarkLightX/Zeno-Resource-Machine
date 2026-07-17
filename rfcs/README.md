@@ -8,6 +8,8 @@ an implementation branch exists.
 
 - [`RFC-0001: Policy, Context, Fact Freshness, and Commit Authority`](RFC-0001-policy-context-fact-and-commit-authority.md) — Class E; authored by Dana Edwards with drafting assistance from GPT-5.6; defines creation suspension, context-bound facts and plans, acyclic semantic-effect commitment, linearizable commit, uncertain outcomes, idempotent retry, and admission/postcommit separation.
 - [`RFC-0002: Recursive Semantic Journal Composition`](RFC-0002-recursive-semantic-journal-composition.md) — Class E; authored by Dana Edwards with drafting assistance from GPT-5.6; defines accepted-journal leaves, derived serialized positions, ordered state-continuous summaries, exact descendant/semantic-effect composition, an empty message-and-carry first profile, partial associativity, and separate semantic versus proof identity.
+- [`RFC-0004: Recursive Accounting Aggregate Profile`](RFC-0004-recursive-accounting-aggregate-profile.md) — Class E; authored by Dana Edwards with drafting assistance from GPT-5.6; refines RFC-0002 with four U256 monotone gross-flow limbs per exact kind/unit dimension, retained accepted-journal accounting openings, ordered coverage provenance, tree-independent definedness, canonical bytes, and leaf-local authority.
+- [`RFC-0005: Paired Transient Resource Lifecycle`](RFC-0005-paired-transient-resource-lifecycle.md) — Class E; author TBD with drafting assistance from Codex; proposes a fourth pairwise-disjoint transient placement, exact birth/death and producer/consumer coverage, gross accounting projection, durable replay nullifiers, bounded dependency graphs, V1 byte preservation, and explicit privacy non-claims.
 
 Draft RFCs are not approved merely because their documentation has merged.
 

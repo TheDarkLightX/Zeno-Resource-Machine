@@ -1,7 +1,7 @@
 {
   "schema": "zrm/cbc-conformance-matrix/v1",
   "version": 1,
-  "updated_at": "2026-07-12",
+  "updated_at": "2026-07-16",
   "status": "scoped_wp0_wp1_implementation",
   "obligation_family": {
     "abbreviation": "CBC",
@@ -36,7 +36,9 @@
       "wp3b_intrinsic_resource_construction",
       "wp3c_intrinsic_body_role_and_ordinal_binding",
       "wp5_bounded_artifact_input_slice",
-      "draft_class_e_semantic_closure_rfc_package"
+      "draft_class_e_semantic_closure_rfc_package",
+      "draft_rfc_0004_recursive_accounting_aggregate_research_profile",
+      "draft_rfc_0005_paired_transient_resource_lifecycle"
     ],
     "non_claims": [
       "no_complete_semantic_kernel",
@@ -53,6 +55,14 @@
       "no_reproducible_release",
       "no_security_audit",
       "no_approved_semantic_closure_rfc",
+      "no_approved_accounting_aggregation_profile",
+      "no_frozen_accounting_aggregate_abi",
+      "no_authenticated_accounting_opening",
+      "no_recursive_accounting_verified_fact",
+      "no_approved_paired_transient_resource_profile",
+      "no_frozen_transient_v2_abi",
+      "no_transient_state_or_commit_implementation",
+      "no_transient_privacy_or_unlinkability",
       "no_production_authority"
     ]
   },
@@ -2008,6 +2018,690 @@
       "blocking_dependencies": [
         "ZRM-CBC-002",
         "ZRM-CBC-024"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-047",
+      "title": "Scoped four-column reference carrier preserves balance, support, and capacity",
+      "severity": "critical",
+      "status": "verified_scoped",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a signed net or resource-only projection erases gross flow or authority support, or an aggregate quantity exceeds the proved carrier capacity",
+      "construction_rule": "Within the non-normative natural-number reference carrier, derive consumed, created, authorized-burn, and authorized-mint totals per exact dimension and prove balance, zero-support reflection, resource-only noninjectivity, and U32-by-U128 capacity below U256",
+      "required_evidence": [
+        "executable four-column reference model and negative projection cases",
+        "Lean balance, support, noninjectivity, and capacity theorems",
+        "assumption and axiom-dependency audit"
+      ],
+      "implementation_refs": [
+        "reference_models/accounting_aggregate_v1.py"
+      ],
+      "test_refs": [
+        "reference_models/tests/test_accounting_aggregate_v1.py"
+      ],
+      "formal_refs": [
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/FourColumnConservation.lean",
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/AccountingFoldTree.lean",
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/CapacityBound.lean"
+      ],
+      "evidence_refs": [
+        "research/zrm_accounting_aggregate_v1/evidence/python-model.json",
+        "research/zrm_accounting_aggregate_v1/evidence/lean.json",
+        "research/zrm_accounting_aggregate_v1/manifest.json"
+      ],
+      "next_action": "define the canonical finite-map and accepted-leaf refinement, then prove the selected Rust U256 and circuit representations implement this scoped carrier without field wrap or dropped support",
+      "non_claim": "The verified scope is pure natural-number and reference-model arithmetic under U32 leaf-count and U128 per-leaf premises; it establishes no canonical bytes, authenticated opening, Rust or circuit refinement, governed profile, recursive proof, RFC approval, or authority",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#2-aggregate-row",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#5-leaf-projection",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#9-capacity-theorem-and-invariant",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#10-aggregate-balance"
+      ],
+      "target_level": "ZRM-L1",
+      "work_packages": [
+        "WP6",
+        "WP8"
+      ],
+      "blocking_dependencies": []
+    },
+    {
+      "id": "ZRM-CBC-048",
+      "title": "Scoped numeric aggregation result and definedness are proof-tree independent",
+      "severity": "critical",
+      "status": "verified_scoped",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "different binary groupings of the same bounded numeric leaves change whether aggregation succeeds or change its four-column result",
+      "construction_rule": "Within the non-normative numeric carrier, require componentwise monotone merge and prove every nonempty binary tree succeeds exactly when the complete totals fit and then returns the same result",
+      "required_evidence": [
+        "exhaustive small-tree grouping comparison and deterministic bounded exploration",
+        "Lean arbitrary-tree definedness and total-overflow-carrier theorems",
+        "counterexample retaining the rejected bounded-signed carrier"
+      ],
+      "implementation_refs": [
+        "reference_models/accounting_aggregate_v1.py",
+        "reference_models/accounting_aggregate_v1_explorer.py"
+      ],
+      "test_refs": [
+        "reference_models/tests/test_accounting_aggregate_v1.py"
+      ],
+      "formal_refs": [
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/AccountingFoldTree.lean",
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/TotalOverflowCarrier.lean"
+      ],
+      "evidence_refs": [
+        "research/zrm_accounting_aggregate_v1/evidence/python-model.json",
+        "research/zrm_accounting_aggregate_v1/evidence/lean.json",
+        "research/zrm_accounting_aggregate_v1/manifest.json"
+      ],
+      "next_action": "link the scoped numeric theorem to canonical sparse maps, exact ordered provenance, the governed profile, Rust and guest implementations, and existing CBC-027 semantic-root identity",
+      "non_claim": "The verified scope is the numeric fold and checked definedness model only; it does not prove canonical map ordering or bytes, retained-opening binding, ordered cryptographic coverage, SemanticSegmentHash equality, Rust or circuit refinement, or full protocol proof-tree independence",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#8-parent-composition",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#11-strong-associativity-and-definedness"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP8",
+        "WP12"
+      ],
+      "blocking_dependencies": []
+    },
+    {
+      "id": "ZRM-CBC-049",
+      "title": "RFC-0004 aggregate, profile, and coverage encodings are exact and domain separated",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "ambiguous, cross-domain, cross-profile, reordered, duplicate, truncated, or trailing bytes identify an accounting aggregate or provenance object",
+      "construction_rule": "Use manual versioned big-endian encoders and schema-fixed domains for profile, aggregate row, row list, coverage entry, coverage manifest, and retained opening; reject noncanonical forms and require independent complete vectors before approval",
+      "required_evidence": [
+        "profile bytes and ID plus canonical empty-root vectors",
+        "row, row-list, coverage-entry, coverage-manifest, and retained-opening vectors",
+        "every-field and cross-domain mutation atlas",
+        "two independent implementation replays"
+      ],
+      "implementation_refs": [
+        "vectors/independent_python/replay_accounting_aggregate_v1.py"
+      ],
+      "test_refs": [
+        "vectors/independent_python/replay_accounting_aggregate_v1.py",
+        "tools/tests/test_zrm_accounting_research.py"
+      ],
+      "formal_refs": [],
+      "evidence_refs": [
+        "vectors/accounting_aggregate_v1.json",
+        "research/zrm_accounting_aggregate_v1/evidence/vectors.json",
+        "research/zrm_accounting_aggregate_v1/manifest.json"
+      ],
+      "next_action": "add profile and empty-root vectors, freeze an existing AccountingRowV1 opening and retained wrapper, complete all-field and cross-domain mutants, and obtain independent cross-language agreement before any ABI claim",
+      "non_claim": "Current proposed vectors cover aggregate row and row-list hashing, coverage entry and manifest hashing, selected capacity cases, order and multiplicity mutants, and U32 framing only; profile bytes and ID, empty roots, retained opening bytes, frozen leaf-row bytes, every-field mutation, cross-language ABI agreement, and approval remain absent",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#canonical-encoding-and-hashing",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#required-vectors-before-approval"
+      ],
+      "target_level": "ZRM-L0",
+      "work_packages": [
+        "WP1",
+        "WP7"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-002",
+        "ZRM-CBC-016",
+        "ZRM-CBC-019",
+        "ZRM-CBC-024",
+        "ZRM-CBC-026"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-050",
+      "title": "Retained openings bind exact authenticated accepted-journal accounting rows",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a prover supplies fabricated, unavailable, truncated, reordered, or mismatched leaf rows while claiming they came from an accepted journal",
+      "construction_rule": "Before leaf projection, bound and strictly decode the retained opening, authenticate the exact AcceptedJournal hash, row bytes, row count, row hashes, and AccountingRowsRoot, and fail closed when any opening is unavailable or inconsistent",
+      "required_evidence": [
+        "frozen AccountingRowV1 opening and root/count vectors",
+        "authenticated AcceptedJournal adapter tests",
+        "malicious count, length, truncation, order, duplicate, and allocation-refusal fuzzing",
+        "unavailable-opening and missing-retention negatives"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "freeze the accepted-journal accounting-row ABI, implement a bounded retained-opening parser and authenticated journal binding, define governed retention, and add negative replay and fuzz evidence",
+      "non_claim": "No frozen AccountingRowV1 canonical opening, authenticated AcceptedJournal adapter, root and count replay, retained-byte parser, proving-time availability guarantee, retention policy, or data-availability result exists",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#4-retained-accepted-journal-opening",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#retained-opening-wrapper",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#data-availability-and-retention"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP6",
+        "WP7",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-012",
+        "ZRM-CBC-017",
+        "ZRM-CBC-019",
+        "ZRM-CBC-025",
+        "ZRM-CBC-045"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-051",
+      "title": "Ordered coverage preserves every authenticated leaf and dimension occurrence",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "aggregation omits, duplicates, permutes, relabels, or collapses a leaf accounting occurrence, authority root, transformation root, row-hash role, or dimension",
+      "construction_rule": "Derive one typed coverage entry for every opened leaf-row occurrence, preserve multiplicity in exact leaf-position and dimension order, concatenate manifests exactly at parents, and keep aggregate totals incapable of granting authority",
+      "required_evidence": [
+        "missing, extra, permuted, duplicate, relabeled, and wrong-digest-role negatives",
+        "two-leaf ordered concatenation vectors",
+        "accepted-journal opening to coverage refinement",
+        "authority and transformation multiplicity tests"
+      ],
+      "implementation_refs": [
+        "reference_models/accounting_aggregate_v1.py",
+        "vectors/independent_python/replay_accounting_aggregate_v1.py"
+      ],
+      "test_refs": [
+        "reference_models/tests/test_accounting_aggregate_v1.py",
+        "vectors/independent_python/replay_accounting_aggregate_v1.py"
+      ],
+      "formal_refs": [
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/AccountingFoldTree.lean"
+      ],
+      "evidence_refs": [
+        "vectors/accounting_aggregate_v1.json",
+        "research/zrm_accounting_aggregate_v1/evidence/python-model.json",
+        "research/zrm_accounting_aggregate_v1/evidence/vectors.json",
+        "research/zrm_accounting_aggregate_v1/evidence/lean.json",
+        "research/zrm_accounting_aggregate_v1/manifest.json"
+      ],
+      "next_action": "bind coverage derivation to the retained accepted-journal opening, replace abstract provenance fixtures with frozen leaf bytes, and prove exact ordered cryptographic refinement and availability behavior",
+      "non_claim": "The model uses abstract provenance identifiers, the candidate vector uses an opaque existing-leaf AccountingRowHash fixture, and Lean CoversExactly is a multiset relation for numeric aggregation; none proves accepted-journal binding, actual leaf bytes, ordered cryptographic coverage refinement, availability, or authority",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#6-coverage-entry-and-ordered-manifest",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#coverage-entry-bytes",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#coverage-manifest-root"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP6",
+        "WP7",
+        "WP8",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-012",
+        "ZRM-CBC-017",
+        "ZRM-CBC-025",
+        "ZRM-CBC-050"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-052",
+      "title": "Governed accounting profile and semantic summary reject substitution and mixed versions",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "an aggregate is replayed under a different profile, limit set, journal schema, semantic context, proof program, or predecessor interpretation",
+      "construction_rule": "Select one governed AccountingAggregationProfileId and bind its exact roots, counts, retained-byte total, accepted-journal schema, semantic context, and compatibility rules into the versioned semantic summary and proof statement",
+      "required_evidence": [
+        "approved profile bytes, identity, and exact deployable limits",
+        "SemanticSegmentHash and proof-statement vectors",
+        "profile, schema, context, program, key, and release substitution negatives",
+        "migration, historical replay, rollback, and predecessor matrix"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "obtain RFC approval and exact limits, freeze the semantic-summary schema and profile ID, identify any predecessor use, then implement policy selection plus migration and substitution tests",
+      "non_claim": "No approved limits, canonical profile-ID vector, governed profile selector, SemanticSegmentHash schema, proof-statement binding, migration or replay matrix, predecessor audit, or cross-profile substitution test exists",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#3-governed-aggregation-profile",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#rfc-0002-refinement",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#compatibility-and-migration"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP2",
+        "WP7",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-010",
+        "ZRM-CBC-017",
+        "ZRM-CBC-026",
+        "ZRM-CBC-027",
+        "ZRM-CBC-049",
+        "ZRM-CBC-050",
+        "ZRM-CBC-051"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-053",
+      "title": "Accounting quantity, count, byte, and work bounds fail closed across trees",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "bounded_blast_radius",
+      "disaster_state": "crafted dimensions, counts, retained bytes, carries, field limbs, or merge trees cause overflow, allocation abuse, proof-field wrap, excessive work, or inconsistent reject precedence",
+      "construction_rule": "Apply governed quantity, dimension, coverage, retained-byte, leaf, frame, and verifier-cost limits before expensive work; use checked monotone arithmetic and stable reject precedence at leaves and parents",
+      "required_evidence": [
+        "executed ESSO mutant campaign for overflow, row dropping, swaps, bounds, and coverage omission",
+        "Rust U256, carry, range, Kani, property, differential, and fuzz evidence",
+        "retained-opening allocation-refusal tests",
+        "worst-case memory, cycle, proof-size, and storage benchmarks"
+      ],
+      "implementation_refs": [
+        "reference_models/accounting_aggregate_v1.py"
+      ],
+      "test_refs": [
+        "reference_models/tests/test_accounting_aggregate_v1.py"
+      ],
+      "formal_refs": [
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/CapacityBound.lean",
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/TotalOverflowCarrier.lean",
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/AccountingFoldTree.lean"
+      ],
+      "evidence_refs": [
+        "research/zrm_accounting_aggregate_v1/evidence/python-model.json",
+        "research/zrm_accounting_aggregate_v1/evidence/lean.json",
+        "research/zrm_accounting_aggregate_v1/manifest.json"
+      ],
+      "next_action": "execute and record the ESSO plan, choose deployable limits from benchmarks, implement bounded retained parsing and Rust U256 arithmetic, constrain circuit limbs and carries, and add deterministic reject and resource evidence",
+      "non_claim": "Scoped evidence covers natural-number quantity capacity, selected model count caps, and U32 digest-list framing; the ESSO campaign is explicitly unexecuted, and no retained-byte parser, allocation refusal, deployable limits, runtime reject implementation, benchmark, Rust U256 refinement, circuit constraint, or proof-cost bound exists",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#9-capacity-theorem-and-invariant",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#reject-taxonomy-and-precedence",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#resource-denial-of-service-and-circuit-analysis"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP6",
+        "WP8",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-016",
+        "ZRM-CBC-019",
+        "ZRM-CBC-024",
+        "ZRM-CBC-045",
+        "ZRM-CBC-052"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-054",
+      "title": "Only an exactly bound recursive verifier constructs the sealed accounting fact",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "host-proposed totals, roots, booleans, proofs, or callback results create admission, state, commit, mint, burn, transformation, or aggregation authority",
+      "construction_rule": "Dispatch through a governed sealed recursive backend, verify exact program, key, release, profile, semantic summary, children, accepted journals, and authenticated output, then construct a sealed postcommit aggregation fact that cannot authorize precommit admission or commit",
+      "required_evidence": [
+        "sealed fact forgery and phase-substitution tests",
+        "wrong program, key, release, profile, summary, child, journal, and output negatives",
+        "recursive guest and reference differential tests",
+        "independent proof-system and authority-boundary review"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "freeze the governed statement and verified-fact API, implement the recursive verifier adapter and guest, bind every exact identity and output, and independently review the postcommit-only authority boundary",
+      "non_claim": "No sealed accounting aggregation fact, verifier adapter, exact program or key identity, recursive guest, circuit proof, admission-separation test, accepted-journal binding, commit integration, or independent proof-system review exists",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#authority-and-trust-boundary",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#formal-obligations",
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#typed-interfaces"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP5",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-009",
+        "ZRM-CBC-010",
+        "ZRM-CBC-017",
+        "ZRM-CBC-027",
+        "ZRM-CBC-050",
+        "ZRM-CBC-051",
+        "ZRM-CBC-052"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-055",
+      "title": "Net projection is a governed boundary result and never a recursive carrier or no-op claim",
+      "severity": "critical",
+      "status": "implemented_partial",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a signed net re-enters recursive aggregation, an untrusted Boolean claims balance, or zero net is treated as semantic no-op or authority",
+      "construction_rule": "Compute net only after successful four-column aggregation by canonical compare-and-subtract for a governed selected dimension set, return a typed sealed boundary fact, and prohibit its use as recursive state, admission authority, or no-op evidence",
+      "required_evidence": [
+        "canonical signed-magnitude net vectors",
+        "selected-dimension-set root and governed predicate tests",
+        "net-as-carrier, host-Boolean, authority, and no-op rejection tests",
+        "runtime and guest refinement evidence"
+      ],
+      "implementation_refs": [
+        "reference_models/accounting_aggregate_v1.py"
+      ],
+      "test_refs": [
+        "reference_models/tests/test_accounting_aggregate_v1.py"
+      ],
+      "formal_refs": [
+        "formal/lean/zrm_accounting_aggregate_v1/ZrmAccountingAggregateV1/AccountingFoldTree.lean"
+      ],
+      "evidence_refs": [
+        "research/zrm_accounting_aggregate_v1/evidence/python-model.json",
+        "research/zrm_accounting_aggregate_v1/evidence/lean.json",
+        "research/zrm_accounting_aggregate_v1/manifest.json"
+      ],
+      "next_action": "freeze the signed-magnitude and selected-set encodings, define the governed boundary predicate and sealed fact, then add runtime, guest, authority-substitution, and semantic-no-op negatives",
+      "non_claim": "Only mathematical net projection and no-op separation are modeled; no canonical signed-magnitude codec, selected-dimension-set root, governed typed predicate, sealed boundary fact, runtime or guest binding, or authority exists",
+      "normative_refs": [
+        "rfcs/RFC-0004-recursive-accounting-aggregate-profile.md#12-net-projection-and-boundary-predicates"
+      ],
+      "target_level": "ZRM-L2",
+      "work_packages": [
+        "WP5",
+        "WP6",
+        "WP8",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-009",
+        "ZRM-CBC-017",
+        "ZRM-CBC-054"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-056",
+      "title": "Transient V2 placement and authority encodings are exact and domain separated",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "a transient resource is confused with consumed, referenced, or created placement, or V2 bytes are decoded under V1 authority meanings",
+      "construction_rule": "Keep every V1 byte and ResourceId meaning unchanged; define a versioned fourth placement with pairwise-disjoint C, R, O, and Q sets, strict bounded decoders, new authority domains, canonical re-encoding equality, and independent complete vectors",
+      "required_evidence": [
+        "frozen V1 non-regression corpus and V2 placement byte tables",
+        "two independent complete V2 vector replays including TransitionIdV2 cross-version separation",
+        "unknown tag, duplicate placement, overlap, truncation, trailing-byte, and cross-domain mutants",
+        "migration and historical V1 replay evidence"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "approve or revise RFC-0005, freeze the exact V2 schemas, domains, and transition-ID derivation, then add independent codecs, golden vectors, cross-version replay, and V1 byte-preservation tests",
+      "non_claim": "No V2 codec, frozen domain, TransitionIdV2 derivation, golden vector, independent replay, migration implementation, or approved transient ABI exists",
+      "normative_refs": [
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#canonical-encoding-and-hashing",
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#1-four-way-placement-partition"
+      ],
+      "target_level": "ZRM-L0",
+      "work_packages": [
+        "WP1",
+        "WP2",
+        "WP3"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-002",
+        "ZRM-CBC-003",
+        "ZRM-CBC-019",
+        "ZRM-CBC-024",
+        "ZRM-CBC-026"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-057",
+      "title": "Every transient has exact birth, death, producer, and consumer authority",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "unrepresentable",
+      "disaster_state": "a transient is created or retired without its own resource logic, is covered by an undifferentiated fact, or is produced or consumed zero, multiple, or mismatched times",
+      "construction_rule": "Bind each Q resource to exactly one TransientBirth logic fact, one TransientDeath logic fact, one producer output use, and one consumer input use with exact role, ordinal, resource ID, claim hash, policy root, statement hash, and sealed verifier identities",
+      "required_evidence": [
+        "missing, duplicate, swapped, wrong-role, wrong-ordinal, and wrong-resource negative tests",
+        "wrong program, claim, statement, policy, output, and verifier substitution tests",
+        "sealed-fact forgery and consumer no-op tests",
+        "reference, optimized, and proof-adapter differential corpus"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "freeze V2 logic and transformation-use claims, implement sealed exact-binding fact constructors, and add the complete dual-authorization mutation atlas",
+      "non_claim": "No V2 logic claim, transformation-use claim, sealed transient fact, verifier adapter, proof guest, differential corpus, or authority exists",
+      "normative_refs": [
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#2-five-logic-uses",
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#5-transformation-resource-uses",
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#authority-and-trust-boundary"
+      ],
+      "target_level": "ZRM-L2",
+      "work_packages": [
+        "WP3",
+        "WP5",
+        "WP6"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-008",
+        "ZRM-CBC-009",
+        "ZRM-CBC-010",
+        "ZRM-CBC-011",
+        "ZRM-CBC-014",
+        "ZRM-CBC-017",
+        "ZRM-CBC-056"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-058",
+      "title": "Transient freshness and planned nullifiers prevent replay admission",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "a transient already exists, has been retired before, is checked at a stale epoch, is inserted into active state, or is omitted from the planned nullifier effects",
+      "construction_rule": "Require every Q resource to be absent from active state and historical nullifiers at one authenticated epoch, never plan Q for active insertion, derive exactly one planned nullifier effect for every Q resource, and bind the complete freshness reads and planned writes to the private validated plan",
+      "required_evidence": [
+        "active-presence, prior-nullifier, stale-epoch, duplicate-Q, and omitted-plan tests",
+        "exact authenticated freshness-read and planned-nullifier construction tests",
+        "reject-is-no-op tests for every precommit freshness failure",
+        "bounded reference-state and private-plan refinement evidence"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "freeze the authenticated freshness statement and planned state effects, then implement the reference-state oracle and private Q-nullifier plan with exact negative and refinement tests",
+      "non_claim": "No transient freshness oracle, authenticated state-plan implementation, planned-effect refinement, or replay-admission proof exists; durable insertion, concurrency, and crash recovery remain CBC-061 obligations",
+      "normative_refs": [
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#3-membership-freshness-and-epoch",
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#8-state-update",
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#9-replay-and-concurrency"
+      ],
+      "target_level": "ZRM-L3",
+      "work_packages": [
+        "WP4",
+        "WP6"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-006",
+        "ZRM-CBC-007",
+        "ZRM-CBC-017",
+        "ZRM-CBC-018",
+        "ZRM-CBC-056",
+        "ZRM-CBC-057"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-059",
+      "title": "Transient dependency graphs are bounded, acyclic, unique, and boundary anchored",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "bounded_blast_radius",
+      "disaster_state": "a transient identity has multiple producers or consumers, or the graph contains a cycle, an all-transient component, nondeterministic traversal, or resource-exhausting work",
+      "construction_rule": "Derive one deterministic producer-to-consumer edge per Q resource, require unique endpoints for each identity, permit bounded branch and merge through distinct identities, reject cycles and same-identity multiple consumers, require each connected Q component to have a persistent input and persistent created output, and enforce governed claim, per-claim use, aggregate use, edge, depth, byte, memory, and verifier-work limits before allocation or expensive checks",
+      "required_evidence": [
+        "cycle, same-identity multiple-consumer, duplicate endpoint, disconnected component, missing persistent anchor, and ordering mutants",
+        "deterministic topological and boundary-anchoring property tests",
+        "per-claim and aggregate transformation-use allocation refusal plus worst-case memory, cycle, proof-size, and journal benchmarks",
+        "bounded graph theorem and runtime refinement evidence"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "collect two real workflow traces, select exact protocol and strict-default limits from benchmarks, and prove the bounded deterministic graph oracle before implementation",
+      "non_claim": "No approved workflow need, numeric limit, graph implementation, benchmark, property corpus, bounded theorem, or runtime refinement exists",
+      "normative_refs": [
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#6-bounded-dependency-graph",
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#resource-and-performance-bounds"
+      ],
+      "target_level": "ZRM-L2",
+      "work_packages": [
+        "WP6"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-014",
+        "ZRM-CBC-016",
+        "ZRM-CBC-033",
+        "ZRM-CBC-045",
+        "ZRM-CBC-057"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-060",
+      "title": "Transient quantities contribute to both gross accounting sides without granting authority",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "guarded_transition",
+      "disaster_state": "transient quantity is omitted, double counted, netted away before validation, assigned inconsistent dimensions, or treated as mint, burn, transformation, or no-op authority",
+      "construction_rule": "Project every Q quantity exactly once into the producer claim's created gross side and exactly once into the consumer claim's consumed gross side for its exact kind and unit, require every per-claim delta row to equal its exact use-derived projection plus separately authorized mint or burn rows, require the checked composition to equal global accounting, preserve RFC-0004 multiplicity and coverage, and prohibit cancellation or zero net from authorizing any lifecycle",
+      "required_evidence": [
+        "missing-side, double-count, wrong-dimension, overflow, order, and multiplicity mutants",
+        "unauthorized birth, death, mint, burn, transformation, and net-as-authority negatives",
+        "per-claim use-to-delta, global composition, and RFC-0004 aggregate differential vectors",
+        "gross-flow preservation and runtime refinement theorem"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "freeze the V2 accounting projection, add reference and RFC-0004 vectors, then prove and implement exact gross-side multiplicity without changing AccountingRowV1",
+      "non_claim": "No transient accounting projection, runtime check, vector, aggregate integration, arithmetic proof, or authorization evidence exists; equal gross totals do not authorize or prove a valid transient",
+      "normative_refs": [
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#7-accounting-projection",
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#accounting-and-rfc-0004-interaction"
+      ],
+      "target_level": "ZRM-L2",
+      "work_packages": [
+        "WP6",
+        "WP8",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-012",
+        "ZRM-CBC-013",
+        "ZRM-CBC-014",
+        "ZRM-CBC-015",
+        "ZRM-CBC-016",
+        "ZRM-CBC-047",
+        "ZRM-CBC-051",
+        "ZRM-CBC-055",
+        "ZRM-CBC-057"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-061",
+      "title": "Transient state, nullifier, semantic-effect, and journal changes commit atomically",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "detected_at_commit",
+      "disaster_state": "a rejected or crashed transition leaves a transient active, inserts only some nullifiers, publishes a mismatched journal, or reports acceptance before a linearizable durable commit",
+      "construction_rule": "Privately plan active-state deletion and creation plus C and Q nullifier insertion in the pre-journal semantic-effect commitment; derive the successor accepted journal without a hash cycle; then atomically commit semantic effects, journal, replay, state-head, admission, and audit metadata or none, bind the final journal bytes, and preserve idempotent recovery without exposing a forgeable plan or capability",
+      "required_evidence": [
+        "reject-is-no-op tests at each validation and commit failure point",
+        "same-Q concurrent histories and crash matrix before, during, and after durable commit plus idempotent retry",
+        "semantic-effect, journal, replay, state-head, admission, and audit hash-dependency acyclicity check",
+        "wrong journal, root, count, semantic-effect, nullifier, and receipt binding negatives",
+        "linearizability model and persistent-adapter differential histories"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "coordinate the successor journal and semantic-effect schema with RFC-0001, then model and implement private plans, atomic commit, crash recovery, and accepted-journal binding",
+      "non_claim": "No V2 journal, semantic-effect schema, private commit plan, durable adapter, crash matrix, linearizability proof, or accepted transient journal exists",
+      "normative_refs": [
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#state-concurrency-and-atomicity",
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#journal-schema",
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#8-state-update"
+      ],
+      "target_level": "ZRM-L3",
+      "work_packages": [
+        "WP6",
+        "WP7",
+        "WP9"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-020",
+        "ZRM-CBC-021",
+        "ZRM-CBC-022",
+        "ZRM-CBC-023",
+        "ZRM-CBC-025",
+        "ZRM-CBC-058",
+        "ZRM-CBC-060"
+      ]
+    },
+    {
+      "id": "ZRM-CBC-062",
+      "title": "V2 activation, replay, recursion, and privacy claims remain version scoped",
+      "severity": "critical",
+      "status": "specified",
+      "defense_layer": "detected_by_evidence",
+      "disaster_state": "a V2 transient transition is interpreted under V1, replayed across machine or policy identity, mixed into unsupported recursion, rolled back unsafely, strands a live persistent output, preserves a pre-rollback plan, or is represented to users as private or ARM-equivalent",
+      "construction_rule": "Govern explicit V2 activation and feature rollback, bind machine, domain, policy, schema, program, release, and profile identities, reject unsupported mixed-version recursion, replay historical V1 bytes unchanged, advance policy root and state version on rollback, retain a Q-empty compatibility path for live V2-policy persistent outputs, stale every old plan and fact, and expose that the transparent profile reveals transient identifiers, counts, nullifiers, and timing and is stricter than membership-optional ARM ephemerality",
+      "required_evidence": [
+        "activation, downgrade, rollback, historical replay, and mixed V1/V2 recursion matrix including live-output consumability and stale pre-rollback plans",
+        "cross-machine, domain, policy, schema, program, release, and profile substitution tests",
+        "public API and BDD review for accurate transient and privacy language",
+        "two independent Class E reviews including an authority-boundary reviewer"
+      ],
+      "implementation_refs": [],
+      "test_refs": [],
+      "formal_refs": [],
+      "evidence_refs": [],
+      "next_action": "obtain semantic approval, freeze activation, non-stranding rollback, and migration rules, define the first recursive profile, add substitution, stale-plan, live-output, and historical replay tests, and complete independent authority and UX claim reviews",
+      "non_claim": "No approved profile, activation mechanism, non-stranding rollback or migration implementation, mixed-version recursive proof, privacy property, unlinkability, ARM-equivalent behavior, or independent Class E approval exists",
+      "normative_refs": [
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#compatibility-and-migration",
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#privacy-and-disclosure",
+        "rfcs/RFC-0005-paired-transient-resource-lifecycle.md#claims-after-implementation-and-approval"
+      ],
+      "target_level": "ZRM-L4",
+      "work_packages": [
+        "WP2",
+        "WP7",
+        "WP9",
+        "WP12"
+      ],
+      "blocking_dependencies": [
+        "ZRM-CBC-010",
+        "ZRM-CBC-026",
+        "ZRM-CBC-027",
+        "ZRM-CBC-029",
+        "ZRM-CBC-043",
+        "ZRM-CBC-052",
+        "ZRM-CBC-054",
+        "ZRM-CBC-056",
+        "ZRM-CBC-061"
       ]
     }
   ]

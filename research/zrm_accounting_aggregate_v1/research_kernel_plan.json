@@ -1,0 +1,91 @@
+{
+  "schema": "zrm/accounting-aggregate-research-kernel-plan/v1",
+  "kernel_revision": "d9cdfceaa396dd56acfacbd042b89ce633dbc173",
+  "run_id": "zrm_accounting_aggregate_v1_20260714",
+  "compounding": {
+    "prior_packet": "research/zrm_frontier_v2",
+    "prior_seed": "ZRM-H02 monotone debit and credit limbs",
+    "method": "Manual, revision-bound seed because this Research Kernel revision has no run-import API.",
+    "next_input": [
+      "the promoted and refuted atoms in research_kernel_receipt.json",
+      "all counterexamples in hypotheses.json",
+      "new Rust, circuit, DA, privacy, and ESSO artifacts with exact digests",
+      "red-team findings and any changed RFC assumptions"
+    ]
+  },
+  "promotion_gates": {
+    "required": [
+      "explicit dependency",
+      "primary-source or artifact provenance",
+      "recorded refutation attempt",
+      "local contradiction search",
+      "replay recipe when evidence is executable",
+      "no unresolved actual counterexample",
+      "bounded rationale and nonclaims"
+    ],
+    "rule": "A Research Kernel SUPPORTED status means only that the local gate passed. Protocol and implementation authority remain external."
+  },
+  "workstreams": [
+    {
+      "id": "RKP-01",
+      "priority": 1,
+      "question": "Does fixed U256 carry arithmetic in Rust and the proof circuit refine the Lean natural-number carrier byte for byte?",
+      "artifacts_required": ["audited [u64;4] implementation", "differential property tests", "Kani boundary harness", "circuit range/carry proof", "canonical vector replay"],
+      "falsifiers": ["carry mismatch", "noncanonical U256 decode", "proof-field wrap", "Rust/Lean boundary disagreement"]
+    },
+    {
+      "id": "RKP-02",
+      "priority": 2,
+      "question": "Can every accepted journal's accounting opening be retrieved within governed time and byte bounds?",
+      "artifacts_required": ["DA profile", "retention SLA", "failure-injection drill", "root/count/opening replay"],
+      "falsifiers": ["valid committed root with unavailable required opening", "unbounded allocation before witness check", "runtime downgrade to weaker DA"]
+    },
+    {
+      "id": "RKP-03",
+      "priority": 3,
+      "question": "Does the ordered coverage commitment preserve occurrence multiplicity, leaf position, and row-local provenance under every tree?",
+      "artifacts_required": ["append/concatenation proof", "independent vectors", "duplicate/reversal/omission mutants", "large-manifest benchmark"],
+      "falsifiers": ["set-like deduplication", "permutation collision at semantic layer", "authority substitution under equal totals"]
+    },
+    {
+      "id": "RKP-04",
+      "priority": 4,
+      "question": "Which aggregate disclosure profile is acceptable for real workloads?",
+      "artifacts_required": ["gross-versus-net leakage measurement", "dimension-cardinality analysis", "authority-root correlation analysis", "shielded predicate prototype"],
+      "falsifiers": ["one profile ID verifies semantically different public/private statements", "public gross flow violates policy", "commitment mistaken for hiding"]
+    },
+    {
+      "id": "RKP-05",
+      "priority": 5,
+      "question": "Can governed profile bridges preserve history without reinterpreting old accounting roots?",
+      "artifacts_required": ["indexed bridge relation", "old/new profile vectors", "mixed-profile rejection tests", "migration RFC"],
+      "falsifiers": ["old bytes acquire new meaning", "caller-selected profile fallback", "cross-profile child merge"]
+    },
+    {
+      "id": "RKP-06",
+      "priority": 6,
+      "question": "Can the first implementation stream accounting rows and coverage entries without attacker-controlled sorting or excess memory?",
+      "artifacts_required": ["linear merge design", "preallocation bounds", "complexity proof", "DoS benchmarks", "malformed-order corpus"],
+      "falsifiers": ["sort-before-authentication", "silent duplicate repair", "allocation before byte/count bounds", "quadratic merge"]
+    }
+  ],
+  "replay_recipe": {
+    "server": "Run internal/research_kernel_mcp/server.py from the pinned Research Kernel checkout with RESEARCH_HOME set to a fresh directory and RK_MODE=safe.",
+    "transport": "MCP stdio ClientSession; do not mutate the SQLite database directly.",
+    "steps": [
+      "start or resume the named run",
+      "retrieve prior promoted claims and failures",
+      "add only revision-bound observations",
+      "attach artifact hashes and exact commands",
+      "register refutation and contradiction searches",
+      "invoke the fail-closed promotion gate",
+      "export report counts and limitations",
+      "validate the committed receipt against the event log"
+    ]
+  },
+  "nonclaims": [
+    "The plan is not itself an executed Research Kernel transcript.",
+    "The plan does not make ESSO, Lean, Morph, Python, or any proof backend authoritative.",
+    "Future promotions must not inherit status when their assumptions, bounds, schema, or profile change."
+  ]
+}

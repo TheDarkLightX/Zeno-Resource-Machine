@@ -1,0 +1,25 @@
+{
+  "schema": "zrm/accounting-aggregate-packet-check-evidence/v1",
+  "base_revision": "efcaa2ba80944fc455ef9c326cd878821d23022b",
+  "executed_on": "2026-07-14",
+  "commands": [
+    "python3 tools/check_zrm_accounting_research.py --write-manifest",
+    "python3 tools/check_zrm_accounting_research.py",
+    "python3 -m unittest tools.tests.test_zrm_accounting_research -v"
+  ],
+  "results": {
+    "packet_check_passed": true,
+    "checker_tests_passed": 18,
+    "mutation_tests_failed": 0,
+    "sources": 22,
+    "hypotheses": 20,
+    "experiments": 12,
+    "knowledge_graph_nodes": 74,
+    "knowledge_graph_edges": 85,
+    "morph_candidates": 24
+  },
+  "nonclaims": [
+    "The checker validates local schema, references, artifact presence, and digests; it does not validate external source truth.",
+    "A fresh manifest authenticates selected bytes but does not promote hypotheses or approve RFC-0004."
+  ]
+}

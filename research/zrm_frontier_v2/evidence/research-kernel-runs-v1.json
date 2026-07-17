@@ -1,0 +1,49 @@
+{
+  "schema": "zrm/research-kernel-run-summary/v1",
+  "research_kernel_revision": "d9cdfceaa396dd56acfacbd042b89ce633dbc173",
+  "mcp_python_package": "1.28.1",
+  "executed_at": "2026-07-14",
+  "runs": [
+    {
+      "id": "zrm-frontier-v2-2026-07-14",
+      "purpose": "ARM and ZRM architecture seed",
+      "atoms": 22,
+      "edges": 13,
+      "refutation_plans": 6,
+      "evidence_records": 2,
+      "reformulations": 5,
+      "promotion_probe": "intentionally rejected because a required dependency was not satisfied"
+    },
+    {
+      "id": "zrm-privacy-policy-v1-2026-07-14",
+      "purpose": "private logic and policy receipt architecture",
+      "hypotheses": 12,
+      "edges": 39,
+      "refutation_plans": 12,
+      "evidence_records": 4,
+      "reformulations": 18,
+      "compounding": "retrieved prior atoms before authoring"
+    },
+    {
+      "id": "zrm-compound-architecture-v2-2026-07-14",
+      "purpose": "cross-run recursion, concurrency, privacy, and assurance synthesis",
+      "retrieved_prior_atoms": 40,
+      "hypotheses": 10,
+      "edges": 21,
+      "refutation_records": 10,
+      "actual_counterexamples": 1,
+      "evidence_records": 3,
+      "reformulations": 6
+    }
+  ],
+  "observed_kernel_limitations": [
+    "The event JSONL omits full records and has no import or deterministic replay path.",
+    "JSONL is written separately from the enclosing SQLite commit and can diverge after failure.",
+    "Read operations mutate the event log.",
+    "Reports and graph exports omit parts of evidence, experiments, artifacts, and promotions.",
+    "IDs and timestamps are nondeterministic.",
+    "Atom creation can set SUPPORTED directly and promotion accepts caller assertions.",
+    "The built-in Morph operation emits templates and is not strict Morph proof-search replay."
+  ],
+  "handling": "The repository knowledge graph is a deterministic curated projection with explicit sources, falsifiers, experiment links, and nonclaims. Research Kernel output is discovery provenance only."
+}

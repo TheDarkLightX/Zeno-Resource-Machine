@@ -1,0 +1,238 @@
+{
+  "schema": "zrm/frontier-knowledge-graph/v2",
+  "run_id": "zrm-frontier-v2-2026-07-14",
+  "base_revision": "a4d2868d92807947cbad5f0d7fd828b74ae1368c",
+  "external_registries": {
+    "hypotheses": "research/zrm_frontier_v2/hypotheses.json",
+    "sources": "research/zrm_frontier_v2/source_ledger.json",
+    "experiments": "research/zrm_frontier_v2/experiments.json",
+    "esso_campaigns": "research/zrm_frontier_v2/esso_campaigns.json",
+    "morph_reformulations": "research/zrm_frontier_v2/morph_reformulations.json"
+  },
+  "nodes": [
+    {
+      "id": "SYN-B01",
+      "type": "breakthrough",
+      "title": "Proof-neutral two-plane architecture",
+      "summary": "A semantic plane defines exact ordered ZRM meaning; replaceable evidence backends authenticate it and cannot create commit authority."
+    },
+    {
+      "id": "SYN-B02",
+      "type": "breakthrough",
+      "title": "Strongly associative accounting",
+      "summary": "Monotone debit and credit limbs remove signed intermediate-overflow dependence on proof-tree shape while retaining cancelling coverage."
+    },
+    {
+      "id": "SYN-B03",
+      "type": "breakthrough",
+      "title": "Context-indexed recursive paths",
+      "summary": "Ordinary steps preserve validation context; rare governed bridge steps change policy, verifier, registry, cost, or proof-adapter context."
+    },
+    {
+      "id": "SYN-B04",
+      "type": "breakthrough",
+      "title": "Deterministic serial refinement",
+      "summary": "Parallel work remains nonsemantic and must refine authenticated preset-order execution through exact sealed point and range observations."
+    },
+    {
+      "id": "SYN-B05",
+      "type": "breakthrough",
+      "title": "Privacy envelope with typed governance",
+      "summary": "A candidate fixed outer proof can aim to hide inner logic identity while binding typed registry membership, nonrevocation, the exact statement, cost classes, and an explicit leakage budget."
+    },
+    {
+      "id": "SYN-B06",
+      "type": "breakthrough",
+      "title": "Semantic/proof identity firewall",
+      "summary": "Economic and replay identity follows the semantic segment; proof identity separately records backend, release, control root, children, and topology."
+    },
+    {
+      "id": "SYN-B07",
+      "type": "breakthrough",
+      "title": "Proof-carrying research promotion",
+      "summary": "Immutable challenge-bound evidence receipts feed a four-valued versioned policy decision with an orthogonal assurance vector."
+    },
+    {
+      "id": "SYN-B08",
+      "type": "breakthrough",
+      "title": "Acyclic state and history roots",
+      "summary": "Machine state and append-only history are sibling commitments advanced atomically and anchored independently against rollback and forks."
+    },
+    {
+      "id": "SYN-B09",
+      "type": "breakthrough",
+      "title": "Typed registry forest",
+      "summary": "Typed roots or type-indexed registry views for policies, proof images, adapters, cost models, and acceleration data help prevent cross-role substitution and make upgrade coupling explicit."
+    },
+    {
+      "id": "RISK-01",
+      "type": "risk",
+      "title": "Partial or signed fold definedness",
+      "summary": "A valid manifest can become valid or invalid according to parenthesization when the recursive carrier excludes identities or checks cancelling signed intermediates."
+    },
+    {
+      "id": "RISK-02",
+      "type": "risk",
+      "title": "Nullifier-only parallel safety",
+      "summary": "Distinct nullifiers and even disjoint writes do not prevent read-write skew, range phantoms, policy conflicts, or incompatible post-roots."
+    },
+    {
+      "id": "RISK-03",
+      "type": "risk",
+      "title": "Receipt or accumulator authority escalation",
+      "summary": "A valid conditional proof or running accumulator does not establish durable commit, finality, data availability, or accepted-journal authority."
+    },
+    {
+      "id": "RISK-04",
+      "type": "risk",
+      "title": "Program-identity linkability",
+      "summary": "Public uncommon logic identifiers, cost, size, timing, roots, and error classes can reveal supposedly private program choice."
+    },
+    {
+      "id": "RISK-05",
+      "type": "risk",
+      "title": "Proof malleability and release drift",
+      "summary": "Alternative proof encodings or flawed curve/linkage implementations can break replay accounting or soundness even when paper-level folding semantics look correct."
+    },
+    {
+      "id": "RISK-06",
+      "type": "risk",
+      "title": "Research evidence laundering",
+      "summary": "Mutable status, producer booleans, replay strings, signed provenance, or a successful Lean process can be mistaken for semantic proof."
+    },
+    {
+      "id": "RISK-07",
+      "type": "risk",
+      "title": "Research Kernel nonreplay",
+      "summary": "Incomplete events, DB/JSONL dual writes, nondeterminism, mutating reads, and incomplete exports make the current kernel an index rather than authoritative evidence."
+    },
+    {
+      "id": "RISK-08",
+      "type": "risk",
+      "title": "Cyclic history commitment",
+      "summary": "A journal committing a post-state that itself commits a history leaf derived from that journal forms a hash dependency cycle."
+    },
+    {
+      "id": "DEC-KEEP-01",
+      "type": "decision",
+      "title": "Keep semantic contracts backend-neutral",
+      "disposition": "keep_now"
+    },
+    {
+      "id": "DEC-KEEP-02",
+      "type": "decision",
+      "title": "Keep exact mutation and refinement oracles",
+      "disposition": "keep_now"
+    },
+    {
+      "id": "DEC-DEFER-01",
+      "type": "decision",
+      "title": "Defer selection of a folding backend",
+      "disposition": "defer"
+    },
+    {
+      "id": "DEC-DEFER-02",
+      "type": "decision",
+      "title": "Defer recursive proofs over the evidence graph",
+      "disposition": "defer"
+    },
+    {
+      "id": "DEC-REJECT-01",
+      "type": "decision",
+      "title": "Reject scheduler or proof receipts as commit authority",
+      "disposition": "reject"
+    },
+    {
+      "id": "DEC-REJECT-02",
+      "type": "decision",
+      "title": "Reject one undifferentiated accumulator operation and mutable scalar status",
+      "disposition": "reject"
+    }
+  ],
+  "edges": [
+    {"id": "KG-E001", "from": "SRC-PCD-ACCUMULATION", "to": "ZRM-H01", "relation": "supports_boundary", "rationale": "Accumulation separates running evidence from a final decision."},
+    {"id": "KG-E002", "from": "SRC-RISC0-COMPOSITION", "to": "ZRM-H01", "relation": "supports_boundary", "rationale": "Guest verification creates assumptions that require resolution."},
+    {"id": "KG-E003", "from": "ZRM-H01", "to": "SYN-B01", "relation": "synthesizes", "rationale": "The proof-neutral semantic contract is the two-plane architecture."},
+    {"id": "KG-E004", "from": "ZRM-H07", "to": "SYN-B01", "relation": "strengthens", "rationale": "Evidence type-state prevents conditional proof escalation."},
+    {"id": "KG-E005", "from": "ZRM-H04", "to": "SYN-B01", "relation": "strengthens", "rationale": "Separate semantic algebras narrow each proof relation."},
+
+    {"id": "KG-E006", "from": "RISK-01", "to": "ZRM-H02", "relation": "mitigated_by", "rationale": "Monotone limbs eliminate cancelling signed intermediate overflow."},
+    {"id": "KG-E007", "from": "ZRM-E16", "to": "ZRM-H02", "relation": "tests", "rationale": "Lean proves the counterexample and replacement properties."},
+    {"id": "KG-E008", "from": "ZRM-H02", "to": "SYN-B02", "relation": "synthesizes", "rationale": "Accounting receives a strongly associative carrier."},
+    {"id": "KG-E009", "from": "ZRM-H02", "to": "ZRM-H04", "relation": "specializes", "rationale": "Accounting is one typed effect algebra, not the journal algebra."},
+
+    {"id": "KG-E010", "from": "SRC-SUPERNOVA", "to": "ZRM-H03", "relation": "inspires", "rationale": "Non-uniform IVC motivates explicit typed routing and common state shape."},
+    {"id": "KG-E011", "from": "SRC-STATEFUL-AUTH", "to": "ZRM-H03", "relation": "supports_boundary", "rationale": "Authorization meaning depends on explicit state and time."},
+    {"id": "KG-E012", "from": "ZRM-E15", "to": "ZRM-H03", "relation": "tests", "rationale": "The bounded model accepts a typed bridge and rejects same-context-only composition."},
+    {"id": "KG-E013", "from": "ZRM-H03", "to": "SYN-B03", "relation": "synthesizes", "rationale": "Upgrades become explicit indexed arrows."},
+    {"id": "KG-E014", "from": "ZRM-H18", "to": "ZRM-H03", "relation": "depends_on", "rationale": "Private policy receipts need governed meaning across upgrades."},
+
+    {"id": "KG-E015", "from": "RISK-02", "to": "ZRM-H05", "relation": "mitigated_by", "rationale": "Preset-order refinement rejects write skew deterministically."},
+    {"id": "KG-E016", "from": "RISK-02", "to": "ZRM-H06", "relation": "mitigated_by", "rationale": "Sealed point and range observations expose hidden dependencies."},
+    {"id": "KG-E017", "from": "ZRM-H05", "to": "ZRM-H06", "relation": "depends_on", "rationale": "Serial refinement needs complete validation dependencies."},
+    {"id": "KG-E018", "from": "ZRM-E17", "to": "ZRM-H05", "relation": "tests", "rationale": "All explored schedules equal the sequential oracle."},
+    {"id": "KG-E019", "from": "ZRM-E17", "to": "ZRM-H06", "relation": "tests", "rationale": "All seeded point and range substitutions reject; complete decision roots also distinguish nullifier-guard and candidate-invariant dependencies omitted by program-only roots."},
+    {"id": "KG-E020", "from": "SRC-SERIALIZABLE-SI", "to": "RISK-02", "relation": "documents", "rationale": "Write skew is a standard snapshot-isolation anomaly."},
+    {"id": "KG-E021", "from": "SRC-AUTH-BTREE", "to": "ZRM-H06", "relation": "supports_mechanism", "rationale": "Authenticated range results need completeness material."},
+    {"id": "KG-E022", "from": "ZRM-H05", "to": "SYN-B04", "relation": "synthesizes", "rationale": "Scheduler work refines canonical semantics."},
+    {"id": "KG-E023", "from": "ZRM-H06", "to": "SYN-B04", "relation": "strengthens", "rationale": "Exact reads make conflict validation meaningful."},
+    {"id": "KG-E024", "from": "ZRM-H21", "to": "ZRM-H05", "relation": "optional_fast_path_under", "rationale": "I-confluence is profile-specific; canonical order remains default."},
+
+    {"id": "KG-E025", "from": "RISK-03", "to": "ZRM-H07", "relation": "mitigated_by", "rationale": "Only resolved and decided evidence crosses the fact boundary."},
+    {"id": "KG-E026", "from": "ZRM-H07", "to": "DEC-REJECT-01", "relation": "justifies", "rationale": "Proof and scheduler receipts cannot construct durable acceptance."},
+    {"id": "KG-E027", "from": "ZRM-H13", "to": "DEC-REJECT-01", "relation": "justifies", "rationale": "Accepted journals remain postcommit phase values."},
+
+    {"id": "KG-E028", "from": "RISK-04", "to": "ZRM-H08", "relation": "mitigated_by", "rationale": "The common envelope targets public program identity."},
+    {"id": "KG-E029", "from": "ZRM-H08", "to": "ZRM-H09", "relation": "depends_on", "rationale": "Hidden inner logic still needs typed governance and nonrevocation."},
+    {"id": "KG-E030", "from": "ZRM-H08", "to": "ZRM-H22", "relation": "depends_on", "rationale": "Privacy is stated only modulo an explicit leakage budget."},
+    {"id": "KG-E031", "from": "SRC-VERIZEXE", "to": "ZRM-H08", "relation": "supports_feasibility", "rationale": "A common outer proof can hide inner predicate proof material."},
+    {"id": "KG-E032", "from": "SRC-ARM-NETHERMIND-AUDIT", "to": "RISK-04", "relation": "documents", "rationale": "The audit records public uncommon program-identity linkability."},
+    {"id": "KG-E033", "from": "ZRM-H08", "to": "SYN-B05", "relation": "synthesizes", "rationale": "Private envelopes need explicit governance and leakage contracts."},
+    {"id": "KG-E034", "from": "ZRM-H09", "to": "SYN-B09", "relation": "synthesizes", "rationale": "Role separation is enforced in authenticated state."},
+    {"id": "KG-E035", "from": "ZRM-H23", "to": "ZRM-H09", "relation": "specializes", "rationale": "Acceleration data is one typed registry role."},
+
+    {"id": "KG-E036", "from": "RISK-05", "to": "ZRM-H10", "relation": "mitigated_by", "rationale": "Semantic replay identity is isolated from proof encoding and topology."},
+    {"id": "KG-E037", "from": "SRC-NOVA-REVISITED", "to": "RISK-05", "relation": "documents", "rationale": "Paper and implementation security can diverge; malleability and cycle linkage require review."},
+    {"id": "KG-E038", "from": "ZRM-H10", "to": "SYN-B06", "relation": "synthesizes", "rationale": "Economic and audit identities become distinct."},
+    {"id": "KG-E039", "from": "ZRM-H24", "to": "ZRM-H10", "relation": "depends_on", "rationale": "Adaptive proof topology must remain outside semantic identity."},
+
+    {"id": "KG-E040", "from": "RISK-06", "to": "ZRM-H14", "relation": "mitigated_by", "rationale": "Promotion consumes typed receipts rather than producer assertions."},
+    {"id": "KG-E041", "from": "RISK-06", "to": "ZRM-H15", "relation": "mitigated_by", "rationale": "Assurance dimensions remain independent."},
+    {"id": "KG-E042", "from": "ZRM-H14", "to": "ZRM-H16", "relation": "feeds", "rationale": "Eligible evidence receipts derive independent support and refutation bits."},
+    {"id": "KG-E043", "from": "ZRM-H15", "to": "ZRM-H16", "relation": "constrains", "rationale": "Per-claim policy selects required assurance coordinates."},
+    {"id": "KG-E044", "from": "ZRM-H17", "to": "ZRM-H14", "relation": "enables", "rationale": "Deterministic reconstructive state provides a stable checkpoint for promotion."},
+    {"id": "KG-E045", "from": "ZRM-H14", "to": "SYN-B07", "relation": "synthesizes", "rationale": "Promotion becomes proof-carrying and policy-derived."},
+    {"id": "KG-E046", "from": "ZRM-H16", "to": "SYN-B07", "relation": "strengthens", "rationale": "Contested and stale evidence remains explicit."},
+    {"id": "KG-E047", "from": "RISK-07", "to": "ZRM-H17", "relation": "mitigated_by", "rationale": "Transactional EventV2 and deterministic replay replace dual authority logs."},
+    {"id": "KG-E048", "from": "ZRM-E04", "to": "RISK-07", "relation": "observes", "rationale": "Three MCP runs exposed current event, graph, and promotion limits."},
+    {"id": "KG-E049", "from": "ZRM-H14", "to": "DEC-DEFER-02", "relation": "justifies", "rationale": "Deterministic receipt semantics must precede recursive proof compression."},
+
+    {"id": "KG-E050", "from": "RISK-08", "to": "ZRM-H12", "relation": "mitigated_by", "rationale": "Sibling roots remove the journal/post-state/history cycle."},
+    {"id": "KG-E051", "from": "ZRM-H12", "to": "SYN-B08", "relation": "synthesizes", "rationale": "State and history advance atomically but remain separate claims."},
+    {"id": "KG-E052", "from": "SRC-TAMPER-LOG", "to": "ZRM-H12", "relation": "supports_mechanism", "rationale": "Append-only history requires externally observed consistency to detect rollback and forks."},
+
+    {"id": "KG-E053", "from": "ZRM-H19", "to": "DEC-DEFER-01", "relation": "benchmarked_before", "rationale": "HyperNova and ProtoStar routing models should share one ContextV1 corpus before selection."},
+    {"id": "KG-E054", "from": "ZRM-H20", "to": "DEC-DEFER-01", "relation": "benchmarked_before", "rationale": "Parallel PCD and multi-folding follow correct binary semantics."},
+    {"id": "KG-E055", "from": "ZRM-H24", "to": "DEC-DEFER-01", "relation": "benchmarked_before", "rationale": "Arity and CycleFold remain implementation choices."},
+    {"id": "KG-E056", "from": "ZRM-H01", "to": "DEC-KEEP-01", "relation": "justifies", "rationale": "The semantic relation remains independent of proof selection."},
+    {"id": "KG-E057", "from": "ZRM-H04", "to": "DEC-KEEP-01", "relation": "justifies", "rationale": "Each relation receives its own exact typed algebra."},
+    {"id": "KG-E058", "from": "ZRM-E15", "to": "DEC-KEEP-02", "relation": "justifies", "rationale": "Bounded mutation models found concrete false-safe schedules."},
+    {"id": "KG-E059", "from": "ZRM-E17", "to": "DEC-KEEP-02", "relation": "justifies", "rationale": "Serial-refinement and footprint mutants provide deterministic regressions."},
+    {"id": "KG-E060", "from": "ZRM-E18", "to": "DEC-KEEP-02", "relation": "justifies", "rationale": "ESSO produces replayable semantic counterexamples for seeded disasters."},
+    {"id": "KG-E061", "from": "ZRM-H04", "to": "DEC-REJECT-02", "relation": "justifies", "rationale": "One undifferentiated operation cannot be assumed to preserve every algebra's laws."},
+    {"id": "KG-E062", "from": "ZRM-H15", "to": "DEC-REJECT-02", "relation": "justifies", "rationale": "One scalar cannot preserve independent assurance dimensions."}
+  ],
+  "clusters": [
+    {"id": "KG-C01", "title": "recursive semantics", "members": ["ZRM-H01", "ZRM-H02", "ZRM-H03", "ZRM-H04", "ZRM-H07", "ZRM-H10", "ZRM-H19", "ZRM-H20", "ZRM-H24"]},
+    {"id": "KG-C02", "title": "parallel authenticated state", "members": ["ZRM-H05", "ZRM-H06", "ZRM-H11", "ZRM-H12", "ZRM-H21"]},
+    {"id": "KG-C03", "title": "privacy and governance", "members": ["ZRM-H08", "ZRM-H09", "ZRM-H18", "ZRM-H22", "ZRM-H23"]},
+    {"id": "KG-C04", "title": "evidence and promotion", "members": ["ZRM-H14", "ZRM-H15", "ZRM-H16", "ZRM-H17"]},
+    {"id": "KG-C05", "title": "authority and durability", "members": ["ZRM-H01", "ZRM-H07", "ZRM-H12", "ZRM-H13"]}
+  ],
+  "ranked_frontier": ["ZRM-H01", "ZRM-H02", "ZRM-H03", "ZRM-H04", "ZRM-H05", "ZRM-H06", "ZRM-H07", "ZRM-H08", "ZRM-H09", "ZRM-H10"],
+  "non_claims": [
+    "Graph edges express research support, dependency, test, or decision rationale; they are not formal logical entailment.",
+    "Source and experiment nodes resolve through the pinned registries and retain their recorded limitations.",
+    "The graph is a deterministic curated projection because the current Research Kernel export is not replay-complete."
+  ]
+}

@@ -1,0 +1,179 @@
+{
+  "schema": "zrm/frontier-research-manifest/v1",
+  "base_revision": "a4d2868d92807947cbad5f0d7fd828b74ae1368c",
+  "digest_algorithm": "SHA-256",
+  "path_order": "UTF-8 bytewise lexicographic",
+  "manifest_self_excluded": true,
+  "file_count": 33,
+  "files": [
+    {
+      "path": "formal/lean/arm_zrm_frontier_v2/.gitignore",
+      "bytes": 7,
+      "sha256": "fde850d24186b6e99c8c0debd641fb3ab85198b109eb66f71a1fea02bd6ea1b3"
+    },
+    {
+      "path": "formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier.lean",
+      "bytes": 166,
+      "sha256": "1b8347f8abfb12dc212d0494a9666abb243a02ebcb91ef29c516f651426d5d77"
+    },
+    {
+      "path": "formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier/AccountingStrongAssociativity.lean",
+      "bytes": 5232,
+      "sha256": "ce060ffce99ce67d40d7a2f282870bec3db7c5edd41f5a7bb0e1165825d81311"
+    },
+    {
+      "path": "formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier/ExactCoverage.lean",
+      "bytes": 1495,
+      "sha256": "949688bf96a13a4e49cf6da840d3e477aa01da38db2595cbfed7aa89e3005f8e"
+    },
+    {
+      "path": "formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier/TotalCarrier.lean",
+      "bytes": 1236,
+      "sha256": "2f8b1596d879b357e16dc64d75017471c5187a38ab52c5cc88562be403bf127f"
+    },
+    {
+      "path": "formal/lean/arm_zrm_frontier_v2/ArmZrmFrontier/TranscriptSeparation.lean",
+      "bytes": 1752,
+      "sha256": "8db5b513d4cedd24d4dd926c472c1fd915039f60cfd3a375f34a17cd85ec6599"
+    },
+    {
+      "path": "formal/lean/arm_zrm_frontier_v2/README.md",
+      "bytes": 1457,
+      "sha256": "e8a3e879f741e5cab6f7d32b3a75c15e30fdb02f4d303efbaf9bcdb314b2f553"
+    },
+    {
+      "path": "formal/lean/arm_zrm_frontier_v2/lake-manifest.json",
+      "bytes": 151,
+      "sha256": "e8fa867c81db580d0c2eed7f41a3a854450dd992b70834af360e0a198bfb528f"
+    },
+    {
+      "path": "formal/lean/arm_zrm_frontier_v2/lakefile.toml",
+      "bytes": 121,
+      "sha256": "64faf033762546c940eae37e1de1b7287abe0945ae380965a2961ba43e176501"
+    },
+    {
+      "path": "formal/lean/arm_zrm_frontier_v2/lean-toolchain",
+      "bytes": 25,
+      "sha256": "2773c517aa90b66ea8a2c52bddddf84393157797f8341be0df45294fff7fd32e"
+    },
+    {
+      "path": "reference_models/deterministic_authenticated_batch_explorer.py",
+      "bytes": 11325,
+      "sha256": "e389d6badf361cf04aefff96dd281a37760f8511aefc8d5d5a39b51ecb3f30f1"
+    },
+    {
+      "path": "reference_models/deterministic_authenticated_batch_v1.py",
+      "bytes": 35490,
+      "sha256": "a9af6cc5a4be4ab018928651cc75f2a533d20a951745a30e25dde8e7b00084da"
+    },
+    {
+      "path": "reference_models/tests/test_deterministic_authenticated_batch_v1.py",
+      "bytes": 18096,
+      "sha256": "029061c8a609ecfe89ed0bdf494ce3082b4e2255edfe5af2cba87b3eda4714db"
+    },
+    {
+      "path": "reference_models/tests/test_zrm_composition_frontier_v2.py",
+      "bytes": 8325,
+      "sha256": "d6fa2d4c729d92a32871feaf47271ef5e88410e6c428badee1654bbed9f95f16"
+    },
+    {
+      "path": "reference_models/zrm_composition_frontier_v2.py",
+      "bytes": 13233,
+      "sha256": "00a360adeb1b0e2c675504b6fbf283d34d32b8c338cdf3266b78b2b798dcf922"
+    },
+    {
+      "path": "reference_models/zrm_composition_frontier_v2_explorer.py",
+      "bytes": 6866,
+      "sha256": "edeef40879bef303943ebc2c8aec60b0dd331d71c1e8d57fbaeb624ff9cc2c29"
+    },
+    {
+      "path": "research/zrm_frontier_v2/README.md",
+      "bytes": 3905,
+      "sha256": "ae481e60b788e79d47399607933ef8bf08fb1b0ab7b0ce5b67ba75a86ae50fed"
+    },
+    {
+      "path": "research/zrm_frontier_v2/breakthroughs.md",
+      "bytes": 16174,
+      "sha256": "77212ba36a43a1ace2ddb500e3bf439a566c8c98a82d5198063b63e65c1cbba6"
+    },
+    {
+      "path": "research/zrm_frontier_v2/esso_campaigns.json",
+      "bytes": 7842,
+      "sha256": "185b5ebc3245532a52401ae531142e8ee8723ccc736d53d0010f34902732b75e"
+    },
+    {
+      "path": "research/zrm_frontier_v2/evidence/composition-frontier-v2.json",
+      "bytes": 1830,
+      "sha256": "1a233a4060cfb4ac957d1b9f11e78fe4aadcc8b9f1ef9962f15780b137472ff2"
+    },
+    {
+      "path": "research/zrm_frontier_v2/evidence/deterministic-authenticated-batch-v1.json",
+      "bytes": 7288,
+      "sha256": "9aae7a19031b2fbfe530142bda1d8a532e8dc84d659eab98b90cf99344719771"
+    },
+    {
+      "path": "research/zrm_frontier_v2/evidence/esso-zrm-semantic-check-v2.json",
+      "bytes": 4533,
+      "sha256": "4a949ab563c0e599bd57f8a37f3db5ce9c013f43cd65b88a9e4a7dbbbfbb6a9a"
+    },
+    {
+      "path": "research/zrm_frontier_v2/evidence/lean-frontier-v2.json",
+      "bytes": 1042,
+      "sha256": "b2a7dfb6cc463b9d12816165b7d44b29b34398f73524592fb24a59b1ffc9809b"
+    },
+    {
+      "path": "research/zrm_frontier_v2/evidence/research-kernel-runs-v1.json",
+      "bytes": 2019,
+      "sha256": "9973512988067178f03e8257494cb403821dcf988d173b84f70028a233d5e981"
+    },
+    {
+      "path": "research/zrm_frontier_v2/experiments.json",
+      "bytes": 12350,
+      "sha256": "ad20550182a36122ddecf213bcc395c7bf7f9704c6c862c518fa36bdd47fa1a0"
+    },
+    {
+      "path": "research/zrm_frontier_v2/hypotheses.json",
+      "bytes": 25994,
+      "sha256": "e02b54a4d5d6e0699d8b51be6838d8601d0bba07430624ff7c2caa1ca9d1377f"
+    },
+    {
+      "path": "research/zrm_frontier_v2/knowledge_graph.json",
+      "bytes": 17978,
+      "sha256": "48487071309921467ad34ddce6c0bf6a86fdc3197fb4cad01c3366091592a76a"
+    },
+    {
+      "path": "research/zrm_frontier_v2/morph_reformulations.json",
+      "bytes": 7928,
+      "sha256": "dc7642a0a87840e6fee88651d3ddf62523476a8baacb0a4493735a2f4f9a21aa"
+    },
+    {
+      "path": "research/zrm_frontier_v2/pr_roadmap.md",
+      "bytes": 5150,
+      "sha256": "53da428a4f06dfb46dd6ce1a59cceeeaa479dfaa0e18c5eed8fe05fcee85dec5"
+    },
+    {
+      "path": "research/zrm_frontier_v2/research_kernel_report.md",
+      "bytes": 9205,
+      "sha256": "680153085e9e7a78a8da0693716ac88022eac95f8396786fa3991fac0935f90c"
+    },
+    {
+      "path": "research/zrm_frontier_v2/source_ledger.json",
+      "bytes": 16035,
+      "sha256": "15c1fb7dd82599d679c161ccc1757fcec28136344542d332308d3009fe14291f"
+    },
+    {
+      "path": "tools/check_zrm_frontier_research.py",
+      "bytes": 27425,
+      "sha256": "8586e0fcfd4d9bacaee1e5d998b3981738779c3d7fb7857965ae82db6a76b10b"
+    },
+    {
+      "path": "tools/tests/test_zrm_frontier_research.py",
+      "bytes": 6849,
+      "sha256": "c3fc61e3a2f47fb7a8d0ebe6ca749dc52562563140d24dd47e17eb137a557861"
+    }
+  ],
+  "non_claims": [
+    "The manifest authenticates packet bytes only; it does not promote research claims or protocol authority.",
+    "External source availability and mutable web content are outside this local digest set."
+  ]
+}
