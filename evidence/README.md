@@ -51,3 +51,17 @@ semantic approval after review and merge of PR #9. It accepts the positive v1
 quantity and lifecycle-maximum-one rules while retaining CBC-046 as partial and
 preserving every policy, verifier, state, commit, release, and production
 non-claim.
+
+`rfc0001-commit-path-exploration-v1.json` is non-authoritative bounded design
+evidence for draft RFC-0001. It records an exhaustive exploration of the public
+composed commit-path model in `reference_models/rfc0001_commit_path_v1.py`:
+
+- invariant results and observable quotients for the correct model;
+- for every named commit-path mutant, the shortest counterexample, re-checked by
+  replay;
+- the SHA-256 of the exact model and explorer sources.
+
+`python3 -m reference_models.rfc0001_commit_path_explorer --check` and the
+reference-model tests reproduce it byte for byte. It approves no RFC semantics and
+replays none of the internal semantic-closure evidence. See
+`reference_models/RFC0001_COMMIT_PATH_V1_ORACLE.md`.

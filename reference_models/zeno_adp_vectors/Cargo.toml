@@ -1,0 +1,14 @@
+[package]
+name = "zrm-zeno-adp-quotient-vectors"
+version = "0.1.0"
+edition = "2021"
+publish = false
+license = "MIT"
+
+# Development tool only. Writes the cross-check vectors for the Python quotient
+# port in reference_models/bounded_explorer.py. It is not a member of the ZRM
+# workspace, no ZRM crate depends on it, and CI does not build it.
+[dependencies]
+zeno-adp = "=0.8.0"
+
+[workspace]
