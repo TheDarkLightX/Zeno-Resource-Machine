@@ -1,0 +1,808 @@
+{
+  "bounds": {
+    "callers": 2,
+    "max_attempts": 3,
+    "max_policy_updates": 1,
+    "max_prepares": 2,
+    "max_states": 100000,
+    "transition_identities": 1
+  },
+  "correct": [
+    {
+      "instance": "duplicate",
+      "quotient": {
+        "classes": 613,
+        "fields_not_determined_by_class": [
+          "caller_A.plan",
+          "caller_A.inflight",
+          "caller_A.knows",
+          "caller_A.attempts",
+          "caller_A.prepares",
+          "caller_B.plan",
+          "caller_B.inflight",
+          "caller_B.knows",
+          "caller_B.attempts",
+          "caller_B.prepares"
+        ],
+        "probes": [
+          [
+            "prepare_A"
+          ],
+          [
+            "prepare_B"
+          ],
+          [
+            "policy_update"
+          ],
+          [
+            "resolve_A"
+          ],
+          [
+            "prepare_A",
+            "commit_A_ack_lost",
+            "prepare_A"
+          ],
+          [
+            "land_A"
+          ],
+          [
+            "resolve_B"
+          ],
+          [
+            "prepare_B",
+            "commit_B_ack_lost",
+            "prepare_B"
+          ],
+          [
+            "land_B"
+          ],
+          [
+            "land_A",
+            "prepare_A"
+          ],
+          [
+            "land_B",
+            "prepare_A"
+          ],
+          [
+            "commit_A"
+          ],
+          [
+            "land_B",
+            "commit_A"
+          ],
+          [
+            "commit_B"
+          ],
+          [
+            "land_A",
+            "commit_A"
+          ],
+          [
+            "land_A",
+            "resolve_A"
+          ],
+          [
+            "land_A",
+            "prepare_B"
+          ],
+          [
+            "land_A",
+            "commit_B"
+          ],
+          [
+            "land_B",
+            "resolve_A"
+          ],
+          [
+            "land_B",
+            "prepare_B"
+          ],
+          [
+            "read_replay"
+          ],
+          [
+            "land_B",
+            "commit_B"
+          ],
+          [
+            "land_B",
+            "resolve_B"
+          ],
+          [
+            "land_B",
+            "read_replay"
+          ],
+          [
+            "land_A",
+            "resolve_B"
+          ],
+          [
+            "land_A",
+            "read_replay"
+          ]
+        ]
+      },
+      "states": 2561,
+      "transitions": 12337,
+      "violations": []
+    },
+    {
+      "instance": "conflicting",
+      "quotient": {
+        "classes": 709,
+        "fields_not_determined_by_class": [
+          "caller_A.plan",
+          "caller_A.inflight",
+          "caller_A.knows",
+          "caller_A.attempts",
+          "caller_A.prepares",
+          "caller_B.plan",
+          "caller_B.inflight",
+          "caller_B.knows",
+          "caller_B.attempts",
+          "caller_B.prepares"
+        ],
+        "probes": [
+          [
+            "prepare_A"
+          ],
+          [
+            "prepare_B"
+          ],
+          [
+            "policy_update"
+          ],
+          [
+            "commit_A"
+          ],
+          [
+            "resolve_A"
+          ],
+          [
+            "prepare_A",
+            "commit_A_ack_lost",
+            "prepare_A"
+          ],
+          [
+            "land_A"
+          ],
+          [
+            "resolve_B"
+          ],
+          [
+            "prepare_B",
+            "commit_B_ack_lost",
+            "prepare_B"
+          ],
+          [
+            "land_B"
+          ],
+          [
+            "land_A",
+            "prepare_A"
+          ],
+          [
+            "land_B",
+            "prepare_B"
+          ],
+          [
+            "read_replay"
+          ],
+          [
+            "commit_B"
+          ],
+          [
+            "land_A",
+            "commit_A"
+          ],
+          [
+            "land_B",
+            "commit_B"
+          ],
+          [
+            "land_A",
+            "resolve_A"
+          ],
+          [
+            "land_B",
+            "resolve_B"
+          ],
+          [
+            "land_A",
+            "read_replay"
+          ],
+          [
+            "land_B",
+            "read_replay"
+          ]
+        ]
+      },
+      "states": 3444,
+      "transitions": 17167,
+      "violations": []
+    }
+  ],
+  "mutants": [
+    {
+      "instances": [
+        {
+          "instance": "duplicate",
+          "killed": true,
+          "states": 2324,
+          "violations": [
+            {
+              "invariant": "FreshCommitOnly",
+              "kind": "edge",
+              "length": 3,
+              "trace": [
+                "prepare_A",
+                "policy_update",
+                "commit_A"
+              ]
+            }
+          ]
+        },
+        {
+          "instance": "conflicting",
+          "killed": true,
+          "states": 3213,
+          "violations": [
+            {
+              "invariant": "FreshCommitOnly",
+              "kind": "edge",
+              "length": 3,
+              "trace": [
+                "prepare_A",
+                "policy_update",
+                "commit_A"
+              ]
+            }
+          ]
+        }
+      ],
+      "intent": "I-CONTEXT-SNAPSHOT-EXACT",
+      "killed_in": 2,
+      "mutant": "stale_plan_commits",
+      "of": 2,
+      "shortest": {
+        "invariant": "FreshCommitOnly",
+        "kind": "edge",
+        "length": 3,
+        "trace": [
+          "prepare_A",
+          "policy_update",
+          "commit_A"
+        ]
+      }
+    },
+    {
+      "instances": [
+        {
+          "instance": "duplicate",
+          "killed": true,
+          "states": 2561,
+          "violations": [
+            {
+              "invariant": "MachineRootAndStateVersionAdvanceTogether",
+              "kind": "state",
+              "length": 1,
+              "trace": [
+                "policy_update"
+              ]
+            }
+          ]
+        },
+        {
+          "instance": "conflicting",
+          "killed": true,
+          "states": 3444,
+          "violations": [
+            {
+              "invariant": "MachineRootAndStateVersionAdvanceTogether",
+              "kind": "state",
+              "length": 1,
+              "trace": [
+                "policy_update"
+              ]
+            }
+          ]
+        }
+      ],
+      "intent": "I-POLICY-UPDATE-CONTEXT",
+      "killed_in": 2,
+      "mutant": "policy_change_reuses_machine_root",
+      "of": 2,
+      "shortest": {
+        "invariant": "MachineRootAndStateVersionAdvanceTogether",
+        "kind": "state",
+        "length": 1,
+        "trace": [
+          "policy_update"
+        ]
+      }
+    },
+    {
+      "instances": [
+        {
+          "instance": "duplicate",
+          "killed": true,
+          "states": 19975,
+          "violations": [
+            {
+              "invariant": "ReplayClassificationLinearizable",
+              "kind": "edge",
+              "length": 6,
+              "trace": [
+                "prepare_A",
+                "lookup_A",
+                "prepare_B",
+                "lookup_B",
+                "commit_A",
+                "commit_B"
+              ]
+            }
+          ]
+        },
+        {
+          "instance": "conflicting",
+          "killed": true,
+          "states": 44154,
+          "violations": [
+            {
+              "invariant": "ReplayAndNullifierMoveTogether",
+              "kind": "state",
+              "length": 6,
+              "trace": [
+                "prepare_A",
+                "lookup_A",
+                "lookup_B",
+                "commit_A",
+                "prepare_B",
+                "commit_B"
+              ]
+            },
+            {
+              "invariant": "EffectCountMatchesReplay",
+              "kind": "state",
+              "length": 6,
+              "trace": [
+                "prepare_A",
+                "lookup_A",
+                "lookup_B",
+                "commit_A",
+                "prepare_B",
+                "commit_B"
+              ]
+            },
+            {
+              "invariant": "ConflictingPlansHaveAtMostOneNewCommit",
+              "kind": "state",
+              "length": 6,
+              "trace": [
+                "prepare_A",
+                "lookup_A",
+                "lookup_B",
+                "commit_A",
+                "prepare_B",
+                "commit_B"
+              ]
+            },
+            {
+              "invariant": "ReplayClassificationLinearizable",
+              "kind": "edge",
+              "length": 6,
+              "trace": [
+                "prepare_A",
+                "lookup_A",
+                "prepare_B",
+                "lookup_B",
+                "commit_A",
+                "commit_B"
+              ]
+            },
+            {
+              "invariant": "AlreadyCommittedRequiresExactRecord",
+              "kind": "edge",
+              "length": 10,
+              "trace": [
+                "prepare_A",
+                "lookup_A",
+                "commit_A_pending",
+                "prepare_A",
+                "lookup_B",
+                "land_A",
+                "lookup_A",
+                "prepare_B",
+                "commit_B",
+                "commit_A"
+              ]
+            }
+          ]
+        }
+      ],
+      "intent": "I-REPLAY-LINEARIZABLE",
+      "killed_in": 2,
+      "mutant": "replay_lookup_outside_commit_boundary",
+      "of": 2,
+      "shortest": {
+        "invariant": "ReplayAndNullifierMoveTogether",
+        "kind": "state",
+        "length": 6,
+        "trace": [
+          "prepare_A",
+          "lookup_A",
+          "lookup_B",
+          "commit_A",
+          "prepare_B",
+          "commit_B"
+        ]
+      }
+    },
+    {
+      "instances": [
+        {
+          "instance": "duplicate",
+          "killed": true,
+          "states": 3511,
+          "violations": [
+            {
+              "invariant": "EffectCountMatchesReplay",
+              "kind": "state",
+              "length": 4,
+              "trace": [
+                "prepare_A",
+                "prepare_B",
+                "commit_A",
+                "commit_B"
+              ]
+            },
+            {
+              "invariant": "ConflictingPlansHaveAtMostOneNewCommit",
+              "kind": "state",
+              "length": 4,
+              "trace": [
+                "prepare_A",
+                "prepare_B",
+                "commit_A",
+                "commit_B"
+              ]
+            },
+            {
+              "invariant": "FreshCommitOnly",
+              "kind": "edge",
+              "length": 4,
+              "trace": [
+                "prepare_A",
+                "prepare_B",
+                "commit_A",
+                "commit_B"
+              ]
+            },
+            {
+              "invariant": "ReplayClassificationLinearizable",
+              "kind": "edge",
+              "length": 4,
+              "trace": [
+                "prepare_A",
+                "prepare_B",
+                "commit_A",
+                "commit_B"
+              ]
+            }
+          ]
+        },
+        {
+          "instance": "conflicting",
+          "killed": true,
+          "states": 4092,
+          "violations": [
+            {
+              "invariant": "EffectCountMatchesReplay",
+              "kind": "state",
+              "length": 5,
+              "trace": [
+                "prepare_A",
+                "commit_A_pending",
+                "prepare_A",
+                "commit_A",
+                "land_A"
+              ]
+            },
+            {
+              "invariant": "ConflictingPlansHaveAtMostOneNewCommit",
+              "kind": "state",
+              "length": 5,
+              "trace": [
+                "prepare_A",
+                "commit_A_pending",
+                "prepare_A",
+                "commit_A",
+                "land_A"
+              ]
+            },
+            {
+              "invariant": "FreshCommitOnly",
+              "kind": "edge",
+              "length": 5,
+              "trace": [
+                "prepare_A",
+                "commit_A_pending",
+                "prepare_A",
+                "commit_A",
+                "land_A"
+              ]
+            },
+            {
+              "invariant": "ReplayClassificationLinearizable",
+              "kind": "edge",
+              "length": 5,
+              "trace": [
+                "prepare_A",
+                "commit_A_pending",
+                "prepare_A",
+                "commit_A",
+                "land_A"
+              ]
+            }
+          ]
+        }
+      ],
+      "intent": "I-EXACT-ONCE-COMPLETE",
+      "killed_in": 2,
+      "mutant": "retry_duplicates_effect",
+      "of": 2,
+      "shortest": {
+        "invariant": "EffectCountMatchesReplay",
+        "kind": "state",
+        "length": 4,
+        "trace": [
+          "prepare_A",
+          "prepare_B",
+          "commit_A",
+          "commit_B"
+        ]
+      }
+    },
+    {
+      "instances": [
+        {
+          "instance": "duplicate",
+          "killed": true,
+          "states": 1087,
+          "violations": [
+            {
+              "invariant": "RejectImpliesStateUnchanged",
+              "kind": "edge",
+              "length": 2,
+              "trace": [
+                "prepare_A",
+                "commit_A_ack_lost"
+              ]
+            }
+          ]
+        },
+        {
+          "instance": "conflicting",
+          "killed": true,
+          "states": 1495,
+          "violations": [
+            {
+              "invariant": "RejectImpliesStateUnchanged",
+              "kind": "edge",
+              "length": 2,
+              "trace": [
+                "prepare_A",
+                "commit_A_ack_lost"
+              ]
+            }
+          ]
+        }
+      ],
+      "intent": "I-OUTCOME-UNKNOWN",
+      "killed_in": 2,
+      "mutant": "unknown_reported_as_rejected",
+      "of": 2,
+      "shortest": {
+        "invariant": "RejectImpliesStateUnchanged",
+        "kind": "edge",
+        "length": 2,
+        "trace": [
+          "prepare_A",
+          "commit_A_ack_lost"
+        ]
+      }
+    },
+    {
+      "instances": [
+        {
+          "instance": "duplicate",
+          "killed": true,
+          "states": 2842,
+          "violations": [
+            {
+              "invariant": "EffectCountMatchesReplay",
+              "kind": "state",
+              "length": 3,
+              "trace": [
+                "prepare_A",
+                "commit_A_ack_lost",
+                "resolve_A"
+              ]
+            },
+            {
+              "invariant": "ExactRetryDoesNotChangeState",
+              "kind": "edge",
+              "length": 3,
+              "trace": [
+                "prepare_A",
+                "commit_A_ack_lost",
+                "resolve_A"
+              ]
+            },
+            {
+              "invariant": "RetryResolutionAppliesNoEffects",
+              "kind": "edge",
+              "length": 3,
+              "trace": [
+                "prepare_A",
+                "commit_A_ack_lost",
+                "resolve_A"
+              ]
+            }
+          ]
+        },
+        {
+          "instance": "conflicting",
+          "killed": true,
+          "states": 3600,
+          "violations": [
+            {
+              "invariant": "EffectCountMatchesReplay",
+              "kind": "state",
+              "length": 3,
+              "trace": [
+                "prepare_A",
+                "commit_A_ack_lost",
+                "resolve_A"
+              ]
+            },
+            {
+              "invariant": "ExactRetryDoesNotChangeState",
+              "kind": "edge",
+              "length": 3,
+              "trace": [
+                "prepare_A",
+                "commit_A_ack_lost",
+                "resolve_A"
+              ]
+            },
+            {
+              "invariant": "RetryResolutionAppliesNoEffects",
+              "kind": "edge",
+              "length": 3,
+              "trace": [
+                "prepare_A",
+                "commit_A_ack_lost",
+                "resolve_A"
+              ]
+            }
+          ]
+        }
+      ],
+      "intent": "I-OUTCOME-UNKNOWN",
+      "killed_in": 2,
+      "mutant": "resolution_reapplies_effect",
+      "of": 2,
+      "shortest": {
+        "invariant": "EffectCountMatchesReplay",
+        "kind": "state",
+        "length": 3,
+        "trace": [
+          "prepare_A",
+          "commit_A_ack_lost",
+          "resolve_A"
+        ]
+      }
+    },
+    {
+      "instances": [
+        {
+          "instance": "duplicate",
+          "killed": true,
+          "states": 4097,
+          "violations": [
+            {
+              "invariant": "ReplayAndNullifierMoveTogether",
+              "kind": "state",
+              "length": 2,
+              "trace": [
+                "prepare_A",
+                "commit_A_crash"
+              ]
+            },
+            {
+              "invariant": "EffectCountMatchesReplay",
+              "kind": "state",
+              "length": 2,
+              "trace": [
+                "prepare_A",
+                "commit_A_crash"
+              ]
+            },
+            {
+              "invariant": "CrashRecoveryIsPreOrPost",
+              "kind": "edge",
+              "length": 2,
+              "trace": [
+                "prepare_A",
+                "commit_A_crash"
+              ]
+            }
+          ]
+        },
+        {
+          "instance": "conflicting",
+          "killed": true,
+          "states": 5458,
+          "violations": [
+            {
+              "invariant": "ReplayAndNullifierMoveTogether",
+              "kind": "state",
+              "length": 2,
+              "trace": [
+                "prepare_A",
+                "commit_A_crash"
+              ]
+            },
+            {
+              "invariant": "EffectCountMatchesReplay",
+              "kind": "state",
+              "length": 2,
+              "trace": [
+                "prepare_A",
+                "commit_A_crash"
+              ]
+            },
+            {
+              "invariant": "CrashRecoveryIsPreOrPost",
+              "kind": "edge",
+              "length": 2,
+              "trace": [
+                "prepare_A",
+                "commit_A_crash"
+              ]
+            }
+          ]
+        }
+      ],
+      "intent": "I-COMMIT-ATOMIC-DURABLE",
+      "killed_in": 2,
+      "mutant": "partial_durable_commit",
+      "of": 2,
+      "shortest": {
+        "invariant": "ReplayAndNullifierMoveTogether",
+        "kind": "state",
+        "length": 2,
+        "trace": [
+          "prepare_A",
+          "commit_A_crash"
+        ]
+      }
+    }
+  ],
+  "non_claims": [
+    "bounded enumeration of two callers, one transition identity and one policy update is not an unbounded proof",
+    "this is an independent public reading of draft RFC-0001; it is not the internal models and replays none of their evidence",
+    "the model approves no RFC semantics and creates no protocol bytes, authority capability or implementation",
+    "roots, hashes and contents are abstract labels; collision resistance is assumed",
+    "storage engines, real concurrency, crash recovery code and external delivery are outside the model",
+    "the quotient is minimal only for the declared actions and outcomes of this model"
+  ],
+  "schema": "zrm/rfc0001-commit-path-exploration/v1",
+  "sources": {
+    "reference_models/bounded_explorer.py": "13eee0486142162c671b8169b27b66732001c2a6cfb4008fd7a0e0fa55150815",
+    "reference_models/rfc0001_commit_path_v1.py": "aa5d95b6f7138e0cda91d0a90e369f497c1028782c6bd139a4333665f12e8475"
+  },
+  "status": "non-authoritative bounded design evidence for draft RFC-0001"
+}
