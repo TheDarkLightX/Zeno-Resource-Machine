@@ -3,7 +3,7 @@
     python3 reference_models/zeno_adp_vectors/regenerate.py [--check]
 
 Runs this directory's Rust program twice: once for its 120 seeded random tables,
-and once on the transition tables of the four correct RFC-0001 commit-path
+and once on the transition tables of the two correct RFC-0001 commit-path
 instances, which are sent on stdin and recorded only by SHA-256.  The program
 depends on ``zeno-adp = "=0.8.0"`` from crates.io and needs network access to
 fetch it.  If the repository's pinned toolchain is unavailable, set
@@ -33,9 +33,9 @@ def model_lines() -> list[tuple[str, str, int]]:
     """Instance label, table line and state count for each correct instance."""
 
     out = []
-    for second, reading in instances():
-        exploration = explore_instance(second, reading)
-        out.append((instance_name(second, reading), table_line(exploration.next, exploration.codes),
+    for second in instances():
+        exploration = explore_instance(second)
+        out.append((instance_name(second), table_line(exploration.next, exploration.codes),
                     len(exploration.states)))
     return out
 

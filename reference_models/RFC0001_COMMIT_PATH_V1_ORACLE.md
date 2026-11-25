@@ -53,19 +53,22 @@ Classification follows the section-11 precedence: an exact match is `AlreadyComm
 different record is `TransitionReplayConflict`, a mismatched tuple is stale, and otherwise
 the bundle is written.
 
-The environment then picks one of four results for the attempt:
+The environment then picks one of five results for the attempt:
 
 | Action suffix | Meaning | Caller receives |
 | --- | --- | --- |
 | none | delivered | the classification |
 | `_ack_lost` | durable, then acknowledgement lost | `OutcomeUnknown` |
-| `_crash` | crash before the durability point | `OutcomeUnknown` |
+| `_crash` | crash before the durability point; the transaction never executes | `OutcomeUnknown` |
 | `_abort` | storage proves no write; only when the attempt would write | `RejectedConfirmedNoWrite` |
+| `_pending` | the transaction is still in flight; `land_*` executes it later against the state at that moment, or it never executes | `OutcomeUnknown` |
 
 The other actions:
 
 - `prepare_*` runs semantic validation. A plan whose input is already nullified is
   `invalid`. Otherwise the plan records the current tuple.
+- `land_*` executes a caller's in-flight transaction inside the boundary, with the
+  section-10 classification at that moment.
 - `resolve_*` is `resolve_retry`. It returns `AlreadyCommitted`, `TransitionReplayConflict`
   or `NotFoundAtObservedSnapshot`, and it writes nothing.
 - `read_replay` is a read-only snapshot of the replay record, as a descriptor holder could
@@ -76,28 +79,36 @@ The other actions:
 - two callers;
 - one transition identity;
 - three commit attempts and two preparations per caller;
+- one in-flight transaction per caller;
 - one policy update.
 
 These bounds are model bounds, not protocol limits. Counts are abstract integers, and
 collision resistance of roots and hashes is assumed.
 
-## An open point in the draft
+## Plan ownership
 
-Section 8 makes `CommitPlanV1` non-cloneable. Section 10.1 speaks of "a caller that no
-longer owns the consumed `CommitPlan`". The text does not fix whether a caller still holds
-its plan after `OutcomeUnknown`. The model explores both readings:
+Every attempt consumes its plan, whatever the result. The RFC's typed interface takes the
+plan by value, `commit(runtime, plan: CommitPlan, admission)`, and neither failure variant
+returns it. The RFC also rejects "serialize or clone the commit plan for retry" because it
+"would widen commit authority". A plan is a one-shot capability, valid only for one exact
+snapshot.
 
-- **`consumed`:** every attempt consumes the plan. A retry must prepare a new plan, and
-  semantic validation then rejects it once the first attempt's input is nullified. A lone
-  retry after a lost acknowledgement therefore never reaches the exact-match branch of step 4.
-  It must use `resolve_retry`. The exact-match branch is reached only by a second caller who
-  prepared identical contents at the same snapshot.
-- **`retained`:** the caller keeps the plan after `OutcomeUnknown` and may attempt it again.
-  Step 4 then returns `AlreadyCommitted` to the lone retry.
+A caller retries by preparing a new plan, which repeats semantic validation against current
+state. This has two consequences:
 
-The correct model satisfies every invariant under both readings. The readings differ in
-which mutants are observable (see `retry_duplicates_effect` below). A maintainer decision on
-which reading is intended would let the next model drop the other.
+- **A retry after a durable write fails validation.** If the first attempt's write is
+  already durable, the retry's input is nullified and preparation rejects it. The caller
+  learns the outcome from `resolve_retry`.
+- **Step 4 is still reached.** The exact-match branch of step 4 is reached in two ways:
+  - a second caller prepared identical contents at the same snapshot;
+  - the first transaction lands after the caller was told `OutcomeUnknown` and has prepared
+    again. This is the realistic lost-acknowledgement race, and `_pending` with `land_*`
+    models it.
+
+An earlier revision of this model also explored a reading in which the caller keeps its
+plan after `OutcomeUnknown`. The interface above rules that reading out, so it was removed.
+Without `_pending`, that revision also missed `retry_duplicates_effect` with a single
+conflicting caller. Adding the delayed-durability choice closes that gap.
 
 ## Invariants
 
@@ -131,15 +142,15 @@ Edge invariants hold on every enabled transition:
 
 | Instance | States | Transitions | Violations | Observable classes | Probes |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| duplicate / consumed | 620 | 2,354 | 0 | 184 | 10 |
-| duplicate / retained | 4,246 | 20,634 | 0 | 564 | 18 |
-| conflicting / consumed | 698 | 2,781 | 0 | 214 | 10 |
-| conflicting / retained | 5,141 | 25,591 | 0 | 644 | 18 |
+| duplicate | 2,561 | 12,337 | 0 | 613 | 26 |
+| conflicting | 3,444 | 17,167 | 0 | 709 | 20 |
 
 - **Observable classes.** Reachable states that give the same outcome to every future action
   sequence are merged, so this is the least number of states any implementation with the
-  same observable behavior must distinguish. Every class is told apart from every other by
-  one of the listed probe words, each of three or four actions at most.
+  same observable behavior must distinguish. Outcomes include the environment's actions:
+  `land_*` is observable as enabled or disabled.
+- **Probes.** Every class is told apart from every other by one of the listed probe words,
+  each of at most three actions.
 - **Durable fields.** Every durable field is determined by its class. Only caller
   bookkeeping after a terminal result is invisible.
 - **Model bounds.** Some probes separate states only by the remaining attempt budget. That
@@ -148,17 +159,18 @@ Edge invariants hold on every enabled transition:
 ### Mutants
 
 Mutant names and intent IDs are those of `intent_map.json`. Each shortest trace is
-re-executed by `replay`, which uses no exploration data.
+re-executed by `replay`, which uses no exploration data. Every mutant is killed in both
+instances.
 
-| Mutant | Intent | Killed in | Shortest trace |
-| --- | --- | --- | --- |
-| `stale_plan_commits` | I-CONTEXT-SNAPSHOT-EXACT | 4 of 4 | `prepare_A, policy_update, commit_A` violates `FreshCommitOnly` |
-| `policy_change_reuses_machine_root` | I-POLICY-UPDATE-CONTEXT | 4 of 4 | `policy_update` violates `MachineRootAndStateVersionAdvanceTogether` |
-| `replay_lookup_outside_commit_boundary` | I-REPLAY-LINEARIZABLE | 4 of 4 | see below |
-| `retry_duplicates_effect` | I-EXACT-ONCE-COMPLETE | 3 of 4 | `prepare_A, commit_A_ack_lost, commit_A` (retained) violates `EffectCountMatchesReplay` |
-| `unknown_reported_as_rejected` | I-OUTCOME-UNKNOWN | 4 of 4 | `prepare_A, commit_A_ack_lost` violates `RejectImpliesStateUnchanged` |
-| `resolution_reapplies_effect` | I-OUTCOME-UNKNOWN | 4 of 4 | `prepare_A, commit_A_ack_lost, resolve_A` violates `RetryResolutionAppliesNoEffects` |
-| `partial_durable_commit` | I-COMMIT-ATOMIC-DURABLE | 4 of 4 | `prepare_A, commit_A_crash` violates `CrashRecoveryIsPreOrPost` |
+| Mutant | Intent | Shortest trace and first violated invariant |
+| --- | --- | --- |
+| `stale_plan_commits` | I-CONTEXT-SNAPSHOT-EXACT | `prepare_A, policy_update, commit_A`: `FreshCommitOnly` |
+| `policy_change_reuses_machine_root` | I-POLICY-UPDATE-CONTEXT | `policy_update`: `MachineRootAndStateVersionAdvanceTogether` |
+| `replay_lookup_outside_commit_boundary` | I-REPLAY-LINEARIZABLE | see below |
+| `retry_duplicates_effect` | I-EXACT-ONCE-COMPLETE | see below |
+| `unknown_reported_as_rejected` | I-OUTCOME-UNKNOWN | `prepare_A, commit_A_ack_lost`: `RejectImpliesStateUnchanged` |
+| `resolution_reapplies_effect` | I-OUTCOME-UNKNOWN | `prepare_A, commit_A_ack_lost, resolve_A`: `RetryResolutionAppliesNoEffects` |
+| `partial_durable_commit` | I-COMMIT-ATOMIC-DURABLE | `prepare_A, commit_A_crash`: `CrashRecoveryIsPreOrPost` |
 
 **`replay_lookup_outside_commit_boundary`.** With a conflicting second caller, the
 shortest schedule is the review packet's "two commits":
@@ -172,17 +184,26 @@ time under `T`. With a duplicate second caller, B cannot prepare after A nullifi
 input. Its attempt is instead misclassified as stale, which section 10 forbids. That
 violates `ReplayClassificationLinearizable` in six actions.
 
-**`retry_duplicates_effect`.** The mutant survives the conflicting / consumed instance. Under
-the consumed reading only a duplicate plan prepared at the same snapshot reaches the
-exact-match branch, and that instance has none. The survivor is an expected consequence of
-the open point above, not a gap in the invariants.
+**`retry_duplicates_effect`.** A duplicate second caller kills it in four actions:
+
+```text
+prepare_A, prepare_B, commit_A, commit_B
+```
+
+A single conflicting caller kills it in five, through the lost-acknowledgement race:
+
+```text
+prepare_A, commit_A_pending, prepare_A, commit_A, land_A
+```
+
+The retry commits, then the original transaction lands on the exact record and re-executes.
 
 ## Cross-check of the quotient
 
 `bounded_explorer.quotient` is a standard-library port of `state_discovery::RawModel::quotient`
 from [Zeno-ADP](https://github.com/TheDarkLightX/Zeno-ADP) 0.8.0. The Rust program in
 [`zeno_adp_vectors`](zeno_adp_vectors) asks Zeno-ADP for the answers on 120 seeded random
-tables and on the four correct model tables, which it records by SHA-256.
+tables and on the two correct model tables, which it records by SHA-256.
 `test_bounded_explorer.py` requires the port to match every class, class table and probe
 word. See that directory's README for how to regenerate the vectors.
 

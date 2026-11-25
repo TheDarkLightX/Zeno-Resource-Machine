@@ -13,16 +13,20 @@ submits conflicting contents ``b``, which consume ``r2``, under the same ``T``.
 Each commit attempt runs the logical algorithm of RFC-0001 section 10 as one
 atomic step in a linearizable boundary.  The environment then chooses whether
 the caller receives the result, loses the acknowledgement after durability,
-crashes before durability, or sees a confirmed abort with no write.
+crashes before durability, or sees a confirmed abort with no write.  It may
+also return ``OutcomeUnknown`` while the transaction is still in flight; the
+transaction then executes later, at ``land_*``, against the state at that
+moment, or never.
 ``resolve_*`` is the read-only retry resolution of section 10.1.  One policy
 update advances the commit freshness tuple as section 4 of the obligations
 requires.  ``read_replay`` is a read-only snapshot lookup of the replay record,
 the observation a retry-descriptor holder can make; it changes nothing and lets
 the quotient see durable state after both callers finish.
 
-The RFC leaves one point open that changes what is reachable: whether a caller
-still holds its plan after ``OutcomeUnknown``.  ``PlanReading`` models both
-readings.
+Every attempt consumes its plan.  RFC-0001 takes the plan by value in
+``commit(runtime, plan: CommitPlan, admission)``, neither failure variant
+returns it, and the RFC rejects serializing or cloning a plan for retry.  A
+caller retries by preparing a new plan, which repeats semantic validation.
 
 Each named mutant reproduces one counterexample obligation from RFC-0001's
 assurance plan and the review packet.  Mutant names match
@@ -60,10 +64,11 @@ OUTCOMES = (
     "replay_absent",
     "replay_a",
     "replay_b",
+    "landed",
 )
 TERMINAL = frozenset({"newly_committed", "already_committed", "conflict", "invalid"})
 REJECTIONS = frozenset({"stale", "conflict", "rejected_no_write", "invalid"})
-ENVIRONMENTS = ("", "_ack_lost", "_crash", "_abort")
+ENVIRONMENTS = ("", "_ack_lost", "_crash", "_abort", "_pending")
 ALPHABET = tuple(
     action
     for caller in CALLERS
@@ -71,6 +76,7 @@ ALPHABET = tuple(
         f"prepare_{caller}",
         f"lookup_{caller}",
         *(f"commit_{caller}{env}" for env in ENVIRONMENTS),
+        f"land_{caller}",
         f"resolve_{caller}",
     )
 ) + ("policy_update", "read_replay")
@@ -81,18 +87,6 @@ class Second(str, Enum):
 
     DUPLICATE = "duplicate"
     CONFLICTING = "conflicting"
-
-
-class PlanReading(str, Enum):
-    """Whether a caller keeps its plan after ``OutcomeUnknown``.
-
-    ``CONSUMED``: every attempt consumes the plan, so a retry must prepare a new
-    plan and pass semantic validation again.  ``RETAINED``: after
-    ``OutcomeUnknown`` the caller still holds the plan and may attempt it again.
-    """
-
-    CONSUMED = "consumed"
-    RETAINED = "retained"
 
 
 class Mutant(str, Enum):
@@ -113,7 +107,6 @@ class Config:
     """One model instance and its bounds."""
 
     second: Second
-    plan_reading: PlanReading
     mutant: Mutant = Mutant.NONE
     max_attempts: int = 3
     max_prepares: int = 2
@@ -155,11 +148,14 @@ class Durable:
 class Caller:
     """One caller: its plan's expected tuple, its knowledge and its budgets.
 
-    ``seen`` exists only for the out-of-boundary lookup mutant.
+    ``seen`` exists only for the out-of-boundary lookup mutant.  ``inflight``
+    holds the consumed plan (and ``seen``) of an attempt that returned
+    ``OutcomeUnknown`` before its transaction executed.
     """
 
     plan: tuple[int, int, int] | None = None
     seen: str | None = None
+    inflight: tuple[tuple[int, int, int], str | None] | None = None
     knows: str | None = None
     attempts: int = 0
     prepares: int = 0
@@ -195,22 +191,23 @@ def _partial_write(durable: Durable, contents: str) -> Durable:
     return replace(durable, nullifiers=durable.nullifiers | {INPUT_OF[contents]}, effects=durable.effects + 1)
 
 
-def classify(config: Config, state: State, index: int) -> str:
-    """In-boundary classification for one attempt (RFC-0001 section 10, steps 3 to 6).
+def classify(config: Config, state: State, index: int, plan: tuple[int, int, int], seen: str | None) -> str:
+    """In-boundary classification of one transaction (RFC-0001 section 10, steps 3 to 6).
 
-    Returns ``write``, ``rewrite`` (mutant re-execution of an exact match),
-    ``already``, ``conflict`` or ``stale``.
+    ``plan`` is the attempt's expected tuple and ``seen`` its out-of-boundary
+    observation (mutant only).  Returns ``write``, ``rewrite`` (mutant
+    re-execution of an exact match), ``already``, ``conflict`` or ``stale``.
     """
 
-    caller, contents = state.callers[index], config.contents(CALLERS[index])
+    contents = config.contents(CALLERS[index])
     observed = state.durable.record
     if config.mutant is Mutant.REPLAY_LOOKUP_OUTSIDE_COMMIT_BOUNDARY:
-        observed = None if caller.seen == "absent" else caller.seen
+        observed = None if seen == "absent" else seen
     if observed == contents:
         return "rewrite" if config.mutant is Mutant.RETRY_DUPLICATES_EFFECT else "already"
     if observed is not None:
         return "conflict"
-    if caller.plan != state.durable.freshness() and config.mutant is not Mutant.STALE_PLAN_COMMITS:
+    if plan != state.durable.freshness() and config.mutant is not Mutant.STALE_PLAN_COMMITS:
         return "stale"
     return "write"
 
@@ -262,7 +259,7 @@ def _attempt_result(config: Config, durable: Durable, cls: str, env: str, conten
         return (write(durable, contents) if writes else durable), DELIVERED.get(cls, cls)
     if env == "_abort":
         return durable, "rejected_no_write"
-    unknown = "rejected_no_write" if config.mutant is Mutant.UNKNOWN_REPORTED_AS_REJECTED else "unknown"
+    unknown = _unknown(config)
     if env == "_ack_lost":
         return (write(durable, contents) if writes else durable), unknown
     if writes and config.mutant is Mutant.PARTIAL_DURABLE_COMMIT:
@@ -270,17 +267,36 @@ def _attempt_result(config: Config, durable: Durable, cls: str, env: str, conten
     return durable, unknown
 
 
+def _unknown(config: Config) -> str:
+    return "rejected_no_write" if config.mutant is Mutant.UNKNOWN_REPORTED_AS_REJECTED else "unknown"
+
+
 def _commit(config: Config, state: State, index: int, env: str) -> tuple[State, str] | None:
     caller = state.callers[index]
-    if not _commit_enabled(config, caller):
+    if not _commit_enabled(config, caller) or (env == "_pending" and caller.inflight is not None):
         return None
-    cls = classify(config, state, index)
+    consumed = replace(caller, plan=None, seen=None, attempts=caller.attempts + 1)
+    if env == "_pending":
+        outcome = _unknown(config)
+        inflight = (caller.plan, caller.seen)
+        return _with_caller(state, index, replace(consumed, knows=outcome, inflight=inflight)), outcome
+    cls = classify(config, state, index, caller.plan, caller.seen)  # type: ignore[arg-type]
     if env == "_abort" and cls not in ("write", "rewrite"):
         return None
     durable, outcome = _attempt_result(config, state.durable, cls, env, config.contents(CALLERS[index]))
-    keep = config.plan_reading is PlanReading.RETAINED and outcome == "unknown"
-    after = replace(caller, plan=caller.plan if keep else None, seen=None, knows=outcome, attempts=caller.attempts + 1)
-    return _with_caller(state, index, after, durable), outcome
+    return _with_caller(state, index, replace(consumed, knows=outcome), durable), outcome
+
+
+def _land(config: Config, state: State, index: int) -> tuple[State, str] | None:
+    """The in-flight transaction of a caller executes now, inside the boundary."""
+
+    caller = state.callers[index]
+    if caller.inflight is None:
+        return None
+    plan, seen = caller.inflight
+    cls = classify(config, state, index, plan, seen)
+    durable = write(state.durable, config.contents(CALLERS[index])) if cls in ("write", "rewrite") else state.durable
+    return _with_caller(state, index, replace(caller, inflight=None), durable), "landed"
 
 
 def _resolve(config: Config, state: State, index: int) -> tuple[State, str] | None:
@@ -292,8 +308,7 @@ def _resolve(config: Config, state: State, index: int) -> tuple[State, str] | No
     durable = state.durable
     if outcome == "already_committed" and config.mutant is Mutant.RESOLUTION_REAPPLIES_EFFECT:
         durable = replace(durable, effects=durable.effects + 1)
-    plan = caller.plan if outcome == "not_found" else None
-    return _with_caller(state, index, replace(caller, plan=plan, knows=outcome), durable), outcome
+    return _with_caller(state, index, replace(caller, knows=outcome), durable), outcome
 
 
 def _policy_update(config: Config, state: State) -> tuple[State, str] | None:
@@ -328,6 +343,8 @@ def step(config: Config, state: State, action: str) -> tuple[State, str] | None:
         return _lookup(config, state, index)
     if verb == "resolve":
         return _resolve(config, state, index)
+    if verb == "land":
+        return _land(config, state, index)
     return _commit(config, state, index, f"_{env}" if env else "")
 
 
@@ -336,8 +353,17 @@ def _actor(action: str) -> int | None:
     return CALLERS.index(parts[1]) if len(parts) > 1 and parts[1] in CALLERS else None
 
 
-def _is_commit(action: str) -> bool:
-    return action.startswith("commit_")
+def _is_attempt(action: str) -> bool:
+    """An action that runs a commit transaction inside the boundary."""
+
+    return action.startswith(("commit_", "land_"))
+
+
+def _attempt_plan(source: State, action: str) -> tuple[int, int, int] | None:
+    caller = source.callers[_actor(action)]  # type: ignore[index]
+    if action.startswith("land_"):
+        return caller.inflight[0]  # type: ignore[index]
+    return caller.plan
 
 
 def state_invariants() -> tuple[tuple[str, object], ...]:
@@ -373,12 +399,12 @@ def edge_invariants(config: Config) -> tuple[tuple[str, object], ...]:
         return config.contents(CALLERS[_actor(action)])  # type: ignore[index]
 
     def fresh_only(source: State, action: str, outcome: str, target: State) -> bool:
-        if not (_is_commit(action) and wrote(source, target)):
+        if not (_is_attempt(action) and wrote(source, target)):
             return True
-        return source.callers[_actor(action)].plan == source.durable.freshness()  # type: ignore[index]
+        return _attempt_plan(source, action) == source.durable.freshness()
 
     def linearizable(source: State, action: str, outcome: str, target: State) -> bool:
-        if not _is_commit(action) or source.durable.record is None:
+        if not _is_attempt(action) or source.durable.record is None:
             return True
         return outcome != "stale" and not wrote(source, target)
 
@@ -408,7 +434,7 @@ def edge_invariants(config: Config) -> tuple[tuple[str, object], ...]:
 def model(config: Config) -> Model[State]:
     """The explorer model for one configuration."""
 
-    name = f"rfc0001_commit_path_v1/{config.second.value}/{config.plan_reading.value}/{config.mutant.value}"
+    name = f"rfc0001_commit_path_v1/{config.second.value}/{config.mutant.value}"
     return Model(
         name=name,
         alphabet=ALPHABET,

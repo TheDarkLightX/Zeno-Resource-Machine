@@ -69,11 +69,11 @@ class QuotientMatchesZenoAdp(unittest.TestCase):
 
     def test_port_matches_every_model_vector(self) -> None:
         expected = {entry["instance"]: entry for entry in VECTORS["models"]}
-        self.assertEqual(len(expected), 4)
-        for second, reading in instances():
-            name = instance_name(second, reading)
+        self.assertEqual(len(expected), 2)
+        for second in instances():
+            name = instance_name(second)
             with self.subTest(instance=name):
-                exploration = explore_instance(second, reading)
+                exploration = explore_instance(second)
                 line = table_line(exploration.next, exploration.codes)
                 self.assertEqual(hashlib.sha256(line.encode("ascii")).hexdigest(), expected[name]["table_sha256"])
                 self.assertEqual(as_json(quotient(exploration.next, exploration.codes)), expected[name]["quotient"])

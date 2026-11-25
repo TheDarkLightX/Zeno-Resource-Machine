@@ -8,7 +8,7 @@ library. This directory holds the Rust program that asks Zeno-ADP itself for the
 The vectors in `vectors_0_8_0.json` cover:
 
 - 120 seeded random tables, with merges, unreachable states and several probes;
-- the four correct RFC-0001 commit-path instances. Their tables are recorded by SHA-256,
+- the two correct RFC-0001 commit-path instances. Their tables are recorded by SHA-256,
   and the test recomputes them from the model.
 
 ```sh

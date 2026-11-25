@@ -2,8 +2,8 @@
 
     python3 -m reference_models.rfc0001_commit_path_explorer [--pretty] [--check]
 
-Explores the correct model and every named mutant in four instances: a
-duplicate or a conflicting second caller, each under both plan readings.  For
+Explores the correct model and every named mutant in two instances: a
+duplicate or a conflicting second caller.  For
 the correct model it reports the coarsest observable quotient.  For each mutant
 it reports which invariants fail and the shortest trace for each, re-checked by
 replay.  ``--check`` compares the output with the committed evidence record.
@@ -17,13 +17,13 @@ import json
 from pathlib import Path
 
 from reference_models.bounded_explorer import Exploration, explore, quotient, replay, undetermined_fields
-from reference_models.rfc0001_commit_path_v1 import Config, Mutant, PlanReading, Second, State, fields, model
+from reference_models.rfc0001_commit_path_v1 import Config, Mutant, Second, State, fields, model
 
 
 ROOT = Path(__file__).resolve().parents[1]
 EVIDENCE = ROOT / "evidence" / "rfc0001-commit-path-exploration-v1.json"
 SOURCES = ("reference_models/bounded_explorer.py", "reference_models/rfc0001_commit_path_v1.py")
-MAX_STATES = 50_000
+MAX_STATES = 100_000
 INTENT = {
     Mutant.STALE_PLAN_COMMITS: "I-CONTEXT-SNAPSHOT-EXACT",
     Mutant.POLICY_CHANGE_REUSES_MACHINE_ROOT: "I-POLICY-UPDATE-CONTEXT",
@@ -44,22 +44,22 @@ NON_CLAIMS = (
 )
 
 
-def instances() -> tuple[tuple[Second, PlanReading], ...]:
-    """The four model instances, in report order."""
+def instances() -> tuple[Second, ...]:
+    """The model instances, in report order."""
 
-    return tuple((second, reading) for second in Second for reading in PlanReading)
+    return tuple(Second)
 
 
-def instance_name(second: Second, reading: PlanReading) -> str:
+def instance_name(second: Second) -> str:
     """Stable instance label."""
 
-    return f"{second.value}/{reading.value}"
+    return second.value
 
 
-def explore_instance(second: Second, reading: PlanReading, mutant: Mutant = Mutant.NONE) -> Exploration[State]:
+def explore_instance(second: Second, mutant: Mutant = Mutant.NONE) -> Exploration[State]:
     """Explore one instance; fails closed above ``MAX_STATES``."""
 
-    return explore(model(Config(second, reading, mutant)), MAX_STATES)
+    return explore(model(Config(second, mutant)), MAX_STATES)
 
 
 def _violations(exploration: Exploration[State]) -> list[dict[str, object]]:
@@ -72,13 +72,13 @@ def _violations(exploration: Exploration[State]) -> list[dict[str, object]]:
     return out
 
 
-def correct_report(second: Second, reading: PlanReading) -> dict[str, object]:
+def correct_report(second: Second) -> dict[str, object]:
     """Reachable size, invariant result and coarsest quotient of the correct model."""
 
-    exploration = explore_instance(second, reading)
+    exploration = explore_instance(second)
     result = quotient(exploration.next, exploration.codes)
     return {
-        "instance": instance_name(second, reading),
+        "instance": instance_name(second),
         "states": len(exploration.states),
         "transitions": exploration.edges,
         "violations": _violations(exploration),
@@ -94,9 +94,9 @@ def mutant_report(mutant: Mutant) -> dict[str, object]:
     """Which invariants a mutant violates in each instance, with shortest traces."""
 
     rows = []
-    for second, reading in instances():
-        exploration = explore_instance(second, reading, mutant)
-        rows.append({"instance": instance_name(second, reading), "states": len(exploration.states),
+    for second in instances():
+        exploration = explore_instance(second, mutant)
+        rows.append({"instance": instance_name(second), "states": len(exploration.states),
                      "killed": bool(exploration.violations), "violations": _violations(exploration)})
     killing = [v for row in rows for v in row["violations"]]  # type: ignore[union-attr]
     shortest = min(killing, key=lambda v: (v["length"], v["trace"]), default=None)
@@ -114,7 +114,7 @@ def source_digests() -> dict[str, str]:
 def explore_all() -> dict[str, object]:
     """The complete evidence record."""
 
-    config = Config(Second.DUPLICATE, PlanReading.CONSUMED)
+    config = Config(Second.DUPLICATE)
     return {
         "schema": "zrm/rfc0001-commit-path-exploration/v1",
         "status": "non-authoritative bounded design evidence for draft RFC-0001",
@@ -122,7 +122,7 @@ def explore_all() -> dict[str, object]:
         "bounds": {"callers": 2, "transition_identities": 1, "max_attempts": config.max_attempts,
                    "max_prepares": config.max_prepares, "max_policy_updates": config.max_policy_updates,
                    "max_states": MAX_STATES},
-        "correct": [correct_report(second, reading) for second, reading in instances()],
+        "correct": [correct_report(second) for second in instances()],
         "mutants": [mutant_report(mutant) for mutant in Mutant if mutant is not Mutant.NONE],
         "non_claims": list(NON_CLAIMS),
     }

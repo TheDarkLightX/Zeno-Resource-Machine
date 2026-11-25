@@ -146,8 +146,8 @@ Exploration, quotient and evidence checks came after.
 - the coarsest observable quotient with separating probes, ported from Zeno-ADP 0.8.0;
 - a report of fields the quotient cannot see.
 
-**`rfc0001_commit_path_v1.py`:** the composed model with two second-caller variants, two
-plan readings and seven mutants.
+**`rfc0001_commit_path_v1.py`:** the composed model with two second-caller variants,
+consumed plans, a delayed-durability environment choice and seven mutants.
 
 **`rfc0001_commit_path_explorer.py`:** the evidence record and `--check`.
 
@@ -178,20 +178,37 @@ Two new unittest modules in `reference_models/tests`. No existing test is change
 
 | Mutant | Instances killed |
 | --- | --- |
-| `stale_plan_commits` | 4/4 |
-| `policy_change_reuses_machine_root` | 4/4 |
-| `replay_lookup_outside_commit_boundary` | 4/4 |
-| `retry_duplicates_effect` | 3/4 |
-| `unknown_reported_as_rejected` | 4/4 |
-| `resolution_reapplies_effect` | 4/4 |
-| `partial_durable_commit` | 4/4 |
+| `stale_plan_commits` | 2/2 |
+| `policy_change_reuses_machine_root` | 2/2 |
+| `replay_lookup_outside_commit_boundary` | 2/2 |
+| `retry_duplicates_effect` | 2/2 |
+| `unknown_reported_as_rejected` | 2/2 |
+| `resolution_reapplies_effect` | 2/2 |
+| `partial_durable_commit` | 2/2 |
 
-`retry_duplicates_effect` survives the conflicting / consumed instance, which has no path
-to the exact-match branch. The oracle document explains why.
+## Revision: plan ownership settled
+
+The first revision explored two readings of whether a caller keeps its plan after
+`OutcomeUnknown`. Re-reading the RFC settles it:
+
+- the typed interface takes the plan by value, `commit(runtime, plan: CommitPlan, admission)`;
+- neither failure variant returns the plan;
+- the RFC rejects serializing or cloning a plan for retry.
+
+So the "retained" reading was removed.
+
+Removing it exposed a model gap: `_ack_lost` meant "already durable", so no transaction
+could land after `OutcomeUnknown`. As a result `retry_duplicates_effect` survived with one
+conflicting caller. The new `_pending` choice and the `land_*` action model that race.
+
+The prediction made before measuring was a kill in five actions with one conflicting
+caller. The measured shortest trace is
+`prepare_A, commit_A_pending, prepare_A, commit_A, land_A`: five actions, with the
+symmetric order to the one predicted.
 
 ## Formal/model evidence
 
-The evidence is bounded exhaustive exploration of four instances. There is no theorem
+The evidence is bounded exhaustive exploration of two instances. There is no theorem
 proving, Kani or Lean work.
 
 ## Canonical hashes and vectors changed
@@ -218,14 +235,14 @@ No workspace manifest or lockfile changed.
 
 ## Performance and resource-bound impact
 
-- Exploration is bounded at 50,000 states per instance; the largest has 19,349.
-- The full reference-model suite takes about 18 seconds on Python 3.12.
+- Exploration is bounded at 100,000 states per instance; the largest, a mutant, has 44,154.
+- The full reference-model suite takes about 17 seconds on Python 3.12.
 
 ## Commands executed
 
 | Command | Result | Evidence/artifact |
 | --- | --- | --- |
-| `PYTHONDONTWRITEBYTECODE=1 python3.12 -m unittest discover -s reference_models/tests` | 71 tests OK | console |
+| `PYTHONDONTWRITEBYTECODE=1 python3.12 -m unittest discover -s reference_models/tests` | 74 tests OK | console |
 | `python3 -m reference_models.rfc0001_commit_path_explorer --check` | evidence matches | `evidence/rfc0001-commit-path-exploration-v1.json` |
 | `RUSTUP_TOOLCHAIN=stable python3 reference_models/zeno_adp_vectors/regenerate.py --check` | vectors match | `reference_models/zeno_adp_vectors/vectors_0_8_0.json` |
 | `python3 tools/check_repository_hygiene.py` | passed | console |
@@ -259,8 +276,8 @@ Cargo format, Clippy, tests, Kani, Miri, fuzz and coverage were not run. They co
 ## Remaining gaps and non-claims
 
 - The bounded model is not an unbounded proof.
-- The model is one reading of a draft RFC. The open point on plan ownership after
-  `OutcomeUnknown` is explored under both readings and needs a maintainer decision.
+- The model is one reading of a draft RFC. Plan consumption follows the RFC's typed
+  interface; the remaining modeling choices are listed in the oracle document.
 - The model is not the internal models and replays none of their evidence.
 - The generator was built with stable 1.97.0, not the pinned 1.87.0.
 - Policy-creation, fact-freshness and recursive intents remain unmodeled here.
@@ -271,7 +288,7 @@ Cargo format, Clippy, tests, Kani, Miri, fuzz and coverage were not run. They co
 - **Exact assurance results:** the tables above.
 - **CBC obligations covered:** none claimed.
 - **Remaining gaps and non-claims:** as listed above.
-- **Required reviewers/roles:** a semantic owner, for the plan-ownership question.
+- **Required reviewers/roles:** a semantic owner.
 - **Review focus:** whether each modeled classification and environment choice matches the
   intended semantics.
 - **Promotion blocked until:** not applicable. This is evidence only.
